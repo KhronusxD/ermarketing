@@ -7,6 +7,7 @@ import Results from '../Quiz/Results';
 import ProgressBar from '../Quiz/ProgressBar';
 import { RESTAURANT_QUESTIONS } from './constants';
 import { AppStep, UserAnswers, QuestionOption, LeadData, DiagnosisResult } from '../Quiz/types';
+import { submitLeadToExcel } from '../Quiz/services';
 
 const RestaurantQuizFlow: React.FC = () => {
     const [currentStep, setCurrentStep] = useState<AppStep>(AppStep.LANDING);
@@ -52,11 +53,20 @@ const RestaurantQuizFlow: React.FC = () => {
         setCurrentStep(AppStep.GATE);
     };
 
-    const handleLeadSubmit = (data: LeadData) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleLeadSubmit = async (data: LeadData) => {
+        setIsSubmitting(true);
         setLeadData(data);
-        // Here you would typically send data to backend/webhook
-        console.log("Restaurant Lead captured:", data, "Answers:", answers);
-        setCurrentStep(AppStep.RESULTS);
+
+        try {
+            await submitLeadToExcel(data, answers, 'restaurante');
+        } catch (error) {
+            console.error("Failed to submit lead", error);
+        } finally {
+            setIsSubmitting(false);
+            setCurrentStep(AppStep.RESULTS);
+        }
     };
 
     // -- Logic for Results Generation --
@@ -136,7 +146,7 @@ const RestaurantQuizFlow: React.FC = () => {
             )}
 
             {currentStep === AppStep.GATE && (
-                <LeadForm onSubmit={handleLeadSubmit} />
+                <LeadForm onSubmit={handleLeadSubmit} isSubmitting={isSubmitting} />
             )}
 
             {currentStep === AppStep.RESULTS && leadData && (

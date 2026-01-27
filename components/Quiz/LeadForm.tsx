@@ -5,16 +5,16 @@ import { Lock, CheckCircle } from 'lucide-react';
 
 interface LeadFormProps {
     onSubmit: (data: LeadData) => void;
+    isSubmitting?: boolean;
 }
 
-const LeadForm: React.FC<LeadFormProps> = ({ onSubmit }) => {
+const LeadForm: React.FC<LeadFormProps> = ({ onSubmit, isSubmitting = false }) => {
     const [formData, setFormData] = useState<LeadData>({
         name: '',
         email: '',
         whatsapp: '',
         website: ''
     });
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,11 +22,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ onSubmit }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSubmitting(true);
-        // Simulate API call delay
-        setTimeout(() => {
-            onSubmit(formData);
-        }, 1000);
+        onSubmit(formData);
     };
 
     return (
