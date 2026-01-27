@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Landing from './Landing';
 import Quiz from './Quiz';
 import LoadingScreen from './LoadingScreen';
@@ -13,6 +13,19 @@ const QuizFlow: React.FC = () => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<UserAnswers>({});
     const [leadData, setLeadData] = useState<LeadData | null>(null);
+
+    // -- Tracking --
+    useEffect(() => {
+        if (currentStep === AppStep.QUIZ) {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event': 'quiz_step_view',
+                'step_number': currentQuestionIndex + 1,
+                'step_name': QUESTIONS[currentQuestionIndex]?.title || 'Unknown Step',
+                'quiz_name': 'general'
+            });
+        }
+    }, [currentStep, currentQuestionIndex]);
 
     // -- Handlers --
 
