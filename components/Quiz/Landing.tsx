@@ -14,6 +14,11 @@ const Landing: React.FC<LandingProps> = ({ onStart }) => {
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-er-red/5 rounded-full blur-[120px]" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-er-red/5 rounded-full blur-[120px]" />
 
+            {/* Absolute Brand Logo */}
+            <div className="absolute top-6 left-6 z-20">
+                <img src="/assets/white-logo.png" alt="ER Marketing" className="h-8 w-auto opacity-80" />
+            </div>
+
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

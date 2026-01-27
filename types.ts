@@ -37,9 +37,12 @@ export interface DiagnosisResult {
   category: string;
 }
 
-// Add global window type definition for dataLayer
 declare global {
   interface Window {
     dataLayer: any[];
   }
+}
+
+export interface SectionProps {
+  onAuditClick: () => void;
 }

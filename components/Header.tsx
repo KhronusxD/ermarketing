@@ -21,8 +21,7 @@ export const Header: React.FC<SectionProps> = ({ onAuditClick }) => {
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-er-red rounded-sm flex items-center justify-center font-black text-black">E</div>
-          <span className="text-xl font-bold tracking-tighter text-white">ER <span className="text-gray-500">MARKETING</span></span>
+          <img src="/assets/white-logo.png" alt="ER Performance Marketing" className="h-10 w-auto object-contain" />
         </div>
 
         {/* Actions */}
