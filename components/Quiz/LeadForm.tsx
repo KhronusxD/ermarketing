@@ -9,39 +9,39 @@ interface LeadFormProps {
 }
 
 const LeadForm: React.FC<LeadFormProps> = ({ onSubmit, isSubmitting = false }) => {
-    name: '',
+    const [formData, setFormData] = useState<LeadData>({
+        name: '',
         email: '',
-            whatsapp: '',
-                instagram: ''
-});
+        whatsapp: '',
+        instagram: ''
+    });
 
-const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-};
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-};
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSubmit(formData);
+    };
 
-return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[#050505] relative overflow-hidden">
-        <div className="w-full max-w-md bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 shadow-2xl z-10 relative">
-            {/* Glow effect */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-er-red shadow-[0_0_20px_rgba(230,0,0,0.8)] rounded-full"></div>
+    return (
+        <div className="min-h-screen flex items-center justify-center p-4 bg-[#050505] relative overflow-hidden">
+            <div className="w-full max-w-md bg-[#0A0A0A] border border-white/10 rounded-2xl p-8 shadow-2xl z-10 relative">
+                {/* Glow effect */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-er-red shadow-[0_0_20px_rgba(230,0,0,0.8)] rounded-full"></div>
 
-            <div className="text-center mb-8 mt-4">
-                <div className="inline-flex items-center gap-2 text-er-red mb-4 bg-er-red/10 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide">
-                    <CheckCircle className="w-3 h-3" /> Análise Concluída
+                <div className="text-center mb-8 mt-4">
+                    <div className="inline-flex items-center gap-2 text-er-red mb-4 bg-er-red/10 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide">
+                        <CheckCircle className="w-3 h-3" /> Análise Concluída
+                    </div>
+                    <h2 className="text-2xl font-sans font-bold text-white mb-2">Sua Auditoria está pronta.</h2>
+                    <p className="text-gray-400 text-sm">
+                        Identificamos <span className="text-white font-semibold">3 pontos críticos</span>. Informe onde devemos enviar o relatório completo e o Plano de Recuperação.
+                    </p>
                 </div>
-                <h2 className="text-2xl font-sans font-bold text-white mb-2">Sua Auditoria está pronta.</h2>
-                <p className="text-gray-400 text-sm">
-                    Identificamos <span className="text-white font-semibold">3 pontos críticos</span>. Informe onde devemos enviar o relatório completo e o Plano de Recuperação.
-                </p>
-            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="name" className="block text-xs font-medium text-gray-400 mb-1 ml-1">NOME E SOBRENOME</label>
                         <input
@@ -111,14 +111,14 @@ return (
                             </>
                         )}
                     </motion.button>
-            </form>
+                </form>
 
-            <p className="text-center text-xs text-gray-600 mt-6 flex items-center justify-center gap-1">
-                <Lock className="w-3 h-3" /> Seus dados estão protegidos e não enviamos spam.
-            </p>
+                <p className="text-center text-xs text-gray-600 mt-6 flex items-center justify-center gap-1">
+                    <Lock className="w-3 h-3" /> Seus dados estão protegidos e não enviamos spam.
+                </p>
+            </div>
         </div>
-    </div>
-);
+    );
 };
 
 export default LeadForm;
