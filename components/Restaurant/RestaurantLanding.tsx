@@ -2,13 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../Header';
 import { RestaurantHero } from './RestaurantHero';
-import { RestaurantAuthority } from './RestaurantAuthority';
+import { RestaurantPain } from './RestaurantPain';
+import { RestaurantStory } from './RestaurantStory';
 import { RestaurantCaseStudies } from './RestaurantCaseStudies';
-import { RestaurantTestimonials } from './RestaurantTestimonials';
-import { RestaurantQualification } from './RestaurantQualification';
-import { Diagnosis } from '../Diagnosis'; // Generic enough
-import { Ecosystem } from '../Ecosystem'; // Generic enough
-import { FAQ } from '../FAQ'; // Generic enough
+import { RestaurantOffer } from './RestaurantOffer';
+import { RestaurantObjections } from './RestaurantObjections';
+import { RestaurantUrgency } from './RestaurantUrgency';
+import { RestaurantQuizTransition } from './RestaurantQuizTransition';
 import { Footer } from '../Footer';
 import { BackgroundParticles } from '../BackgroundParticles';
 import { FloatingWhatsApp } from '../FloatingWhatsApp';
@@ -28,13 +28,13 @@ export const RestaurantLanding: React.FC = () => {
 
             <main className="relative z-10">
                 <RestaurantHero onAuditClick={handleAuditClick} />
-                <RestaurantAuthority onAuditClick={handleAuditClick} />
+                <RestaurantPain onAuditClick={handleAuditClick} />
+                <RestaurantStory onAuditClick={handleAuditClick} />
                 <RestaurantCaseStudies onAuditClick={handleAuditClick} />
-                <RestaurantTestimonials onAuditClick={handleAuditClick} />
-                <Ecosystem onAuditClick={handleAuditClick} />
-                <Diagnosis onAuditClick={handleAuditClick} />
-                <FAQ onAuditClick={handleAuditClick} />
-                <RestaurantQualification onAuditClick={handleAuditClick} />
+                <RestaurantOffer onAuditClick={handleAuditClick} />
+                <RestaurantObjections onAuditClick={handleAuditClick} />
+                <RestaurantUrgency onAuditClick={handleAuditClick} />
+                <RestaurantQuizTransition onAuditClick={handleAuditClick} />
             </main>
 
             <Footer />
