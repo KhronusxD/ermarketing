@@ -94,12 +94,12 @@ export const PHOTOS = {
         '/photos-food/t-4.jpg',
     ],
     pizza: [
-        '/photos-food/p-1.png',
-        '/photos-food/p-2.png',
-        '/photos-food/p-3.png',
-        '/photos-food/p-4.png',
-        '/photos-food/p-5.png',
-        '/photos-food/p-6.png',
+        '/photos-food/p-1.jpg',
+        '/photos-food/p-2.jpg',
+        '/photos-food/p-3.jpg',
+        '/photos-food/p-4.jpg',
+        '/photos-food/p-5.jpg',
+        '/photos-food/p-6.jpg',
     ],
     get all() {
         // Interleave for visual variety
