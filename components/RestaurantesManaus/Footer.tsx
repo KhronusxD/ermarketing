@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoldDivider } from './shared';
+import { GoldDivider, GOLD_FILTER } from './shared';
 
 export const Footer: React.FC = () => {
     return (
@@ -11,7 +11,8 @@ export const Footer: React.FC = () => {
                         <img
                             src="/assets/white-logo.png"
                             alt="ER Performance Marketing"
-                            className="h-6 w-auto opacity-60"
+                            className="h-6 w-auto opacity-70"
+                            style={{ filter: GOLD_FILTER }}
                         />
                         <span className="text-xs text-[#A8A196] tracking-wider">
                             &copy; {new Date().getFullYear()} ER Marketing &middot; Especialistas em restaurantes

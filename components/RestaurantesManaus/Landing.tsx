@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Hero } from './Hero';
+import { Gallery } from './Gallery';
 import { Pain } from './Pain';
 import { Why } from './Why';
 import { Story } from './Story';
@@ -47,6 +48,7 @@ export const RestaurantesManausLanding: React.FC = () => {
 
             <main className="relative z-10">
                 <Hero onAuditClick={handleAuditClick} />
+                <Gallery withHeader />
                 <Pain onAuditClick={handleAuditClick} />
                 <Why onAuditClick={handleAuditClick} />
                 <Story onAuditClick={handleAuditClick} />
@@ -55,6 +57,7 @@ export const RestaurantesManausLanding: React.FC = () => {
                 <Objections onAuditClick={handleAuditClick} />
                 <Urgency onAuditClick={handleAuditClick} />
                 <QuizCTA onAuditClick={handleAuditClick} />
+                <Gallery reverse speed="slow" />
             </main>
 
             <Footer />

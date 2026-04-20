@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Animated gradient button — gold/amber shifting gradient
+// Animated gradient button — gold shimmer looping right-to-left
 interface GoldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     size?: 'sm' | 'md' | 'lg';
     variant?: 'primary' | 'outline';
@@ -34,21 +34,14 @@ export const GoldButton: React.FC<GoldButtonProps> = ({
         <button
             className={`relative inline-flex items-center justify-center gap-2 ${sizes[size]} font-semibold rounded-full text-[#1A1208] tracking-wide overflow-hidden group transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_10px_30px_-5px_rgba(212,165,116,0.5)] active:translate-y-0 ${className}`}
             style={{
-                background: 'linear-gradient(110deg, #E8C088 0%, #D4A574 25%, #F5D89F 50%, #D4A574 75%, #E8C088 100%)',
-                backgroundSize: '300% 100%',
-                animation: 'gradient-shift 4s ease infinite',
+                background:
+                    'linear-gradient(90deg, #B8875B 0%, #D4A574 15%, #F5D89F 30%, #E8C088 45%, #D4A574 60%, #B8875B 80%, #D4A574 100%)',
+                backgroundSize: '200% 100%',
+                animation: 'gradient-loop 3.5s linear infinite',
             }}
             {...props}
         >
             <span className="relative z-10 flex items-center gap-2">{children}</span>
-            <span
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{
-                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                    backgroundSize: '200% 100%',
-                    animation: 'shimmer 3s linear infinite',
-                }}
-            />
         </button>
     );
 };
@@ -76,14 +69,14 @@ export const GlassCard: React.FC<GlassCardProps> = ({
     );
 };
 
-// Section label (small gold uppercase tag)
+// Section label
 export const SectionLabel: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
     <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#D4A574]/25 bg-[#D4A574]/5 text-[#E8C088] text-xs font-semibold tracking-[0.2em] uppercase ${className}`}>
         {children}
     </div>
 );
 
-// Decorative divider with gold ornament
+// Gold divider
 export const GoldDivider: React.FC = () => (
     <div className="flex items-center justify-center gap-3 my-8">
         <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#D4A574]/40"></div>
@@ -92,20 +85,52 @@ export const GoldDivider: React.FC = () => (
     </div>
 );
 
-// Stock images - Unsplash placeholders
-export const IMAGES = {
-    hero_video: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80',
-    steak: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&q=80',
-    sushi_hero: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=1200&q=80',
-    sushi_rolls: 'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=1200&q=80',
-    pizza: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=1200&q=80',
-    pizza_oven: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1200&q=80',
-    chef_cooking: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=1200&q=80',
-    ambience: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80',
-    plating: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=1200&q=80',
-    camera_bts: 'https://images.unsplash.com/photo-1496559249665-c7e2874707ea?w=1200&q=80',
-    team_meeting: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200&q=80',
-    edit_screen: 'https://images.unsplash.com/photo-1574717024453-354056aafa98?w=1200&q=80',
-    food_closeup: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200&q=80',
-    dark_bar: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200&q=80',
+// Local assets
+export const PHOTOS = {
+    taychi: [
+        '/photos-food/t-1.jpg',
+        '/photos-food/t-2.jpg',
+        '/photos-food/t-3.jpg',
+        '/photos-food/t-4.jpg',
+    ],
+    pizza: [
+        '/photos-food/p-1.png',
+        '/photos-food/p-2.png',
+        '/photos-food/p-3.png',
+        '/photos-food/p-4.png',
+        '/photos-food/p-5.png',
+        '/photos-food/p-6.png',
+    ],
+    get all() {
+        // Interleave for visual variety
+        const result: string[] = [];
+        const max = Math.max(this.taychi.length, this.pizza.length);
+        for (let i = 0; i < max; i++) {
+            if (this.taychi[i]) result.push(this.taychi[i]);
+            if (this.pizza[i]) result.push(this.pizza[i]);
+        }
+        return result;
+    },
 };
+
+export const VIDEOS = {
+    pizza: [
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/PIZZA%20RIO%20-%205%20TIPOS%20DE%20FOME.mov', title: '5 tipos de fome' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/PIZZA%20RIO%20-%20SE%20QUISER%20VIM%20VER.mov', title: 'Se quiser vim ver' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/PIZZA%20RIO%20-%20SERA%CC%81%20TREND.mov', title: 'Será? — Trend' },
+    ],
+    taychi: [
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20YAKISOBA.mov', title: 'Yakisoba' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20MONTAGEM%20COMBO.mov', title: 'Montagem de combo' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20COMO%20USAR%20O%20HASHI.mov', title: 'Como usar o hashi' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20TREND.mov', title: 'Trend' },
+    ],
+    other: [
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/YUAI%20-%20SUSHI%20NO%20COPO.mov', title: 'Sushi no copo — YUAI' },
+    ],
+    hero: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20YAKISOBA.mov',
+};
+
+// Gold logo CSS filter (turns white logo into #D4A574)
+export const GOLD_FILTER =
+    'brightness(0) saturate(100%) invert(68%) sepia(17%) saturate(762%) hue-rotate(349deg) brightness(91%) contrast(89%)';

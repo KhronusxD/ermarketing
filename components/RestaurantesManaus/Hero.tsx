@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Play, Sparkles } from 'lucide-react';
+import { ArrowRight, Play, Pause, Sparkles } from 'lucide-react';
 import { SectionProps } from '../../types';
-import { GoldButton, SectionLabel, IMAGES } from './shared';
+import { GoldButton, SectionLabel, PHOTOS, VIDEOS } from './shared';
 
 export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const [playing, setPlaying] = useState(true);
+
+    const togglePlay = () => {
+        const v = videoRef.current;
+        if (!v) return;
+        if (v.paused) {
+            v.play();
+            setPlaying(true);
+        } else {
+            v.pause();
+            setPlaying(false);
+        }
+    };
+
     const scrollToCases = () => {
         document.getElementById('cases-manaus')?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -20,7 +35,6 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                             'radial-gradient(ellipse at 20% 20%, rgba(212,165,116,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(212,165,116,0.08) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(139,111,71,0.05) 0%, #0A0A0F 70%)',
                     }}
                 ></div>
-                {/* Grid overlay */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#D4A57408_1px,transparent_1px),linear-gradient(to_bottom,#D4A57408_1px,transparent_1px)] bg-[size:64px_64px]"></div>
             </div>
 
@@ -71,36 +85,47 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                         transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
                         className="lg:col-span-5 relative h-[500px] md:h-[600px]"
                     >
-                        {/* Main video-style card */}
+                        {/* Main video card — real Taychi Yakisoba reel */}
                         <div className="absolute top-0 right-0 w-[85%] h-[70%] rounded-3xl overflow-hidden border border-[#D4A574]/20 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)]">
-                            <img
-                                src={IMAGES.steak}
-                                alt="Prato premium"
+                            <video
+                                ref={videoRef}
+                                src={VIDEOS.hero}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
                                 className="w-full h-full object-cover"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                            {/* Play button overlay */}
-                            <button className="absolute inset-0 flex items-center justify-center group">
-                                <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-[#D4A574]/90 group-hover:border-[#D4A574] transition-all duration-300">
-                                    <Play size={22} className="text-white fill-current ml-1 group-hover:text-[#1A1208]" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                            <button
+                                onClick={togglePlay}
+                                className="absolute inset-0 flex items-center justify-center group"
+                                aria-label={playing ? 'Pausar' : 'Reproduzir'}
+                            >
+                                <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:bg-[#D4A574]/90 group-hover:border-[#D4A574] transition-all duration-300 opacity-0 group-hover:opacity-100">
+                                    {playing ? (
+                                        <Pause size={22} className="text-white fill-current group-hover:text-[#1A1208]" />
+                                    ) : (
+                                        <Play size={22} className="text-white fill-current ml-1 group-hover:text-[#1A1208]" />
+                                    )}
                                 </div>
                             </button>
                             <div className="absolute bottom-4 left-4 text-xs text-white/80 font-medium tracking-wider uppercase backdrop-blur-sm bg-black/30 px-3 py-1.5 rounded-full border border-white/10">
-                                Bastidores &middot; ER Marketing
+                                Bastidores &middot; Taychi Sushi Bar
                             </div>
                         </div>
 
-                        {/* Overlapping thumbnail — sushi */}
+                        {/* Overlapping thumbnail — real Pizza photo */}
                         <motion.div
                             animate={{ y: [0, -10, 0] }}
                             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
                             className="absolute bottom-0 left-0 w-[55%] h-[45%] rounded-2xl overflow-hidden border border-[#D4A574]/30 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8)]"
                         >
-                            <img src={IMAGES.sushi_rolls} alt="Sushi" className="w-full h-full object-cover" />
+                            <img src={PHOTOS.pizza[0]} alt="La Pizza Rio" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                             <div className="absolute bottom-3 left-3">
                                 <div className="text-[10px] text-[#E8C088] font-semibold tracking-widest uppercase">Cliente</div>
-                                <div className="text-sm text-white font-serif italic">Taychi Sushi Bar</div>
+                                <div className="text-sm text-white font-serif italic">La Pizza Rio</div>
                             </div>
                         </motion.div>
 

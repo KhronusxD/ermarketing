@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SectionProps } from '../../types';
-import { GoldButton } from './shared';
+import { GoldButton, GOLD_FILTER } from './shared';
 
 export const Header: React.FC<SectionProps> = ({ onAuditClick }) => {
     const [scrolled, setScrolled] = useState(false);
@@ -24,7 +24,8 @@ export const Header: React.FC<SectionProps> = ({ onAuditClick }) => {
                     <img
                         src="/assets/white-logo.png"
                         alt="ER Performance Marketing"
-                        className="h-8 w-auto object-contain opacity-90"
+                        className="h-8 w-auto object-contain"
+                        style={{ filter: GOLD_FILTER }}
                     />
                 </div>
 
