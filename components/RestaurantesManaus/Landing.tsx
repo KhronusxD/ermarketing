@@ -18,7 +18,7 @@ export const RestaurantesManausLanding: React.FC = () => {
     const navigate = useNavigate();
 
     const handleAuditClick = () => {
-        navigate('/auditoria-restaurante');
+        navigate('/diagnostico-manaus');
     };
 
     return (

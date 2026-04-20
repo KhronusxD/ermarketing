@@ -5,6 +5,7 @@ import QuizFlow from './components/Quiz/QuizFlow';
 import { RestaurantLanding } from './components/Restaurant/RestaurantLanding';
 import { RestaurantBLanding } from './components/RestaurantB/RestaurantBLanding';
 import { RestaurantesManausLanding } from './components/RestaurantesManaus/Landing';
+import { DiagnosticoFlow } from './components/RestaurantesManaus/Quiz/DiagnosticoFlow';
 import RestaurantQuizFlow from './components/Restaurant/RestaurantQuizFlow';
 
 const App: React.FC = () => {
@@ -16,6 +17,7 @@ const App: React.FC = () => {
         <Route path="/restaurante" element={<RestaurantLanding />} />
         <Route path="/restaurante-b" element={<RestaurantBLanding />} />
         <Route path="/restaurantes-manaus" element={<RestaurantesManausLanding />} />
+        <Route path="/diagnostico-manaus" element={<DiagnosticoFlow />} />
         <Route path="/auditoria-restaurante" element={<RestaurantQuizFlow />} />
       </Routes>
     </Router>
