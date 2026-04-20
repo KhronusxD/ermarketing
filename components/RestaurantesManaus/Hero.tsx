@@ -53,6 +53,15 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#D4A57408_1px,transparent_1px),linear-gradient(to_bottom,#D4A57408_1px,transparent_1px)] bg-[size:64px_64px] opacity-60"></div>
             </div>
 
+            {/* Bottom fade — blends video into page bg for seamless transition */}
+            <div
+                className="absolute bottom-0 left-0 right-0 h-40 md:h-56 z-[5] pointer-events-none"
+                style={{
+                    background:
+                        'linear-gradient(to top, #0A0A0F 0%, rgba(10,10,15,0.85) 35%, rgba(10,10,15,0.45) 70%, transparent 100%)',
+                }}
+            ></div>
+
             <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
                 <div className="grid lg:grid-cols-12 gap-12 items-center">
                     {/* Left — copy */}
