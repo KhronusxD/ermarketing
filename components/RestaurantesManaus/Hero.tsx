@@ -26,16 +26,31 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
 
     return (
         <section className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
-            {/* Ambient backdrop */}
-            <div className="absolute inset-0 z-0">
+            {/* BG video — ER branded footage at 60% opacity, mixes with existing ambient */}
+            <video
+                src={VIDEOS.bg}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover z-0"
+                style={{ opacity: 0.6 }}
+            />
+            {/* Dark overlay to keep copy readable */}
+            <div className="absolute inset-0 z-0 bg-[#0A0A0F]/55"></div>
+
+            {/* Ambient gold wash layered on top of the video */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
                 <div
-                    className="absolute inset-0 opacity-40"
+                    className="absolute inset-0 opacity-50"
                     style={{
                         background:
-                            'radial-gradient(ellipse at 20% 20%, rgba(212,165,116,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(212,165,116,0.08) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(139,111,71,0.05) 0%, #0A0A0F 70%)',
+                            'radial-gradient(ellipse at 20% 20%, rgba(212,165,116,0.18) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(212,165,116,0.10) 0%, transparent 55%)',
                     }}
                 ></div>
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#D4A57408_1px,transparent_1px),linear-gradient(to_bottom,#D4A57408_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#D4A57408_1px,transparent_1px),linear-gradient(to_bottom,#D4A57408_1px,transparent_1px)] bg-[size:64px_64px] opacity-60"></div>
             </div>
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
@@ -89,11 +104,13 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                         <div className="absolute top-0 right-0 w-[85%] h-[70%] rounded-3xl overflow-hidden border border-[#D4A574]/20 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)]">
                             <video
                                 ref={videoRef}
-                                src={VIDEOS.hero}
+                                src={VIDEOS.hero.src}
+                                poster={VIDEOS.hero.poster}
                                 autoPlay
                                 loop
                                 muted
                                 playsInline
+                                preload="auto"
                                 className="w-full h-full object-cover"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>

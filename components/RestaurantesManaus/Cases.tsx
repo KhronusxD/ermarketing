@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Quote, TrendingUp, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { SectionProps } from '../../types';
@@ -7,12 +7,34 @@ import { GoldButton, SectionLabel, PHOTOS, VIDEOS } from './shared';
 interface VideoItem {
     src: string;
     title: string;
+    poster?: string;
 }
 
 const VideoCard: React.FC<{ video: VideoItem; aspect?: string }> = ({ video, aspect = 'aspect-[9/16]' }) => {
+    const wrapRef = useRef<HTMLDivElement | null>(null);
     const ref = useRef<HTMLVideoElement | null>(null);
+    const [loaded, setLoaded] = useState(false);
     const [playing, setPlaying] = useState(false);
     const [muted, setMuted] = useState(true);
+
+    // Lazy-load: only attach src when card scrolls within ~300px of viewport
+    useEffect(() => {
+        const el = wrapRef.current;
+        if (!el) return;
+        const io = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setLoaded(true);
+                        io.disconnect();
+                    }
+                });
+            },
+            { rootMargin: '300px' }
+        );
+        io.observe(el);
+        return () => io.disconnect();
+    }, []);
 
     const toggle = () => {
         const v = ref.current;
@@ -36,18 +58,23 @@ const VideoCard: React.FC<{ video: VideoItem; aspect?: string }> = ({ video, asp
 
     return (
         <div
+            ref={wrapRef}
             onClick={toggle}
             className={`relative ${aspect} rounded-2xl overflow-hidden border border-[#D4A574]/20 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.7)] cursor-pointer group bg-black`}
+            style={video.poster ? { backgroundImage: `url(${video.poster})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
         >
-            <video
-                ref={ref}
-                src={video.src}
-                loop
-                muted={muted}
-                playsInline
-                preload="metadata"
-                className="w-full h-full object-cover"
-            />
+            {loaded && (
+                <video
+                    ref={ref}
+                    src={video.src}
+                    poster={video.poster}
+                    loop
+                    muted={muted}
+                    playsInline
+                    preload="metadata"
+                    className="w-full h-full object-cover"
+                />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none"></div>
             {/* Play/pause overlay */}
             <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${playing ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>

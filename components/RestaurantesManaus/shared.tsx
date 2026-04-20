@@ -115,20 +115,24 @@ export const PHOTOS = {
 
 export const VIDEOS = {
     pizza: [
-        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/PIZZA%20RIO%20-%205%20TIPOS%20DE%20FOME.mov', title: '5 tipos de fome' },
-        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/PIZZA%20RIO%20-%20SE%20QUISER%20VIM%20VER.mov', title: 'Se quiser vim ver' },
-        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/PIZZA%20RIO%20-%20SERA%CC%81%20TREND.mov', title: 'Será? — Trend' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/PIZZA%20RIO%20-%205%20TIPOS%20DE%20FOME.mov', title: '5 tipos de fome', poster: '/video-posters/pizza-1-fome.jpg' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/PIZZA%20RIO%20-%20SE%20QUISER%20VIM%20VER.mov', title: 'Se quiser vim ver', poster: '/video-posters/pizza-2-vim-ver.jpg' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/PIZZA%20RIO%20-%20SERA%CC%81%20TREND.mov', title: 'Será? — Trend', poster: '/video-posters/pizza-3-sera.jpg' },
     ],
     taychi: [
-        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20YAKISOBA.mov', title: 'Yakisoba' },
-        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20MONTAGEM%20COMBO.mov', title: 'Montagem de combo' },
-        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20COMO%20USAR%20O%20HASHI.mov', title: 'Como usar o hashi' },
-        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20TREND.mov', title: 'Trend' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20YAKISOBA.mov', title: 'Yakisoba', poster: '/video-posters/taychi-yakisoba.jpg' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20MONTAGEM%20COMBO.mov', title: 'Montagem de combo', poster: '/video-posters/taychi-combo.jpg' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20COMO%20USAR%20O%20HASHI.mov', title: 'Como usar o hashi', poster: '/video-posters/taychi-hashi.jpg' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20TREND.mov', title: 'Trend', poster: '/video-posters/taychi-trend.jpg' },
     ],
     other: [
-        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/YUAI%20-%20SUSHI%20NO%20COPO.mov', title: 'Sushi no copo — YUAI' },
+        { src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/YUAI%20-%20SUSHI%20NO%20COPO.mov', title: 'Sushi no copo — YUAI', poster: '/video-posters/yuai-sushi-copo.jpg' },
     ],
-    hero: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20YAKISOBA.mov',
+    hero: {
+        src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20YAKISOBA.mov',
+        poster: '/video-posters/taychi-yakisoba.jpg',
+    },
+    bg: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/BG-ER.mp4',
 };
 
 // Gold logo CSS filter (turns white logo into #D4A574)
