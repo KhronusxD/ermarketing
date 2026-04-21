@@ -6,22 +6,23 @@ import { GOLD_FILTER } from '../shared';
 import { QuizIntro } from './QuizIntro';
 import { QuizStep } from './QuizStep';
 import { QuizForm } from './QuizForm';
+import { QuizResult, type QuizFormFields } from './QuizResult';
 import { QUIZ_STEPS } from './quizData';
 
-// Phases: 0 = intro, 1..5 = quiz steps, 6 = final form
-type Phase = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+// Phases: 0 = intro, 1..5 = quiz steps, 6 = form, 7 = result
+type Phase = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export const DiagnosticoFlow: React.FC = () => {
     const navigate = useNavigate();
     const [phase, setPhase] = useState<Phase>(0);
     const [answers, setAnswers] = useState<(string | undefined)[]>(Array(QUIZ_STEPS.length).fill(undefined));
+    const [formData, setFormData] = useState<QuizFormFields | null>(null);
 
-    // Scroll to top on every phase change
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [phase]);
 
-    const advance = () => setPhase((p) => Math.min(6, (p + 1) as Phase) as Phase);
+    const advance = () => setPhase((p) => Math.min(7, (p + 1) as Phase) as Phase);
     const retreat = () => setPhase((p) => Math.max(0, (p - 1) as Phase) as Phase);
 
     const handleSelect = (stepIdx: number) => (option: string) => {
@@ -93,7 +94,19 @@ export const DiagnosticoFlow: React.FC = () => {
                                 canGoBack={phase > 1}
                             />
                         )}
-                        {phase === 6 && <QuizForm key="form" answers={answers} />}
+                        {phase === 6 && (
+                            <QuizForm
+                                key="form"
+                                answers={answers}
+                                onComplete={(data) => {
+                                    setFormData(data);
+                                    setPhase(7);
+                                }}
+                            />
+                        )}
+                        {phase === 7 && formData && (
+                            <QuizResult key="result" answers={answers} formData={formData} />
+                        )}
                     </AnimatePresence>
                 </div>
             </main>

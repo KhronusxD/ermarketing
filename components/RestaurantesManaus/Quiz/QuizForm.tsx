@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, Lock } from 'lucide-react';
 import { GoldButton, SectionLabel } from '../shared';
-import { WHATSAPP_REDIRECT } from './quizData';
+import type { QuizFormFields } from './QuizResult';
 
 interface QuizFormProps {
     answers: (string | undefined)[];
+    onComplete: (data: QuizFormFields) => void;
 }
 
-export const QuizForm: React.FC<QuizFormProps> = ({ answers }) => {
-    const [fields, setFields] = useState({
+export const QuizForm: React.FC<QuizFormProps> = ({ answers, onComplete }) => {
+    const [fields, setFields] = useState<QuizFormFields>({
         name: '',
         whatsapp: '',
         restaurant: '',
@@ -17,20 +18,19 @@ export const QuizForm: React.FC<QuizFormProps> = ({ answers }) => {
     });
     const [submitting, setSubmitting] = useState(false);
 
-    const update = (key: keyof typeof fields) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    const update = (key: keyof QuizFormFields) => (e: React.ChangeEvent<HTMLInputElement>) =>
         setFields((f) => ({ ...f, [key]: e.target.value }));
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitting(true);
-        // Persist for retrieval by any tracking/CRM that reads from storage
         try {
             localStorage.setItem(
                 'er-diagnostico-manaus',
                 JSON.stringify({ ...fields, answers, ts: new Date().toISOString() })
             );
         } catch { /* ignore storage errors */ }
-        window.location.href = WHATSAPP_REDIRECT;
+        onComplete(fields);
     };
 
     const labelClass = 'text-[10px] text-[#D4A574] font-semibold tracking-[0.25em] uppercase mb-2 block';
@@ -118,7 +118,7 @@ export const QuizForm: React.FC<QuizFormProps> = ({ answers }) => {
 
                 <div className="mt-8 flex flex-col items-center gap-4">
                     <GoldButton type="submit" size="lg" disabled={submitting} className="w-full sm:w-auto">
-                        {submitting ? 'Liberando...' : 'Liberar meu plano de crescimento'}
+                        {submitting ? 'Gerando diagnóstico...' : 'Ver meu diagnóstico personalizado'}
                         <ArrowRight size={18} />
                     </GoldButton>
 
