@@ -39,8 +39,8 @@ export const Gallery: React.FC<GalleryProps> = ({ withHeader = false, speed = 'n
 
             {/* Gradient fade edges */}
             <div className="relative">
-                <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 md:w-40 z-10 bg-gradient-to-r from-[#0A0A0F] to-transparent"></div>
-                <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 md:w-40 z-10 bg-gradient-to-l from-[#0A0A0F] to-transparent"></div>
+                <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 md:w-40 z-10 bg-gradient-to-r from-[#111112] to-transparent"></div>
+                <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 md:w-40 z-10 bg-gradient-to-l from-[#111112] to-transparent"></div>
 
                 <div className="flex overflow-hidden">
                     <div className={`flex gap-5 shrink-0 ${animClass}`} style={{ willChange: 'transform' }}>

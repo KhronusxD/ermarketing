@@ -19,7 +19,7 @@ export const Urgency: React.FC<SectionProps> = ({ onAuditClick }) => {
                         className="relative p-12 md:p-16 text-center"
                         style={{
                             background:
-                                'radial-gradient(ellipse at 50% 0%, rgba(212,165,116,0.15) 0%, transparent 50%), linear-gradient(180deg, #1a1510 0%, #0A0A0F 100%)',
+                                'radial-gradient(ellipse at 50% 0%, rgba(212,165,116,0.15) 0%, transparent 50%), linear-gradient(180deg, #1a1510 0%, #111112 100%)',
                         }}
                     >
                         {/* Animated gold border */}
@@ -32,7 +32,7 @@ export const Urgency: React.FC<SectionProps> = ({ onAuditClick }) => {
                                 animation: 'gradient-shift 5s ease infinite',
                             }}
                         >
-                            <div className="absolute inset-[1px] rounded-3xl" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(212,165,116,0.15) 0%, transparent 50%), linear-gradient(180deg, #1a1510 0%, #0A0A0F 100%)' }}></div>
+                            <div className="absolute inset-[1px] rounded-3xl" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(212,165,116,0.15) 0%, transparent 50%), linear-gradient(180deg, #1a1510 0%, #111112 100%)' }}></div>
                         </div>
 
                         <div className="relative z-10">

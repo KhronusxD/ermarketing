@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play, Pause, Sparkles } from 'lucide-react';
 import { SectionProps } from '../../types';
@@ -7,6 +7,17 @@ import { GoldButton, SectionLabel, PHOTOS, VIDEOS } from './shared';
 export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [playing, setPlaying] = useState(true);
+
+    // Pick the BG video variant based on viewport (responds to orientation changes too)
+    const [bgVideoSrc, setBgVideoSrc] = useState(VIDEOS.bg.desktop);
+    useEffect(() => {
+        if (typeof window === 'undefined' || !window.matchMedia) return;
+        const mq = window.matchMedia('(max-width: 768px)');
+        const apply = () => setBgVideoSrc(mq.matches ? VIDEOS.bg.mobile : VIDEOS.bg.desktop);
+        apply();
+        mq.addEventListener('change', apply);
+        return () => mq.removeEventListener('change', apply);
+    }, []);
 
     const togglePlay = () => {
         const v = videoRef.current;
@@ -26,9 +37,10 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
 
     return (
         <section className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
-            {/* BG video — ER branded footage at 60% opacity, mixes with existing ambient */}
+            {/* BG video — desktop/mobile variants, mixed with dark overlay + gold wash */}
             <video
-                src={VIDEOS.bg}
+                key={bgVideoSrc}
+                src={bgVideoSrc}
                 autoPlay
                 loop
                 muted
@@ -39,7 +51,7 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                 style={{ opacity: 0.6 }}
             />
             {/* Dark overlay to keep copy readable */}
-            <div className="absolute inset-0 z-0 bg-[#0A0A0F]/55"></div>
+            <div className="absolute inset-0 z-0 bg-[#111112]/55"></div>
 
             {/* Ambient gold wash layered on top of the video */}
             <div className="absolute inset-0 z-0 pointer-events-none">
@@ -58,7 +70,7 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                 className="absolute bottom-0 left-0 right-0 h-40 md:h-56 z-[5] pointer-events-none"
                 style={{
                     background:
-                        'linear-gradient(to top, #0A0A0F 0%, rgba(10,10,15,0.85) 35%, rgba(10,10,15,0.45) 70%, transparent 100%)',
+                        'linear-gradient(to top, #111112 0%, rgba(17,17,18,0.85) 35%, rgba(17,17,18,0.45) 70%, transparent 100%)',
                 }}
             ></div>
 
@@ -180,7 +192,7 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                         { v: '12+', l: 'Restaurantes atendidos' },
                         { v: '3x', l: 'Retorno médio sobre ads' },
                     ].map((s, i) => (
-                        <div key={i} className="bg-[#0A0A0F] p-6 text-center">
+                        <div key={i} className="bg-[#111112] p-6 text-center">
                             <div className="font-serif text-2xl md:text-3xl font-bold text-[#E8C088] mb-1">{s.v}</div>
                             <div className="text-[11px] text-[#A8A196] uppercase tracking-widest">{s.l}</div>
                         </div>

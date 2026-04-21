@@ -36,8 +36,8 @@ export const DiagnosticoFlow: React.FC = () => {
 
     return (
         <div
-            className="min-h-screen text-[#F5F1E8] font-sans selection:bg-[#D4A574] selection:text-[#0A0A0F] relative overflow-hidden flex flex-col"
-            style={{ backgroundColor: '#0A0A0F' }}
+            className="min-h-screen text-[#F5F1E8] font-sans selection:bg-[#D4A574] selection:text-[#111112] relative overflow-hidden flex flex-col"
+            style={{ backgroundColor: '#111112' }}
         >
             {/* Global ambient backdrop (same as the main LP) */}
             <div className="fixed inset-0 pointer-events-none z-0">
@@ -58,7 +58,7 @@ export const DiagnosticoFlow: React.FC = () => {
             </div>
 
             {/* Slim header — gold logo + exit */}
-            <header className="relative z-20 py-5 border-b border-[#D4A574]/10 backdrop-blur-md bg-[#0A0A0F]/60">
+            <header className="relative z-20 py-5 border-b border-[#D4A574]/10 backdrop-blur-md bg-[#111112]/60">
                 <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
                     <button
                         onClick={() => navigate('/restaurantes-manaus')}

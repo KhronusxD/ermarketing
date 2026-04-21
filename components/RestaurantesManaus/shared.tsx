@@ -132,7 +132,10 @@ export const VIDEOS = {
         src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20YAKISOBA.mov',
         poster: '/video-posters/taychi-yakisoba.jpg',
     },
-    bg: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/BG-ER.mp4',
+    bg: {
+        desktop: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/BG-ER.mp4',
+        mobile: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/BG%20-%20ER%202.mp4',
+    },
 };
 
 // Gold logo CSS filter (turns white logo into #D4A574)

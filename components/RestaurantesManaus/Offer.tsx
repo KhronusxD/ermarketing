@@ -136,7 +136,7 @@ export const Offer: React.FC<SectionProps> = ({ onAuditClick }) => {
                                 animation: 'gradient-shift 6s ease infinite',
                             }}
                         >
-                            <div className="absolute inset-[1px] rounded-3xl bg-[#0A0A0F]"></div>
+                            <div className="absolute inset-[1px] rounded-3xl bg-[#111112]"></div>
                         </div>
 
                         <div className="relative z-10">

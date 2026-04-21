@@ -15,7 +15,7 @@ export const Header: React.FC<SectionProps> = ({ onAuditClick }) => {
         <header
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
                 scrolled
-                    ? 'py-3 bg-[#0A0A0F]/80 backdrop-blur-xl border-b border-[#D4A574]/10'
+                    ? 'py-3 bg-[#111112]/80 backdrop-blur-xl border-b border-[#D4A574]/10'
                     : 'py-5 bg-transparent'
             }`}
         >

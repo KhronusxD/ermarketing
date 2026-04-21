@@ -45,9 +45,9 @@ export const QUIZ_STEPS: QuizStepData[] = [
         question: 'Qual é a verba mensal que você consegue destinar para marketing (agência + anúncios)?',
         options: [
             'Ainda não invisto / Só orgânico',
-            'De R$ 1.500 a R$ 4.000',
-            'De R$ 4.000 a R$ 8.000',
-            'Acima de R$ 8.000 (já tenho verba separada)',
+            'A partir de R$ 3.500/mês',
+            'A partir de R$ 6.000/mês',
+            'A partir de R$ 10.000/mês',
         ],
     },
     {

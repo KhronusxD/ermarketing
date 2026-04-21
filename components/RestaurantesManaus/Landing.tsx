@@ -23,8 +23,8 @@ export const RestaurantesManausLanding: React.FC = () => {
 
     return (
         <div
-            className="min-h-screen text-[#F5F1E8] font-sans selection:bg-[#D4A574] selection:text-[#0A0A0F] relative overflow-hidden"
-            style={{ backgroundColor: '#0A0A0F' }}
+            className="min-h-screen text-[#F5F1E8] font-sans selection:bg-[#D4A574] selection:text-[#111112] relative overflow-hidden"
+            style={{ backgroundColor: '#111112' }}
         >
             {/* Global ambient backdrop */}
             <div className="fixed inset-0 pointer-events-none z-0">
