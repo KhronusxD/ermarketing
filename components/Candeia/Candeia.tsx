@@ -215,25 +215,29 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
             </motion.div>
         </div>
 
-        {/* Middle area — woman image + bubbles (flex-1 so it takes all remaining space) */}
-        <div className="relative z-10 flex-1 flex items-end justify-center min-h-0 w-full">
+        {/* Main area — woman flush to section base + bubbles + centered bottom strip */}
+        <div className="relative z-10 flex-1 min-h-0 w-full">
+            {/* Woman — anchored to the section base, bottom third fades into the sage bg */}
             <motion.img
                 src="/woman-in-the-middle.png"
                 alt="Profissional de saúde"
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
-                className="relative z-10 select-none object-contain object-bottom"
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 select-none"
                 style={{
-                    width: 'clamp(280px, 40vw, 560px)',
-                    maxHeight: '78vh',
-                    filter: 'drop-shadow(0 40px 40px rgba(31,31,31,0.25))',
+                    width: 'clamp(260px, 42vw, 560px)',
+                    maxHeight: '100%',
+                    objectFit: 'contain',
+                    objectPosition: 'bottom',
+                    maskImage: 'linear-gradient(to top, transparent 0%, #000 33%)',
+                    WebkitMaskImage: 'linear-gradient(to top, transparent 0%, #000 33%)',
                 }}
                 draggable={false}
             />
 
-            {/* 3 psychology bubbles — positioned clear of the woman's silhouette */}
-            <div className="absolute left-[5%] md:left-[10%] top-[18%] z-20 pointer-events-none">
+            {/* 3 psychology bubbles — hidden on mobile so the stack stays clean */}
+            <div className="hidden md:block absolute left-[8%] lg:left-[12%] top-[18%] z-20 pointer-events-none">
                 <PsychBubble
                     icon={Brain}
                     size={140}
@@ -243,7 +247,7 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                     tint="tan"
                 />
             </div>
-            <div className="absolute right-[6%] md:right-[12%] top-[12%] z-20 pointer-events-none">
+            <div className="hidden md:block absolute right-[8%] lg:right-[12%] top-[10%] z-20 pointer-events-none">
                 <PsychBubble
                     icon={Heart}
                     size={118}
@@ -254,7 +258,7 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                     iconColor="#C89968"
                 />
             </div>
-            <div className="absolute right-[8%] md:right-[15%] bottom-[18%] z-20 pointer-events-none">
+            <div className="hidden md:block absolute right-[10%] lg:right-[16%] top-[48%] z-20 pointer-events-none">
                 <PsychBubble
                     icon={Sprout}
                     size={100}
@@ -265,41 +269,23 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                     iconColor="#6F7A66"
                 />
             </div>
-        </div>
 
-        {/* Bottom strip — flows naturally below the woman (no overlap) */}
-        <div className="relative z-30 px-6 pt-4 pb-6 md:pb-8">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1.2 }}
-                className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-end justify-between gap-6"
-            >
-                {/* Left — tagline + Saiba mais */}
-                <div className="max-w-[280px] text-center md:text-left">
-                    <h3 className="font-serif text-[#1F1F1F] text-[15px] md:text-base leading-snug mb-3 italic">
+            {/* Bottom strip — centered column over the faded base of the woman */}
+            <div className="absolute bottom-0 left-0 right-0 z-30 px-6 pb-6 md:pb-10">
+                <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 1.2 }}
+                    className="max-w-lg mx-auto flex flex-col items-center text-center gap-3"
+                >
+                    <h3 className="font-serif text-[#1F1F1F] text-lg md:text-xl leading-snug italic">
                         Cuidar da mente é{' '}
                         <span className="font-semibold not-italic">transformar a vida.</span>
                     </h3>
-                    <button
-                        onClick={onScroll}
-                        className="inline-flex items-center gap-2 text-[#3B4236] font-semibold text-[12px] hover:text-[#A77A4B] transition-colors group"
-                    >
-                        <span className="border-b border-[#3B4236]/60 group-hover:border-[#A77A4B] pb-0.5">
-                            Saiba mais
-                        </span>
-                        <span className="w-6 h-6 rounded-full border border-[#3B4236]/40 flex items-center justify-center group-hover:border-[#A77A4B]">
-                            <ArrowRight size={11} />
-                        </span>
-                    </button>
-                </div>
-
-                {/* Right — price + CTAs */}
-                <div className="flex flex-col items-center md:items-end gap-3 md:text-right">
                     <p className="text-[11px] text-[#3B4236]/80 tracking-[0.2em] uppercase font-semibold">
                         A partir de R$ 990 &middot; 4x sem juros
                     </p>
-                    <div className="flex flex-wrap items-center justify-center md:justify-end gap-2">
+                    <div className="flex flex-wrap items-center justify-center gap-2">
                         <CandeiaButton size="md" tone="ink" onClick={onCta}>
                             Quero meu site
                             <ArrowRight size={14} />
@@ -308,8 +294,8 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                             Ver planos
                         </CandeiaButton>
                     </div>
-                </div>
-            </motion.div>
+                </motion.div>
+            </div>
         </div>
     </section>
 );
