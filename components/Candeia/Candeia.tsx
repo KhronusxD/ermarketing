@@ -217,24 +217,38 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
 
         {/* Main area — woman flush to section base + bubbles + centered bottom strip */}
         <div className="relative z-10 flex-1 min-h-0 w-full">
-            {/* Woman — anchored to the section base, bottom third fades into the sage bg */}
-            <motion.img
-                src="/woman-in-the-middle.png"
-                alt="Profissional de saúde"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 select-none"
+            {/* Woman — anchored to the section base, bottom third fades into the sage bg.
+                Wrapper handles centering so framer-motion's transform on the img doesn't
+                wipe out Tailwind's -translate-x-1/2. */}
+            <div
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
                 style={{
-                    width: 'clamp(260px, 42vw, 560px)',
-                    maxHeight: '100%',
-                    objectFit: 'contain',
-                    objectPosition: 'bottom',
-                    maskImage: 'linear-gradient(to top, transparent 0%, #000 33%)',
-                    WebkitMaskImage: 'linear-gradient(to top, transparent 0%, #000 33%)',
+                    width: 'clamp(300px, 48vw, 644px)',
+                    maxWidth: '95vw',
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
                 }}
-                draggable={false}
-            />
+            >
+                <motion.img
+                    src="/woman-in-the-middle.png"
+                    alt="Profissional de saúde"
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
+                    className="select-none"
+                    style={{
+                        width: '100%',
+                        maxHeight: '100%',
+                        objectFit: 'contain',
+                        objectPosition: 'bottom',
+                        maskImage: 'linear-gradient(to top, transparent 0%, #000 33%)',
+                        WebkitMaskImage: 'linear-gradient(to top, transparent 0%, #000 33%)',
+                    }}
+                    draggable={false}
+                />
+            </div>
 
             {/* 3 psychology bubbles — hidden on mobile so the stack stays clean */}
             <div className="hidden md:block absolute left-[8%] lg:left-[12%] top-[18%] z-20 pointer-events-none">
