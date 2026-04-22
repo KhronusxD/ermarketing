@@ -163,10 +163,10 @@ const PsychBubble: React.FC<PsychBubbleProps> = ({
 
 const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, onScroll }) => (
     <section
-        className="relative min-h-[100vh] overflow-hidden flex flex-col"
+        className="relative min-h-[92vh] md:min-h-[100vh] overflow-hidden flex flex-col"
         style={{ backgroundColor: CANDEIA.sage }}
     >
-        {/* Background video — muted, autoplay, loop, 5% opacity */}
+        {/* Background video — muted, autoplay, loop, 5% opacity. Desktop only (mobile hides to save bandwidth). */}
         <video
             src="https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/Hand_taking_coffee_202604221736.mp4"
             autoPlay
@@ -175,7 +175,7 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
             playsInline
             preload="auto"
             aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+            className="hidden md:block absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
             style={{ opacity: 0.05 }}
         />
 
@@ -215,7 +215,7 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
         <NavBar onCta={onCta} />
 
         {/* Top pill badge — sits in the whitespace above the woman, clear of the face */}
-        <div className="relative z-20 pt-24 md:pt-28 pb-4 flex justify-center px-6">
+        <div className="relative z-20 pt-20 md:pt-28 pb-2 md:pb-4 flex justify-center px-6">
             <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -232,12 +232,13 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
         <div className="relative z-10 flex-1 min-h-0 w-full">
             {/* Woman — anchored to the section base, bottom third fades into the sage bg.
                 Wrapper handles centering so framer-motion's transform on the img doesn't
-                wipe out Tailwind's -translate-x-1/2. */}
+                wipe out Tailwind's -translate-x-1/2. Mobile is width-driven (image fills
+                the viewport horizontally), desktop is capped bigger (+20% from prior). */}
             <div
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 pointer-events-none"
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 pointer-events-none
+                           w-full max-w-[480px]
+                           md:w-[58%] md:max-w-[770px]"
                 style={{
-                    width: 'clamp(300px, 48vw, 644px)',
-                    maxWidth: '95vw',
                     height: '100%',
                     display: 'flex',
                     justifyContent: 'center',
