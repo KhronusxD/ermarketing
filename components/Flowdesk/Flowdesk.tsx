@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
     ArrowRight,
@@ -8,7 +9,6 @@ import {
     Zap,
     Crown,
     Shield,
-    MessageCircle,
     Target,
     BarChart3,
     Users,
@@ -31,7 +31,7 @@ const WHATSAPP =
 // ————————————————————————————————————————————————————————————————
 // HERO
 // ————————————————————————————————————————————————————————————————
-const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, onScroll }) => {
+const Hero: React.FC<{ onDiagnostic: () => void; onScroll: () => void }> = ({ onDiagnostic, onScroll }) => {
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
     const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 120]);
@@ -86,12 +86,12 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                 </p>
 
                 <div className="inline-flex flex-col sm:flex-row gap-4 mb-14">
-                    <OceanButton size="lg" onClick={onCta}>
-                        Quero começar agora
+                    <OceanButton size="lg" onClick={onDiagnostic}>
+                        Fazer diagnóstico grátis
                         <ArrowRight size={18} />
                     </OceanButton>
                     <OceanButton size="lg" variant="outline" onClick={onScroll}>
-                        Ver o que está incluído
+                        Ver os planos
                     </OceanButton>
                 </div>
 
@@ -789,7 +789,7 @@ const Objections: React.FC = () => (
 // ————————————————————————————————————————————————————————————————
 // URGENCY
 // ————————————————————————————————————————————————————————————————
-const Urgency: React.FC = () => (
+const Urgency: React.FC<{ onDiagnostic: () => void }> = ({ onDiagnostic }) => (
     <section className="relative py-20 md:py-28 overflow-hidden">
         <UnderwaterBackdrop variant="mid" />
         <BioluminescentOrbs count={4} />
@@ -817,9 +817,14 @@ const Urgency: React.FC = () => (
                 Cada cliente recebe atenção direta da nossa equipe. Por isso, abrimos exatamente 4 vagas por mês —
                 independente do plano.
             </p>
-            <p className="text-[#A6DEFF] text-sm md:text-base italic">
+            <p className="text-[#A6DEFF] text-sm md:text-base italic mb-8">
                 Se você está lendo isso agora, ainda pode ter uma vaga disponível.
             </p>
+
+            <OceanButton size="lg" onClick={onDiagnostic} className="mx-auto">
+                Fazer diagnóstico e garantir a vaga
+                <ArrowRight size={18} />
+            </OceanButton>
         </div>
     </section>
 );
@@ -827,7 +832,7 @@ const Urgency: React.FC = () => (
 // ————————————————————————————————————————————————————————————————
 // FINAL CTA — "Don't miss it / Join us" equivalent, coral reef vibe
 // ————————————————————————————————————————————————————————————————
-const FinalCTA: React.FC<{ onCta: () => void }> = ({ onCta }) => (
+const FinalCTA: React.FC<{ onDiagnostic: () => void }> = ({ onDiagnostic }) => (
     <section className="relative py-24 md:py-32 overflow-hidden">
         <UnderwaterBackdrop variant="reef" />
         <BioluminescentOrbs count={10} />
@@ -855,13 +860,13 @@ const FinalCTA: React.FC<{ onCta: () => void }> = ({ onCta }) => (
             </h3>
 
             <p className="text-[#B8CEE4] text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-10">
-                3 meses. A partir de <span className="text-[#E8F4FF] font-semibold">R$ 990/mês</span>. Um sistema
-                completo funcionando pro seu negócio.
+                Em 2 minutos descobrimos qual plano faz sentido pro seu momento — sem compromisso, direto da nossa
+                equipe.
             </p>
 
-            <OceanButton size="lg" onClick={onCta} className="mx-auto mb-8">
-                <MessageCircle size={18} />
-                Quero começar — falar com a equipe
+            <OceanButton size="lg" onClick={onDiagnostic} className="mx-auto mb-8">
+                <Sparkles size={18} />
+                Fazer diagnóstico grátis
                 <ArrowRight size={18} />
             </OceanButton>
 
@@ -894,7 +899,7 @@ const Footer: React.FC = () => (
 // MAIN
 // ————————————————————————————————————————————————————————————————
 export const Flowdesk: React.FC = () => {
-    const planosRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         document.title = 'ER Marketing · Plano Essencial · FlowDesk';
@@ -902,6 +907,10 @@ export const Flowdesk: React.FC = () => {
 
     const goToWhatsApp = () => {
         window.open(WHATSAPP, '_blank', 'noopener,noreferrer');
+    };
+
+    const goToDiagnostic = () => {
+        navigate('/diagnostico-flowdesk');
     };
 
     const scrollToPlans = () => {
@@ -914,18 +923,16 @@ export const Flowdesk: React.FC = () => {
             className="min-h-screen text-[#E8F4FF] font-sans selection:bg-[#4DD5FF] selection:text-[#031224] relative overflow-x-hidden"
             style={{ backgroundColor: OCEAN.bg }}
         >
-            <Hero onCta={goToWhatsApp} onScroll={scrollToPlans} />
+            <Hero onDiagnostic={goToDiagnostic} onScroll={scrollToPlans} />
             <Pain />
             <Solution />
-            <div ref={planosRef}>
-                <Plans onCta={goToWhatsApp} />
-            </div>
             <Audience />
             <Cases />
             <HowItWorks />
             <Objections />
-            <Urgency />
-            <FinalCTA onCta={goToWhatsApp} />
+            <Urgency onDiagnostic={goToDiagnostic} />
+            <Plans onCta={goToWhatsApp} />
+            <FinalCTA onDiagnostic={goToDiagnostic} />
             <Footer />
         </div>
     );
