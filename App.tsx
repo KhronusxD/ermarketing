@@ -9,6 +9,7 @@ import { DiagnosticoFlow } from './components/RestaurantesManaus/Quiz/Diagnostic
 import RestaurantQuizFlow from './components/Restaurant/RestaurantQuizFlow';
 import { Flowdesk } from './components/Flowdesk/Flowdesk';
 import { DiagnosticoFlow as FlowdeskDiagnostico } from './components/Flowdesk/Quiz/DiagnosticoFlow';
+import { Candeia } from './components/Candeia/Candeia';
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
         <Route path="/auditoria-restaurante" element={<RestaurantQuizFlow />} />
         <Route path="/flowdesk" element={<Flowdesk />} />
         <Route path="/diagnostico-flowdesk" element={<FlowdeskDiagnostico />} />
+        <Route path="/lp-psicologia" element={<Candeia />} />
       </Routes>
     </Router>
   );
