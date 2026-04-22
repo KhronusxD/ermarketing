@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
     ArrowRight,
-    ArrowDown,
     Check,
     Sparkles,
     Instagram,
@@ -16,109 +15,293 @@ import {
     Smartphone,
     LifeBuoy,
     Wrench,
+    Brain,
+    Heart,
+    Sprout,
+    Quote,
 } from 'lucide-react';
 import { CandeiaButton, PillBadge, DecorativeQuote, GrainOverlay, CANDEIA } from './shared';
+import { SITE_PREVIEWS, HERO_PREVIEW } from './assets';
 
 const WHATSAPP =
     'https://wa.me/5592985146299?text=Ol%C3%A1%2C%20quero%20criar%20meu%20site%20profissional%20com%20a%20Candeia';
 
 // ————————————————————————————————————————————————————————————————
-// HERO
+// HERO — layered composition (inspired by the Mente Viva reference)
 // ————————————————————————————————————————————————————————————————
+const NavBar: React.FC<{ onCta: () => void }> = ({ onCta }) => (
+    <nav className="absolute top-0 left-0 right-0 z-30 px-6 md:px-10 pt-5 md:pt-7">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-[#1F1F1F] flex items-center justify-center">
+                    <Sprout size={18} className="text-[#C89968]" strokeWidth={2} />
+                </div>
+                <div>
+                    <div className="font-serif text-[#1F1F1F] font-semibold text-lg leading-none">candeia</div>
+                    <div className="text-[8px] text-[#3B4236] tracking-[0.35em] uppercase mt-0.5 font-semibold">
+                        Sites &middot; saúde
+                    </div>
+                </div>
+            </div>
+            <div className="hidden md:flex items-center gap-2">
+                {[
+                    { label: 'Portfólio', id: 'portfolio' },
+                    { label: 'Planos', id: 'planos' },
+                    { label: 'Processo', id: 'processo' },
+                    { label: 'Inclui', id: 'inclui' },
+                ].map((link) => (
+                    <button
+                        key={link.id}
+                        onClick={() =>
+                            document.getElementById(link.id)?.scrollIntoView({ behavior: 'smooth' })
+                        }
+                        className="px-5 py-2 rounded-full text-[13px] text-[#1F1F1F] border border-transparent hover:border-[#1F1F1F]/20 hover:bg-white/30 transition-all"
+                    >
+                        {link.label}
+                    </button>
+                ))}
+            </div>
+            <CandeiaButton size="sm" tone="tan" onClick={onCta}>
+                Contato
+                <ArrowRight size={14} />
+            </CandeiaButton>
+        </div>
+    </nav>
+);
+
+const BrowserFrame: React.FC<{ src: string; alt: string; className?: string; url?: string }> = ({
+    src,
+    alt,
+    className = '',
+    url = 'candeia.site',
+}) => (
+    <div
+        className={`relative rounded-2xl overflow-hidden border border-[#1F1F1F]/10 bg-white shadow-[0_40px_80px_-20px_rgba(31,31,31,0.35)] ${className}`}
+    >
+        <div className="flex items-center gap-1.5 bg-[#F0ECE3] px-4 py-2.5 border-b border-[#1F1F1F]/8">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]"></span>
+            <div className="ml-3 text-[10px] text-[#3B4236]/60 font-mono tracking-wide">{url}</div>
+        </div>
+        <img src={src} alt={alt} loading="eager" className="w-full block" />
+    </div>
+);
+
+const GlassIconCard: React.FC<{ icon: React.ElementType; className?: string; style?: React.CSSProperties }> = ({
+    icon: Icon,
+    className = '',
+    style,
+}) => (
+    <div
+        className={`relative rounded-[1.75rem] border border-white/50 bg-white/25 backdrop-blur-xl flex items-center justify-center shadow-[0_20px_50px_-15px_rgba(31,31,31,0.25)] ${className}`}
+        style={style}
+    >
+        <div className="absolute inset-0 rounded-[1.75rem] bg-gradient-to-br from-white/40 via-transparent to-[#C89968]/15 pointer-events-none"></div>
+        <Icon size={36} className="relative text-[#A77A4B]" strokeWidth={1.8} />
+    </div>
+);
+
 const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, onScroll }) => (
     <section
-        className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden pt-28 pb-20"
+        className="relative min-h-[100vh] overflow-hidden"
         style={{ backgroundColor: CANDEIA.sage }}
     >
         <GrainOverlay opacity={0.08} />
 
-        {/* Floating decorative quote marks */}
-        <DecorativeQuote className="absolute -top-8 -left-6 md:top-6 md:left-8" />
-        <DecorativeQuote
-            className="absolute bottom-10 right-6 md:bottom-12 md:right-16 opacity-80"
-            style={{ fontSize: 'clamp(6rem, 14vw, 12rem)' }}
-            flip
+        {/* Atmospheric soft orbs like the reference's pastel glow */}
+        <div
+            className="absolute inset-0 pointer-events-none opacity-60"
+            style={{
+                background:
+                    'radial-gradient(ellipse 40% 30% at 10% 20%, rgba(200,153,104,0.22), transparent 60%), radial-gradient(ellipse 40% 35% at 95% 80%, rgba(240,236,227,0.45), transparent 60%)',
+            }}
         />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 w-full text-center">
-            <div className="mb-8 flex justify-center">
-                <PillBadge tone="ink">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#C89968]"></span>
-                    Candeia &middot; Sites para profissionais de saúde
-                </PillBadge>
+        <NavBar onCta={onCta} />
+
+        {/* Huge background display typography (split across hero) */}
+        <div className="absolute inset-0 flex flex-col justify-center pointer-events-none select-none">
+            <div className="relative w-full flex flex-col gap-0 items-stretch">
+                <h1
+                    className="font-serif font-bold text-[#1F1F1F] leading-[0.78] tracking-tighter text-center"
+                    style={{
+                        fontSize: 'clamp(7rem, 28vw, 24rem)',
+                        opacity: 0.88,
+                    }}
+                >
+                    CAN
+                </h1>
+                <h1
+                    className="font-serif font-bold italic text-[#1F1F1F] leading-[0.78] tracking-tighter text-center"
+                    style={{
+                        fontSize: 'clamp(7rem, 28vw, 24rem)',
+                        opacity: 0.88,
+                    }}
+                >
+                    DEIA
+                </h1>
             </div>
+        </div>
 
-            <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, ease: 'easeOut' }}
-                className="font-serif font-semibold text-[#1F1F1F] tracking-tight leading-[0.95] mb-4"
-                style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)' }}
-            >
-                Seu consultório é profissional.
-            </motion.h1>
-            <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.15, ease: 'easeOut' }}
-                className="font-serif italic text-[#1F1F1F] tracking-tight leading-[0.95] mb-10"
-                style={{ fontSize: 'clamp(2.5rem, 8vw, 6.5rem)' }}
-            >
-                Seu site <span className="text-[#C89968]">também</span> precisa ser.
-            </motion.h2>
-
-            <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.45, duration: 0.6 }}
-                className="text-[#3B4236] text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-3"
-            >
-                Pacientes pesquisam no Google antes de agendar. Se você não aparece — ou aparece mal — eles vão pra
-                outro profissional.
-            </motion.p>
-            <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.55, duration: 0.6 }}
-                className="text-[#3B4236] text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-10"
-            >
-                Sites exclusivos pra <span className="font-semibold">psicólogos, nutricionistas e terapeutas</span>.
-                Design que transmite confiança, copy que comunica sua abordagem e estrutura que converte visitante
-                em paciente.
-            </motion.p>
-
+        {/* MAIN LAYERED COMPOSITION — desktop only */}
+        <div className="hidden lg:block absolute inset-0 z-10 pointer-events-none">
+            {/* Center — browser mockup with the first site preview */}
             <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.6 }}
-                className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+                initial={{ opacity: 0, y: 40, rotate: -3 }}
+                animate={{ opacity: 1, y: 0, rotate: -2 }}
+                transition={{ duration: 1, delay: 0.2, ease: 'easeOut' }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[48%] max-w-[640px] pointer-events-auto"
+                style={{ filter: 'drop-shadow(0 40px 60px rgba(31,31,31,0.3))' }}
             >
+                <BrowserFrame
+                    src={HERO_PREVIEW.src}
+                    alt={HERO_PREVIEW.label}
+                    url={HERO_PREVIEW.label.toLowerCase().replace(/\s+/g, '') + '.site'}
+                />
+            </motion.div>
+
+            {/* Left floating "profile" card — Candeia pitch card */}
+            <motion.div
+                initial={{ opacity: 0, x: -40, y: 20 }}
+                animate={{ opacity: 1, x: 0, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.5, ease: 'easeOut' }}
+                className="absolute left-[6%] top-[38%] z-20 w-[280px] pointer-events-auto"
+            >
+                <div className="relative rounded-[1.5rem] border border-white/60 bg-white/50 backdrop-blur-xl p-5 shadow-[0_25px_60px_-15px_rgba(31,31,31,0.3)]">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#C89968] to-[#A77A4B] flex items-center justify-center text-[#F0ECE3]">
+                            <Sprout size={20} strokeWidth={2} />
+                        </div>
+                        <div>
+                            <div className="font-serif text-[#1F1F1F] text-lg leading-tight flex items-center gap-1.5">
+                                Candeia
+                                <span className="w-3.5 h-3.5 rounded-full bg-[#1F1F1F] text-[#C89968] text-[9px] flex items-center justify-center font-bold">
+                                    ✓
+                                </span>
+                            </div>
+                            <div className="text-[11px] text-[#3B4236]/80">Sites · saúde mental</div>
+                        </div>
+                    </div>
+                    <p className="text-[13px] text-[#1F1F1F] leading-snug mb-4 italic">
+                        Cuidar da presença digital é cuidar do consultório.
+                    </p>
+                    <CandeiaButton size="sm" tone="tan" onClick={onCta} className="w-full justify-center">
+                        Agendar conversa
+                        <ArrowRight size={14} />
+                    </CandeiaButton>
+                </div>
+            </motion.div>
+
+            {/* Right glass icon cards */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: -30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.7, ease: 'easeOut' }}
+                className="absolute right-[8%] top-[24%]"
+            >
+                <GlassIconCard icon={Brain} className="w-24 h-24 md:w-28 md:h-28 rotate-[6deg]" />
+            </motion.div>
+            <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.85, ease: 'easeOut' }}
+                className="absolute right-[12%] top-[55%]"
+            >
+                <GlassIconCard icon={Heart} className="w-20 h-20 md:w-24 md:h-24 -rotate-[8deg]" />
+            </motion.div>
+
+            {/* Bottom-left testimonial block */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 1, ease: 'easeOut' }}
+                className="absolute bottom-16 left-[6%] max-w-[260px] pointer-events-auto"
+            >
+                <Quote size={22} className="text-[#C89968] mb-3" strokeWidth={2.2} />
+                <p className="text-[#1F1F1F] text-[14px] leading-relaxed mb-4">
+                    Sua presença online merece o mesmo cuidado que o seu atendimento.
+                </p>
+                <button
+                    onClick={onScroll}
+                    className="inline-flex items-center gap-2 text-[#3B4236] font-semibold text-[13px] hover:text-[#A77A4B] transition-colors group"
+                >
+                    <span className="border-b border-[#3B4236]/60 group-hover:border-[#A77A4B] pb-0.5">Saiba mais</span>
+                    <span className="w-7 h-7 rounded-full border border-[#3B4236]/40 flex items-center justify-center group-hover:border-[#A77A4B]">
+                        <ArrowRight size={12} />
+                    </span>
+                </button>
+            </motion.div>
+        </div>
+
+        {/* MOBILE COMPOSITION — simplified stack */}
+        <div className="lg:hidden relative z-10 pt-28 pb-16 px-6">
+            <div className="text-center mb-8">
+                <PillBadge tone="ink" className="mb-6">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#C89968]"></span>
+                    Sites para profissionais de saúde
+                </PillBadge>
+                <h2
+                    className="font-serif font-semibold text-[#1F1F1F] leading-[0.95] mb-3"
+                    style={{ fontSize: 'clamp(2rem, 8vw, 3rem)' }}
+                >
+                    Seu consultório é profissional.
+                </h2>
+                <h2
+                    className="font-serif italic text-[#1F1F1F] leading-[0.95]"
+                    style={{ fontSize: 'clamp(2rem, 9vw, 3.5rem)' }}
+                >
+                    Seu site <span className="text-[#C89968]">também</span>.
+                </h2>
+            </div>
+            <div className="relative max-w-md mx-auto mb-8" style={{ transform: 'rotate(-2deg)' }}>
+                <BrowserFrame src={HERO_PREVIEW.src} alt={HERO_PREVIEW.label} />
+            </div>
+            <div className="flex flex-col items-center gap-3">
                 <CandeiaButton size="lg" tone="ink" onClick={onCta}>
                     Quero meu site profissional
                     <ArrowRight size={18} />
                 </CandeiaButton>
-                <CandeiaButton size="lg" tone="outline-ink" onClick={onScroll}>
+                <CandeiaButton size="md" tone="outline-ink" onClick={onScroll}>
                     Ver os planos
                 </CandeiaButton>
-            </motion.div>
-
-            <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.9, duration: 0.6 }}
-                className="text-[11px] text-[#3B4236]/80 tracking-[0.2em] uppercase font-semibold"
-            >
-                A partir de R$ 990 &middot; 4x sem juros
-            </motion.p>
+                <p className="text-[11px] text-[#3B4236]/80 tracking-[0.2em] uppercase font-semibold mt-2">
+                    A partir de R$ 990 &middot; 4x sem juros
+                </p>
+            </div>
         </div>
 
-        <button
-            onClick={onScroll}
-            aria-label="Rolar"
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 w-11 h-11 rounded-full border border-[#1F1F1F]/30 bg-white/10 backdrop-blur-sm flex items-center justify-center text-[#1F1F1F] hover:bg-[#1F1F1F] hover:text-[#F0ECE3] transition-all"
-        >
-            <ArrowDown size={15} />
-        </button>
+        {/* Bottom copy strip — value prop + CTA + price (desktop) */}
+        <div className="hidden lg:block absolute bottom-8 left-0 right-0 z-20 px-6">
+            <div className="max-w-6xl mx-auto flex items-end justify-between">
+                <div className="flex-1"></div>
+                <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 1.1 }}
+                    className="flex flex-col items-end gap-2 text-right"
+                >
+                    <div className="flex flex-col items-end gap-2">
+                        <PillBadge tone="ink">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#C89968]"></span>
+                            Psicólogos · Nutricionistas · Terapeutas
+                        </PillBadge>
+                        <p className="text-[11px] text-[#3B4236]/80 tracking-[0.2em] uppercase font-semibold">
+                            A partir de R$ 990 &middot; 4x sem juros
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                        <CandeiaButton size="md" tone="ink" onClick={onCta}>
+                            Quero meu site
+                            <ArrowRight size={14} />
+                        </CandeiaButton>
+                        <CandeiaButton size="md" tone="outline-ink" onClick={onScroll}>
+                            Ver planos
+                        </CandeiaButton>
+                    </div>
+                </motion.div>
+            </div>
+        </div>
     </section>
 );
 
@@ -251,6 +434,92 @@ const InstagramVsSite: React.FC = () => (
             <p className="text-center mt-10 text-[#E8E2D3] text-base md:text-lg leading-relaxed max-w-2xl mx-auto italic">
                 Um site bem construído trabalha por você 24h por dia, 7 dias por semana — inclusive enquanto você
                 está em atendimento.
+            </p>
+        </div>
+    </section>
+);
+
+// ————————————————————————————————————————————————————————————————
+// PORTFOLIO — showcase of real psychology site screenshots
+// ————————————————————————————————————————————————————————————————
+const Portfolio: React.FC = () => (
+    <section
+        id="portfolio"
+        className="relative py-24 md:py-32 overflow-hidden"
+        style={{ backgroundColor: CANDEIA.sage }}
+    >
+        <GrainOverlay opacity={0.07} />
+        <DecorativeQuote
+            className="absolute top-4 left-2 opacity-35"
+            style={{ fontSize: 'clamp(6rem, 14vw, 11rem)' }}
+        />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+            <div className="text-center mb-14">
+                <PillBadge tone="ink" className="mb-6">
+                    <Sparkles size={10} />
+                    Portfólio
+                </PillBadge>
+                <h2
+                    className="font-serif font-semibold text-[#1F1F1F] tracking-tight leading-[0.98] mb-4 max-w-3xl mx-auto"
+                    style={{ fontSize: 'clamp(2.25rem, 5vw, 3.75rem)' }}
+                >
+                    Cada site tem <span className="italic text-[#A77A4B]">a cara do profissional.</span>
+                </h2>
+                <p className="text-[#3B4236] text-base md:text-lg max-w-2xl mx-auto">
+                    Sem template. Sem molde repetido. Conheça alguns dos sites que construímos pra psicólogos,
+                    nutricionistas e terapeutas — cada um com identidade própria.
+                </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+                {SITE_PREVIEWS.map((site, i) => (
+                    <motion.div
+                        key={site.src}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-50px' }}
+                        transition={{ duration: 0.55, delay: (i % 3) * 0.08 }}
+                        className="group"
+                    >
+                        <div className="relative rounded-2xl overflow-hidden border border-[#1F1F1F]/10 bg-white shadow-[0_15px_40px_-15px_rgba(31,31,31,0.3)] transition-all duration-500 hover:shadow-[0_25px_50px_-15px_rgba(31,31,31,0.4)] hover:-translate-y-1">
+                            {/* Browser chrome */}
+                            <div className="flex items-center gap-1.5 bg-[#F0ECE3] px-3 py-2 border-b border-[#1F1F1F]/8">
+                                <span className="w-2 h-2 rounded-full bg-[#FF5F57]"></span>
+                                <span className="w-2 h-2 rounded-full bg-[#FEBC2E]"></span>
+                                <span className="w-2 h-2 rounded-full bg-[#28C840]"></span>
+                                <div className="ml-2 text-[9px] text-[#3B4236]/60 font-mono tracking-wide truncate">
+                                    {site.label.toLowerCase().replace(/\s+/g, '') + '.com.br'}
+                                </div>
+                            </div>
+                            {/* Screenshot */}
+                            <div className="relative aspect-[16/9] overflow-hidden">
+                                <img
+                                    src={site.src}
+                                    alt={site.label}
+                                    loading="lazy"
+                                    className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
+                                />
+                            </div>
+                            {/* Caption */}
+                            <div className="p-4 flex items-center justify-between gap-3 bg-white">
+                                <div>
+                                    <div className="font-serif text-[#1F1F1F] text-[15px] leading-tight">
+                                        {site.label}
+                                    </div>
+                                    <div className="text-[11px] text-[#3B4236]/75 tracking-wide">{site.style}</div>
+                                </div>
+                                <span className="shrink-0 text-[10px] uppercase tracking-[0.2em] font-bold text-[#A77A4B] border border-[#A77A4B]/35 rounded-full px-2.5 py-1">
+                                    {site.mood}
+                                </span>
+                            </div>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+
+            <p className="text-center mt-12 text-[#3B4236] text-sm md:text-base italic max-w-xl mx-auto">
+                Seu site não vai ser igual a nenhum desses. Vai ser <span className="font-semibold not-italic">seu</span>.
             </p>
         </div>
     </section>
@@ -515,6 +784,7 @@ const INCLUDED = [
 
 const Included: React.FC = () => (
     <section
+        id="inclui"
         className="relative py-24 md:py-32 overflow-hidden"
         style={{ backgroundColor: CANDEIA.sage }}
     >
@@ -594,6 +864,7 @@ const TIMELINE = [
 
 const HowItWorks: React.FC = () => (
     <section
+        id="processo"
         className="relative py-24 md:py-32 overflow-hidden"
         style={{ backgroundColor: CANDEIA.cream }}
     >
@@ -919,6 +1190,7 @@ export const Candeia: React.FC = () => {
             <Hero onCta={goToWhatsApp} onScroll={scrollToPlans} />
             <Pain />
             <InstagramVsSite />
+            <Portfolio />
             <Plans onCta={goToWhatsApp} />
             <Included />
             <HowItWorks />
