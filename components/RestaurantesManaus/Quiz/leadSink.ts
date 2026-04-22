@@ -4,7 +4,8 @@ import type { QuizFormFields } from './QuizResult';
 // into the spreadsheet: 1vpQx96rca-A0j7kBxpI4t4HgaMDR_6JT5hBtBEmZTq0
 // Deploy the Apps Script as "Web App" with access "Anyone" and paste the
 // /exec URL below. The request uses text/plain to avoid a CORS preflight.
-const SHEETS_ENDPOINT = 'https://script.google.com/macros/s/REPLACE_WITH_DEPLOYMENT_ID/exec';
+const SHEETS_ENDPOINT =
+    'https://script.google.com/macros/s/AKfycbzQvWOnzZHhHIp-kfryN1vDDvLlMDcqoc2I6GOddthjRYYpaTw2RwfdD02WhwXXL7Wj/exec';
 
 export interface LeadPayload extends QuizFormFields {
     answers: (string | undefined)[];
@@ -25,9 +26,7 @@ export function buildLeadPayload(fields: QuizFormFields, answers: (string | unde
 
 // Fire-and-forget — we don't block the UI on the network call.
 export function sendLeadToSheet(payload: LeadPayload): Promise<void> {
-    if (!SHEETS_ENDPOINT || SHEETS_ENDPOINT.includes('REPLACE_WITH_DEPLOYMENT_ID')) {
-        return Promise.resolve();
-    }
+    if (!SHEETS_ENDPOINT) return Promise.resolve();
     return fetch(SHEETS_ENDPOINT, {
         method: 'POST',
         mode: 'no-cors',
