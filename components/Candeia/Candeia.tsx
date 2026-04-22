@@ -21,9 +21,12 @@ import {
 } from 'lucide-react';
 import { CandeiaButton, PillBadge, DecorativeQuote, GrainOverlay, CANDEIA } from './shared';
 import { SITE_PREVIEWS } from './assets';
+import { trackStandard } from './metaPixel';
 
-const WHATSAPP =
-    'https://wa.me/5592985146299?text=Ol%C3%A1%2C%20quero%20criar%20meu%20site%20profissional%20com%20a%20Candeia';
+// Candeia-specific redirect (Flowdesk tracking link dedicated to this page)
+const CTA_REDIRECT = 'https://flowdesk-flowdesk-app.rikvu5.easypanel.host/r/10jh5a';
+const FLOWDESK_PIXEL_ID = '63f4f20b-41a3-46fb-94d8-942c3344a730';
+const FLOWDESK_LINK = '10jh5a';
 
 // ————————————————————————————————————————————————————————————————
 // HERO — layered composition (inspired by the Mente Viva reference)
@@ -1193,11 +1196,30 @@ const Footer: React.FC = () => (
 // ————————————————————————————————————————————————————————————————
 export const Candeia: React.FC = () => {
     useEffect(() => {
-        document.title = 'Candeia · Sites pra profissionais de saúde';
+        document.title = 'ER Marketing Psicologia · Sites para profissionais de saúde';
+
+        // Inject a Flowdesk pixel scoped to this page's redirect link (10jh5a).
+        // The site-wide Flowdesk pixel in index.html is tied to a different link,
+        // so this one makes sure the Candeia CTA clicks are attributed correctly.
+        const scriptId = 'flowdesk-pixel-candeia';
+        if (!document.getElementById(scriptId)) {
+            const script = document.createElement('script');
+            script.id = scriptId;
+            script.async = true;
+            script.src = `https://flowdesk-flowdesk-app.rikvu5.easypanel.host/pixel.js?id=${FLOWDESK_PIXEL_ID}&link=${FLOWDESK_LINK}`;
+            document.head.appendChild(script);
+        }
     }, []);
 
-    const goToWhatsApp = () => {
-        window.open(WHATSAPP, '_blank', 'noopener,noreferrer');
+    const goToCta = () => {
+        // Fire the Meta Ads Lead conversion event on this page's primary CTA.
+        trackStandard('Lead', {
+            content_name: 'Candeia · Psicologia',
+            content_category: 'sites-saude',
+            value: 1,
+            currency: 'BRL',
+        });
+        window.open(CTA_REDIRECT, '_blank', 'noopener,noreferrer');
     };
 
     const scrollToPlans = () => {
@@ -1210,17 +1232,17 @@ export const Candeia: React.FC = () => {
             className="min-h-screen font-sans selection:bg-[#C89968] selection:text-[#1F1F1F] relative overflow-x-hidden"
             style={{ backgroundColor: CANDEIA.cream, color: CANDEIA.ink }}
         >
-            <Hero onCta={goToWhatsApp} onScroll={scrollToPlans} />
+            <Hero onCta={goToCta} onScroll={scrollToPlans} />
             <PortfolioCarousel />
             <Pain />
             <InstagramVsSite />
-            <Plans onCta={goToWhatsApp} />
+            <Plans onCta={goToCta} />
             <Included />
             <HowItWorks />
             <Audience />
             <Objections />
-            <Urgency onCta={goToWhatsApp} />
-            <FinalCTA onCta={goToWhatsApp} />
+            <Urgency onCta={goToCta} />
+            <FinalCTA onCta={goToCta} />
             <Footer />
         </div>
     );
