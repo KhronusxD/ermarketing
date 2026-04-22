@@ -166,6 +166,19 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
         className="relative min-h-[100vh] overflow-hidden flex flex-col"
         style={{ backgroundColor: CANDEIA.sage }}
     >
+        {/* Background video — muted, autoplay, loop, 5% opacity */}
+        <video
+            src="https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/Hand_taking_coffee_202604221736.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+            style={{ opacity: 0.05 }}
+        />
+
         <GrainOverlay opacity={0.08} />
 
         {/* Atmospheric soft orbs */}
