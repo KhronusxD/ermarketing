@@ -12,6 +12,7 @@ import {
 import { GoldButton, SectionLabel } from '../shared';
 import { WHATSAPP_REDIRECT } from './quizData';
 import { getDiagnostic } from './diagnostic';
+import { trackCustom, trackStandard } from './metaPixel';
 
 export interface QuizFormFields {
     name: string;
@@ -43,10 +44,20 @@ export const QuizResult: React.FC<QuizResultProps> = ({ answers, formData }) => 
                 restaurant: restaurantName,
             });
         } catch { /* noop */ }
+        // Meta Pixel — standard Lead event fires on the conclusion page
+        trackStandard('Lead', {
+            content_name: 'Diagnostico Manaus - Result',
+            content_category: 'diagnostico',
+            value: 1,
+            currency: 'BRL',
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const openWhatsApp = () => {
+        trackCustom('DiagnosticoWhatsAppClick', {
+            content_name: 'Diagnostico Manaus - WhatsApp CTA',
+        });
         window.open(WHATSAPP_REDIRECT, '_blank', 'noopener,noreferrer');
     };
 

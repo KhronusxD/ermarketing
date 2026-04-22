@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, Lock } from 'lucide-react';
 import { GoldButton, SectionLabel } from '../shared';
 import type { QuizFormFields } from './QuizResult';
+import { trackCustom } from './metaPixel';
 
 interface QuizFormProps {
     answers: (string | undefined)[];
@@ -30,6 +31,9 @@ export const QuizForm: React.FC<QuizFormProps> = ({ answers, onComplete }) => {
                 JSON.stringify({ ...fields, answers, ts: new Date().toISOString() })
             );
         } catch { /* ignore storage errors */ }
+        trackCustom('DiagnosticoFormSubmit', {
+            content_name: 'Diagnostico Manaus - Form Submit',
+        });
         onComplete(fields);
     };
 

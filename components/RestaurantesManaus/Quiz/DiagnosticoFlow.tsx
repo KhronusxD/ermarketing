@@ -10,6 +10,7 @@ import { QuizLoading } from './QuizLoading';
 import { QuizResult, type QuizFormFields } from './QuizResult';
 import { QUIZ_STEPS } from './quizData';
 import { buildLeadPayload, sendLeadToSheet } from './leadSink';
+import { trackCustom, trackStandard } from './metaPixel';
 
 // Phases: 0 = intro, 1..5 = quiz steps, 6 = form, 7 = loading, 8 = result
 type Phase = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
@@ -22,6 +23,13 @@ export const DiagnosticoFlow: React.FC = () => {
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Phase-level Meta Pixel events
+        if (phase === 0) {
+            trackStandard('ViewContent', { content_name: 'Diagnostico Manaus - Intro', content_category: 'diagnostico' });
+        } else if (phase === 6) {
+            // Lead is seeing the capture form — strong intent signal
+            trackStandard('InitiateCheckout', { content_name: 'Diagnostico Manaus - Form', content_category: 'diagnostico' });
+        }
     }, [phase]);
 
     const advance = () => setPhase((p) => Math.min(8, (p + 1) as Phase) as Phase);
@@ -32,6 +40,11 @@ export const DiagnosticoFlow: React.FC = () => {
             const next = [...prev];
             next[stepIdx] = option;
             return next;
+        });
+        trackCustom('DiagnosticoStepAnswered', {
+            step: stepIdx + 1,
+            step_label: QUIZ_STEPS[stepIdx]?.label || '',
+            answer: option,
         });
         // Slight delay so the user sees the selection animate before advancing
         setTimeout(advance, 260);
