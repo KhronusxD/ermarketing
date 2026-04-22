@@ -163,48 +163,60 @@ const PsychBubble: React.FC<PsychBubbleProps> = ({
 
 const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, onScroll }) => (
     <section
-        className="relative min-h-[100vh] overflow-hidden"
+        className="relative min-h-[100vh] overflow-hidden flex flex-col"
         style={{ backgroundColor: CANDEIA.sage }}
     >
         <GrainOverlay opacity={0.08} />
 
-        {/* Atmospheric soft orbs like the reference's pastel glow */}
+        {/* Atmospheric soft orbs */}
         <div
-            className="absolute inset-0 pointer-events-none opacity-60"
+            className="absolute inset-0 pointer-events-none opacity-60 z-0"
             style={{
                 background:
                     'radial-gradient(ellipse 40% 30% at 10% 20%, rgba(200,153,104,0.22), transparent 60%), radial-gradient(ellipse 40% 35% at 95% 80%, rgba(240,236,227,0.45), transparent 60%)',
             }}
         />
 
-        <NavBar onCta={onCta} />
-
-        {/* Huge background display typography (split across hero) */}
-        <div className="absolute inset-0 flex flex-col justify-center pointer-events-none select-none">
-            <div className="relative w-full flex flex-col gap-0 items-stretch">
-                <h1
-                    className="font-serif font-bold text-[#1F1F1F] leading-[0.78] tracking-tighter text-center"
-                    style={{
-                        fontSize: 'clamp(7rem, 28vw, 24rem)',
-                        opacity: 0.88,
-                    }}
-                >
-                    CAN
-                </h1>
-                <h1
-                    className="font-serif font-bold italic text-[#1F1F1F] leading-[0.78] tracking-tighter text-center"
-                    style={{
-                        fontSize: 'clamp(7rem, 28vw, 24rem)',
-                        opacity: 0.88,
-                    }}
-                >
-                    DEIA
-                </h1>
-            </div>
+        {/* Huge background display typography — sits behind everything, low opacity */}
+        <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none select-none z-0">
+            <h1
+                className="font-serif font-bold text-[#1F1F1F] leading-[0.78] tracking-tighter text-center w-full"
+                style={{
+                    fontSize: 'clamp(6rem, 24vw, 21rem)',
+                    opacity: 0.32,
+                }}
+            >
+                PSICO
+            </h1>
+            <h1
+                className="font-serif font-bold italic text-[#1F1F1F] leading-[0.78] tracking-tighter text-center w-full"
+                style={{
+                    fontSize: 'clamp(6rem, 24vw, 21rem)',
+                    opacity: 0.32,
+                }}
+            >
+                LOGIA
+            </h1>
         </div>
 
-        {/* CENTER — Woman image (desktop + mobile share this block) */}
-        <div className="relative z-10 w-full h-full flex items-end justify-center pointer-events-none">
+        <NavBar onCta={onCta} />
+
+        {/* Top pill badge — sits in the whitespace above the woman, clear of the face */}
+        <div className="relative z-20 pt-24 md:pt-28 pb-4 flex justify-center px-6">
+            <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+            >
+                <PillBadge tone="ink" className="bg-white/50 backdrop-blur-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#C89968]"></span>
+                    Sites para profissionais de saúde
+                </PillBadge>
+            </motion.div>
+        </div>
+
+        {/* Middle area — woman image + bubbles (flex-1 so it takes all remaining space) */}
+        <div className="relative z-10 flex-1 flex items-end justify-center min-h-0 w-full">
             <motion.img
                 src="/woman-in-the-middle.png"
                 alt="Profissional de saúde"
@@ -213,78 +225,61 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                 transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
                 className="relative z-10 select-none object-contain object-bottom"
                 style={{
-                    width: 'clamp(320px, 45vw, 640px)',
-                    maxHeight: '92vh',
+                    width: 'clamp(280px, 40vw, 560px)',
+                    maxHeight: '78vh',
                     filter: 'drop-shadow(0 40px 40px rgba(31,31,31,0.25))',
                 }}
                 draggable={false}
             />
+
+            {/* 3 psychology bubbles — positioned clear of the woman's silhouette */}
+            <div className="absolute left-[5%] md:left-[10%] top-[18%] z-20 pointer-events-none">
+                <PsychBubble
+                    icon={Brain}
+                    size={140}
+                    floatOffset={18}
+                    floatDuration={6.5}
+                    delay={0.5}
+                    tint="tan"
+                />
+            </div>
+            <div className="absolute right-[6%] md:right-[12%] top-[12%] z-20 pointer-events-none">
+                <PsychBubble
+                    icon={Heart}
+                    size={118}
+                    floatOffset={14}
+                    floatDuration={7.5}
+                    delay={0.8}
+                    tint="cream"
+                    iconColor="#C89968"
+                />
+            </div>
+            <div className="absolute right-[8%] md:right-[15%] bottom-[18%] z-20 pointer-events-none">
+                <PsychBubble
+                    icon={Sprout}
+                    size={100}
+                    floatOffset={12}
+                    floatDuration={8}
+                    delay={1.1}
+                    tint="sage"
+                    iconColor="#6F7A66"
+                />
+            </div>
         </div>
 
-        {/* 3 PSYCHOLOGY BUBBLES — floating around the woman, harmonized */}
-        {/* Top-left — Brain (mind/reflection) */}
-        <div className="absolute left-[6%] md:left-[12%] top-[24%] md:top-[28%] z-20 pointer-events-none">
-            <PsychBubble
-                icon={Brain}
-                size={140}
-                floatOffset={18}
-                floatDuration={6.5}
-                delay={0.5}
-                tint="tan"
-            />
-        </div>
-        {/* Top-right — Heart (emotion/care) */}
-        <div className="absolute right-[7%] md:right-[13%] top-[20%] md:top-[22%] z-20 pointer-events-none">
-            <PsychBubble
-                icon={Heart}
-                size={120}
-                floatOffset={14}
-                floatDuration={7.5}
-                delay={0.8}
-                tint="cream"
-                iconColor="#C89968"
-            />
-        </div>
-        {/* Bottom-right — Sprout (growth) — sits lower, smaller, rotated slightly */}
-        <div className="absolute right-[10%] md:right-[18%] bottom-[22%] md:bottom-[26%] z-20 pointer-events-none">
-            <PsychBubble
-                icon={Sprout}
-                size={100}
-                floatOffset={12}
-                floatDuration={8}
-                delay={1.1}
-                tint="sage"
-                iconColor="#6F7A66"
-            />
-        </div>
-
-        {/* TOP HEADLINE + CTAs (overlay) */}
-        <div className="absolute top-[18%] md:top-[20%] left-0 right-0 z-20 px-6 pointer-events-none">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.4 }}
-                className="max-w-5xl mx-auto text-center pointer-events-auto"
-            >
-                <PillBadge tone="ink" className="mb-5 bg-white/40 backdrop-blur-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#C89968]"></span>
-                    Sites para profissionais de saúde
-                </PillBadge>
-            </motion.div>
-        </div>
-
-        {/* BOTTOM HEADLINE + CTAs + price */}
-        <div className="absolute bottom-6 md:bottom-8 left-0 right-0 z-30 px-6 pointer-events-none">
+        {/* Bottom strip — flows naturally below the woman (no overlap) */}
+        <div className="relative z-30 px-6 pt-4 pb-6 md:pb-8">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.2 }}
-                className="max-w-6xl mx-auto flex flex-col md:flex-row items-end md:items-end justify-between gap-4 pointer-events-auto"
+                className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:items-end justify-between gap-6"
             >
-                {/* Left-bottom tagline block (replaces the old testimonial) */}
-                <div className="max-w-[260px] text-center md:text-left">
+                {/* Left — tagline + Saiba mais */}
+                <div className="max-w-[280px] text-center md:text-left">
                     <h3 className="font-serif text-[#1F1F1F] text-[15px] md:text-base leading-snug mb-3 italic">
-                        Cuidar da mente é <span className="font-semibold not-italic">transformar a vida.</span>
+                        Cuidar da mente é{' '}
+                        <span className="font-semibold not-italic">transformar a vida.</span>
                     </h3>
                     <button
                         onClick={onScroll}
@@ -299,12 +294,12 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                     </button>
                 </div>
 
-                {/* Right-bottom CTAs + price */}
-                <div className="flex flex-col items-center md:items-end gap-2 text-right">
+                {/* Right — price + CTAs */}
+                <div className="flex flex-col items-center md:items-end gap-3 md:text-right">
                     <p className="text-[11px] text-[#3B4236]/80 tracking-[0.2em] uppercase font-semibold">
                         A partir de R$ 990 &middot; 4x sem juros
                     </p>
-                    <div className="flex flex-wrap items-center justify-end gap-2">
+                    <div className="flex flex-wrap items-center justify-center md:justify-end gap-2">
                         <CandeiaButton size="md" tone="ink" onClick={onCta}>
                             Quero meu site
                             <ArrowRight size={14} />
