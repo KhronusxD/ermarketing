@@ -166,19 +166,6 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
         className="relative min-h-[92vh] md:min-h-[100vh] overflow-hidden flex flex-col"
         style={{ backgroundColor: CANDEIA.sage }}
     >
-        {/* Background video — muted, autoplay, loop, 5% opacity. Desktop only (mobile hides to save bandwidth). */}
-        <video
-            src="https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/Hand_taking_coffee_202604221736.mp4"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            aria-hidden="true"
-            className="hidden md:block absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
-            style={{ opacity: 0.05 }}
-        />
-
         <GrainOverlay opacity={0.08} />
 
         {/* Atmospheric soft orbs */}
@@ -190,8 +177,9 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
             }}
         />
 
-        {/* Huge background display typography — sits behind everything, low opacity */}
-        <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none select-none z-0">
+        {/* Huge background display typography — sits behind everything, low opacity.
+            On mobile it snaps close to the pill; on md+ it stays vertically centered. */}
+        <div className="absolute inset-0 flex flex-col items-center pointer-events-none select-none z-0 justify-start pt-36 md:justify-center md:pt-0">
             <h1
                 className="font-serif font-bold text-[#1F1F1F] leading-[0.78] tracking-tighter text-center w-full"
                 style={{
@@ -236,8 +224,8 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                 the viewport horizontally), desktop is capped bigger (+20% from prior). */}
             <div
                 className="absolute bottom-0 left-1/2 -translate-x-1/2 z-10 pointer-events-none
-                           w-full max-w-[480px]
-                           md:w-[58%] md:max-w-[770px]"
+                           w-[120%] max-w-[576px]
+                           md:w-[62%] md:max-w-[924px]"
                 style={{
                     height: '100%',
                     display: 'flex',
