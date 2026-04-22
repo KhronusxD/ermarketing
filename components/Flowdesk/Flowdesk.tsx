@@ -24,6 +24,8 @@ import {
     BioluminescentOrbs,
     OCEAN,
 } from './shared';
+import { CreativeShowcase } from './CreativeShowcase';
+import { LandingPagesShowcase } from './LandingPagesShowcase';
 
 const WHATSAPP =
     'https://wa.me/5592985146299?text=Ol%C3%A1%2C%20quero%20come%C3%A7ar%20com%20o%20Plano%20Essencial%20da%20ER%20Marketing';
@@ -926,8 +928,10 @@ export const Flowdesk: React.FC = () => {
             <Hero onDiagnostic={goToDiagnostic} onScroll={scrollToPlans} />
             <Pain />
             <Solution />
+            <CreativeShowcase />
             <Audience />
             <Cases />
+            <LandingPagesShowcase />
             <HowItWorks />
             <Objections />
             <Urgency onDiagnostic={goToDiagnostic} />
