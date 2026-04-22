@@ -18,10 +18,9 @@ import {
     Brain,
     Heart,
     Sprout,
-    Quote,
 } from 'lucide-react';
 import { CandeiaButton, PillBadge, DecorativeQuote, GrainOverlay, CANDEIA } from './shared';
-import { SITE_PREVIEWS, HERO_PREVIEW } from './assets';
+import { SITE_PREVIEWS } from './assets';
 
 const WHATSAPP =
     'https://wa.me/5592985146299?text=Ol%C3%A1%2C%20quero%20criar%20meu%20site%20profissional%20com%20a%20Candeia';
@@ -37,9 +36,9 @@ const NavBar: React.FC<{ onCta: () => void }> = ({ onCta }) => (
                     <Sprout size={18} className="text-[#C89968]" strokeWidth={2} />
                 </div>
                 <div>
-                    <div className="font-serif text-[#1F1F1F] font-semibold text-lg leading-none">candeia</div>
+                    <div className="font-serif text-[#1F1F1F] font-semibold text-lg leading-none">ER Marketing</div>
                     <div className="text-[8px] text-[#3B4236] tracking-[0.35em] uppercase mt-0.5 font-semibold">
-                        Sites &middot; saúde
+                        Psicologia
                     </div>
                 </div>
             </div>
@@ -69,38 +68,95 @@ const NavBar: React.FC<{ onCta: () => void }> = ({ onCta }) => (
     </nav>
 );
 
-const BrowserFrame: React.FC<{ src: string; alt: string; className?: string; url?: string }> = ({
-    src,
-    alt,
-    className = '',
-    url = 'candeia.site',
-}) => (
-    <div
-        className={`relative rounded-2xl overflow-hidden border border-[#1F1F1F]/10 bg-white shadow-[0_40px_80px_-20px_rgba(31,31,31,0.35)] ${className}`}
-    >
-        <div className="flex items-center gap-1.5 bg-[#F0ECE3] px-4 py-2.5 border-b border-[#1F1F1F]/8">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]"></span>
-            <div className="ml-3 text-[10px] text-[#3B4236]/60 font-mono tracking-wide">{url}</div>
-        </div>
-        <img src={src} alt={alt} loading="eager" className="w-full block" />
-    </div>
-);
+// Animated floating psychology bubble (circular, frosted glass, symbol at center)
+interface PsychBubbleProps {
+    icon: React.ElementType;
+    size?: number;
+    className?: string;
+    floatOffset?: number;
+    floatDuration?: number;
+    delay?: number;
+    iconColor?: string;
+    tint?: 'tan' | 'sage' | 'cream';
+}
 
-const GlassIconCard: React.FC<{ icon: React.ElementType; className?: string; style?: React.CSSProperties }> = ({
+const PsychBubble: React.FC<PsychBubbleProps> = ({
     icon: Icon,
+    size = 120,
     className = '',
-    style,
-}) => (
-    <div
-        className={`relative rounded-[1.75rem] border border-white/50 bg-white/25 backdrop-blur-xl flex items-center justify-center shadow-[0_20px_50px_-15px_rgba(31,31,31,0.25)] ${className}`}
-        style={style}
-    >
-        <div className="absolute inset-0 rounded-[1.75rem] bg-gradient-to-br from-white/40 via-transparent to-[#C89968]/15 pointer-events-none"></div>
-        <Icon size={36} className="relative text-[#A77A4B]" strokeWidth={1.8} />
-    </div>
-);
+    floatOffset = 16,
+    floatDuration = 6,
+    delay = 0,
+    iconColor = '#A77A4B',
+    tint = 'tan',
+}) => {
+    const tintGradient = {
+        tan: 'radial-gradient(circle at 30% 25%, rgba(255,255,255,0.85) 0%, rgba(240,236,227,0.55) 35%, rgba(200,153,104,0.25) 75%, rgba(167,122,75,0.22) 100%)',
+        sage: 'radial-gradient(circle at 30% 25%, rgba(255,255,255,0.85) 0%, rgba(240,236,227,0.55) 35%, rgba(168,178,154,0.25) 75%, rgba(111,122,102,0.22) 100%)',
+        cream: 'radial-gradient(circle at 30% 25%, rgba(255,255,255,0.9) 0%, rgba(240,236,227,0.7) 40%, rgba(200,153,104,0.15) 80%, rgba(167,122,75,0.12) 100%)',
+    }[tint];
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{
+                opacity: 1,
+                scale: 1,
+                y: [0, -floatOffset, 0],
+            }}
+            transition={{
+                opacity: { duration: 0.8, delay },
+                scale: { duration: 0.8, delay, ease: 'easeOut' },
+                y: {
+                    duration: floatDuration,
+                    delay: delay + 0.4,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                },
+            }}
+            className={`relative rounded-full ${className}`}
+            style={{ width: size, height: size }}
+        >
+            {/* outer soft glow */}
+            <div
+                className="absolute -inset-4 rounded-full blur-2xl"
+                style={{
+                    background:
+                        'radial-gradient(circle, rgba(200,153,104,0.3) 0%, transparent 70%)',
+                }}
+            />
+            {/* glass sphere */}
+            <div
+                className="relative w-full h-full rounded-full flex items-center justify-center overflow-hidden backdrop-blur-xl border border-white/60 shadow-[0_25px_60px_-15px_rgba(31,31,31,0.25)]"
+                style={{ background: tintGradient }}
+            >
+                {/* inner highlight (top) */}
+                <div
+                    className="absolute inset-0 rounded-full pointer-events-none"
+                    style={{
+                        background:
+                            'radial-gradient(ellipse 50% 30% at 35% 20%, rgba(255,255,255,0.7), transparent 60%)',
+                    }}
+                />
+                {/* inner shadow (bottom-right) */}
+                <div
+                    className="absolute inset-0 rounded-full pointer-events-none"
+                    style={{
+                        background:
+                            'radial-gradient(ellipse 60% 40% at 70% 85%, rgba(167,122,75,0.28), transparent 55%)',
+                    }}
+                />
+                {/* icon */}
+                <Icon
+                    size={size * 0.42}
+                    className="relative z-10"
+                    color={iconColor}
+                    strokeWidth={1.6}
+                />
+            </div>
+        </motion.div>
+    );
+};
 
 const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, onScroll }) => (
     <section
@@ -144,153 +200,108 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
             </div>
         </div>
 
-        {/* MAIN LAYERED COMPOSITION — desktop only */}
-        <div className="hidden lg:block absolute inset-0 z-10 pointer-events-none">
-            {/* Center — browser mockup with the first site preview */}
-            <motion.div
-                initial={{ opacity: 0, y: 40, rotate: -3 }}
-                animate={{ opacity: 1, y: 0, rotate: -2 }}
-                transition={{ duration: 1, delay: 0.2, ease: 'easeOut' }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[48%] max-w-[640px] pointer-events-auto"
-                style={{ filter: 'drop-shadow(0 40px 60px rgba(31,31,31,0.3))' }}
-            >
-                <BrowserFrame
-                    src={HERO_PREVIEW.src}
-                    alt={HERO_PREVIEW.label}
-                    url={HERO_PREVIEW.label.toLowerCase().replace(/\s+/g, '') + '.site'}
-                />
-            </motion.div>
+        {/* CENTER — Woman image (desktop + mobile share this block) */}
+        <div className="relative z-10 w-full h-full flex items-end justify-center pointer-events-none">
+            <motion.img
+                src="/woman-in-the-middle.png"
+                alt="Profissional de saúde"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
+                className="relative z-10 select-none object-contain object-bottom"
+                style={{
+                    width: 'clamp(320px, 45vw, 640px)',
+                    maxHeight: '92vh',
+                    filter: 'drop-shadow(0 40px 40px rgba(31,31,31,0.25))',
+                }}
+                draggable={false}
+            />
+        </div>
 
-            {/* Left floating "profile" card — Candeia pitch card */}
-            <motion.div
-                initial={{ opacity: 0, x: -40, y: 20 }}
-                animate={{ opacity: 1, x: 0, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.5, ease: 'easeOut' }}
-                className="absolute left-[6%] top-[38%] z-20 w-[280px] pointer-events-auto"
-            >
-                <div className="relative rounded-[1.5rem] border border-white/60 bg-white/50 backdrop-blur-xl p-5 shadow-[0_25px_60px_-15px_rgba(31,31,31,0.3)]">
-                    <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#C89968] to-[#A77A4B] flex items-center justify-center text-[#F0ECE3]">
-                            <Sprout size={20} strokeWidth={2} />
-                        </div>
-                        <div>
-                            <div className="font-serif text-[#1F1F1F] text-lg leading-tight flex items-center gap-1.5">
-                                Candeia
-                                <span className="w-3.5 h-3.5 rounded-full bg-[#1F1F1F] text-[#C89968] text-[9px] flex items-center justify-center font-bold">
-                                    ✓
-                                </span>
-                            </div>
-                            <div className="text-[11px] text-[#3B4236]/80">Sites · saúde mental</div>
-                        </div>
-                    </div>
-                    <p className="text-[13px] text-[#1F1F1F] leading-snug mb-4 italic">
-                        Cuidar da presença digital é cuidar do consultório.
-                    </p>
-                    <CandeiaButton size="sm" tone="tan" onClick={onCta} className="w-full justify-center">
-                        Agendar conversa
-                        <ArrowRight size={14} />
-                    </CandeiaButton>
-                </div>
-            </motion.div>
+        {/* 3 PSYCHOLOGY BUBBLES — floating around the woman, harmonized */}
+        {/* Top-left — Brain (mind/reflection) */}
+        <div className="absolute left-[6%] md:left-[12%] top-[24%] md:top-[28%] z-20 pointer-events-none">
+            <PsychBubble
+                icon={Brain}
+                size={140}
+                floatOffset={18}
+                floatDuration={6.5}
+                delay={0.5}
+                tint="tan"
+            />
+        </div>
+        {/* Top-right — Heart (emotion/care) */}
+        <div className="absolute right-[7%] md:right-[13%] top-[20%] md:top-[22%] z-20 pointer-events-none">
+            <PsychBubble
+                icon={Heart}
+                size={120}
+                floatOffset={14}
+                floatDuration={7.5}
+                delay={0.8}
+                tint="cream"
+                iconColor="#C89968"
+            />
+        </div>
+        {/* Bottom-right — Sprout (growth) — sits lower, smaller, rotated slightly */}
+        <div className="absolute right-[10%] md:right-[18%] bottom-[22%] md:bottom-[26%] z-20 pointer-events-none">
+            <PsychBubble
+                icon={Sprout}
+                size={100}
+                floatOffset={12}
+                floatDuration={8}
+                delay={1.1}
+                tint="sage"
+                iconColor="#6F7A66"
+            />
+        </div>
 
-            {/* Right glass icon cards */}
-            <motion.div
-                initial={{ opacity: 0, scale: 0.8, y: -30 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.7, ease: 'easeOut' }}
-                className="absolute right-[8%] top-[24%]"
-            >
-                <GlassIconCard icon={Brain} className="w-24 h-24 md:w-28 md:h-28 rotate-[6deg]" />
-            </motion.div>
-            <motion.div
-                initial={{ opacity: 0, scale: 0.8, y: 30 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.85, ease: 'easeOut' }}
-                className="absolute right-[12%] top-[55%]"
-            >
-                <GlassIconCard icon={Heart} className="w-20 h-20 md:w-24 md:h-24 -rotate-[8deg]" />
-            </motion.div>
-
-            {/* Bottom-left testimonial block */}
+        {/* TOP HEADLINE + CTAs (overlay) */}
+        <div className="absolute top-[18%] md:top-[20%] left-0 right-0 z-20 px-6 pointer-events-none">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 1, ease: 'easeOut' }}
-                className="absolute bottom-16 left-[6%] max-w-[260px] pointer-events-auto"
+                transition={{ duration: 0.9, delay: 0.4 }}
+                className="max-w-5xl mx-auto text-center pointer-events-auto"
             >
-                <Quote size={22} className="text-[#C89968] mb-3" strokeWidth={2.2} />
-                <p className="text-[#1F1F1F] text-[14px] leading-relaxed mb-4">
-                    Sua presença online merece o mesmo cuidado que o seu atendimento.
-                </p>
-                <button
-                    onClick={onScroll}
-                    className="inline-flex items-center gap-2 text-[#3B4236] font-semibold text-[13px] hover:text-[#A77A4B] transition-colors group"
-                >
-                    <span className="border-b border-[#3B4236]/60 group-hover:border-[#A77A4B] pb-0.5">Saiba mais</span>
-                    <span className="w-7 h-7 rounded-full border border-[#3B4236]/40 flex items-center justify-center group-hover:border-[#A77A4B]">
-                        <ArrowRight size={12} />
-                    </span>
-                </button>
-            </motion.div>
-        </div>
-
-        {/* MOBILE COMPOSITION — simplified stack */}
-        <div className="lg:hidden relative z-10 pt-28 pb-16 px-6">
-            <div className="text-center mb-8">
-                <PillBadge tone="ink" className="mb-6">
+                <PillBadge tone="ink" className="mb-5 bg-white/40 backdrop-blur-sm">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#C89968]"></span>
                     Sites para profissionais de saúde
                 </PillBadge>
-                <h2
-                    className="font-serif font-semibold text-[#1F1F1F] leading-[0.95] mb-3"
-                    style={{ fontSize: 'clamp(2rem, 8vw, 3rem)' }}
-                >
-                    Seu consultório é profissional.
-                </h2>
-                <h2
-                    className="font-serif italic text-[#1F1F1F] leading-[0.95]"
-                    style={{ fontSize: 'clamp(2rem, 9vw, 3.5rem)' }}
-                >
-                    Seu site <span className="text-[#C89968]">também</span>.
-                </h2>
-            </div>
-            <div className="relative max-w-md mx-auto mb-8" style={{ transform: 'rotate(-2deg)' }}>
-                <BrowserFrame src={HERO_PREVIEW.src} alt={HERO_PREVIEW.label} />
-            </div>
-            <div className="flex flex-col items-center gap-3">
-                <CandeiaButton size="lg" tone="ink" onClick={onCta}>
-                    Quero meu site profissional
-                    <ArrowRight size={18} />
-                </CandeiaButton>
-                <CandeiaButton size="md" tone="outline-ink" onClick={onScroll}>
-                    Ver os planos
-                </CandeiaButton>
-                <p className="text-[11px] text-[#3B4236]/80 tracking-[0.2em] uppercase font-semibold mt-2">
-                    A partir de R$ 990 &middot; 4x sem juros
-                </p>
-            </div>
+            </motion.div>
         </div>
 
-        {/* Bottom copy strip — value prop + CTA + price (desktop) */}
-        <div className="hidden lg:block absolute bottom-8 left-0 right-0 z-20 px-6">
-            <div className="max-w-6xl mx-auto flex items-end justify-between">
-                <div className="flex-1"></div>
-                <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 1.1 }}
-                    className="flex flex-col items-end gap-2 text-right"
-                >
-                    <div className="flex flex-col items-end gap-2">
-                        <PillBadge tone="ink">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#C89968]"></span>
-                            Psicólogos · Nutricionistas · Terapeutas
-                        </PillBadge>
-                        <p className="text-[11px] text-[#3B4236]/80 tracking-[0.2em] uppercase font-semibold">
-                            A partir de R$ 990 &middot; 4x sem juros
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-2 mt-2">
+        {/* BOTTOM HEADLINE + CTAs + price */}
+        <div className="absolute bottom-6 md:bottom-8 left-0 right-0 z-30 px-6 pointer-events-none">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.2 }}
+                className="max-w-6xl mx-auto flex flex-col md:flex-row items-end md:items-end justify-between gap-4 pointer-events-auto"
+            >
+                {/* Left-bottom tagline block (replaces the old testimonial) */}
+                <div className="max-w-[260px] text-center md:text-left">
+                    <h3 className="font-serif text-[#1F1F1F] text-[15px] md:text-base leading-snug mb-3 italic">
+                        Cuidar da mente é <span className="font-semibold not-italic">transformar a vida.</span>
+                    </h3>
+                    <button
+                        onClick={onScroll}
+                        className="inline-flex items-center gap-2 text-[#3B4236] font-semibold text-[12px] hover:text-[#A77A4B] transition-colors group"
+                    >
+                        <span className="border-b border-[#3B4236]/60 group-hover:border-[#A77A4B] pb-0.5">
+                            Saiba mais
+                        </span>
+                        <span className="w-6 h-6 rounded-full border border-[#3B4236]/40 flex items-center justify-center group-hover:border-[#A77A4B]">
+                            <ArrowRight size={11} />
+                        </span>
+                    </button>
+                </div>
+
+                {/* Right-bottom CTAs + price */}
+                <div className="flex flex-col items-center md:items-end gap-2 text-right">
+                    <p className="text-[11px] text-[#3B4236]/80 tracking-[0.2em] uppercase font-semibold">
+                        A partir de R$ 990 &middot; 4x sem juros
+                    </p>
+                    <div className="flex flex-wrap items-center justify-end gap-2">
                         <CandeiaButton size="md" tone="ink" onClick={onCta}>
                             Quero meu site
                             <ArrowRight size={14} />
@@ -299,8 +310,8 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                             Ver planos
                         </CandeiaButton>
                     </div>
-                </motion.div>
-            </div>
+                </div>
+            </motion.div>
         </div>
     </section>
 );
@@ -440,90 +451,102 @@ const InstagramVsSite: React.FC = () => (
 );
 
 // ————————————————————————————————————————————————————————————————
-// PORTFOLIO — showcase of real psychology site screenshots
+// PORTFOLIO — infinite horizontal carousel of real psychology site screenshots
 // ————————————————————————————————————————————————————————————————
-const Portfolio: React.FC = () => (
-    <section
-        id="portfolio"
-        className="relative py-24 md:py-32 overflow-hidden"
-        style={{ backgroundColor: CANDEIA.sage }}
-    >
-        <GrainOverlay opacity={0.07} />
-        <DecorativeQuote
-            className="absolute top-4 left-2 opacity-35"
-            style={{ fontSize: 'clamp(6rem, 14vw, 11rem)' }}
-        />
+const PortfolioCarousel: React.FC = () => {
+    // Duplicate for seamless loop
+    const slides = [...SITE_PREVIEWS, ...SITE_PREVIEWS];
+    return (
+        <section
+            id="portfolio"
+            className="relative py-20 md:py-28 overflow-hidden"
+            style={{ backgroundColor: CANDEIA.cream }}
+        >
+            <GrainOverlay opacity={0.04} />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-            <div className="text-center mb-14">
-                <PillBadge tone="ink" className="mb-6">
+            <div className="relative z-10 max-w-6xl mx-auto px-6 mb-10 md:mb-14 text-center">
+                <PillBadge tone="ink" className="mb-5">
                     <Sparkles size={10} />
                     Portfólio
                 </PillBadge>
                 <h2
-                    className="font-serif font-semibold text-[#1F1F1F] tracking-tight leading-[0.98] mb-4 max-w-3xl mx-auto"
-                    style={{ fontSize: 'clamp(2.25rem, 5vw, 3.75rem)' }}
+                    className="font-serif font-semibold text-[#1F1F1F] tracking-tight leading-[0.98] mb-3"
+                    style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}
                 >
                     Cada site tem <span className="italic text-[#A77A4B]">a cara do profissional.</span>
                 </h2>
-                <p className="text-[#3B4236] text-base md:text-lg max-w-2xl mx-auto">
+                <p className="text-[#3B4236] text-[15px] md:text-base max-w-2xl mx-auto">
                     Sem template. Sem molde repetido. Conheça alguns dos sites que construímos pra psicólogos,
-                    nutricionistas e terapeutas — cada um com identidade própria.
+                    nutricionistas e terapeutas.
                 </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-                {SITE_PREVIEWS.map((site, i) => (
-                    <motion.div
-                        key={site.src}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: '-50px' }}
-                        transition={{ duration: 0.55, delay: (i % 3) * 0.08 }}
-                        className="group"
-                    >
-                        <div className="relative rounded-2xl overflow-hidden border border-[#1F1F1F]/10 bg-white shadow-[0_15px_40px_-15px_rgba(31,31,31,0.3)] transition-all duration-500 hover:shadow-[0_25px_50px_-15px_rgba(31,31,31,0.4)] hover:-translate-y-1">
-                            {/* Browser chrome */}
-                            <div className="flex items-center gap-1.5 bg-[#F0ECE3] px-3 py-2 border-b border-[#1F1F1F]/8">
-                                <span className="w-2 h-2 rounded-full bg-[#FF5F57]"></span>
-                                <span className="w-2 h-2 rounded-full bg-[#FEBC2E]"></span>
-                                <span className="w-2 h-2 rounded-full bg-[#28C840]"></span>
-                                <div className="ml-2 text-[9px] text-[#3B4236]/60 font-mono tracking-wide truncate">
-                                    {site.label.toLowerCase().replace(/\s+/g, '') + '.com.br'}
-                                </div>
-                            </div>
-                            {/* Screenshot */}
-                            <div className="relative aspect-[16/9] overflow-hidden">
-                                <img
-                                    src={site.src}
-                                    alt={site.label}
-                                    loading="lazy"
-                                    className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
-                                />
-                            </div>
-                            {/* Caption */}
-                            <div className="p-4 flex items-center justify-between gap-3 bg-white">
-                                <div>
-                                    <div className="font-serif text-[#1F1F1F] text-[15px] leading-tight">
-                                        {site.label}
+            {/* Infinite marquee */}
+            <div className="relative w-full overflow-hidden">
+                <div
+                    className="flex gap-5 md:gap-7 w-max animate-marquee"
+                    style={{ willChange: 'transform' }}
+                >
+                    {slides.map((site, i) => (
+                        <div
+                            key={`${site.src}-${i}`}
+                            className="shrink-0 w-[280px] md:w-[420px] group"
+                        >
+                            <div className="relative rounded-2xl overflow-hidden border border-[#1F1F1F]/10 bg-white shadow-[0_15px_40px_-15px_rgba(31,31,31,0.3)]">
+                                {/* Browser chrome */}
+                                <div className="flex items-center gap-1.5 bg-[#F0ECE3] px-3 py-2 border-b border-[#1F1F1F]/8">
+                                    <span className="w-2 h-2 rounded-full bg-[#FF5F57]"></span>
+                                    <span className="w-2 h-2 rounded-full bg-[#FEBC2E]"></span>
+                                    <span className="w-2 h-2 rounded-full bg-[#28C840]"></span>
+                                    <div className="ml-2 text-[9px] text-[#3B4236]/60 font-mono tracking-wide truncate">
+                                        {site.label.toLowerCase().replace(/\s+/g, '') + '.com.br'}
                                     </div>
-                                    <div className="text-[11px] text-[#3B4236]/75 tracking-wide">{site.style}</div>
                                 </div>
-                                <span className="shrink-0 text-[10px] uppercase tracking-[0.2em] font-bold text-[#A77A4B] border border-[#A77A4B]/35 rounded-full px-2.5 py-1">
-                                    {site.mood}
-                                </span>
+                                {/* Screenshot */}
+                                <div className="relative aspect-[16/9] overflow-hidden">
+                                    <img
+                                        src={site.src}
+                                        alt={site.label}
+                                        loading="lazy"
+                                        className="w-full h-full object-cover object-top"
+                                    />
+                                </div>
+                                {/* Caption */}
+                                <div className="p-3.5 flex items-center justify-between gap-3 bg-white">
+                                    <div>
+                                        <div className="font-serif text-[#1F1F1F] text-[14px] leading-tight">
+                                            {site.label}
+                                        </div>
+                                        <div className="text-[11px] text-[#3B4236]/75 tracking-wide">
+                                            {site.style}
+                                        </div>
+                                    </div>
+                                    <span className="shrink-0 text-[10px] uppercase tracking-[0.2em] font-bold text-[#A77A4B] border border-[#A77A4B]/35 rounded-full px-2.5 py-1">
+                                        {site.mood}
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </motion.div>
-                ))}
+                    ))}
+                </div>
+                {/* Fade edges */}
+                <div
+                    className="absolute inset-y-0 left-0 w-16 md:w-32 pointer-events-none z-10"
+                    style={{ background: `linear-gradient(to right, ${CANDEIA.cream}, transparent)` }}
+                />
+                <div
+                    className="absolute inset-y-0 right-0 w-16 md:w-32 pointer-events-none z-10"
+                    style={{ background: `linear-gradient(to left, ${CANDEIA.cream}, transparent)` }}
+                />
             </div>
 
-            <p className="text-center mt-12 text-[#3B4236] text-sm md:text-base italic max-w-xl mx-auto">
-                Seu site não vai ser igual a nenhum desses. Vai ser <span className="font-semibold not-italic">seu</span>.
+            <p className="relative z-10 text-center mt-10 text-[#3B4236] text-sm md:text-base italic max-w-xl mx-auto px-6">
+                Seu site não vai ser igual a nenhum desses. Vai ser{' '}
+                <span className="font-semibold not-italic">seu</span>.
             </p>
-        </div>
-    </section>
-);
+        </section>
+    );
+};
 
 // ————————————————————————————————————————————————————————————————
 // PLANS
@@ -1188,9 +1211,9 @@ export const Candeia: React.FC = () => {
             style={{ backgroundColor: CANDEIA.cream, color: CANDEIA.ink }}
         >
             <Hero onCta={goToWhatsApp} onScroll={scrollToPlans} />
+            <PortfolioCarousel />
             <Pain />
             <InstagramVsSite />
-            <Portfolio />
             <Plans onCta={goToWhatsApp} />
             <Included />
             <HowItWorks />
