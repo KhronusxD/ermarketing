@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
     ArrowRight,
@@ -28,12 +27,12 @@ import { CreativeShowcase } from './CreativeShowcase';
 import { LandingPagesShowcase } from './LandingPagesShowcase';
 
 const WHATSAPP =
-    'https://wa.me/5592985146299?text=Ol%C3%A1%2C%20quero%20come%C3%A7ar%20com%20o%20Plano%20Essencial%20da%20ER%20Marketing';
+    'https://wa.me/5592985146299?text=Ol%C3%A1%21%20Vim%20da%20p%C3%A1gina%20do%20Plano%20Essencial%20da%20ER%20Marketing.%20Quero%20conversar%20sobre%20como%20come%C3%A7ar%20o%20marketing%20completo%20no%20meu%20neg%C3%B3cio.';
 
 // ————————————————————————————————————————————————————————————————
 // HERO
 // ————————————————————————————————————————————————————————————————
-const Hero: React.FC<{ onDiagnostic: () => void; onScroll: () => void }> = ({ onDiagnostic, onScroll }) => {
+const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, onScroll }) => {
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
     const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 120]);
@@ -88,12 +87,12 @@ const Hero: React.FC<{ onDiagnostic: () => void; onScroll: () => void }> = ({ on
                 </p>
 
                 <div className="inline-flex flex-col sm:flex-row gap-4 mb-14">
-                    <OceanButton size="lg" onClick={onDiagnostic}>
-                        Fazer diagnóstico grátis
+                    <OceanButton size="lg" onClick={onCta}>
+                        Quero começar agora
                         <ArrowRight size={18} />
                     </OceanButton>
                     <OceanButton size="lg" variant="outline" onClick={onScroll}>
-                        Ver os planos
+                        Ver o que está incluído
                     </OceanButton>
                 </div>
 
@@ -101,7 +100,7 @@ const Hero: React.FC<{ onDiagnostic: () => void; onScroll: () => void }> = ({ on
                 <div className="flex flex-col items-center gap-1">
                     <div className="text-[10px] tracking-[0.4em] text-[#A6DEFF]/80 font-bold">ER MARKETING</div>
                     <div className="text-[9px] tracking-[0.3em] uppercase text-[#6B86A3]">
-                        A partir de R$ 990/mês &middot; 3 meses
+                        Sem contrato longo &middot; Sem surpresa no bolso
                     </div>
                 </div>
             </motion.div>
@@ -139,8 +138,8 @@ const PAIN_ITEMS = [
         d: 'Mensagem demora para ser respondida — e o lead some sem você perceber.',
     },
     {
-        t: 'Preço fora do seu momento',
-        d: 'Sabe que precisa de marketing, mas R$ 3.000, R$ 5.000/mês está fora da sua realidade agora.',
+        t: 'Pacotes fora do seu momento',
+        d: 'Sabe que precisa de marketing, mas os pacotes que encontrou no mercado estão fora da sua realidade agora.',
     },
 ];
 
@@ -215,7 +214,7 @@ const Solution: React.FC = () => (
                 orgânico. Sem perder lead por demora no atendimento.
             </p>
             <p className="text-[#A6DEFF] text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-medium">
-                A partir de R$ 990/mês, durante 3 meses, a ER cuida de tudo isso pra você.
+                Durante 3 meses, a ER cuida de tudo isso pra você — sem contrato longo e sem taxa de setup.
             </p>
         </div>
     </section>
@@ -227,12 +226,11 @@ const Solution: React.FC = () => (
 interface Plan {
     tag: string;
     name: string;
-    price: string;
+    tagline: string;
     sub: string;
     badge?: string;
     icon: React.ElementType;
     features: string[];
-    marketValue: string;
     highlight?: boolean;
 }
 
@@ -240,8 +238,8 @@ const PLANS: Plan[] = [
     {
         tag: '01',
         name: 'Start',
-        price: 'R$ 990',
-        sub: 'Pra quem quer dar o primeiro passo com o mínimo de risco.',
+        tagline: 'Primeiro passo, risco mínimo',
+        sub: 'Pra quem quer começar estruturado sem dar um salto grande demais.',
         icon: Zap,
         features: [
             'Tráfego pago (Meta OU Google Ads — 1 plataforma)',
@@ -250,13 +248,12 @@ const PLANS: Plan[] = [
             'Relatório mensal com número, sem achismo',
             'Grupo VIP com o time da ER',
         ],
-        marketValue: 'Valor de mercado: R$ 1.300–2.600/mês',
     },
     {
         tag: '02',
         name: 'Essencial',
-        price: 'R$ 1.490',
-        sub: 'Pra quem quer o sistema completo rodando.',
+        tagline: 'Sistema completo rodando',
+        sub: 'Pra quem quer o pacote completo com previsibilidade de resultado.',
         badge: 'Mais escolhido',
         icon: Crown,
         features: [
@@ -267,14 +264,13 @@ const PLANS: Plan[] = [
             'Relatórios semanais e mensais',
             '1 consultoria mensal de vendas e marketing',
         ],
-        marketValue: 'Valor de mercado: R$ 2.600–5.000/mês',
         highlight: true,
     },
     {
         tag: '03',
         name: 'Profissional',
-        price: 'R$ 3.500',
-        sub: 'Pra quem quer crescer de verdade com time dedicado.',
+        tagline: 'Time dedicado, escala real',
+        sub: 'Pra quem quer crescer com time dedicado e produção completa.',
         icon: Star,
         features: [
             'Tudo do Plano Essencial, mais:',
@@ -285,7 +281,6 @@ const PLANS: Plan[] = [
             'Rastreamento avançado de conversões',
             'Reunião estratégica mensal de 1 hora',
         ],
-        marketValue: 'Valor de mercado: R$ 5.650–11.200/mês',
     },
 ];
 
@@ -346,19 +341,15 @@ const Plans: React.FC<{ onCta: () => void }> = ({ onCta }) => (
                                     </div>
                                 </div>
 
-                                <h3 className="font-serif text-3xl md:text-4xl font-semibold text-[#E8F4FF] leading-tight mb-2">
+                                <h3 className="font-serif text-3xl md:text-4xl font-semibold text-[#E8F4FF] leading-tight mb-1">
                                     {p.name}
                                 </h3>
+                                <div className="font-serif italic text-xl md:text-2xl text-[#4DD5FF] leading-tight mb-4">
+                                    {p.tagline}
+                                </div>
                                 <p className="text-[#B8CEE4] text-sm leading-relaxed mb-6 min-h-[3rem]">{p.sub}</p>
 
-                                {/* Price */}
-                                <div className="flex items-baseline gap-2 mb-2">
-                                    <span className="font-serif text-4xl md:text-5xl font-bold text-[#E8F4FF]">
-                                        {p.price}
-                                    </span>
-                                    <span className="text-[#7FC4FF] text-sm font-medium">/mês</span>
-                                </div>
-                                <p className="text-[11px] text-[#6B86A3] mb-7 tracking-wide">
+                                <p className="text-[11px] text-[#6B86A3] mb-6 tracking-wide">
                                     Contrato mínimo: 3 meses &middot; sem taxa de setup
                                 </p>
 
@@ -379,17 +370,13 @@ const Plans: React.FC<{ onCta: () => void }> = ({ onCta }) => (
                                     ))}
                                 </ul>
 
-                                <div className="pt-5 border-t border-[#4DD5FF]/15 mb-5">
-                                    <p className="text-[11px] text-[#7FC4FF] tracking-wide">{p.marketValue}</p>
-                                </div>
-
                                 <OceanButton
                                     size="md"
                                     variant={p.highlight ? 'primary' : 'outline'}
                                     onClick={onCta}
                                     className="w-full justify-center"
                                 >
-                                    Começar com o {p.name}
+                                    Falar sobre o {p.name}
                                     <ArrowRight size={16} />
                                 </OceanButton>
                             </GlassCard>
@@ -527,7 +514,7 @@ const CASES: Case[] = [
         badge: 'Restaurante',
         story:
             'Salão cheio no fim de semana, mesas vazias na semana. Sem sistema de captação ativo.',
-        result: '+280% em reservas · R$ 11,80 por lead · fila de espera em 60 dias',
+        result: '+280% em reservas · custo por lead muito abaixo do mercado · fila de espera em 60 dias',
         quote: 'Em dois meses o sushi bar tinha fila de espera. Algo que nunca tinha acontecido antes.',
     },
     {
@@ -538,7 +525,7 @@ const CASES: Case[] = [
         badge: 'Delivery',
         story:
             'Queria crescer no delivery sem depender do iFood. Construir base própria com margem maior e cliente fiel.',
-        result: '+190% em pedidos diretos · R$ 9,40 por lead · 4,1x de ROAS',
+        result: '+190% em pedidos diretos · custo por lead abaixo de dois dígitos · 4,1x de ROAS',
         quote: 'A taxa de conversão triplicou. E a margem foi junto porque paramos de pagar comissão de marketplace.',
     },
     {
@@ -558,7 +545,7 @@ const CASES: Case[] = [
         channel: 'Meta Ads',
         badge: 'Infoproduto',
         story:
-            'Chegou com produto validado e a ambição de escalar via lançamento — 6 em 7 (R$ 6 mil em 7 dias).',
+            'Chegou com produto validado e a ambição de escalar via lançamento na metodologia 6 em 7.',
         result: 'Lançamento 6 em 7 concluído dentro da janela',
         quote: 'O funil funcionou do jeito que precisava. Captura, nutrição e conversão — tudo no tempo certo.',
     },
@@ -726,8 +713,8 @@ const HowItWorks: React.FC = () => (
 // ————————————————————————————————————————————————————————————————
 const OBJECTIONS = [
     {
-        q: '"R$ 990 ainda parece caro pra mim."',
-        a: 'Um único cliente novo gerado pelo anúncio já paga o plano do mês. Na maioria dos negócios, um lead convertido cobre 3 a 4 meses de investimento.',
+        q: '"Não sei se cabe no meu momento."',
+        a: 'Por isso temos três planos diferentes. Um único cliente novo trazido pelo anúncio já costuma cobrir várias mensalidades — a gente mostra no briefing quanto faz sentido pra sua realidade.',
     },
     {
         q: '"Já tentei tráfego pago e não funcionou."',
@@ -791,7 +778,7 @@ const Objections: React.FC = () => (
 // ————————————————————————————————————————————————————————————————
 // URGENCY
 // ————————————————————————————————————————————————————————————————
-const Urgency: React.FC<{ onDiagnostic: () => void }> = ({ onDiagnostic }) => (
+const Urgency: React.FC<{ onCta: () => void }> = ({ onCta }) => (
     <section className="relative py-20 md:py-28 overflow-hidden">
         <UnderwaterBackdrop variant="mid" />
         <BioluminescentOrbs count={4} />
@@ -823,8 +810,8 @@ const Urgency: React.FC<{ onDiagnostic: () => void }> = ({ onDiagnostic }) => (
                 Se você está lendo isso agora, ainda pode ter uma vaga disponível.
             </p>
 
-            <OceanButton size="lg" onClick={onDiagnostic} className="mx-auto">
-                Fazer diagnóstico e garantir a vaga
+            <OceanButton size="lg" onClick={onCta} className="mx-auto">
+                Garantir minha vaga agora
                 <ArrowRight size={18} />
             </OceanButton>
         </div>
@@ -834,7 +821,7 @@ const Urgency: React.FC<{ onDiagnostic: () => void }> = ({ onDiagnostic }) => (
 // ————————————————————————————————————————————————————————————————
 // FINAL CTA — "Don't miss it / Join us" equivalent, coral reef vibe
 // ————————————————————————————————————————————————————————————————
-const FinalCTA: React.FC<{ onDiagnostic: () => void }> = ({ onDiagnostic }) => (
+const FinalCTA: React.FC<{ onCta: () => void }> = ({ onCta }) => (
     <section className="relative py-24 md:py-32 overflow-hidden">
         <UnderwaterBackdrop variant="reef" />
         <BioluminescentOrbs count={10} />
@@ -862,13 +849,13 @@ const FinalCTA: React.FC<{ onDiagnostic: () => void }> = ({ onDiagnostic }) => (
             </h3>
 
             <p className="text-[#B8CEE4] text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-10">
-                Em 2 minutos descobrimos qual plano faz sentido pro seu momento — sem compromisso, direto da nossa
-                equipe.
+                Chame a gente no WhatsApp — em uma conversa curta a gente descobre qual plano faz sentido pro seu
+                momento. Sem compromisso.
             </p>
 
-            <OceanButton size="lg" onClick={onDiagnostic} className="mx-auto mb-8">
+            <OceanButton size="lg" onClick={onCta} className="mx-auto mb-8">
                 <Sparkles size={18} />
-                Fazer diagnóstico grátis
+                Falar com a equipe no WhatsApp
                 <ArrowRight size={18} />
             </OceanButton>
 
@@ -901,18 +888,12 @@ const Footer: React.FC = () => (
 // MAIN
 // ————————————————————————————————————————————————————————————————
 export const Flowdesk: React.FC = () => {
-    const navigate = useNavigate();
-
     useEffect(() => {
         document.title = 'ER Marketing · Plano Essencial · FlowDesk';
     }, []);
 
     const goToWhatsApp = () => {
         window.open(WHATSAPP, '_blank', 'noopener,noreferrer');
-    };
-
-    const goToDiagnostic = () => {
-        navigate('/diagnostico-flowdesk');
     };
 
     const scrollToPlans = () => {
@@ -925,7 +906,7 @@ export const Flowdesk: React.FC = () => {
             className="min-h-screen text-[#E8F4FF] font-sans selection:bg-[#4DD5FF] selection:text-[#031224] relative overflow-x-hidden"
             style={{ backgroundColor: OCEAN.bg }}
         >
-            <Hero onDiagnostic={goToDiagnostic} onScroll={scrollToPlans} />
+            <Hero onCta={goToWhatsApp} onScroll={scrollToPlans} />
             <Pain />
             <Solution />
             <CreativeShowcase />
@@ -934,9 +915,9 @@ export const Flowdesk: React.FC = () => {
             <LandingPagesShowcase />
             <HowItWorks />
             <Objections />
-            <Urgency onDiagnostic={goToDiagnostic} />
+            <Urgency onCta={goToWhatsApp} />
             <Plans onCta={goToWhatsApp} />
-            <FinalCTA onDiagnostic={goToDiagnostic} />
+            <FinalCTA onCta={goToWhatsApp} />
             <Footer />
         </div>
     );

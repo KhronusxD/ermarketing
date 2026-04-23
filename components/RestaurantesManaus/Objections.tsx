@@ -16,9 +16,9 @@ const objections = [
             'Você não precisa. A operação roda sem você. O único compromisso de tempo que pedimos é 1 hora por mês na reunião estratégica.',
     },
     {
-        question: '"R$ 3.500 é muito para o meu momento."',
+        question: '"Não sei se cabe no meu momento."',
         answer:
-            'É exatamente por isso que fazemos um diagnóstico antes. Se não fizer sentido financeiro para o seu momento atual, a gente fala com honestidade. Não atendemos todo mundo.',
+            'É exatamente por isso que conversamos antes de fechar qualquer pacote. A gente entende o seu momento e fala com honestidade se faz sentido agora ou não. Não atendemos todo mundo.',
     },
     {
         question: '"Meu restaurante é pequeno demais."',

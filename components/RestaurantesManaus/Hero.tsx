@@ -188,9 +188,9 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                 >
                     {[
                         { v: '+340%', l: 'Aumento médio em reservas' },
-                        { v: 'R$ 13,52', l: 'Custo por lead qualificado' },
                         { v: '12+', l: 'Restaurantes atendidos' },
                         { v: '3x', l: 'Retorno médio sobre ads' },
+                        { v: '60d', l: 'Pra ver fila no fim de semana' },
                     ].map((s, i) => (
                         <div key={i} className="bg-[#111112] p-6 text-center">
                             <div className="font-serif text-2xl md:text-3xl font-bold text-[#E8C088] mb-1">{s.v}</div>

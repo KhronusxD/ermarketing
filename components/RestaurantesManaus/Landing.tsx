@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Hero } from './Hero';
 import { Gallery } from './Gallery';
@@ -14,11 +13,12 @@ import { QuizCTA } from './QuizCTA';
 import { Footer } from './Footer';
 import { FloatingWhatsApp } from '../FloatingWhatsApp';
 
-export const RestaurantesManausLanding: React.FC = () => {
-    const navigate = useNavigate();
+const RESTAURANT_WHATSAPP =
+    'https://wa.me/5592985146299?text=Ol%C3%A1%21%20Vim%20da%20p%C3%A1gina%20da%20ER%20Marketing%20para%20restaurantes.%20Quero%20saber%20como%20voc%C3%AAs%20podem%20lotar%20o%20meu%20sal%C3%A3o%20com%20mais%20clientes.';
 
+export const RestaurantesManausLanding: React.FC = () => {
     const handleAuditClick = () => {
-        navigate('/diagnostico-manaus');
+        window.open(RESTAURANT_WHATSAPP, '_blank', 'noopener,noreferrer');
     };
 
     return (

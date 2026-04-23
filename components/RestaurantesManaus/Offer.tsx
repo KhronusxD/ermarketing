@@ -9,31 +9,26 @@ const services = [
         icon: Target,
         title: 'Tráfego pago com foco em reservas e delivery',
         desc: 'Meta Ads e Google Ads criados para restaurante — não para clique vazio. Cada real rastreado e reportado.',
-        value: 'R$ 1.500–3.000/mês',
     },
     {
         icon: Video,
         title: 'Captação audiovisual profissional mensal',
         desc: '1 dia de gravação no seu restaurante todo mês. Vídeos e fotos que fazem o cliente sentir o cheiro do prato pela tela.',
-        value: 'R$ 800–2.000/mês',
     },
     {
         icon: Instagram,
         title: 'Social media completo',
         desc: 'Feed, stories e gestão de comentários com estratégia editorial definida e identidade visual consistente.',
-        value: 'R$ 1.500–2.500/mês',
     },
     {
         icon: BarChart3,
         title: 'Rastreamento de conversão',
         desc: 'Cada reserva, cada pedido, cada clique rastreado. Você sabe exatamente de onde veio cada cliente.',
-        value: 'R$ 500–1.000/mês',
     },
     {
         icon: FileText,
         title: 'Relatório mensal de resultado',
         desc: 'Leads gerados, custo por lead, reservas convertidas, ROI. Sem métrica de vaidade — só o que importa.',
-        value: 'Incluso',
     },
 ];
 
@@ -81,12 +76,7 @@ export const Offer: React.FC<SectionProps> = ({ onAuditClick }) => {
                             </div>
 
                             <h3 className="font-serif text-xl text-[#F5F1E8] mb-3 leading-tight">{s.title}</h3>
-                            <p className="text-[#A8A196] text-sm leading-relaxed mb-5">{s.desc}</p>
-
-                            <div className="pt-4 border-t border-white/10">
-                                <div className="text-[10px] text-[#A8A196] uppercase tracking-widest mb-1">Valor de mercado</div>
-                                <div className="text-[#E8C088] font-semibold text-sm">{s.value}</div>
-                            </div>
+                            <p className="text-[#A8A196] text-sm leading-relaxed">{s.desc}</p>
                         </motion.div>
                     ))}
 
@@ -111,7 +101,7 @@ export const Offer: React.FC<SectionProps> = ({ onAuditClick }) => {
                     </motion.div>
                 </div>
 
-                {/* Price summary */}
+                {/* CTA card */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.98 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -140,22 +130,20 @@ export const Offer: React.FC<SectionProps> = ({ onAuditClick }) => {
                         </div>
 
                         <div className="relative z-10">
-                            <div className="text-xs text-[#A8A196] uppercase tracking-[0.3em] mb-3">
-                                Valor total separado
-                            </div>
-                            <div className="font-serif text-xl text-[#A8A196] line-through mb-8">
-                                R$ 4.300–8.500/mês
-                            </div>
-
                             <div className="text-xs text-[#E8C088] uppercase tracking-[0.3em] mb-3 font-semibold">
-                                Você investe
+                                Pronto pra começar
                             </div>
-                            <div className="font-serif text-6xl md:text-7xl font-bold text-[#F5F1E8] mb-8 tracking-tight">
-                                R$ 3.500<span className="text-xl text-[#A8A196] font-normal">/mês</span>
-                            </div>
+                            <h3 className="font-serif text-3xl md:text-4xl text-[#F5F1E8] mb-4 tracking-tight leading-tight">
+                                Um time. Um objetivo.<br />
+                                <span className="italic text-[#E8C088]">Encher o seu salão.</span>
+                            </h3>
+                            <p className="text-[#A8A196] text-sm md:text-base leading-relaxed max-w-xl mx-auto mb-8">
+                                Chame a gente no WhatsApp. Em uma conversa curta a gente entende o seu restaurante e
+                                monta o pacote que faz sentido pro seu momento — sem surpresa no bolso.
+                            </p>
 
                             <GoldButton size="lg" onClick={onAuditClick}>
-                                Quero esse resultado — fazer o diagnóstico
+                                Quero esse resultado — chamar no WhatsApp
                                 <ArrowRight size={18} />
                             </GoldButton>
                         </div>

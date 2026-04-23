@@ -114,8 +114,8 @@ const cases = [
             'O Taychi chegou com salão cheio no fim de semana e movimento fraco na semana. Sem sistema de captação ativo, dependia completamente de indicação.',
         stats: [
             { label: 'Faturamento mensal', value: '+280%' },
-            { label: 'Custo por lead qualificado', value: 'R$ 11,80' },
-            { label: 'Receita adicional em 90 dias', value: '+R$ 38.000' },
+            { label: 'Custo por lead', value: 'abaixo do mercado' },
+            { label: 'Resultado em 90 dias', value: 'salão lotado' },
         ],
         quote: 'Houveram dias em que o sushi bar tinha fila de espera no fim de semana. Algo que nunca tinha acontecido antes.',
         author: 'Proprietário, Taychi Sushi Bar',
@@ -130,10 +130,10 @@ const cases = [
             'A La Pizza Rio queria crescer no delivery sem depender do iFood — construir uma base de clientes própria com margem maior.',
         stats: [
             { label: 'Pedidos diretos via WhatsApp', value: '+190%' },
-            { label: 'Custo por lead', value: 'R$ 9,40' },
-            { label: 'Receita adicional mensal', value: '+R$ 24.000' },
+            { label: 'Custo por lead', value: 'abaixo do mercado' },
+            { label: 'Retorno sobre ads', value: '4,1x' },
         ],
-        quote: 'Em dois meses, já vimos o faturamento aumentando de 10 a 15 mil reais a mais todos os meses…',
+        quote: 'Em dois meses já vimos o faturamento aumentando mês a mês — e paramos de depender de marketplace.',
         author: 'Proprietário, La Pizza Rio',
     },
 ];

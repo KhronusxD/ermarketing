@@ -23,8 +23,9 @@ import { CandeiaButton, PillBadge, DecorativeQuote, GrainOverlay, CANDEIA } from
 import { SITE_PREVIEWS } from './assets';
 import { trackStandard } from './metaPixel';
 
-// Candeia-specific redirect (Flowdesk tracking link dedicated to this page)
-const CTA_REDIRECT = 'https://flowdesk-flowdesk-app.rikvu5.easypanel.host/r/10jh5a';
+// Direct WhatsApp redirect — Candeia-specific pre-filled message
+const CTA_REDIRECT =
+    'https://wa.me/5592985146299?text=Ol%C3%A1%21%20Vim%20do%20site%20da%20ER%20Marketing%20Psicologia.%20Quero%20criar%20um%20site%20profissional%20para%20o%20meu%20consult%C3%B3rio.';
 const FLOWDESK_PIXEL_ID = '63f4f20b-41a3-46fb-94d8-942c3344a730';
 const FLOWDESK_LINK = '10jh5a';
 
@@ -299,7 +300,7 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                         <span className="font-semibold not-italic">transformar a vida.</span>
                     </h3>
                     <p className="text-[11px] text-[#3B4236]/80 tracking-[0.2em] uppercase font-semibold">
-                        A partir de R$ 990 &middot; 4x sem juros
+                        Entrega em até 7 dias &middot; Design exclusivo
                     </p>
                     <div className="flex flex-wrap items-center justify-center gap-2">
                         <CandeiaButton size="md" tone="ink" onClick={onCta}>
@@ -553,8 +554,7 @@ const PortfolioCarousel: React.FC = () => {
 // ————————————————————————————————————————————————————————————————
 interface Plan {
     name: string;
-    price: string;
-    installments: string;
+    tagline: string;
     pitch: string;
     features: string[];
     idealFor: string;
@@ -565,8 +565,7 @@ interface Plan {
 const PLANS: Plan[] = [
     {
         name: 'Essencial',
-        price: 'R$ 990',
-        installments: '4x de R$ 247,50 sem juros',
+        tagline: 'Presença digital profissional',
         pitch: 'Pra quem quer presença digital profissional sem complicação.',
         features: [
             'Até 5 seções estratégicas',
@@ -580,8 +579,7 @@ const PLANS: Plan[] = [
     },
     {
         name: 'Profissional',
-        price: 'R$ 2.900',
-        installments: '3x de R$ 966,67 sem juros',
+        tagline: 'Canal de aquisição completo',
         pitch: 'Pra quem quer um site completo que trabalha como canal de aquisição.',
         badge: 'Mais escolhido',
         highlight: true,
@@ -600,8 +598,7 @@ const PLANS: Plan[] = [
     },
     {
         name: 'Premium',
-        price: 'R$ 4.900',
-        installments: '3x de R$ 1.633,33 sem juros',
+        tagline: 'Sistema digital completo',
         pitch: 'Pra quem quer o site mais completo — com automação, CRM e painel de métricas exclusivo.',
         features: [
             'Seções ilimitadas',
@@ -690,29 +687,13 @@ const Plans: React.FC<{ onCta: () => void }> = ({ onCta }) => (
                                 {p.pitch}
                             </p>
 
-                            <div className="flex items-baseline gap-2 mb-1">
-                                <span
-                                    className={`font-serif text-4xl md:text-5xl font-bold ${
-                                        p.highlight ? 'text-[#F0ECE3]' : 'text-[#1F1F1F]'
-                                    }`}
-                                >
-                                    {p.price}
-                                </span>
-                                <span
-                                    className={`text-xs tracking-wide ${
-                                        p.highlight ? 'text-[#C89968]' : 'text-[#A77A4B]'
-                                    }`}
-                                >
-                                    à vista
-                                </span>
-                            </div>
-                            <p
-                                className={`text-[11px] mb-7 tracking-wide ${
-                                    p.highlight ? 'text-[#E8E2D3]/70' : 'text-[#3B4236]/70'
+                            <div
+                                className={`font-serif text-2xl md:text-3xl italic leading-tight mb-7 ${
+                                    p.highlight ? 'text-[#C89968]' : 'text-[#A77A4B]'
                                 }`}
                             >
-                                {p.installments}
-                            </p>
+                                {p.tagline}
+                            </div>
 
                             <ul className="space-y-3 mb-7 flex-1">
                                 {p.features.map((f, fi) => (
@@ -1014,8 +995,8 @@ const OBJECTIONS = [
         a: 'Um site bem construído pra profissional de saúde não parece anúncio — parece credencial. É a diferença entre um consultório bem cuidado e um espaço improvisado.',
     },
     {
-        q: '"R$ 990 é muito pra começar."',
-        a: 'É menos do que um mês de aluguel de sala. E trabalha por você 24h por dia, todos os dias, sem custo adicional.',
+        q: '"Não sei se cabe no meu momento financeiro."',
+        a: 'Por isso temos planos diferentes — do profissional que está começando à clínica consolidada. A gente conversa sobre seu momento e monta o caminho certo. O orçamento sai por mensagem depois do briefing rápido.',
     },
     {
         q: '"Tenho tempo de fazer sozinho no Wix."',
@@ -1159,13 +1140,13 @@ const FinalCTA: React.FC<{ onCta: () => void }> = ({ onCta }) => (
             </CandeiaButton>
 
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-[#E8E2D3]/80 tracking-wide max-w-2xl mx-auto">
-                <span>A partir de R$ 990</span>
-                <span className="opacity-50">·</span>
-                <span>4x sem juros</span>
-                <span className="opacity-50">·</span>
                 <span>Entrega em até 7 dias</span>
                 <span className="opacity-50">·</span>
-                <span>Design exclusivo · copy incluso · sem template</span>
+                <span>Design exclusivo</span>
+                <span className="opacity-50">·</span>
+                <span>Copy incluso</span>
+                <span className="opacity-50">·</span>
+                <span>Sem template</span>
             </div>
         </div>
     </section>
