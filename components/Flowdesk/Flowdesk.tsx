@@ -87,11 +87,16 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                     tudo em um único plano, sem contrato longo e sem surpresa no bolso.
                 </p>
 
-                <div className="inline-flex flex-col sm:flex-row gap-4 mb-14">
-                    <OceanButton size="lg" onClick={onCta}>
-                        Quero começar agora
-                        <ArrowRight size={18} />
-                    </OceanButton>
+                <div className="inline-flex flex-col sm:flex-row items-start sm:items-start gap-4 mb-14">
+                    <div className="inline-flex flex-col items-center gap-1.5">
+                        <OceanButton size="lg" onClick={onCta}>
+                            Quero começar agora
+                            <ArrowRight size={18} />
+                        </OceanButton>
+                        <span className="text-[10px] text-[#7FC4FF]/80 tracking-wide font-medium">
+                            Fale com a equipe pelo WhatsApp
+                        </span>
+                    </div>
                     <OceanButton size="lg" variant="outline" onClick={onScroll}>
                         Ver o que está incluído
                     </OceanButton>
@@ -380,6 +385,9 @@ const Plans: React.FC<{ onCta: () => void }> = ({ onCta }) => (
                                     Falar sobre o {p.name}
                                     <ArrowRight size={16} />
                                 </OceanButton>
+                                <span className="text-[10px] text-center text-[#7FC4FF]/80 tracking-wide font-medium mt-2">
+                                    Fale com a equipe pelo WhatsApp
+                                </span>
                             </GlassCard>
                         </motion.div>
                     );
@@ -811,10 +819,15 @@ const Urgency: React.FC<{ onCta: () => void }> = ({ onCta }) => (
                 Se você está lendo isso agora, ainda pode ter uma vaga disponível.
             </p>
 
-            <OceanButton size="lg" onClick={onCta} className="mx-auto">
-                Garantir minha vaga agora
-                <ArrowRight size={18} />
-            </OceanButton>
+            <div className="inline-flex flex-col items-center gap-1.5">
+                <OceanButton size="lg" onClick={onCta}>
+                    Garantir minha vaga agora
+                    <ArrowRight size={18} />
+                </OceanButton>
+                <span className="text-[10px] text-[#7FC4FF]/80 tracking-wide font-medium">
+                    Fale com a equipe pelo WhatsApp
+                </span>
+            </div>
         </div>
     </section>
 );
@@ -854,11 +867,16 @@ const FinalCTA: React.FC<{ onCta: () => void }> = ({ onCta }) => (
                 momento. Sem compromisso.
             </p>
 
-            <OceanButton size="lg" onClick={onCta} className="mx-auto mb-8">
-                <Sparkles size={18} />
-                Falar com a equipe no WhatsApp
-                <ArrowRight size={18} />
-            </OceanButton>
+            <div className="inline-flex flex-col items-center gap-1.5 mb-8">
+                <OceanButton size="lg" onClick={onCta}>
+                    <Sparkles size={18} />
+                    Falar com a equipe no WhatsApp
+                    <ArrowRight size={18} />
+                </OceanButton>
+                <span className="text-[10px] text-[#7FC4FF]/80 tracking-wide font-medium">
+                    Fale com a equipe pelo WhatsApp
+                </span>
+            </div>
 
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-[#6B86A3] tracking-wide max-w-2xl mx-auto">
                 <span>Contrato de 3 meses</span>

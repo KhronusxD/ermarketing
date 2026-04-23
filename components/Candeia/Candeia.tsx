@@ -302,11 +302,16 @@ const Hero: React.FC<{ onCta: () => void; onScroll: () => void }> = ({ onCta, on
                     <p className="text-[11px] text-[#3B4236]/80 tracking-[0.2em] uppercase font-semibold">
                         Entrega em até 7 dias &middot; Design exclusivo
                     </p>
-                    <div className="flex flex-wrap items-center justify-center gap-2">
-                        <CandeiaButton size="md" tone="ink" onClick={onCta}>
-                            Quero meu site
-                            <ArrowRight size={14} />
-                        </CandeiaButton>
+                    <div className="flex flex-wrap items-start justify-center gap-2">
+                        <div className="inline-flex flex-col items-center gap-1.5">
+                            <CandeiaButton size="md" tone="ink" onClick={onCta}>
+                                Quero meu site
+                                <ArrowRight size={14} />
+                            </CandeiaButton>
+                            <span className="text-[10px] text-[#3B4236]/70 tracking-wide font-medium">
+                                Fale com a equipe pelo WhatsApp
+                            </span>
+                        </div>
                         <CandeiaButton size="md" tone="outline-ink" onClick={onScroll}>
                             Ver planos
                         </CandeiaButton>
@@ -747,6 +752,13 @@ const Plans: React.FC<{ onCta: () => void }> = ({ onCta }) => (
                                 Quero o Plano {p.name}
                                 <ArrowRight size={16} />
                             </CandeiaButton>
+                            <span
+                                className={`text-[10px] text-center tracking-wide font-medium mt-2 ${
+                                    p.highlight ? 'text-[#E8E2D3]/70' : 'text-[#3B4236]/70'
+                                }`}
+                            >
+                                Fale com a equipe pelo WhatsApp
+                            </span>
                         </div>
                     </motion.div>
                 ))}
@@ -1082,10 +1094,15 @@ const Urgency: React.FC<{ onCta: () => void }> = ({ onCta }) => (
                 Se você está lendo isso agora, ainda há vagas disponíveis pra este mês.
             </p>
 
-            <CandeiaButton size="lg" tone="ink" onClick={onCta}>
-                Garantir minha vaga
-                <ArrowRight size={18} />
-            </CandeiaButton>
+            <div className="inline-flex flex-col items-center gap-1.5">
+                <CandeiaButton size="lg" tone="ink" onClick={onCta}>
+                    Garantir minha vaga
+                    <ArrowRight size={18} />
+                </CandeiaButton>
+                <span className="text-[10px] text-[#3B4236]/70 tracking-wide font-medium">
+                    Fale com a equipe pelo WhatsApp
+                </span>
+            </div>
         </div>
     </section>
 );
@@ -1133,11 +1150,16 @@ const FinalCTA: React.FC<{ onCta: () => void }> = ({ onCta }) => (
                 A pergunta é: ele vai te encontrar?
             </p>
 
-            <CandeiaButton size="lg" tone="tan" onClick={onCta} className="mx-auto mb-8">
-                <MessageCircle size={18} />
-                Quero meu site profissional
-                <ArrowRight size={18} />
-            </CandeiaButton>
+            <div className="inline-flex flex-col items-center gap-1.5 mb-8">
+                <CandeiaButton size="lg" tone="tan" onClick={onCta}>
+                    <MessageCircle size={18} />
+                    Quero meu site profissional
+                    <ArrowRight size={18} />
+                </CandeiaButton>
+                <span className="text-[10px] text-[#E8E2D3]/70 tracking-wide font-medium">
+                    Fale com a equipe pelo WhatsApp
+                </span>
+            </div>
 
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-[#E8E2D3]/80 tracking-wide max-w-2xl mx-auto">
                 <span>Entrega em até 7 dias</span>

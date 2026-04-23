@@ -142,10 +142,15 @@ export const Offer: React.FC<SectionProps> = ({ onAuditClick }) => {
                                 monta o pacote que faz sentido pro seu momento — sem surpresa no bolso.
                             </p>
 
-                            <GoldButton size="lg" onClick={onAuditClick}>
-                                Quero esse resultado — chamar no WhatsApp
-                                <ArrowRight size={18} />
-                            </GoldButton>
+                            <div className="inline-flex flex-col items-center gap-1.5">
+                                <GoldButton size="lg" onClick={onAuditClick}>
+                                    Quero esse resultado — chamar no WhatsApp
+                                    <ArrowRight size={18} />
+                                </GoldButton>
+                                <span className="text-[10px] text-[#A8A196]/90 tracking-wide font-medium">
+                                    Fale com a equipe pelo WhatsApp
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </motion.div>

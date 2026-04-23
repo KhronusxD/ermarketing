@@ -268,10 +268,15 @@ export const Cases: React.FC<SectionProps> = ({ onAuditClick }) => {
                     transition={{ duration: 0.8 }}
                     className="text-center mt-20"
                 >
-                    <GoldButton size="lg" onClick={onAuditClick}>
-                        Quero resultado assim — ver se meu restaurante se qualifica
-                        <ArrowRight size={18} />
-                    </GoldButton>
+                    <div className="inline-flex flex-col items-center gap-1.5">
+                        <GoldButton size="lg" onClick={onAuditClick}>
+                            Quero resultado assim — ver se meu restaurante se qualifica
+                            <ArrowRight size={18} />
+                        </GoldButton>
+                        <span className="text-[10px] text-[#A8A196]/90 tracking-wide font-medium">
+                            Fale com a equipe pelo WhatsApp
+                        </span>
+                    </div>
                 </motion.div>
             </div>
         </section>

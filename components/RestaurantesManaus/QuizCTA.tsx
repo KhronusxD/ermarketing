@@ -87,10 +87,15 @@ export const QuizCTA: React.FC<SectionProps> = ({ onAuditClick }) => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
                 >
-                    <GoldButton size="lg" onClick={onAuditClick} className="text-base md:text-lg">
-                        Fazer o diagnóstico gratuito
-                        <ArrowRight size={20} />
-                    </GoldButton>
+                    <div className="inline-flex flex-col items-center gap-1.5">
+                        <GoldButton size="lg" onClick={onAuditClick} className="text-base md:text-lg">
+                            Fazer o diagnóstico gratuito
+                            <ArrowRight size={20} />
+                        </GoldButton>
+                        <span className="text-[10px] text-[#A8A196]/90 tracking-wide font-medium">
+                            Fale com a equipe pelo WhatsApp
+                        </span>
+                    </div>
                     <p className="mt-5 text-xs text-[#A8A196] uppercase tracking-widest">
                         Apenas restaurantes em Manaus &middot; Máximo 4 novos clientes por mês
                     </p>

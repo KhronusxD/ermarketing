@@ -102,11 +102,16 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                             <span className="text-[#F5F1E8] font-medium">tudo integrado, tudo com resultado mensurável.</span>
                         </p>
 
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                            <GoldButton size="lg" onClick={onAuditClick}>
-                                Quero ver se meu restaurante se qualifica
-                                <ArrowRight size={18} />
-                            </GoldButton>
+                        <div className="flex flex-col sm:flex-row items-start sm:items-start gap-4">
+                            <div className="inline-flex flex-col items-start gap-1.5">
+                                <GoldButton size="lg" onClick={onAuditClick}>
+                                    Quero ver se meu restaurante se qualifica
+                                    <ArrowRight size={18} />
+                                </GoldButton>
+                                <span className="text-[10px] text-[#A8A196]/90 tracking-wide font-medium">
+                                    Fale com a equipe pelo WhatsApp
+                                </span>
+                            </div>
                             <GoldButton size="lg" variant="outline" onClick={scrollToCases}>
                                 <Play size={14} className="fill-current" />
                                 Ver o que fizemos pelo Taychi e La Pizza Rio

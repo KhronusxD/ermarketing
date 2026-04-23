@@ -42,7 +42,7 @@ export const Header: React.FC<SectionProps> = ({ onAuditClick }) => {
                         Tirar dúvidas
                     </button>
                     <GoldButton size="sm" onClick={onAuditClick}>
-                        Fazer diagnóstico
+                        Falar no WhatsApp
                     </GoldButton>
                 </div>
             </div>
