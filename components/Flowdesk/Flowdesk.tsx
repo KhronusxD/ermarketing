@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
     ArrowRight,
@@ -25,7 +25,7 @@ import {
 } from './shared';
 import { CreativeShowcase } from './CreativeShowcase';
 import { LandingPagesShowcase } from './LandingPagesShowcase';
-import { trackStandard } from './Quiz/metaPixel';
+import { LeadCapturePopup } from '../LeadCapturePopup';
 
 const WHATSAPP =
     'https://wa.me/5592985146299?text=Ol%C3%A1%21%20Vim%20da%20p%C3%A1gina%20do%20Plano%20Essencial%20da%20ER%20Marketing.%20Quero%20conversar%20sobre%20como%20come%C3%A7ar%20o%20marketing%20completo%20no%20meu%20neg%C3%B3cio.';
@@ -907,19 +907,14 @@ const Footer: React.FC = () => (
 // MAIN
 // ————————————————————————————————————————————————————————————————
 export const Flowdesk: React.FC = () => {
+    const [popupOpen, setPopupOpen] = useState(false);
+
     useEffect(() => {
         document.title = 'ER Marketing · Plano Essencial · FlowDesk';
     }, []);
 
-    const goToWhatsApp = () => {
-        trackStandard('Lead', {
-            content_name: 'Flowdesk · Plano Essencial · WhatsApp CTA',
-            content_category: 'flowdesk',
-            value: 1,
-            currency: 'BRL',
-        });
-        window.open(WHATSAPP, '_blank', 'noopener,noreferrer');
-    };
+    // WhatsApp CTAs now open the lead-capture popup; Meta Lead fires on submit.
+    const openPopup = () => setPopupOpen(true);
 
     const scrollToPlans = () => {
         const el = document.getElementById('planos');
@@ -931,7 +926,7 @@ export const Flowdesk: React.FC = () => {
             className="min-h-screen text-[#E8F4FF] font-sans selection:bg-[#4DD5FF] selection:text-[#031224] relative overflow-x-hidden"
             style={{ backgroundColor: OCEAN.bg }}
         >
-            <Hero onCta={goToWhatsApp} onScroll={scrollToPlans} />
+            <Hero onCta={openPopup} onScroll={scrollToPlans} />
             <Pain />
             <Solution />
             <CreativeShowcase />
@@ -940,10 +935,24 @@ export const Flowdesk: React.FC = () => {
             <LandingPagesShowcase />
             <HowItWorks />
             <Objections />
-            <Urgency onCta={goToWhatsApp} />
-            <Plans onCta={goToWhatsApp} />
-            <FinalCTA onCta={goToWhatsApp} />
+            <Urgency onCta={openPopup} />
+            <Plans onCta={openPopup} />
+            <FinalCTA onCta={openPopup} />
             <Footer />
+
+            <LeadCapturePopup
+                open={popupOpen}
+                onClose={() => setPopupOpen(false)}
+                theme="ocean"
+                title="Falar com a equipe"
+                subtitle="Deixe seus dados e te chamamos no WhatsApp em minutos — atendimento direto do time da ER."
+                businessLabel="Nome do negócio"
+                businessPlaceholder="Ex: Clínica Rio / Studio João"
+                whatsappUrl={WHATSAPP}
+                leadContentName="Flowdesk · Plano Essencial · Popup"
+                leadContentCategory="flowdesk"
+                storageKey="er-lead-flowdesk"
+            />
         </div>
     );
 };

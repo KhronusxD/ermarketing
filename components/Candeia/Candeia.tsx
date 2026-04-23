@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
     ArrowRight,
@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { CandeiaButton, PillBadge, DecorativeQuote, GrainOverlay, CANDEIA } from './shared';
 import { SITE_PREVIEWS } from './assets';
-import { trackStandard } from './metaPixel';
+import { LeadCapturePopup } from '../LeadCapturePopup';
 
 // Direct WhatsApp redirect — Candeia-specific pre-filled message
 const CTA_REDIRECT =
@@ -1195,6 +1195,8 @@ const Footer: React.FC = () => (
 // MAIN
 // ————————————————————————————————————————————————————————————————
 export const Candeia: React.FC = () => {
+    const [popupOpen, setPopupOpen] = useState(false);
+
     useEffect(() => {
         document.title = 'ER Marketing Psicologia · Sites para profissionais de saúde';
 
@@ -1211,16 +1213,10 @@ export const Candeia: React.FC = () => {
         }
     }, []);
 
-    const goToCta = () => {
-        // Fire the Meta Ads Lead conversion event on this page's primary CTA.
-        trackStandard('Lead', {
-            content_name: 'Candeia · Psicologia',
-            content_category: 'sites-saude',
-            value: 1,
-            currency: 'BRL',
-        });
-        window.open(CTA_REDIRECT, '_blank', 'noopener,noreferrer');
-    };
+    // All WhatsApp CTAs now open the lead-capture popup.
+    // Meta Pixel Lead event is fired on the popup submit (see LeadCapturePopup),
+    // not on the LP button click.
+    const openPopup = () => setPopupOpen(true);
 
     const scrollToPlans = () => {
         const el = document.getElementById('planos');
@@ -1232,18 +1228,32 @@ export const Candeia: React.FC = () => {
             className="min-h-screen font-sans selection:bg-[#C89968] selection:text-[#1F1F1F] relative overflow-x-hidden"
             style={{ backgroundColor: CANDEIA.cream, color: CANDEIA.ink }}
         >
-            <Hero onCta={goToCta} onScroll={scrollToPlans} />
+            <Hero onCta={openPopup} onScroll={scrollToPlans} />
             <PortfolioCarousel />
             <Pain />
             <InstagramVsSite />
-            <Plans onCta={goToCta} />
+            <Plans onCta={openPopup} />
             <Included />
             <HowItWorks />
             <Audience />
             <Objections />
-            <Urgency onCta={goToCta} />
-            <FinalCTA onCta={goToCta} />
+            <Urgency onCta={openPopup} />
+            <FinalCTA onCta={openPopup} />
             <Footer />
+
+            <LeadCapturePopup
+                open={popupOpen}
+                onClose={() => setPopupOpen(false)}
+                theme="sage"
+                title="Falar com a equipe"
+                subtitle="Deixe seus dados e te chamamos no WhatsApp em minutos — atendimento direto da equipe."
+                businessLabel="Nome do consultório"
+                businessPlaceholder="Ex: Clínica Bem-Estar"
+                whatsappUrl={CTA_REDIRECT}
+                leadContentName="Candeia · Psicologia · Popup"
+                leadContentCategory="sites-saude"
+                storageKey="er-lead-candeia"
+            />
         </div>
     );
 };

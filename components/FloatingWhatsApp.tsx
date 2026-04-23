@@ -3,11 +3,11 @@ import { MessageCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface FloatingWhatsAppProps {
-    /** When provided, fires before opening WhatsApp — used to report a Meta Pixel Lead event on the main LPs. */
-    onBeforeOpen?: () => void;
+    /** When provided, replaces the default click behavior (used by main LPs to open a lead-capture popup instead of going straight to WhatsApp). */
+    onOverrideClick?: () => void;
 }
 
-export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ onBeforeOpen }) => {
+export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ onOverrideClick }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -25,7 +25,10 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ onBeforeOpen
     }, []);
 
     const handleClick = () => {
-        onBeforeOpen?.();
+        if (onOverrideClick) {
+            onOverrideClick();
+            return;
+        }
         window.open('https://wa.me/5592985146299?text=Ol%C3%A1%2C%20estou%20no%20site%20e%20tenho%20d%C3%BAvidas.', '_blank');
     };
 
