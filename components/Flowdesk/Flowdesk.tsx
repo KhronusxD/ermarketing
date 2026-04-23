@@ -25,6 +25,7 @@ import {
 } from './shared';
 import { CreativeShowcase } from './CreativeShowcase';
 import { LandingPagesShowcase } from './LandingPagesShowcase';
+import { trackStandard } from './Quiz/metaPixel';
 
 const WHATSAPP =
     'https://wa.me/5592985146299?text=Ol%C3%A1%21%20Vim%20da%20p%C3%A1gina%20do%20Plano%20Essencial%20da%20ER%20Marketing.%20Quero%20conversar%20sobre%20como%20come%C3%A7ar%20o%20marketing%20completo%20no%20meu%20neg%C3%B3cio.';
@@ -893,6 +894,12 @@ export const Flowdesk: React.FC = () => {
     }, []);
 
     const goToWhatsApp = () => {
+        trackStandard('Lead', {
+            content_name: 'Flowdesk · Plano Essencial · WhatsApp CTA',
+            content_category: 'flowdesk',
+            value: 1,
+            currency: 'BRL',
+        });
         window.open(WHATSAPP, '_blank', 'noopener,noreferrer');
     };
 

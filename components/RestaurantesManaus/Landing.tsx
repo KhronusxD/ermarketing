@@ -12,12 +12,19 @@ import { Urgency } from './Urgency';
 import { QuizCTA } from './QuizCTA';
 import { Footer } from './Footer';
 import { FloatingWhatsApp } from '../FloatingWhatsApp';
+import { trackStandard } from './Quiz/metaPixel';
 
 const RESTAURANT_WHATSAPP =
     'https://wa.me/5592985146299?text=Ol%C3%A1%21%20Vim%20da%20p%C3%A1gina%20da%20ER%20Marketing%20para%20restaurantes.%20Quero%20saber%20como%20voc%C3%AAs%20podem%20lotar%20o%20meu%20sal%C3%A3o%20com%20mais%20clientes.';
 
 export const RestaurantesManausLanding: React.FC = () => {
     const handleAuditClick = () => {
+        trackStandard('Lead', {
+            content_name: 'Restaurantes Manaus · WhatsApp CTA',
+            content_category: 'restaurantes',
+            value: 1,
+            currency: 'BRL',
+        });
         window.open(RESTAURANT_WHATSAPP, '_blank', 'noopener,noreferrer');
     };
 
@@ -61,7 +68,16 @@ export const RestaurantesManausLanding: React.FC = () => {
             </main>
 
             <Footer />
-            <FloatingWhatsApp />
+            <FloatingWhatsApp
+                onBeforeOpen={() =>
+                    trackStandard('Lead', {
+                        content_name: 'Restaurantes Manaus · WhatsApp Flutuante',
+                        content_category: 'restaurantes',
+                        value: 1,
+                        currency: 'BRL',
+                    })
+                }
+            />
         </div>
     );
 };

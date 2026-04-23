@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { MessageCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const FloatingWhatsApp: React.FC = () => {
+interface FloatingWhatsAppProps {
+    /** When provided, fires before opening WhatsApp — used to report a Meta Pixel Lead event on the main LPs. */
+    onBeforeOpen?: () => void;
+}
+
+export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ onBeforeOpen }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -20,6 +25,7 @@ export const FloatingWhatsApp: React.FC = () => {
     }, []);
 
     const handleClick = () => {
+        onBeforeOpen?.();
         window.open('https://wa.me/5592985146299?text=Ol%C3%A1%2C%20estou%20no%20site%20e%20tenho%20d%C3%BAvidas.', '_blank');
     };
 
