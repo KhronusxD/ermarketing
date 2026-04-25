@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { SectionProps } from '../../types';
-import { SectionLabel, PHOTOS } from './shared';
+import { SectionLabel, PHOTOS, Photo } from './shared';
 
 export const Story: React.FC<SectionProps> = ({ onAuditClick }) => {
     return (
@@ -18,7 +18,7 @@ export const Story: React.FC<SectionProps> = ({ onAuditClick }) => {
                     >
                         {/* Main large image */}
                         <div className="absolute top-0 left-0 w-[70%] h-[60%] rounded-3xl overflow-hidden border border-[#D4A574]/20 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.8)]">
-                            <img src={PHOTOS.taychi[0]} alt="Captação Taychi" className="w-full h-full object-cover" />
+                            <Photo src={PHOTOS.taychi[0]} alt="Captação Taychi" width={400} height={500} loading="lazy" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                             <div className="absolute bottom-4 left-4 text-xs text-white/90 tracking-widest uppercase backdrop-blur-sm bg-black/40 px-3 py-1 rounded-full border border-white/10">
                                 Captação no cliente
@@ -31,7 +31,7 @@ export const Story: React.FC<SectionProps> = ({ onAuditClick }) => {
                             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
                             className="absolute top-[10%] right-0 w-[45%] h-[40%] rounded-2xl overflow-hidden border border-[#D4A574]/25 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.7)]"
                         >
-                            <img src={PHOTOS.pizza[1]} alt="La Pizza Rio" className="w-full h-full object-cover" />
+                            <Photo src={PHOTOS.pizza[1]} alt="La Pizza Rio" width={400} height={500} loading="lazy" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                         </motion.div>
 
@@ -41,7 +41,7 @@ export const Story: React.FC<SectionProps> = ({ onAuditClick }) => {
                             transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
                             className="absolute bottom-0 right-[5%] w-[50%] h-[42%] rounded-2xl overflow-hidden border border-[#D4A574]/25 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.7)]"
                         >
-                            <img src={PHOTOS.taychi[2]} alt="Edição Taychi" className="w-full h-full object-cover" />
+                            <Photo src={PHOTOS.taychi[2]} alt="Edição Taychi" width={400} height={500} loading="lazy" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                         </motion.div>
 
@@ -51,7 +51,7 @@ export const Story: React.FC<SectionProps> = ({ onAuditClick }) => {
                             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
                             className="absolute bottom-[5%] left-[10%] w-[35%] h-[28%] rounded-2xl overflow-hidden border border-[#D4A574]/30 shadow-[0_15px_40px_-10px_rgba(212,165,116,0.3)]"
                         >
-                            <img src={PHOTOS.pizza[3]} alt="Prato" className="w-full h-full object-cover" />
+                            <Photo src={PHOTOS.pizza[3]} alt="Prato" width={400} height={500} loading="lazy" className="w-full h-full object-cover" />
                         </motion.div>
                     </motion.div>
 

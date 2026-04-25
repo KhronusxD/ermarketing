@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Target, Video, Instagram, BarChart3, FileText } from 'lucide-react';
 import { SectionProps } from '../../types';
-import { GoldButton, SectionLabel, PHOTOS } from './shared';
+import { GoldButton, SectionLabel, PHOTOS, Photo } from './shared';
 
 const services = [
     {
@@ -88,7 +88,14 @@ export const Offer: React.FC<SectionProps> = ({ onAuditClick }) => {
                         transition={{ duration: 0.6, delay: 0.4 }}
                         className="relative rounded-3xl overflow-hidden border border-[#D4A574]/30 min-h-[300px] group"
                     >
-                        <img src={PHOTOS.taychi[3]} alt="Bastidores Taychi" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <Photo
+                            src={PHOTOS.taychi[3]}
+                            alt="Bastidores Taychi"
+                            width={600}
+                            height={750}
+                            loading="lazy"
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20"></div>
                         <div className="relative z-10 p-8 h-full flex flex-col justify-end">
                             <div className="text-[10px] text-[#E8C088] font-semibold tracking-[0.3em] uppercase mb-2">

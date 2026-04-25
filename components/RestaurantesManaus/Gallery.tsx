@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { PHOTOS, SectionLabel } from './shared';
+import { PHOTOS, SectionLabel, Photo } from './shared';
 
 interface GalleryProps {
     withHeader?: boolean;
@@ -49,9 +49,11 @@ export const Gallery: React.FC<GalleryProps> = ({ withHeader = false, speed = 'n
                                 key={i}
                                 className="relative w-[240px] md:w-[300px] h-[300px] md:h-[380px] rounded-2xl overflow-hidden border border-[#D4A574]/15 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6)] shrink-0 group"
                             >
-                                <img
+                                <Photo
                                     src={src}
                                     alt=""
+                                    width={300}
+                                    height={380}
                                     loading="lazy"
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                 />

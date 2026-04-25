@@ -1,5 +1,29 @@
 import React from 'react';
 
+// ——————————————————————————————————————————————————————————
+// Photo — <picture> wrapper that prefers the auto-generated AVIF sibling
+// of any JPG in /photos-food/. Pass width/height so Lighthouse stops
+// flagging the unsized-image rule and so the browser can reserve space
+// before the bytes arrive (CLS stays at 0).
+// ——————————————————————————————————————————————————————————
+interface PhotoProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+    src: string;
+    width: number;
+    height: number;
+    alt: string;
+}
+
+export const Photo: React.FC<PhotoProps> = ({ src, width, height, alt, ...rest }) => {
+    const avif = src.endsWith('.jpg') ? src.replace(/\.jpg$/, '.avif') : null;
+    return (
+        <picture>
+            {avif && <source type="image/avif" srcSet={avif} />}
+            <img src={src} alt={alt} width={width} height={height} {...rest} />
+        </picture>
+    );
+};
+
+
 // Animated gradient button — gold shimmer looping right-to-left
 interface GoldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     size?: 'sm' | 'md' | 'lg';

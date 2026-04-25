@@ -154,6 +154,8 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                                 <img
                                     src={PHOTOS.pizza[0]}
                                     alt="La Pizza Rio"
+                                    width={480}
+                                    height={600}
                                     fetchPriority="high"
                                     decoding="async"
                                     className="w-full h-full object-cover"

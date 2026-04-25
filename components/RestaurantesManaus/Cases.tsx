@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Quote, TrendingUp, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 import { SectionProps } from '../../types';
-import { GoldButton, SectionLabel, PHOTOS, VIDEOS } from './shared';
+import { GoldButton, SectionLabel, PHOTOS, VIDEOS, Photo } from './shared';
 
 interface VideoItem {
     src: string;
@@ -178,7 +178,14 @@ export const Cases: React.FC<SectionProps> = ({ onAuditClick }) => {
                                 {/* Gallery */}
                                 <div className={`lg:col-span-6 relative h-[480px] md:h-[560px] ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
                                     <div className="absolute inset-0 rounded-3xl overflow-hidden border border-[#D4A574]/20 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.8)]">
-                                        <img src={c.hero} alt={c.name} className="w-full h-full object-cover" />
+                                        <Photo
+                                            src={c.hero}
+                                            alt={c.name}
+                                            width={600}
+                                            height={750}
+                                            loading="lazy"
+                                            className="w-full h-full object-cover"
+                                        />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                                         <div className="absolute top-5 left-5 flex items-center gap-2">
                                             <span className="text-[10px] text-[#E8C088] font-semibold tracking-[0.3em] uppercase backdrop-blur-md bg-black/40 border border-[#D4A574]/30 px-3 py-1.5 rounded-full">
@@ -196,7 +203,14 @@ export const Cases: React.FC<SectionProps> = ({ onAuditClick }) => {
                                                 key={j}
                                                 className="w-14 h-14 rounded-full overflow-hidden border border-[#D4A574]/30 hover:border-[#D4A574] cursor-pointer transition-all hover:scale-110"
                                             >
-                                                <img src={src} alt="" className="w-full h-full object-cover" />
+                                                <Photo
+                                                    src={src}
+                                                    alt=""
+                                                    width={56}
+                                                    height={56}
+                                                    loading="lazy"
+                                                    className="w-full h-full object-cover"
+                                                />
                                             </div>
                                         ))}
                                     </div>
