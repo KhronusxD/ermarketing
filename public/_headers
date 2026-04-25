@@ -1,0 +1,29 @@
+# Long-lived immutable cache for hashed/static assets.
+# Vite emits hashed filenames in /assets/, so cache forever is safe.
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/photos-food/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/posts-feed/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/lps/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/lp-psicologia/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/video-posters/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/woman-in-the-middle.png
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts (Cloudflare Pages will pick up the actual woff2 paths from /assets/ above)
+
+# HTML — never cache, always revalidate so deploys take effect immediately.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

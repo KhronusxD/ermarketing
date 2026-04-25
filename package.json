@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/playfair-display": "^5.2.8",
     "framer-motion": "^12.27.0",
     "lucide-react": "^0.562.0",
     "react": "^19.2.3",

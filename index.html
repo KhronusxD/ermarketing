@@ -8,9 +8,11 @@
   <link rel="icon" type="image/png" href="/assets/red-logo.png" />
 
   <!-- Preconnect to third-parties used above-the-fold to cut TLS/DNS latency -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev" />
+
+  <!-- Preload the LCP image of the most-visited LP (/restaurantes-manaus hero).
+       Browsers ignore the hint on other routes; cheap and very effective there. -->
+  <link rel="preload" as="image" type="image/avif" href="/photos-food/p-1.avif" fetchpriority="high" />
 
   <!-- Google Tag Manager -->
   <script>(function (w, d, s, l, i) {
@@ -39,8 +41,9 @@
   </script>
   <!-- End Meta Pixel -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
-    rel="stylesheet">
+  <!-- Fonts are now self-hosted via @fontsource (imported from index.css) — no
+       external Google Fonts request, no fonts.gstatic.com round-trip. -->
+
   <script>
     tailwind.config = {
       darkMode: 'class',

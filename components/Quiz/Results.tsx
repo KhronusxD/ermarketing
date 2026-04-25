@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Calendar, AlertTriangle, ArrowRight, Download, CheckCircle, MessageCircle } from 'lucide-react';
 import { DiagnosisResult, LeadData } from './types';
+
+// Lazy — keeps the ~300KB recharts bundle out of the chunk until the user
+// actually reaches the results screen.
+const HealthGauge = lazy(() => import('./HealthGauge'));
 
 interface ResultsProps {
     result: DiagnosisResult;
@@ -40,26 +43,9 @@ const Results: React.FC<ResultsProps> = ({ result, leadData }) => {
                     >
                         <h3 className="text-gray-400 font-medium mb-4">Saúde Digital</h3>
                         <div className="w-full h-[180px] relative">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={data}
-                                        cx="50%"
-                                        cy="100%"
-                                        startAngle={180}
-                                        endAngle={0}
-                                        innerRadius={60}
-                                        outerRadius={80}
-                                        paddingAngle={0}
-                                        dataKey="value"
-                                        stroke="none"
-                                    >
-                                        {data.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.color} />
-                                        ))}
-                                    </Pie>
-                                </PieChart>
-                            </ResponsiveContainer>
+                            <Suspense fallback={<div className="w-full h-full" aria-hidden="true" />}>
+                                <HealthGauge data={data} />
+                            </Suspense>
                             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-center pb-2">
                                 <span className={`text-4xl font-bold ${result.score > 70 ? 'text-green-400' : 'text-amber-400'}`}>
                                     {result.score}%

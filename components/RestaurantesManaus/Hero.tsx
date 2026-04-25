@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play, Pause, Sparkles } from 'lucide-react';
 import { SectionProps } from '../../types';
@@ -7,17 +7,6 @@ import { GoldButton, SectionLabel, PHOTOS, VIDEOS } from './shared';
 export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [playing, setPlaying] = useState(true);
-
-    // Pick the BG video variant based on viewport (responds to orientation changes too)
-    const [bgVideoSrc, setBgVideoSrc] = useState(VIDEOS.bg.desktop);
-    useEffect(() => {
-        if (typeof window === 'undefined' || !window.matchMedia) return;
-        const mq = window.matchMedia('(max-width: 768px)');
-        const apply = () => setBgVideoSrc(mq.matches ? VIDEOS.bg.mobile : VIDEOS.bg.desktop);
-        apply();
-        mq.addEventListener('change', apply);
-        return () => mq.removeEventListener('change', apply);
-    }, []);
 
     const togglePlay = () => {
         const v = videoRef.current;
@@ -36,26 +25,18 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
     };
 
     return (
-        <section className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
-            {/* BG video — desktop/mobile variants, mixed with dark overlay + gold wash.
-                preload='none' so the video never blocks FCP/LCP; playback starts
-                as soon as the browser fetches enough data from the autoPlay hint. */}
-            <video
-                key={bgVideoSrc}
-                src={bgVideoSrc}
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="none"
-                aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover z-0"
-                style={{ opacity: 0.6 }}
+        <section className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden bg-[#111112]">
+            {/* Ambient gold wash + dark gradient backdrop (replaces the previous BG
+                video — video was costing ~MB of bandwidth and blocking FCP/LCP). */}
+            <div
+                className="absolute inset-0 z-0"
+                style={{
+                    background:
+                        'radial-gradient(ellipse at 20% 20%, rgba(212,165,116,0.22) 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, rgba(212,165,116,0.14) 0%, transparent 55%), linear-gradient(180deg, #1a1510 0%, #111112 60%, #0a0a0c 100%)',
+                }}
             />
-            {/* Dark overlay to keep copy readable */}
-            <div className="absolute inset-0 z-0 bg-[#111112]/55"></div>
 
-            {/* Ambient gold wash layered on top of the video */}
+            {/* Ambient gold wash + grid overlay */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <div
                     className="absolute inset-0 opacity-50"
@@ -168,13 +149,16 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
                             className="absolute bottom-0 left-0 w-[55%] h-[45%] rounded-2xl overflow-hidden border border-[#D4A574]/30 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8)]"
                         >
-                            <img
-                                src={PHOTOS.pizza[0]}
-                                alt="La Pizza Rio"
-                                fetchPriority="high"
-                                decoding="async"
-                                className="w-full h-full object-cover"
-                            />
+                            <picture>
+                                <source type="image/avif" srcSet="/photos-food/p-1.avif" />
+                                <img
+                                    src={PHOTOS.pizza[0]}
+                                    alt="La Pizza Rio"
+                                    fetchPriority="high"
+                                    decoding="async"
+                                    className="w-full h-full object-cover"
+                                />
+                            </picture>
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                             <div className="absolute bottom-3 left-3">
                                 <div className="text-[10px] text-[#E8C088] font-semibold tracking-widest uppercase">Cliente</div>

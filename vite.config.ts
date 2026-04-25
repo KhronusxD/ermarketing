@@ -18,6 +18,20 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
-      }
+      },
+      build: {
+        // Split heavy libs into stable, separately-cacheable chunks so a
+        // returning visitor doesn't re-download react/framer-motion/lucide
+        // when only the app code changes.
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+              'framer-motion': ['framer-motion'],
+              'lucide': ['lucide-react'],
+            },
+          },
+        },
+      },
     };
 });
