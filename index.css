@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Self-hosted fonts via @fontsource — same Inter + Playfair Display files
    that Google Fonts serves, just bundled into our own /assets/ output so
    there's no extra DNS/TLS hop to fonts.gstatic.com. */
@@ -16,3 +20,54 @@
 @import '@fontsource/playfair-display/400-italic.css';
 @import '@fontsource/playfair-display/600-italic.css';
 @import '@fontsource/playfair-display/700-italic.css';
+
+/* Custom keyframes used by inline `animation:` styles across the components.
+   Tailwind v3 only emits @keyframes when the matching `animate-*` utility is
+   referenced in the source — but several places set `animation:` directly via
+   inline style (gradient-loop on buttons, gradient-shift on the Offer card,
+   glow on the red ER buttons, shimmer on accents). Define them here so the
+   animations actually run after the CDN was removed. */
+@keyframes gradient-loop {
+    0% { background-position: 200% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #E60000, 0 0 10px #E60000; }
+    100% { box-shadow: 0 0 20px #E60000, 0 0 30px #E60000; }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Global base styles migrated from the previous index.html inline <style> */
+body {
+    background-color: #050505;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #E60000;
+}
