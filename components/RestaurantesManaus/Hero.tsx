@@ -37,7 +37,9 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
 
     return (
         <section className="relative min-h-screen flex items-center pt-28 pb-20 overflow-hidden">
-            {/* BG video — desktop/mobile variants, mixed with dark overlay + gold wash */}
+            {/* BG video — desktop/mobile variants, mixed with dark overlay + gold wash.
+                preload='none' so the video never blocks FCP/LCP; playback starts
+                as soon as the browser fetches enough data from the autoPlay hint. */}
             <video
                 key={bgVideoSrc}
                 src={bgVideoSrc}
@@ -45,7 +47,7 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                 loop
                 muted
                 playsInline
-                preload="auto"
+                preload="none"
                 aria-hidden="true"
                 className="absolute inset-0 w-full h-full object-cover z-0"
                 style={{ opacity: 0.6 }}
@@ -126,7 +128,9 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                         transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
                         className="lg:col-span-5 relative h-[500px] md:h-[600px]"
                     >
-                        {/* Main video card — real Taychi Yakisoba reel */}
+                        {/* Main video card — real Taychi Yakisoba reel.
+                            Poster shows instantly; the video itself is only fetched
+                            when the browser decides it's time (autoplay kick), not eagerly. */}
                         <div className="absolute top-0 right-0 w-[85%] h-[70%] rounded-3xl overflow-hidden border border-[#D4A574]/20 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.7)]">
                             <video
                                 ref={videoRef}
@@ -136,7 +140,7 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                                 loop
                                 muted
                                 playsInline
-                                preload="auto"
+                                preload="metadata"
                                 className="w-full h-full object-cover"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
@@ -164,7 +168,13 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
                             className="absolute bottom-0 left-0 w-[55%] h-[45%] rounded-2xl overflow-hidden border border-[#D4A574]/30 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8)]"
                         >
-                            <img src={PHOTOS.pizza[0]} alt="La Pizza Rio" className="w-full h-full object-cover" />
+                            <img
+                                src={PHOTOS.pizza[0]}
+                                alt="La Pizza Rio"
+                                fetchPriority="high"
+                                decoding="async"
+                                className="w-full h-full object-cover"
+                            />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                             <div className="absolute bottom-3 left-3">
                                 <div className="text-[10px] text-[#E8C088] font-semibold tracking-widest uppercase">Cliente</div>
