@@ -1,10 +1,16 @@
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
-// Route-level code splitting. Each LP becomes its own chunk so a first-time
-// visitor only downloads the code for the LP they actually opened, not every
-// landing page bundled into one giant JS file. This is the single biggest win
-// for FCP/LCP on LPs like /restaurantes-manaus.
+// /restaurantes-manaus is the single most-visited LP and is pre-rendered as
+// static HTML at build time (see scripts/prerender.tsx). For hydration to
+// reuse that DOM the route component has to render eagerly on both server
+// and client — so this one is a static import. The ~11 KiB it adds to the
+// entry chunk is paid back many times over by skipping the lazy round-trip
+// at LCP time.
+import { RestaurantesManausLanding } from './components/RestaurantesManaus/Landing';
+
+// Every other LP stays code-split so a first-time visitor only downloads
+// what they need.
 const MainLanding = lazy(() =>
     import('./components/MainLanding').then((m) => ({ default: m.MainLanding })),
 );
@@ -17,11 +23,6 @@ const RestaurantLanding = lazy(() =>
 const RestaurantBLanding = lazy(() =>
     import('./components/RestaurantB/RestaurantBLanding').then((m) => ({
         default: m.RestaurantBLanding,
-    })),
-);
-const RestaurantesManausLanding = lazy(() =>
-    import('./components/RestaurantesManaus/Landing').then((m) => ({
-        default: m.RestaurantesManausLanding,
     })),
 );
 const DiagnosticoFlow = lazy(() =>
@@ -51,24 +52,24 @@ const RouteFallback: React.FC = () => (
     />
 );
 
+// Router lives in the entry (index.tsx for browser, prerender.tsx for build),
+// so the same App tree can be rendered with BrowserRouter or StaticRouter.
 const App: React.FC = () => {
     return (
-        <Router>
-            <Suspense fallback={<RouteFallback />}>
-                <Routes>
-                    <Route path="/" element={<MainLanding />} />
-                    <Route path="/auditoria-de-lucro-invisivel" element={<QuizFlow />} />
-                    <Route path="/restaurante" element={<RestaurantLanding />} />
-                    <Route path="/restaurante-b" element={<RestaurantBLanding />} />
-                    <Route path="/restaurantes-manaus" element={<RestaurantesManausLanding />} />
-                    <Route path="/diagnostico-manaus" element={<DiagnosticoFlow />} />
-                    <Route path="/auditoria-restaurante" element={<RestaurantQuizFlow />} />
-                    <Route path="/flowdesk" element={<Flowdesk />} />
-                    <Route path="/diagnostico-flowdesk" element={<FlowdeskDiagnostico />} />
-                    <Route path="/lp-psicologia" element={<Candeia />} />
-                </Routes>
-            </Suspense>
-        </Router>
+        <Suspense fallback={<RouteFallback />}>
+            <Routes>
+                <Route path="/" element={<MainLanding />} />
+                <Route path="/auditoria-de-lucro-invisivel" element={<QuizFlow />} />
+                <Route path="/restaurante" element={<RestaurantLanding />} />
+                <Route path="/restaurante-b" element={<RestaurantBLanding />} />
+                <Route path="/restaurantes-manaus" element={<RestaurantesManausLanding />} />
+                <Route path="/diagnostico-manaus" element={<DiagnosticoFlow />} />
+                <Route path="/auditoria-restaurante" element={<RestaurantQuizFlow />} />
+                <Route path="/flowdesk" element={<Flowdesk />} />
+                <Route path="/diagnostico-flowdesk" element={<FlowdeskDiagnostico />} />
+                <Route path="/lp-psicologia" element={<Candeia />} />
+            </Routes>
+        </Suspense>
     );
 };
 
