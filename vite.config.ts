@@ -2,26 +2,41 @@ import path from 'path';
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// Vite default-injects the bundled stylesheet as a render-blocking
-// <link rel="stylesheet">. With ~90 KiB of CSS (Tailwind + every fontsource
-// @font-face), simulated mobile 4G turns that into ~1.5s of render-blocking
-// time and tanked our LCP. Switch to the standard async-CSS pattern: ship the
-// stylesheet as media="print" so the browser fetches but doesn't apply it,
-// then flip media="all" on load. Inline body bg in index.html prevents the
-// flash, and a <noscript> fallback keeps the site styled with JS disabled.
-const asyncCssPlugin = (): Plugin => ({
-    name: 'async-css',
+// Inline the bundled CSS into index.html as a <style> block. Vite's default
+// is a render-blocking <link rel="stylesheet"> which adds ~1.5s on simulated
+// mobile 4G. We tried the async-CSS (media=print swap) pattern, but on a
+// JS-rendered SPA the DOM ends up painted *before* the swap completes — so
+// the styled paint becomes the LCP and lands later than render-blocking
+// would. Inlining the gzipped 13 KiB CSS into the HTML lets the bundled
+// styles be available the moment the HTML parses, no second request.
+const inlineCssPlugin = (): Plugin => ({
+    name: 'inline-css',
     enforce: 'post',
-    transformIndexHtml(html) {
-        return html.replace(
-            /<link rel="stylesheet"([^>]*?)>/g,
-            (match, attrs) => {
-                const hrefMatch = attrs.match(/href="([^"]+)"/);
-                if (!hrefMatch) return match;
-                const href = hrefMatch[1];
-                return `<link rel="stylesheet"${attrs} media="print" onload="this.media='all';this.onload=null"><noscript><link rel="stylesheet" href="${href}"></noscript>`;
-            },
+    apply: 'build',
+    generateBundle(_, bundle) {
+        const cssAsset = Object.values(bundle).find(
+            (a) => a.type === 'asset' && a.fileName.endsWith('.css'),
         );
+        const htmlAsset = Object.values(bundle).find(
+            (a) => a.type === 'asset' && a.fileName.endsWith('.html'),
+        );
+        if (!cssAsset || !htmlAsset || cssAsset.type !== 'asset' || htmlAsset.type !== 'asset') return;
+
+        const css = String(cssAsset.source);
+        let html = String(htmlAsset.source);
+
+        // Replace any <link rel="stylesheet" ... href=".../*.css" ...> with an
+        // inline <style> block. Drops crossorigin/media attrs since they're
+        // pointless on inline styles.
+        html = html.replace(
+            /<link\s+rel="stylesheet"[^>]*href="[^"]+\.css"[^>]*>/g,
+            `<style>${css}</style>`,
+        );
+
+        htmlAsset.source = html;
+
+        // Remove the CSS asset from the bundle — nothing references it now.
+        delete (bundle as Record<string, unknown>)[cssAsset.fileName];
     },
 });
 
@@ -32,7 +47,7 @@ export default defineConfig(({ mode }) => {
         port: 3000,
         host: '0.0.0.0',
       },
-      plugins: [react(), asyncCssPlugin()],
+      plugins: [react(), inlineCssPlugin()],
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)

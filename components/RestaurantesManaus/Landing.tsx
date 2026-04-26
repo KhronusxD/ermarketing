@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Header } from './Header';
 import { Hero } from './Hero';
 import { Footer } from './Footer';
@@ -6,9 +6,13 @@ import { FloatingWhatsApp } from '../FloatingWhatsApp';
 import { LeadCapturePopup } from '../LeadCapturePopup';
 
 // Below-the-fold sections — split out so framer-motion (134 KiB) and the
-// section bodies don't compete with the Hero LCP. They load on idle / when
-// the user begins scrolling. Each chunk lands well before its section enters
-// the viewport on a normal scroll.
+// section bodies don't compete with the Hero LCP.
+//
+// IMPORTANT: rendering <BelowFold/> via Suspense fires the dynamic import the
+// moment React reaches it during the initial render. That defeats the point —
+// framer-motion shows up in the LCP critical path on Lighthouse Lantern.
+// We gate the render on a useEffect/idle callback below so the chunk only
+// starts fetching after the Hero has painted.
 const BelowFold = lazy(() => import('./BelowFold'));
 
 const RESTAURANT_WHATSAPP =
@@ -16,6 +20,24 @@ const RESTAURANT_WHATSAPP =
 
 export const RestaurantesManausLanding: React.FC = () => {
     const [popupOpen, setPopupOpen] = useState(false);
+    const [showBelowFold, setShowBelowFold] = useState(false);
+
+    // Defer the BelowFold chunk fetch until after Hero paints. Idle callback
+    // with a short fallback timeout so the page still hydrates fully even on
+    // browsers that never go idle (Safari) or if the user scrolls fast.
+    useEffect(() => {
+        const trigger = () => setShowBelowFold(true);
+        const onScroll = () => trigger();
+        window.addEventListener('scroll', onScroll, { once: true, passive: true });
+        const ric = (window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback;
+        const id = ric ? ric(trigger, { timeout: 1500 }) : window.setTimeout(trigger, 600);
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            const cic = (window as Window & { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
+            if (ric && cic) cic(id);
+            else window.clearTimeout(id);
+        };
+    }, []);
 
     // WhatsApp CTAs open the lead-capture popup; Meta Lead fires on submit.
     const handleAuditClick = () => setPopupOpen(true);
@@ -47,9 +69,13 @@ export const RestaurantesManausLanding: React.FC = () => {
 
             <main className="relative z-10">
                 <Hero onAuditClick={handleAuditClick} />
-                <Suspense fallback={<div style={{ minHeight: '100vh' }} aria-hidden="true" />}>
-                    <BelowFold onAuditClick={handleAuditClick} />
-                </Suspense>
+                {showBelowFold ? (
+                    <Suspense fallback={<div style={{ minHeight: '100vh' }} aria-hidden="true" />}>
+                        <BelowFold onAuditClick={handleAuditClick} />
+                    </Suspense>
+                ) : (
+                    <div style={{ minHeight: '100vh' }} aria-hidden="true" />
+                )}
             </main>
 
             <Footer />
