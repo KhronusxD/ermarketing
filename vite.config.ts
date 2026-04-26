@@ -20,6 +20,19 @@ export default defineConfig(({ mode }) => {
         }
       },
       build: {
+        // Modern target — kills legacy JS transforms/polyfills that Lighthouse
+        // flags. Mobile Safari ≥ iOS 15 and evergreen Chrome/Firefox already
+        // ship native top-level await, optional chaining, etc.
+        target: 'es2022',
+        // Skip eager <link rel="modulepreload"> for chunks that aren't on the
+        // critical path of the LCP. framer-motion is only needed by below-the-
+        // fold sections (lazy on every LP), so preloading it in <head> just
+        // burns mobile bandwidth before the hero finishes painting. The runtime
+        // still preloads it the moment a lazy chunk that uses it is requested.
+        modulePreload: {
+          resolveDependencies: (filename, deps) =>
+            deps.filter((d) => !/framer-motion|lucide/.test(d)),
+        },
         // Split heavy libs into stable, separately-cacheable chunks so a
         // returning visitor doesn't re-download react/framer-motion/lucide
         // when only the app code changes.

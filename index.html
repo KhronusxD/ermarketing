@@ -7,39 +7,73 @@
   <title>ER Marketing | Auditoria de Lucro Invisível</title>
   <link rel="icon" type="image/png" href="/assets/red-logo.png" />
 
-  <!-- Preconnect to third-parties used above-the-fold to cut TLS/DNS latency -->
+  <!-- Inline base styles — prevents the white flash between HTML arrival and
+       the hashed CSS bundle, and gives the LCP element a correct background
+       on first paint (FCP). -->
+  <style>
+    html, body { background-color: #111112; color: #F5F1E8; margin: 0; }
+    #root { min-height: 100vh; background-color: #111112; }
+  </style>
+
+  <!-- Preconnect to the R2 video CDN used above-the-fold on /restaurantes-manaus
+       and the main LP hero. Saves TLS/DNS on the first byte of video metadata. -->
   <link rel="preconnect" href="https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev" />
 
   <!-- Preload the LCP image of the most-visited LP (/restaurantes-manaus hero).
-       Browsers ignore the hint on other routes; cheap and very effective there. -->
-  <link rel="preload" as="image" type="image/avif" href="/photos-food/p-1.avif" fetchpriority="high" />
+       Two variants split by viewport: mobile gets the 480px AVIF (~44 KiB),
+       desktop the full one. Browsers ignore the hint on routes that don't use
+       the image; cheap and very effective on /restaurantes-manaus. -->
+  <link rel="preload" as="image" type="image/avif" href="/photos-food/p-1-sm.avif" media="(max-width: 768px)" fetchpriority="high" />
+  <link rel="preload" as="image" type="image/avif" href="/photos-food/p-1.avif" media="(min-width: 769px)" fetchpriority="high" />
 
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-MLK59QPC');</script>
-  <!-- End Google Tag Manager -->
-  <!-- Flowdesk pixel — conversion tracking for Manaus funnel -->
-  <script async src="https://flowdesk-flowdesk-app.rikvu5.easypanel.host/pixel.js?id=63f4f20b-41a3-46fb-94d8-942c3344a730&link=sknyr4"></script>
-  <!-- Meta Pixel -->
+  <!-- Third-party tags (GTM, Flowdesk pixel, Meta Pixel) are deferred until
+       after the page is interactive. They still fire within the user's session
+       but don't compete with React hydration / image decode for the initial
+       LCP/FCP window. The fbq + dataLayer queues are stubbed synchronously so
+       any in-app push() during boot is captured and replayed on flush. -->
   <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window,document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
+    // Stub queues so app code can push events before the real scripts load.
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    !function (f, b, e, v, n) {
+      if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
+    }(window);
     fbq('init', '339396175425796');
     fbq('track', 'PageView');
+
+    // Defer real loaders to first idle slot after `load`, so they never compete
+    // with the LCP image / hero JS. ~1.5s extra delay vs synchronous fire.
+    function __loadThirdPartyTags() {
+      // GTM
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MLK59QPC';
+      document.head.appendChild(s);
+      // Flowdesk
+      var f = document.createElement('script');
+      f.async = true;
+      f.src = 'https://flowdesk-flowdesk-app.rikvu5.easypanel.host/pixel.js?id=63f4f20b-41a3-46fb-94d8-942c3344a730&link=sknyr4';
+      document.head.appendChild(f);
+      // Meta Pixel
+      var m = document.createElement('script');
+      m.async = true;
+      m.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      document.head.appendChild(m);
+    }
+    function __schedulePixels() {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(__loadThirdPartyTags, { timeout: 2500 });
+      } else {
+        setTimeout(__loadThirdPartyTags, 1500);
+      }
+    }
+    if (document.readyState === 'complete') {
+      __schedulePixels();
+    } else {
+      window.addEventListener('load', __schedulePixels, { once: true });
+    }
   </script>
-  <!-- End Meta Pixel -->
 </head>
 
 <body>

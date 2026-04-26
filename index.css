@@ -1,10 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Self-hosted fonts via @fontsource — same Inter + Playfair Display files
    that Google Fonts serves, just bundled into our own /assets/ output so
-   there's no extra DNS/TLS hop to fonts.gstatic.com. */
+   there's no extra DNS/TLS hop to fonts.gstatic.com. PostCSS requires every
+   @import to come before any other rules (incl. @tailwind), so these are at
+   the very top of the file. */
 
 /* Inter (sans) */
 @import '@fontsource/inter/400.css';
@@ -21,12 +19,14 @@
 @import '@fontsource/playfair-display/600-italic.css';
 @import '@fontsource/playfair-display/700-italic.css';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Custom keyframes used by inline `animation:` styles across the components.
    Tailwind v3 only emits @keyframes when the matching `animate-*` utility is
    referenced in the source — but several places set `animation:` directly via
-   inline style (gradient-loop on buttons, gradient-shift on the Offer card,
-   glow on the red ER buttons, shimmer on accents). Define them here so the
-   animations actually run after the CDN was removed. */
+   inline style. Define them here so animations run after the CDN was removed. */
 @keyframes gradient-loop {
     0% { background-position: 200% 50%; }
     100% { background-position: 0% 50%; }
@@ -46,6 +46,48 @@
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
 }
+
+/* Composited shimmer — used by GoldButton on hot LP CTAs. Translates X on the
+   GPU instead of animating background-position (the latter triggers paint every
+   frame and was flagged by Lighthouse). */
+@keyframes shimmer-x {
+    0% { transform: translate3d(-100%, 0, 0); }
+    100% { transform: translate3d(300%, 0, 0); }
+}
+
+.animate-shimmer-x {
+    animation: shimmer-x 3.5s linear infinite;
+}
+
+/* Hero entry fade — replaces framer-motion `initial/animate` on the LCP path so
+   the LP can render without waiting for framer-motion to hydrate. Uses opacity
+   + transform (composited). */
+@keyframes hero-rise {
+    from { opacity: 0; transform: translate3d(0, 16px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes hero-pop {
+    from { opacity: 0; transform: scale(0.97); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.animate-hero-rise { animation: hero-rise 0.8s ease-out both; }
+.animate-hero-pop  { animation: hero-pop 1s ease-out 0.3s both; }
+
+/* Floating decorative loops — composited (only translateY). */
+@keyframes hero-float-a {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50%      { transform: translate3d(0, -10px, 0); }
+}
+
+@keyframes hero-float-b {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50%      { transform: translate3d(0, 8px, 0); }
+}
+
+.animate-hero-float-a { animation: hero-float-a 5s ease-in-out infinite; }
+.animate-hero-float-b { animation: hero-float-b 4s ease-in-out 1s infinite; }
 
 /* Global base styles migrated from the previous index.html inline <style> */
 body {

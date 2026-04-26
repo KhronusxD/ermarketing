@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { Header } from './Header';
 import { Hero } from './Hero';
-import { Gallery } from './Gallery';
-import { Pain } from './Pain';
-import { Why } from './Why';
-import { Story } from './Story';
-import { Cases } from './Cases';
-import { Offer } from './Offer';
-import { Objections } from './Objections';
-import { Urgency } from './Urgency';
-import { QuizCTA } from './QuizCTA';
 import { Footer } from './Footer';
 import { FloatingWhatsApp } from '../FloatingWhatsApp';
 import { LeadCapturePopup } from '../LeadCapturePopup';
+
+// Below-the-fold sections — split out so framer-motion (134 KiB) and the
+// section bodies don't compete with the Hero LCP. They load on idle / when
+// the user begins scrolling. Each chunk lands well before its section enters
+// the viewport on a normal scroll.
+const BelowFold = lazy(() => import('./BelowFold'));
 
 const RESTAURANT_WHATSAPP =
     'https://wa.me/5592985146299?text=Ol%C3%A1%21%20Vim%20da%20p%C3%A1gina%20da%20ER%20Marketing%20para%20restaurantes.%20Quero%20saber%20como%20voc%C3%AAs%20podem%20lotar%20o%20meu%20sal%C3%A3o%20com%20mais%20clientes.';
@@ -50,16 +47,9 @@ export const RestaurantesManausLanding: React.FC = () => {
 
             <main className="relative z-10">
                 <Hero onAuditClick={handleAuditClick} />
-                <Gallery withHeader />
-                <Pain onAuditClick={handleAuditClick} />
-                <Why onAuditClick={handleAuditClick} />
-                <Story onAuditClick={handleAuditClick} />
-                <Cases onAuditClick={handleAuditClick} />
-                <Offer onAuditClick={handleAuditClick} />
-                <Objections onAuditClick={handleAuditClick} />
-                <Urgency onAuditClick={handleAuditClick} />
-                <QuizCTA onAuditClick={handleAuditClick} />
-                <Gallery reverse speed="slow" />
+                <Suspense fallback={<div style={{ minHeight: '100vh' }} aria-hidden="true" />}>
+                    <BelowFold onAuditClick={handleAuditClick} />
+                </Suspense>
             </main>
 
             <Footer />
