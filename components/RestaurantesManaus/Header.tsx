@@ -24,6 +24,9 @@ export const Header: React.FC<SectionProps> = ({ onAuditClick }) => {
                     <img
                         src="/assets/white-logo.png"
                         alt="ER Performance Marketing"
+                        width={43}
+                        height={32}
+                        decoding="async"
                         className="h-8 w-auto object-contain"
                         style={{ filter: GOLD_FILTER }}
                     />

@@ -11,6 +11,10 @@ export const Footer: React.FC = () => {
                         <img
                             src="/assets/white-logo.png"
                             alt="ER Performance Marketing"
+                            width={32}
+                            height={24}
+                            loading="lazy"
+                            decoding="async"
                             className="h-6 w-auto opacity-70"
                             style={{ filter: GOLD_FILTER }}
                         />
