@@ -2,22 +2,26 @@
    that Google Fonts serves, just bundled into our own /assets/ output so
    there's no extra DNS/TLS hop to fonts.gstatic.com. PostCSS requires every
    @import to come before any other rules (incl. @tailwind), so these are at
-   the very top of the file. */
+   the very top of the file.
+
+   Latin-only subsets — drops cyrillic, vietnamese, and latin-ext @font-face
+   blocks that fontsource ships by default. The site is pt-BR; latin covers it.
+   This shrinks the render-blocking CSS bundle by ~50 KiB. */
 
 /* Inter (sans) */
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/600.css';
-@import '@fontsource/inter/700.css';
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-500.css';
+@import '@fontsource/inter/latin-600.css';
+@import '@fontsource/inter/latin-700.css';
 
 /* Playfair Display (serif) — weights actually used across the LPs */
-@import '@fontsource/playfair-display/400.css';
-@import '@fontsource/playfair-display/500.css';
-@import '@fontsource/playfair-display/600.css';
-@import '@fontsource/playfair-display/700.css';
-@import '@fontsource/playfair-display/400-italic.css';
-@import '@fontsource/playfair-display/600-italic.css';
-@import '@fontsource/playfair-display/700-italic.css';
+@import '@fontsource/playfair-display/latin-400.css';
+@import '@fontsource/playfair-display/latin-500.css';
+@import '@fontsource/playfair-display/latin-600.css';
+@import '@fontsource/playfair-display/latin-700.css';
+@import '@fontsource/playfair-display/latin-400-italic.css';
+@import '@fontsource/playfair-display/latin-600-italic.css';
+@import '@fontsource/playfair-display/latin-700-italic.css';
 
 @tailwind base;
 @tailwind components;

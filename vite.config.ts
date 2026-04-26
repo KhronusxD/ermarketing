@@ -1,6 +1,29 @@
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+
+// Vite default-injects the bundled stylesheet as a render-blocking
+// <link rel="stylesheet">. With ~90 KiB of CSS (Tailwind + every fontsource
+// @font-face), simulated mobile 4G turns that into ~1.5s of render-blocking
+// time and tanked our LCP. Switch to the standard async-CSS pattern: ship the
+// stylesheet as media="print" so the browser fetches but doesn't apply it,
+// then flip media="all" on load. Inline body bg in index.html prevents the
+// flash, and a <noscript> fallback keeps the site styled with JS disabled.
+const asyncCssPlugin = (): Plugin => ({
+    name: 'async-css',
+    enforce: 'post',
+    transformIndexHtml(html) {
+        return html.replace(
+            /<link rel="stylesheet"([^>]*?)>/g,
+            (match, attrs) => {
+                const hrefMatch = attrs.match(/href="([^"]+)"/);
+                if (!hrefMatch) return match;
+                const href = hrefMatch[1];
+                return `<link rel="stylesheet"${attrs} media="print" onload="this.media='all';this.onload=null"><noscript><link rel="stylesheet" href="${href}"></noscript>`;
+            },
+        );
+    },
+});
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
@@ -9,7 +32,7 @@ export default defineConfig(({ mode }) => {
         port: 3000,
         host: '0.0.0.0',
       },
-      plugins: [react()],
+      plugins: [react(), asyncCssPlugin()],
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
