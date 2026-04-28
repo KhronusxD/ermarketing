@@ -173,7 +173,14 @@ export const VIDEOS = {
     ],
     hero: {
         src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/TAYCHI%20-%20YAKISOBA.mov',
-        poster: '/video-posters/taychi-yakisoba-sm.jpg',
+        // AVIF poster — Lighthouse flagged the JPG at 51 KiB as the LCP element
+        // on /restaurantes-manaus mobile. The AVIF variant is 11 KiB and is
+        // supported by every browser that ships AVIF for <img> (Chrome 85+,
+        // Safari 16.4+, Firefox 113+) — graceful fallback isn't possible on
+        // <video poster> (no <picture>/srcset support there), but >95% of the
+        // mobile traffic on this LP is on capable browsers. Other posters in
+        // VIDEOS.* stay .jpg for safety since they're below-the-fold.
+        poster: '/video-posters/taychi-yakisoba-sm.avif',
     },
     bg: {
         desktop: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/BG-ER.mp4',

@@ -20,7 +20,11 @@ const TARGETS = [
     },
     {
         dir: path.resolve('public/video-posters'),
-        targetW: 640, // poster shows in a wider hero box (~360-540px CSS)
+        // Lighthouse measured the hero poster at 307×547 CSS px on Moto G Power
+        // (slow 4G simulation). 384 wide gives ~1.25× headroom over a 307 box,
+        // covering 1.5× DPR cleanly without overshooting and burning bytes on
+        // a poster that is hidden the moment the video starts playing.
+        targetW: 384,
         avifQuality: 40,
         jpgQuality: 70,
     },
