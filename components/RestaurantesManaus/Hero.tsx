@@ -166,20 +166,20 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                     </div>
 
                     {/* Mobile-only static visual — replaces the desktop video collage
-                        on <lg. Reuses /video-posters/taychi-yakisoba-sm.avif (~11 KiB)
-                        which is already preloaded for mobile in index.html, so adds
-                        zero net network bytes vs. the previous video poster. The
-                        +340% pill that lived in the desktop collage is intentionally
-                        dropped here — the same number is duplicated in the proof
-                        strip immediately below this section. */}
+                        on <lg. Reuses /video-posters/taychi-yakisoba-sm.avif (~11 KiB).
+                        Loaded LAZY with no preload and default fetch priority: the
+                        actual LCP element on mobile is the H1 (with preloaded
+                        Playfair), and any contention from this image's fetch was
+                        pushing LCP later for no visual gain — it sits below the
+                        H1 + CTAs and barely peeks into the initial viewport. */}
                     <div className="lg:hidden relative w-full max-w-md mx-auto aspect-[4/3] rounded-2xl overflow-hidden border border-[#D4A574]/20 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.6)] motion-safe:animate-hero-pop">
                         <img
                             src="/video-posters/taychi-yakisoba-sm.avif"
                             alt="Bastidores · Taychi Sushi Bar"
                             width={384}
                             height={683}
+                            loading="lazy"
                             decoding="async"
-                            fetchPriority="high"
                             className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
