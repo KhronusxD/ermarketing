@@ -12,15 +12,21 @@ interface PhotoProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     width: number;
     height: number;
     alt: string;
+    /** Skip the (max-width: 768px) <source> tags. Use when the <picture> is
+     *  inside a `hidden lg:block` (or similar) container — the browser still
+     *  picks the smallest matching <source> at HTML parse time before the
+     *  `display:none` settles, so on mobile it would fetch the -sm variant
+     *  for a desktop-only image. Default false (emit mobile variants). */
+    desktopOnly?: boolean;
 }
 
-export const Photo: React.FC<PhotoProps> = ({ src, width, height, alt, ...rest }) => {
+export const Photo: React.FC<PhotoProps> = ({ src, width, height, alt, desktopOnly = false, ...rest }) => {
     const isJpg = src.endsWith('.jpg');
     const base = isJpg ? src.replace(/\.jpg$/, '') : null;
     return (
         <picture>
-            {base && <source type="image/avif" media="(max-width: 768px)" srcSet={`${base}-sm.avif`} />}
-            {base && <source type="image/jpeg" media="(max-width: 768px)" srcSet={`${base}-sm.jpg`} />}
+            {base && !desktopOnly && <source type="image/avif" media="(max-width: 768px)" srcSet={`${base}-sm.avif`} />}
+            {base && !desktopOnly && <source type="image/jpeg" media="(max-width: 768px)" srcSet={`${base}-sm.jpg`} />}
             {base && <source type="image/avif" srcSet={`${base}.avif`} />}
             <img src={src} alt={alt} width={width} height={height} {...rest} />
         </picture>

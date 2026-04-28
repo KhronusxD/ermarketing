@@ -58,8 +58,14 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
                 <div className="grid lg:grid-cols-12 gap-12 items-center">
-                    {/* Left — copy */}
-                    <div className="lg:col-span-7 motion-safe:animate-hero-rise">
+                    {/* Left — copy. The `animate-hero-rise` entry animation was
+                        removed from this column because it starts at opacity:0 and
+                        runs 800 ms — the H1 (LCP element on mobile) only counts as
+                        "visible" to Lighthouse after the animation finishes, so it
+                        was capping LCP at ~2.5 s no matter how fast the bytes
+                        arrived. Animation kept on the desktop collage and other
+                        decorative elements where it doesn't gate the LCP. */}
+                    <div className="lg:col-span-7">
                         <SectionLabel className="mb-8">
                             <Sparkles size={12} />
                             Agência especializada em restaurantes &middot; Manaus
@@ -149,6 +155,7 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                                 height={600}
                                 fetchPriority="high"
                                 decoding="async"
+                                desktopOnly
                                 className="w-full h-full object-cover"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
@@ -189,11 +196,11 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                     </div>
                 </div>
 
-                {/* Bottom proof strip */}
-                <div
-                    className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 border border-white/10 rounded-2xl overflow-hidden motion-safe:animate-hero-rise"
-                    style={{ animationDelay: '0.4s' }}
-                >
+                {/* Bottom proof strip — animation also removed (same reason as the
+                    left column above; on desktop the strip is well within the
+                    initial viewport and was a secondary LCP candidate while it
+                    sat at opacity:0 during its 800 ms entry animation). */}
+                <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
                     {[
                         { v: '+340%', l: 'Aumento médio em reservas' },
                         { v: '12+', l: 'Restaurantes atendidos' },
