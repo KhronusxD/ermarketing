@@ -2,18 +2,25 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Header } from './Header';
 import { Hero } from './Hero';
 import { Footer } from './Footer';
-import { FloatingWhatsApp } from '../FloatingWhatsApp';
-import { LeadCapturePopup } from '../LeadCapturePopup';
 
-// Below-the-fold sections — split out so framer-motion (134 KiB) and the
-// section bodies don't compete with the Hero LCP.
+// Below-the-fold sections AND the two framer-motion-driven UI shells
+// (FloatingWhatsApp, LeadCapturePopup) are split out so framer-motion (134
+// KiB) and the section bodies don't compete with the Hero LCP.
 //
-// IMPORTANT: rendering <BelowFold/> via Suspense fires the dynamic import the
-// moment React reaches it during the initial render. That defeats the point —
-// framer-motion shows up in the LCP critical path on Lighthouse Lantern.
-// We gate the render on a useEffect/idle callback below so the chunk only
-// starts fetching after the Hero has painted.
+// IMPORTANT: rendering these via Suspense fires the dynamic import the moment
+// React reaches it during the initial render. That defeats the point —
+// framer-motion shows up in the LCP critical path on Lighthouse Lantern. We
+// gate the render on a useEffect/idle callback so the chunks only start
+// fetching after the Hero has painted. FloatingWhatsApp + LeadCapturePopup
+// were previously static imports — moving them out of the entry chunk
+// removes framer-motion (and its lucide deps) from the LCP critical chain.
 const BelowFold = lazy(() => import('./BelowFold'));
+const FloatingWhatsApp = lazy(() =>
+    import('../FloatingWhatsApp').then((m) => ({ default: m.FloatingWhatsApp })),
+);
+const LeadCapturePopup = lazy(() =>
+    import('../LeadCapturePopup').then((m) => ({ default: m.LeadCapturePopup })),
+);
 
 const RESTAURANT_WHATSAPP =
     'https://wa.me/5592985146299?text=Ol%C3%A1%21%20Vim%20da%20p%C3%A1gina%20da%20ER%20Marketing%20para%20restaurantes.%20Quero%20saber%20como%20voc%C3%AAs%20podem%20lotar%20o%20meu%20sal%C3%A3o%20com%20mais%20clientes.';
@@ -79,21 +86,31 @@ export const RestaurantesManausLanding: React.FC = () => {
             </main>
 
             <Footer />
-            <FloatingWhatsApp onOverrideClick={() => setPopupOpen(true)} />
 
-            <LeadCapturePopup
-                open={popupOpen}
-                onClose={() => setPopupOpen(false)}
-                theme="gold"
-                title="Falar com a equipe"
-                subtitle="Deixe seus dados e te chamamos no WhatsApp em minutos — atendimento direto da equipe."
-                businessLabel="Nome do restaurante"
-                businessPlaceholder="Ex: Taychi Sushi Bar"
-                whatsappUrl={RESTAURANT_WHATSAPP}
-                leadContentName="Restaurantes Manaus · Popup"
-                leadContentCategory="restaurantes"
-                storageKey="er-lead-restaurantes-manaus"
-            />
+            {/* FloatingWhatsApp + LeadCapturePopup are gated behind the same
+                idle/scroll trigger as BelowFold so framer-motion doesn't sneak
+                into the LCP critical chain. The popup also mounts when the
+                user clicks an audit CTA so it's available even before idle. */}
+            {(showBelowFold || popupOpen) && (
+                <Suspense fallback={null}>
+                    {showBelowFold && (
+                        <FloatingWhatsApp onOverrideClick={() => setPopupOpen(true)} />
+                    )}
+                    <LeadCapturePopup
+                        open={popupOpen}
+                        onClose={() => setPopupOpen(false)}
+                        theme="gold"
+                        title="Falar com a equipe"
+                        subtitle="Deixe seus dados e te chamamos no WhatsApp em minutos — atendimento direto da equipe."
+                        businessLabel="Nome do restaurante"
+                        businessPlaceholder="Ex: Taychi Sushi Bar"
+                        whatsappUrl={RESTAURANT_WHATSAPP}
+                        leadContentName="Restaurantes Manaus · Popup"
+                        leadContentCategory="restaurantes"
+                        storageKey="er-lead-restaurantes-manaus"
+                    />
+                </Suspense>
+            )}
         </div>
     );
 };

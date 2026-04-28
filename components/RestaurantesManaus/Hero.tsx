@@ -1,7 +1,32 @@
 import React, { useRef, useState } from 'react';
-import { ArrowRight, Play, Pause, Sparkles } from 'lucide-react';
 import { SectionProps } from '../../types';
 import { GoldButton, SectionLabel, PHOTOS, VIDEOS, Photo } from './shared';
+
+// Inline SVG icons — kept here instead of importing from lucide-react so the
+// lucide chunk (~27 KiB) doesn't get static-imported by the entry chunk on
+// /restaurantes-manaus. Hero is the only above-the-fold consumer; everything
+// else that uses lucide is in lazy-loaded chunks.
+const Sparkles = ({ size = 12 }: { size?: number }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
+        <path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" />
+    </svg>
+);
+const ArrowRight = ({ size = 18, className = '' }: { size?: number; className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+        <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+    </svg>
+);
+const Play = ({ size = 14, className = '' }: { size?: number; className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+        <path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" />
+    </svg>
+);
+const Pause = ({ size = 22, className = '' }: { size?: number; className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+        <rect x="14" y="3" width="5" height="18" rx="1" /><rect x="5" y="3" width="5" height="18" rx="1" />
+    </svg>
+);
 
 export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);

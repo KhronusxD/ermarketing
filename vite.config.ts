@@ -117,10 +117,32 @@ export default defineConfig(({ mode }) => {
         // when only the app code changes.
         rollupOptions: {
           output: {
-            manualChunks: {
-              'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-              'framer-motion': ['framer-motion'],
-              'lucide': ['lucide-react'],
+            // Function form so we can pin react/jsx-runtime into react-vendor
+            // explicitly. With the simple object form Rollup sometimes hoists
+            // jsx-runtime into the first chunk that imports it (framer-motion
+            // bundles a CJS interop wrapper that touches it), which then
+            // makes every JSX-emitting component statically import the
+            // framer-motion chunk — putting framer-motion on the LCP
+            // critical chain even when no above-the-fold component uses it.
+            manualChunks(id) {
+              if (id.includes('node_modules/react/jsx-runtime') ||
+                  id.includes('node_modules/react/cjs/react-jsx-runtime') ||
+                  id.includes('node_modules/react/index.') ||
+                  id.includes('node_modules/react/cjs/react.') ||
+                  id.includes('node_modules/react-dom/') ||
+                  id.includes('node_modules/scheduler/') ||
+                  id.includes('node_modules/react-router-dom/') ||
+                  id.includes('node_modules/react-router/')) {
+                return 'react-vendor';
+              }
+              if (id.includes('node_modules/framer-motion/') ||
+                  id.includes('node_modules/motion-dom/') ||
+                  id.includes('node_modules/motion-utils/')) {
+                return 'framer-motion';
+              }
+              if (id.includes('node_modules/lucide-react/')) {
+                return 'lucide';
+              }
             },
           },
         },
