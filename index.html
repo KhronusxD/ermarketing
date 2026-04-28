@@ -19,15 +19,10 @@
        and the main LP hero. Saves TLS/DNS on the first byte of video metadata. -->
   <link rel="preconnect" href="https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev" />
 
-  <!-- Desktop-only preload of the pizza photo. On >=lg the collage IS in
-       viewport on first paint and the photo is the LCP candidate there.
-       Mobile preload of the Taychi poster was REMOVED — that image is now
-       a `lg:hidden` static <img> rendered AFTER the H1 + CTAs in the mobile
-       layout, so it's not the LCP candidate (the H1 is, with preloaded
-       Playfair). Preloading it at high priority was costing ~150 ms of
-       contended bandwidth against the actual critical-path resources
-       (fonts + critical CSS) without contributing to LCP. The mobile <img>
-       now uses loading="lazy" so it fetches only when scrolled near. -->
+  <!-- Desktop-only preload of the pizza photo. On >=lg the hero collage is
+       in viewport on first paint and the photo is the LCP candidate there.
+       Mobile hero is copy-only (no static <img>): the H1 is the LCP element
+       on mobile, painted instantly with the preloaded Playfair below. -->
   <link rel="preload" as="image" type="image/avif" href="/photos-food/p-1.avif" media="(min-width: 769px)" fetchpriority="high" />
 
   <!-- Third-party tags (GTM, Flowdesk pixel, Meta Pixel) are deferred until

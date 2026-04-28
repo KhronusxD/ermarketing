@@ -172,28 +172,13 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                         </div>
                     </div>
 
-                    {/* Mobile-only static visual — replaces the desktop video collage
-                        on <lg. Reuses /video-posters/taychi-yakisoba-sm.avif (~11 KiB).
-                        Loaded LAZY with no preload and default fetch priority: the
-                        actual LCP element on mobile is the H1 (with preloaded
-                        Playfair), and any contention from this image's fetch was
-                        pushing LCP later for no visual gain — it sits below the
-                        H1 + CTAs and barely peeks into the initial viewport. */}
-                    <div className="lg:hidden relative w-full max-w-md mx-auto aspect-[4/3] rounded-2xl overflow-hidden border border-[#D4A574]/20 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.6)] motion-safe:animate-hero-pop">
-                        <img
-                            src="/video-posters/taychi-yakisoba-sm.avif"
-                            alt="Bastidores · Taychi Sushi Bar"
-                            width={384}
-                            height={683}
-                            loading="lazy"
-                            decoding="async"
-                            className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
-                        <div className="absolute bottom-4 left-4 text-xs text-white/80 font-medium tracking-wider uppercase backdrop-blur-sm bg-black/30 px-3 py-1.5 rounded-full border border-white/10">
-                            Bastidores · Taychi Sushi Bar
-                        </div>
-                    </div>
+                    {/* No mobile visual in the hero anymore — the previous lg:hidden
+                        AVIF kept turning up as the LCP element on Lighthouse mobile
+                        even with loading="lazy" (the lazy fetch and decode delay
+                        landed AFTER the H1 paint and pushed LCP from ~2 s to >4 s).
+                        Mobile hero is now copy-only: section label, H1, paragraphs,
+                        CTAs, and the proof strip below. The Taychi/Pizza visuals
+                        return as the full collage from `lg` upward. */}
                 </div>
 
                 {/* Bottom proof strip — animation also removed (same reason as the
