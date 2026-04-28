@@ -96,9 +96,15 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                             Agência especializada em restaurantes &middot; Manaus
                         </SectionLabel>
 
+                        {/* H1 LCP element — only Playfair 600 (normal) is on the
+                            critical path; the gold accent line uses the same
+                            weight + a color shift instead of italic so the
+                            browser doesn't have to fetch the italic woff2 file
+                            (which on a Lighthouse 4G simulation took ~2.5 s and
+                            was the bottleneck holding LCP at 3.7 s). */}
                         <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.05] tracking-tight mb-6 text-[#F5F1E8]">
                             Você já investiu em marketing para o seu restaurante.<br />
-                            <span className="italic text-[#E8C088]">E o salão continuou vazio.</span>
+                            <span className="text-[#E8C088]">E o salão continuou vazio.</span>
                         </h1>
 
                         <p className="text-lg text-[#A8A196] leading-relaxed mb-3 max-w-2xl">
@@ -217,8 +223,12 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                         { v: '3x', l: 'Retorno médio sobre ads' },
                         { v: '60d', l: 'Pra ver fila no fim de semana' },
                     ].map((s, i) => (
+                        // font-semibold (600) reuses the H1's preloaded
+                        // Playfair weight; bumping to 700 here would force
+                        // a second above-the-fold woff2 fetch on the LCP
+                        // critical path, costing ~500 ms on slow 4G.
                         <div key={i} className="bg-[#111112] p-6 text-center">
-                            <div className="font-serif text-2xl md:text-3xl font-bold text-[#E8C088] mb-1">{s.v}</div>
+                            <div className="font-serif text-2xl md:text-3xl font-semibold text-[#E8C088] mb-1">{s.v}</div>
                             <div className="text-[11px] text-[#A8A196] uppercase tracking-widest">{s.l}</div>
                         </div>
                     ))}

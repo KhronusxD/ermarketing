@@ -31,10 +31,33 @@ const CRITICAL_FONT_PATTERNS = [
     // Hero CTA / SectionLabel uses Inter 600/700, but those are smaller text
     // areas and tolerate a swap. Skipping their preloads keeps total preload
     // bytes under ~50 KiB so we don't choke the slow-4G pipe.
-    // H1 LCP element — Playfair Display 600 normal + the italic span
+    // H1 LCP element — Playfair Display 600 normal. Italic isn't on the
+    // mobile critical path anymore (the H1 accent line dropped italic to
+    // avoid a second woff2 fetch that was gating LCP); the desktop italic
+    // caption isn't an LCP candidate so we let it lazy-load via @font-face.
     /playfair-display-latin-600-normal-.*\.woff2$/,
-    /playfair-display-latin-600-italic-.*\.woff2$/,
 ];
+
+// Rewrite the @font-face blocks emitted by @fontsource so Playfair Display
+// uses `font-display: optional` instead of `swap`. With `swap` the H1 paints
+// in a fallback first and re-paints when Playfair arrives — the second paint
+// counts as a fresh LCP candidate and gates the Lighthouse score on the slow
+// woff2 fetch (Lighthouse simulates 4G; the italic woff2 takes ~2.5 s on
+// that pipe). With `optional` the browser only swaps if the font is in
+// cache when the H1 first paints; otherwise the fallback is permanent for
+// this navigation and LCP fires at FCP. Inter is left as `swap` because
+// body copy isn't an LCP candidate and the swap is barely perceptible.
+function rewriteFontDisplay(css: string): string {
+    return css.replace(
+        /@font-face\s*\{([^}]+)\}/g,
+        (block, body: string) => {
+            if (/font-family\s*:\s*['"]?Playfair Display/i.test(body)) {
+                return `@font-face{${body.replace(/font-display\s*:\s*swap/g, 'font-display:optional')}}`;
+            }
+            return block;
+        },
+    );
+}
 
 const inlineCssPlugin = (): Plugin => ({
     name: 'inline-css',
@@ -49,6 +72,8 @@ const inlineCssPlugin = (): Plugin => ({
         );
         if (!cssAsset || !htmlAsset || cssAsset.type !== 'asset' || htmlAsset.type !== 'asset') return;
 
+        // Patch font-display before we either inline or hand to Beasties.
+        cssAsset.source = rewriteFontDisplay(String(cssAsset.source));
         const css = String(cssAsset.source);
         let html = String(htmlAsset.source);
 
