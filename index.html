@@ -20,10 +20,11 @@
   <link rel="preconnect" href="https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev" />
 
   <!-- Preload the LCP image of the most-visited LP (/restaurantes-manaus hero).
-       Two variants split by viewport: mobile gets the 480px AVIF (~44 KiB),
-       desktop the full one. Browsers ignore the hint on routes that don't use
-       the image; cheap and very effective on /restaurantes-manaus. -->
-  <link rel="preload" as="image" type="image/avif" href="/photos-food/p-1-sm.avif" media="(max-width: 768px)" fetchpriority="high" />
+       Desktop only: on mobile the right-column image is stacked BELOW the H1
+       text and is below the fold on first paint, so preloading it just steals
+       bandwidth from the actual LCP element (the H1) and from the fonts that
+       paint it. Mobile preload removed in favour of the font preloads injected
+       by the inline-css plugin (see vite.config.ts). -->
   <link rel="preload" as="image" type="image/avif" href="/photos-food/p-1.avif" media="(min-width: 769px)" fetchpriority="high" />
 
   <!-- Third-party tags (GTM, Flowdesk pixel, Meta Pixel) are deferred until
