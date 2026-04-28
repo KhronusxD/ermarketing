@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, Lock } from 'lucide-react';
 import { GoldButton, SectionLabel } from '../shared';
 import type { QuizFormFields } from './QuizResult';
-import { trackCustom } from './metaPixel';
+import { trackCustom, trackStandard } from './metaPixel';
 
 interface QuizFormProps {
     answers: (string | undefined)[];
@@ -31,6 +31,15 @@ export const QuizForm: React.FC<QuizFormProps> = ({ answers, onComplete }) => {
                 JSON.stringify({ ...fields, answers, ts: new Date().toISOString() })
             );
         } catch { /* ignore storage errors */ }
+        // Standard Meta Lead event — this is the conversion point for the
+        // /restaurantes-manaus funnel. Fires once the quiz form is submitted
+        // (after the user fills in name, WhatsApp, restaurant, instagram).
+        trackStandard('Lead', {
+            content_name: 'Restaurantes Manaus · Diagnóstico',
+            content_category: 'restaurantes',
+            value: 1,
+            currency: 'BRL',
+        });
         trackCustom('DiagnosticoFormSubmit', {
             content_name: 'Diagnostico Manaus - Form Submit',
         });
