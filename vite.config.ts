@@ -2,15 +2,20 @@ import path from 'path';
 import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// Inline the bundled CSS into index.html as a <style> block + inject preload
-// links for critical above-the-fold fonts (using hashed filenames resolved
-// from the bundle). Vite's default is a render-blocking <link rel="stylesheet">
-// which adds ~1.5s on simulated mobile 4G. We tried the async-CSS (media=print
-// swap) pattern, but on a JS-rendered SPA the DOM ends up painted *before*
-// the swap completes — so the styled paint becomes the LCP and lands later
-// than render-blocking would. Inlining the gzipped 13 KiB CSS into the HTML
-// lets the bundled styles be available the moment the HTML parses, no second
-// request.
+// Inline the bundled CSS into index.html as a <style data-bundle> block + inject
+// preload links for critical above-the-fold fonts (using hashed filenames
+// resolved from the bundle).
+//
+// CSS inlining: Vite's default is a render-blocking <link rel="stylesheet">
+// which adds ~1.5s on simulated mobile 4G. Inlining the gzipped 13 KiB CSS into
+// the HTML lets the bundled styles be available the moment the HTML parses, no
+// second request. The CSS asset is INTENTIONALLY kept on disk (not deleted from
+// the bundle) so scripts/prerender.tsx can swap the inline <style data-bundle>
+// back to a <link> before running Beasties — Beasties extracts a tiny critical
+// CSS for the prerendered DOM and async-loads the rest, cutting ~80 KiB of
+// CSS-parse work off the LCP critical path. Non-prerendered SPA routes fall
+// back to dist/index.html with the inline <style data-bundle>, so they keep
+// the current "no extra request" behaviour with no regression.
 //
 // Font preloads: @fontsource-imported faces are discovered by the parser only
 // after the inline CSS is parsed, which puts the font fetch off the critical
@@ -60,17 +65,19 @@ const inlineCssPlugin = (): Plugin => ({
         }
 
         // Replace any <link rel="stylesheet" ... href=".../*.css" ...> with an
-        // inline <style> block. Drops crossorigin/media attrs since they're
-        // pointless on inline styles.
+        // inline <style data-bundle> block. The data-bundle marker lets the
+        // prerender script find this exact <style> (vs. the small inline base
+        // style for the dark page background) and swap it back to an external
+        // <link> before running Beasties for critical-CSS extraction.
         html = html.replace(
             /<link\s+rel="stylesheet"[^>]*href="[^"]+\.css"[^>]*>/g,
-            `<style>${css}</style>`,
+            `<style data-bundle>${css}</style>`,
         );
 
         htmlAsset.source = html;
 
-        // Remove the CSS asset from the bundle — nothing references it now.
-        delete (bundle as Record<string, unknown>)[cssAsset.fileName];
+        // Note: CSS asset is intentionally kept on disk. Prerender script
+        // re-references it for Beasties' async-load split.
     },
 });
 

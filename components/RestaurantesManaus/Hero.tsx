@@ -96,8 +96,16 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                         </div>
                     </div>
 
-                    {/* Right — visual collage */}
-                    <div className="lg:col-span-5 relative h-[500px] md:h-[600px] motion-safe:animate-hero-pop">
+                    {/* Right — visual collage (desktop only). On mobile this column
+                        was costing real LCP — the AVIF poster of the <video> was
+                        Lighthouse's LCP element, the pizza <picture> was a second
+                        contended fetch, and stacking the right column below the H1
+                        pushed total content past 1300 px. We render a single small
+                        static AVIF below the text on mobile (see <picture> further
+                        down with `lg:hidden`) and keep the full collage from `lg`
+                        upward where the layout is side-by-side and the visuals are
+                        actually in the initial viewport. */}
+                    <div className="hidden lg:block lg:col-span-5 relative h-[500px] md:h-[600px] motion-safe:animate-hero-pop">
                         {/* Main video card — real Taychi Yakisoba reel.
                             Poster shows instantly; the video itself is only fetched
                             when the browser decides it's time (autoplay kick), not eagerly. */}
@@ -154,6 +162,29 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                         <div className="absolute top-[55%] right-[-5%] bg-gradient-to-br from-[#1a1510] to-[#0f0c08] border border-[#D4A574]/40 rounded-2xl px-5 py-3 backdrop-blur-xl shadow-[0_15px_40px_-10px_rgba(212,165,116,0.3)] motion-safe:animate-hero-float-b">
                             <div className="text-[10px] text-[#A8A196] uppercase tracking-widest mb-1">Reservas</div>
                             <div className="font-serif text-2xl font-bold text-[#E8C088]">+340%</div>
+                        </div>
+                    </div>
+
+                    {/* Mobile-only static visual — replaces the desktop video collage
+                        on <lg. Reuses /video-posters/taychi-yakisoba-sm.avif (~11 KiB)
+                        which is already preloaded for mobile in index.html, so adds
+                        zero net network bytes vs. the previous video poster. The
+                        +340% pill that lived in the desktop collage is intentionally
+                        dropped here — the same number is duplicated in the proof
+                        strip immediately below this section. */}
+                    <div className="lg:hidden relative w-full max-w-md mx-auto aspect-[4/3] rounded-2xl overflow-hidden border border-[#D4A574]/20 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.6)] motion-safe:animate-hero-pop">
+                        <img
+                            src="/video-posters/taychi-yakisoba-sm.avif"
+                            alt="Bastidores · Taychi Sushi Bar"
+                            width={384}
+                            height={683}
+                            decoding="async"
+                            fetchPriority="high"
+                            className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                        <div className="absolute bottom-4 left-4 text-xs text-white/80 font-medium tracking-wider uppercase backdrop-blur-sm bg-black/30 px-3 py-1.5 rounded-full border border-white/10">
+                            Bastidores · Taychi Sushi Bar
                         </div>
                     </div>
                 </div>
