@@ -92,10 +92,10 @@ export const Terms: React.FC = () => {
                     canais. Você pode solicitar o descadastro a qualquer momento através do
                     e-mail{' '}
                     <a
-                        href="mailto:contato@ermarketing.com.br"
+                        href="mailto:contato@trafegomanaus.com.br"
                         className="text-white underline hover:text-white/70"
                     >
-                        contato@ermarketing.com.br
+                        contato@trafegomanaus.com.br
                     </a>{' '}
                     ou pelos próprios mecanismos das mensagens enviadas.
                 </p>
@@ -178,7 +178,7 @@ export const Terms: React.FC = () => {
                     <br />
                     CNPJ 41.079.306/0001-62
                     <br />
-                    E-mail: contato@ermarketing.com.br
+                    E-mail: contato@trafegomanaus.com.br
                 </p>
             </Section>
         </LegalLayout>

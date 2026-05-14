@@ -24,7 +24,7 @@ export const RestaurantBFooter: React.FC = () => {
                         <p className="text-[#B5ADA5] leading-relaxed">
                             ER Marketing &middot; CNPJ 41.079.306/0001-62
                             <br />
-                            contato@ermarketing.com.br
+                            contato@trafegomanaus.com.br
                         </p>
                     </div>
 

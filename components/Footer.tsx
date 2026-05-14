@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
                         <p className="text-gray-600 leading-relaxed">
                             ER Marketing &middot; CNPJ 41.079.306/0001-62
                             <br />
-                            contato@ermarketing.com.br
+                            contato@trafegomanaus.com.br
                         </p>
                     </div>
 

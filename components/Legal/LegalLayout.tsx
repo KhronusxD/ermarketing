@@ -43,7 +43,7 @@ export const LegalLayout: React.FC<LegalLayoutProps> = ({ title, updatedAt, chil
                         <strong className="text-white/60">ER Marketing</strong> &middot; CNPJ
                         41.079.306/0001-62
                     </p>
-                    <p>Contato: contato@ermarketing.com.br</p>
+                    <p>Contato: contato@trafegomanaus.com.br</p>
                 </div>
             </main>
         </div>

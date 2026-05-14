@@ -142,10 +142,10 @@ export const Privacy: React.FC = () => {
                 <p>
                     Para exercer seus direitos, envie um e-mail para{' '}
                     <a
-                        href="mailto:contato@ermarketing.com.br"
+                        href="mailto:contato@trafegomanaus.com.br"
                         className="text-white underline hover:text-white/70"
                     >
-                        contato@ermarketing.com.br
+                        contato@trafegomanaus.com.br
                     </a>
                     .
                 </p>
@@ -177,7 +177,7 @@ export const Privacy: React.FC = () => {
                     <br />
                     CNPJ 41.079.306/0001-62
                     <br />
-                    E-mail: contato@ermarketing.com.br
+                    E-mail: contato@trafegomanaus.com.br
                 </p>
             </Section>
         </LegalLayout>
