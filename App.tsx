@@ -42,6 +42,12 @@ const FlowdeskDiagnostico = lazy(() =>
 const Candeia = lazy(() =>
     import('./components/Candeia/Candeia').then((m) => ({ default: m.Candeia })),
 );
+const Privacy = lazy(() =>
+    import('./components/Legal/Privacy').then((m) => ({ default: m.Privacy })),
+);
+const Terms = lazy(() =>
+    import('./components/Legal/Terms').then((m) => ({ default: m.Terms })),
+);
 
 // Minimal fallback — solid dark panel that matches the shell background so
 // users don't see a white flash while the chunk arrives.
@@ -68,6 +74,8 @@ const App: React.FC = () => {
                 <Route path="/flowdesk" element={<Flowdesk />} />
                 <Route path="/diagnostico-flowdesk" element={<FlowdeskDiagnostico />} />
                 <Route path="/lp-psicologia" element={<Candeia />} />
+                <Route path="/politica-de-privacidade" element={<Privacy />} />
+                <Route path="/termos-de-uso" element={<Terms />} />
             </Routes>
         </Suspense>
     );
