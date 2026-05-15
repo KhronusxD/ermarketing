@@ -55,7 +55,7 @@ export const Header: React.FC<SectionProps> = ({ onAuditClick }) => {
                         onClick={onAuditClick}
                         className="inline-flex items-center gap-2 bg-er-red hover:bg-er-redHover text-white font-bold text-xs md:text-sm tracking-[0.15em] uppercase px-4 py-2.5 md:px-5 md:py-3 transition-colors"
                     >
-                        Auditoria gratuita
+                        Agendar diagnóstico
                         <span className="text-white/70">→</span>
                     </button>
                 </div>

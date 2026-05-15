@@ -103,14 +103,14 @@ export const Partners: React.FC<SectionProps> = ({ onAuditClick }) => {
                 <div className="mt-16 md:mt-20 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-t border-white/10 pt-10">
                     <p className="text-sm md:text-base text-white/60 max-w-md">
                         Quer entender como o trio aborda o seu projeto antes mesmo de
-                        contratar? A auditoria é o melhor teste-drive.
+                        contratar? A reunião de 15 min é o melhor teste-drive.
                     </p>
                     <button
                         type="button"
                         onClick={onAuditClick}
                         className="group inline-flex items-center gap-3 bg-white text-er-black hover:bg-er-red hover:text-white transition-colors font-bold text-sm tracking-[0.18em] uppercase px-6 py-4"
                     >
-                        Conversar com os sócios
+                        Agendar com o time
                         <span className="transition-transform group-hover:translate-x-1">
                             →
                         </span>

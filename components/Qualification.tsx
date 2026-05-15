@@ -60,13 +60,13 @@ export const Qualification: React.FC<SectionProps> = ({ onAuditClick }) => {
                         onClick={onAuditClick}
                         className="group inline-flex items-center gap-3 bg-er-red hover:bg-er-redHover text-white font-bold tracking-[0.18em] uppercase text-sm md:text-base px-8 py-5 md:px-12 md:py-6 shadow-[0_0_60px_rgba(230,0,0,0.5)] hover:shadow-[0_0_90px_rgba(230,0,0,0.7)] transition-all"
                     >
-                        Quero minha auditoria gratuita
+                        Agendar meus 15 minutos
                         <span className="transition-transform group-hover:translate-x-1">
                             →
                         </span>
                     </button>
                     <p className="text-xs tracking-[0.2em] uppercase text-white/40">
-                        Sem compromisso · Resposta em até 2h úteis · 5 vagas no mês
+                        Sem compromisso · Reunião por Google Meet · 5 vagas no mês
                     </p>
                 </div>
             </div>

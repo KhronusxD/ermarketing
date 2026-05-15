@@ -334,7 +334,7 @@ export const ClientResults: React.FC<SectionProps> = ({ onAuditClick }) => {
                         onClick={onAuditClick}
                         className="group inline-flex items-center gap-3 bg-er-ink text-er-paper hover:bg-er-red transition-colors font-bold text-sm tracking-[0.18em] uppercase px-6 py-4 whitespace-nowrap"
                     >
-                        Solicitar auditoria
+                        Agendar diagnóstico
                         <span className="transition-transform group-hover:translate-x-1">
                             →
                         </span>

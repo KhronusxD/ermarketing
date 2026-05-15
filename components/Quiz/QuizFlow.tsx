@@ -1,159 +1,219 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import Landing from './Landing';
-import Quiz from './Quiz';
-import LoadingScreen from './LoadingScreen';
-import LeadForm from './LeadForm';
-import Results from './Results';
-import ProgressBar from './ProgressBar';
-import { QUESTIONS } from './constants';
-import { AppStep, UserAnswers, QuestionOption, LeadData, DiagnosisResult } from './types';
-import { submitLeadToExcel } from './services';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import Landing from './DiagnosticLanding';
+import Question from './Question';
+import InsightCard from './InsightCard';
+import LeadForm from './DiagnosticLeadForm';
+import Schedule from './Schedule';
+import NurtureWaitlist, { WaitlistThanks } from './NurtureWaitlist';
+import {
+    LeadData,
+    QuizAnswers,
+    StepId,
+    WaitlistData,
+    QuestionSpec,
+} from './types';
+import {
+    QUESTION_BY_STEP,
+    nicheSpecificQuestion,
+} from './constants';
+import {
+    nextStep,
+    progressIndex,
+    qualify,
+    totalProgressSteps,
+} from './branching';
+import { submitLead, submitWaitlist } from './services';
 
+// State machine for the new diagnostic-call funnel. Each `step` is one
+// screen; transitions are driven by `branching.ts` so the routing logic
+// stays in one pure-function place that's easy to test.
 const QuizFlow: React.FC = () => {
-    const [currentStep, setCurrentStep] = useState<AppStep>(AppStep.LANDING);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState<UserAnswers>({});
-    const [leadData, setLeadData] = useState<LeadData | null>(null);
-
-    // -- Tracking --
-    useEffect(() => {
-        if (currentStep === AppStep.QUIZ) {
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                'event': 'quiz_step_view',
-                'step_number': currentQuestionIndex + 1,
-                'step_name': QUESTIONS[currentQuestionIndex]?.title || 'Unknown Step',
-                'quiz_name': 'general'
-            });
-        }
-    }, [currentStep, currentQuestionIndex]);
-
-    // -- Handlers --
-
-    const startQuiz = () => {
-        setCurrentStep(AppStep.QUIZ);
-    };
-
-    const handleQuizAnswer = (option: QuestionOption) => {
-        // Record answer
-        const currentQ = QUESTIONS[currentQuestionIndex];
-        setAnswers(prev => ({ ...prev, [currentQ.id]: option }));
-
-        // Delay for animation then move next
-        setTimeout(() => {
-            if (currentQuestionIndex < QUESTIONS.length - 1) {
-                setCurrentQuestionIndex(prev => prev + 1);
-            } else {
-                setCurrentStep(AppStep.LOADING);
-            }
-        }, 400);
-    };
-
-    const handleLoadingComplete = () => {
-        setCurrentStep(AppStep.GATE);
-    };
-
+    const [step, setStep] = useState<StepId>('landing');
+    const [answers, setAnswers] = useState<QuizAnswers>({});
+    const [lead, setLead] = useState<LeadData | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleLeadSubmit = async (data: LeadData) => {
-        setIsSubmitting(true);
-        setLeadData(data);
+    // Scroll-to-top on every step change — without this the question
+    // body can stay scrolled past the headline after a long option list.
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+    }, [step]);
 
-        try {
-            await submitLeadToExcel(data, answers, 'geral');
-        } catch (error) {
-            console.error("Failed to submit lead", error);
-        } finally {
-            setIsSubmitting(false);
-            setCurrentStep(AppStep.RESULTS);
-        }
-    };
-
-    // -- Logic for Results Generation --
-    const result: DiagnosisResult = useMemo(() => {
-        // 1. Calculate base score from answers
-        let rawScore = 50; // Base score
-        Object.values(answers).forEach((ans) => {
-            const option = ans as QuestionOption;
-            if (option.scoreImpact) rawScore += option.scoreImpact;
+    // GTM event per step view — keeps the funnel chart in GA usable.
+    useEffect(() => {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            event: 'quiz_step_view',
+            step_id: step,
+            quiz_name: 'diagnostico_v2',
         });
-        // Cap score
-        const finalScore = Math.min(Math.max(rawScore, 15), 95);
+    }, [step]);
 
-        // 2. Determine Verdict based on "Pain" question (Question ID 2)
-        const painAnswer = answers[2]?.value;
-        let verdictTitle = "Gargalo Desconhecido";
-        let verdictDesc = "Sua operação possui falhas, mas precisamos de uma análise manual mais profunda.";
-        let category = "Geral";
+    // ---- Step transitions ----
 
-        switch (painAnswer) {
-            case 'trafego':
-                verdictTitle = "A Vitrine Invisível";
-                verdictDesc = "Seu produto é bom, mas ninguém o vê. Você está operando no escuro. Sem tráfego qualificado e constante, seu negócio depende de sorte ou indicação, o que impede a escala previsível.";
-                category = "Tráfego Pago";
-                break;
-            case 'conversao':
-                verdictTitle = "O Balde Furado";
-                verdictDesc = "O seu gargalo é clássico. Você está pagando por tráfego, as pessoas chegam, mas sua página não convence. Estima-se que você perca 40% da verba aqui por falta de copywriting persuasivo e design focado em conversão.";
-                category = "Conversão (CRO)";
-                break;
-            case 'publico':
-                verdictTitle = "A Miragem de Vendas";
-                verdictDesc = "Você atrai volume, mas de curiosos. Isso infla métricas de vaidade e destrói a moral do time comercial. O erro está na segmentação da campanha e na comunicação que não filtra os desqualificados antes do clique.";
-                category = "Qualificação de Leads";
-                break;
-            case 'estrategia':
-                verdictTitle = "O Navio à Deriva";
-                verdictDesc = "A sensação de estagnação vem da falta de um funil claro. Você provavelmente faz 'ações aleatórias de marketing' em vez de seguir um processo validado de aquisição.";
-                category = "Estratégia Digital";
-                break;
+    // Kept for the insight + form steps that don't go through handleAnswer.
+    const goNext = useCallback(
+        (current: StepId, withAnswers: QuizAnswers) => {
+            setStep(nextStep(current, withAnswers));
+        },
+        [],
+    );
+
+    const handleAnswer = useCallback(
+        <F extends keyof QuizAnswers>(
+            field: F,
+            value: NonNullable<QuizAnswers[F]>,
+        ) => {
+            // Compute the next state outside the updater so React StrictMode's
+            // dev-only double-invoke doesn't fire the step transition twice.
+            const updated = { ...answers, [field]: value };
+            setAnswers(updated);
+            setStep(nextStep(step, updated));
+        },
+        [step, answers],
+    );
+
+    const handleLeadSubmit = useCallback(
+        async (data: LeadData) => {
+            setIsSubmitting(true);
+            setLead(data);
+            const level = qualify(answers);
+            try {
+                await submitLead(data, answers, level);
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: 'lead_qualified',
+                    qualification_level: level,
+                    quiz_name: 'diagnostico_v2',
+                });
+            } catch (err) {
+                console.error('Lead submission failed', err);
+            } finally {
+                setIsSubmitting(false);
+                goNext('lead_form', answers);
+            }
+        },
+        [answers, goNext],
+    );
+
+    const handleWaitlistSubmit = useCallback(
+        async (data: WaitlistData) => {
+            setIsSubmitting(true);
+            try {
+                await submitWaitlist(data, answers);
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: 'waitlist_join',
+                    quiz_name: 'diagnostico_v2',
+                });
+            } catch (err) {
+                console.error('Waitlist submission failed', err);
+            } finally {
+                setIsSubmitting(false);
+                setStep('waitlist_thanks');
+            }
+        },
+        [answers],
+    );
+
+    // ---- Progress bar math ----
+
+    const progress = useMemo(() => {
+        const total = totalProgressSteps(answers);
+        const current = progressIndex(step, answers);
+        return { current, total };
+    }, [step, answers]);
+
+    // ---- Render the active step ----
+
+    if (step === 'landing') {
+        return <Landing onStart={() => setStep('q_niche')} />;
+    }
+
+    if (step === 'lead_form') {
+        return (
+            <LeadForm
+                onSubmit={handleLeadSubmit}
+                isSubmitting={isSubmitting}
+            />
+        );
+    }
+
+    if (step === 'schedule_standard' || step === 'schedule_premium') {
+        if (!lead) {
+            // Defensive: shouldn't happen because lead_form always runs
+            // first. If it does, fall back to the form.
+            return (
+                <LeadForm
+                    onSubmit={handleLeadSubmit}
+                    isSubmitting={isSubmitting}
+                />
+            );
         }
+        return (
+            <Schedule
+                level={step === 'schedule_premium' ? 'premium' : 'qualified'}
+                lead={lead}
+                answers={answers}
+            />
+        );
+    }
 
-        return {
-            score: finalScore,
-            verdictTitle,
-            verdictDescription: verdictDesc,
-            category
-        };
-    }, [answers]);
+    if (step === 'nurture_waitlist') {
+        return (
+            <NurtureWaitlist
+                onSubmit={handleWaitlistSubmit}
+                isSubmitting={isSubmitting}
+            />
+        );
+    }
 
-    // -- Render --
+    if (step === 'waitlist_thanks') {
+        return <WaitlistThanks />;
+    }
+
+    if (step === 'insight_financial') {
+        return (
+            <InsightCard
+                variant="financial"
+                answers={answers}
+                onContinue={() => goNext('insight_financial', answers)}
+                progress={progress}
+            />
+        );
+    }
+
+    if (step === 'insight_case') {
+        return (
+            <InsightCard
+                variant="case"
+                answers={answers}
+                onContinue={() => goNext('insight_case', answers)}
+                progress={progress}
+            />
+        );
+    }
+
+    // Question step — resolve the spec, including the niche-specific Q4.
+    const spec: QuestionSpec | null =
+        step === 'q_niche_specific'
+            ? nicheSpecificQuestion(answers.niche)
+            : QUESTION_BY_STEP[step] ?? null;
+
+    if (!spec) {
+        // Unknown step — fail-safe: send the user back to landing.
+        console.warn('Unknown step', step);
+        return <Landing onStart={() => setStep('q_niche')} />;
+    }
 
     return (
-        <main className="font-sans text-gray-100 bg-[#050505] min-h-screen">
-
-            {currentStep === AppStep.QUIZ && (
-                <ProgressBar
-                    currentStep={currentQuestionIndex + 1}
-                    totalSteps={QUESTIONS.length}
-                />
-            )}
-
-            {currentStep === AppStep.LANDING && (
-                <Landing onStart={startQuiz} />
-            )}
-
-            {currentStep === AppStep.QUIZ && (
-                <Quiz
-                    question={QUESTIONS[currentQuestionIndex]}
-                    onAnswer={handleQuizAnswer}
-                    currentStepIndex={currentQuestionIndex + 1}
-                />
-            )}
-
-            {currentStep === AppStep.LOADING && (
-                <LoadingScreen onComplete={handleLoadingComplete} />
-            )}
-
-            {currentStep === AppStep.GATE && (
-                <LeadForm onSubmit={handleLeadSubmit} isSubmitting={isSubmitting} />
-            )}
-
-            {currentStep === AppStep.RESULTS && leadData && (
-                <Results result={result} leadData={leadData} />
-            )}
-
-        </main>
+        <Question
+            spec={spec}
+            progress={progress}
+            onAnswer={(value) =>
+                handleAnswer(spec.field, value as never)
+            }
+        />
     );
 };
 

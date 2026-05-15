@@ -37,7 +37,7 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                         Manaus · Brasil
                     </span>
                     <span className="hidden md:inline">
-                        Auditoria nº <span className="text-white">003</span> / 2026
+                        Diagnóstico nº <span className="text-white">003</span> / 2026
                     </span>
                 </div>
 
@@ -58,12 +58,12 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                 <div className="col-span-12 lg:col-span-7 lg:col-start-6 mt-10 lg:mt-14">
                     <p className="text-base md:text-lg text-white/70 leading-relaxed max-w-xl font-light">
                         A maioria das empresas perde 30 a 60% do orçamento de marketing em
-                        canais errados, criativos fracos e funis sem rastreio. Nossa{' '}
+                        canais errados, criativos fracos e funis sem rastreio. Em uma{' '}
                         <span className="text-white font-semibold">
-                            Auditoria de Lucro Invisível
+                            reunião de 15 minutos
                         </span>{' '}
-                        mostra exatamente onde o seu dinheiro está vazando — e o plano de
-                        resgate para os próximos 90 dias.
+                        mostramos exatamente onde o seu dinheiro está vazando — e o plano
+                        de resgate pros próximos 90 dias.
                     </p>
 
                     <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
@@ -72,7 +72,7 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                             onClick={onAuditClick}
                             className="group inline-flex items-center gap-3 bg-er-red hover:bg-er-redHover text-white font-bold tracking-[0.18em] uppercase text-sm md:text-base px-7 py-4 md:px-9 md:py-5 transition-all shadow-[0_0_40px_rgba(230,0,0,0.35)] hover:shadow-[0_0_60px_rgba(230,0,0,0.55)]"
                         >
-                            Solicitar minha auditoria
+                            Agendar meus 15 min
                             <span className="transition-transform group-hover:translate-x-1">
                                 →
                             </span>

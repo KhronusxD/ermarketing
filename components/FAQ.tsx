@@ -8,14 +8,14 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
     {
-        question: 'Como funciona a Auditoria de Lucro Invisível?',
+        question: 'Como funciona a reunião de diagnóstico?',
         answer:
-            'É uma análise profunda da sua estrutura atual de marketing e vendas. Nossos estrategistas acessam suas campanhas (modo leitura), analisam funil, criativos, tracking e CRM, e devolvem em duas semanas o mapa de onde o dinheiro está vazando e onde dá pra escalar.',
+            'É uma call de 15 minutos com um dos sócios. Antes dela, você responde um questionário rápido (3 minutos) que serve pra gente já entrar na reunião com o contexto do seu negócio. Na call, mostramos onde está o gargalo e o plano dos próximos 90 dias. Sem PDF de 40 páginas — só o que importa.',
     },
     {
         question: 'Qual o investimento necessário pra começar?',
         answer:
-            'Não trabalhamos com pacotes fechados. A auditoria existe pra desenhar um projeto compatível com o seu momento e objetivo. Focamos em empresas que já investem em tráfego ou têm capacidade pra começar — não atendemos quem ainda precisa validar o produto.',
+            'Não trabalhamos com pacotes fechados. A reunião existe pra desenhar um projeto compatível com o seu momento e objetivo. Focamos em empresas que já investem em tráfego ou têm capacidade pra começar — não atendemos quem ainda precisa validar o produto.',
     },
     {
         question: 'Quais nichos vocês atendem?',

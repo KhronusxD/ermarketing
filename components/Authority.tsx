@@ -101,7 +101,7 @@ export const Authority: React.FC<SectionProps> = ({ onAuditClick }) => {
                             onClick={onAuditClick}
                             className="group inline-flex items-center justify-between w-full md:w-auto bg-er-ink text-er-paper hover:bg-er-red transition-colors font-bold text-sm tracking-[0.18em] uppercase px-6 py-4"
                         >
-                            Conhecer metodologia
+                            Agendar diagnóstico
                             <span className="ml-6 transition-transform group-hover:translate-x-1">
                                 →
                             </span>

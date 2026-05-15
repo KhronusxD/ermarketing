@@ -38,7 +38,7 @@ export const Diagnosis: React.FC<SectionProps> = ({ onAuditClick }) => {
                 <div className="grid grid-cols-12 gap-6 mb-16 md:mb-24">
                     <div className="col-span-12 md:col-span-8">
                         <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
-                            ◆ A auditoria
+                            ◆ O diagnóstico
                         </p>
                         <h2
                             className="font-display uppercase leading-[0.88] tracking-tight"
