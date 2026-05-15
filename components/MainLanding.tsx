@@ -29,12 +29,12 @@ export const MainLanding: React.FC = () => {
             <main>
                 <Hero onAuditClick={handleAuditClick} />
                 <Authority onAuditClick={handleAuditClick} />
+                <ReelsShowcase />
+                <FeaturedCases onAuditClick={handleAuditClick} />
                 <ClientLogos />
                 <Diagnosis onAuditClick={handleAuditClick} />
                 <Ecosystem onAuditClick={handleAuditClick} />
                 <Partners onAuditClick={handleAuditClick} />
-                <FeaturedCases onAuditClick={handleAuditClick} />
-                <ReelsShowcase />
                 <ClientResults onAuditClick={handleAuditClick} />
                 <FAQ onAuditClick={handleAuditClick} />
                 <Qualification onAuditClick={handleAuditClick} />
