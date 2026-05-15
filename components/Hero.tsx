@@ -87,9 +87,9 @@ export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
                 {/* Bottom metrics strip — small label + giant number, brutalist */}
                 <div className="col-span-12 mt-20 md:mt-28 grid grid-cols-3 gap-4 border-t border-white/10 pt-8">
                     {[
-                        { label: 'Em mídia gerida', value: '45M' },
+                        { label: 'Em mídia gerida', value: '5M' },
                         { label: 'ROAS médio global', value: '7.5x' },
-                        { label: 'Leads qualificados', value: '120k+' },
+                        { label: 'Leads qualificados', value: '150k+' },
                     ].map((m) => (
                         <div key={m.label} className="flex flex-col">
                             <span className="text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-white/40 mb-2">

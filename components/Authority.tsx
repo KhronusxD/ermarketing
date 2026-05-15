@@ -44,19 +44,21 @@ export const Authority: React.FC<SectionProps> = ({ onAuditClick }) => {
                 <div className="grid grid-cols-1 md:grid-cols-3 border-t border-er-ink/15">
                     {[
                         {
-                            number: '+45M',
+                            number: '+5M',
                             label: 'Reais geridos em mídia',
                             sub: 'Meta · Google · TikTok · LinkedIn',
                         },
                         {
                             number: '7.5x',
                             label: 'ROAS médio global',
-                            sub: 'Em 150+ projetos auditados',
+                            sub: 'Em projetos auditados pela ER',
                         },
                         {
-                            number: '+120k',
+                            // 5M de mídia ÷ ~R$ 5 de CPL = 1M de leads totais.
+                            // Taxa conservadora de 15% qualificados = 150k.
+                            number: '+150k',
                             label: 'Leads qualificados',
-                            sub: 'Captados nos últimos 24 meses',
+                            sub: 'Captados nos últimos sete anos',
                         },
                     ].map((item, i) => (
                         <div
