@@ -1,0 +1,12 @@
+# ER Marketing — robots policy
+# Sitemap referenced absolutely so it works regardless of which host
+# the bot is querying (apex vs www).
+
+User-agent: *
+Allow: /
+
+# Block analytics endpoints from the crawl path — these are tracked
+# server-side and don't need to be indexed.
+Disallow: /api/
+
+Sitemap: https://ermarketing.com.br/sitemap.xml

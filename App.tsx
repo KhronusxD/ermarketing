@@ -9,6 +9,12 @@ import { Routes, Route } from 'react-router-dom';
 // at LCP time.
 import { RestaurantesManausLanding } from './components/RestaurantesManaus/Landing';
 
+// Blog routes are also pre-rendered for SEO — every post needs to be
+// indexable by Google with full HTML on first byte. Same eager-import
+// pattern as /restaurantes-manaus.
+import BlogIndex from './components/Blog/Index';
+import BlogPost from './components/Blog/Post';
+
 // Every other LP stays code-split so a first-time visitor only downloads
 // what they need.
 const MainLanding = lazy(() =>
@@ -76,6 +82,8 @@ const App: React.FC = () => {
                 <Route path="/lp-psicologia" element={<Candeia />} />
                 <Route path="/politica-de-privacidade" element={<Privacy />} />
                 <Route path="/termos-de-uso" element={<Terms />} />
+                <Route path="/blog" element={<BlogIndex />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
             </Routes>
         </Suspense>
     );

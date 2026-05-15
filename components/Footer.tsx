@@ -40,9 +40,25 @@ export const Footer: React.FC = () => {
 
                     <div className="col-span-6 md:col-span-3 md:col-start-7">
                         <span className="block text-[10px] tracking-[0.3em] uppercase text-er-red font-bold mb-5">
-                            Institucional
+                            Mapa do site
                         </span>
                         <ul className="space-y-3 text-sm">
+                            <li>
+                                <Link
+                                    to="/blog"
+                                    className="hover:text-white transition-colors"
+                                >
+                                    Blog
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/auditoria-de-lucro-invisivel"
+                                    className="hover:text-white transition-colors"
+                                >
+                                    Agendar diagnóstico
+                                </Link>
+                            </li>
                             <li>
                                 <Link
                                     to="/politica-de-privacidade"
