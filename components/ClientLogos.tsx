@@ -83,13 +83,7 @@ export const ClientLogos: React.FC = () => {
                                 src={logo.src}
                                 alt={logo.alt}
                                 loading="lazy"
-                                className="max-h-full max-w-full object-contain opacity-60 hover:opacity-100 transition-opacity duration-500"
-                                style={{
-                                    // brightness(0) flattens every pixel to black, invert(1)
-                                    // flips it to white — net effect is a pure light-gray
-                                    // silhouette regardless of the original logo color.
-                                    filter: 'brightness(0) invert(1)',
-                                }}
+                                className="max-h-full max-w-full object-contain"
                             />
                         </div>
                     ))}
