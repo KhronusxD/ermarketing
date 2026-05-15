@@ -15,6 +15,7 @@ export type StepId =
     | 'insight_case'
     | 'q_sales_capacity'
     | 'q_urgency'
+    | 'price_gate'
     | 'lead_form'
     | 'schedule_standard'
     | 'schedule_premium'
@@ -73,6 +74,8 @@ export interface QuizAnswers {
     // chapter 3
     sales_capacity?: SalesCapacity;
     urgency?: Urgency;
+    // gate
+    price_confirmed?: 'yes' | 'no';
 }
 
 export type QualificationLevel = 'qualified' | 'premium' | 'nurture';

@@ -22,12 +22,44 @@ const ORDER: StepId[] = [
     'insight_case',
     'q_sales_capacity',
     'q_urgency',
+    'price_gate',
     'lead_form',
     'schedule_standard',
     'schedule_premium',
     'nurture_waitlist',
     'waitlist_thanks',
 ];
+
+// ----------- Track detection helpers -----------
+// These mirror the gates in `qualify()` but run earlier in the funnel
+// so we can route around the price_gate for leads that don't need it
+// (premium leads are already above the floor; hard-nurture leads
+// shouldn't fill the full form just to be told "not the moment").
+
+const isPremium = (answers: QuizAnswers): boolean => {
+    if (answers.revenue === 'gt500k') return true;
+    if (answers.ad_budget === 'gt20k') return true;
+    if (answers.ticket_size === 'gt30k') return true;
+    if (
+        answers.revenue === '100to500k' &&
+        (answers.ad_budget === '5to20k' || answers.invests === 'monthly')
+    ) {
+        return true;
+    }
+    return false;
+};
+
+const isHardNurture = (answers: QuizAnswers): boolean => {
+    // Pre-revenue + never invested = not the moment for a paid program.
+    if (answers.revenue === 'pre_revenue' && answers.invests === 'never') {
+        return true;
+    }
+    // Tiny revenue + no urgency = will burn the team's calendar.
+    if (answers.urgency === '3plus_months' && answers.revenue === 'lt10k') {
+        return true;
+    }
+    return false;
+};
 
 // Returns true when the step is mid-funnel question/insight and should
 // count toward the progress bar.
@@ -78,10 +110,22 @@ export const nextStep = (
     current: StepId,
     answers: QuizAnswers,
 ): StepId => {
-    // After q_urgency we hit the routing decision — qualification level
-    // determines which terminal track the lead enters.
+    // After q_urgency we route to one of three places:
+    //   - Premium leads skip the price gate entirely (R$2.5k is below
+    //     their floor; bringing it up reads as defensive).
+    //   - Hard-nurture leads skip the lead form and go straight to the
+    //     waitlist — there's no point making them fill a 5-field form.
+    //   - Everyone else hits the price gate.
     if (current === 'q_urgency') {
-        return 'lead_form';
+        if (isPremium(answers)) return 'lead_form';
+        if (isHardNurture(answers)) return 'nurture_waitlist';
+        return 'price_gate';
+    }
+    // After the price gate, branch by the lead's answer.
+    if (current === 'price_gate') {
+        return answers.price_confirmed === 'yes'
+            ? 'lead_form'
+            : 'nurture_waitlist';
     }
     // After the lead form, route by qualification level.
     if (current === 'lead_form') {
@@ -120,57 +164,41 @@ const shouldSkip = (step: StepId, answers: QuizAnswers): boolean => {
 // remaining levers (revenue, invests, sales_capacity, urgency).
 
 export const qualify = (answers: QuizAnswers): QualificationLevel => {
-    // Hard premium gates — any of these flips premium immediately.
-    if (answers.revenue === 'gt500k') return 'premium';
-    if (answers.ad_budget === 'gt20k') return 'premium';
-    if (answers.ticket_size === 'gt30k') return 'premium';
+    // Premium is the strongest signal — check it before the price gate
+    // so a premium lead is still routed to the longer 30-min slot even
+    // if they happened to see the gate.
+    if (isPremium(answers)) return 'premium';
 
-    // Hard disqualifications — these are simply not the right fit yet.
-    if (answers.revenue === 'pre_revenue' && answers.invests === 'never') {
-        return 'nurture';
-    }
-    if (answers.urgency === '3plus_months' && answers.revenue === 'lt10k') {
-        return 'nurture';
-    }
+    // Price gate is the master filter for everyone else. A "yes" means
+    // they confirmed the R$2.5k floor, so they're qualified by definition.
+    if (answers.price_confirmed === 'yes') return 'qualified';
+    if (answers.price_confirmed === 'no') return 'nurture';
 
-    // Soft scoring. Each lever contributes; threshold decides.
+    // Fallback path — reached only when the price gate didn't run
+    // (hard-nurture leads, or a future iteration that skips it). Keeps
+    // the legacy soft-scoring behavior so qualify() never returns
+    // something unexpected upstream.
+    if (isHardNurture(answers)) return 'nurture';
+
     let score = 0;
-    // Revenue: more = more qualified. (`gt500k` is unreachable here
-    // because of the early-return premium gate above.)
     if (answers.revenue === '100to500k') score += 3;
     else if (answers.revenue === '30to100k') score += 2;
     else if (answers.revenue === '10to30k') score += 1;
     else if (answers.revenue === 'lt10k') score -= 1;
     else if (answers.revenue === 'pre_revenue') score -= 3;
 
-    // Has skin in the game already (invests or has budget intent).
     if (answers.invests === 'monthly') score += 2;
     else if (answers.invests === 'sporadic') score += 1;
-    else if (answers.invests === 'stopped') score += 0;
     else if (answers.invests === 'never') score -= 1;
 
-    // Urgency.
     if (answers.urgency === 'now') score += 2;
     else if (answers.urgency === '30d') score += 1;
     else if (answers.urgency === 'learning') score -= 1;
     else if (answers.urgency === '3plus_months') score -= 2;
 
-    // Sales capacity — at_limit is actually a buy signal because the
-    // lead is already feeling the pain of demand they can't serve.
     if (answers.sales_capacity === 'hungry') score += 2;
     else if (answers.sales_capacity === 'will_hire') score += 1;
     else if (answers.sales_capacity === 'at_limit') score += 1;
-
-    // Premium boost via revenue tier even without the hard gate. The
-    // earlier `gt500k` short-circuit means we only see `100to500k` here,
-    // but we still gate on ad behavior to avoid promoting a curious
-    // mid-tier with no skin in the game.
-    if (
-        answers.revenue === '100to500k' &&
-        (answers.ad_budget === '5to20k' || answers.invests === 'monthly')
-    ) {
-        return 'premium';
-    }
 
     return score >= 3 ? 'qualified' : 'nurture';
 };

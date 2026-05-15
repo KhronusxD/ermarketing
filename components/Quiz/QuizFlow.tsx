@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Landing from './DiagnosticLanding';
 import Question from './Question';
 import InsightCard from './InsightCard';
+import PriceGate from './PriceGate';
 import LeadForm from './DiagnosticLeadForm';
 import Schedule from './Schedule';
 import NurtureWaitlist, { WaitlistThanks } from './NurtureWaitlist';
@@ -190,6 +191,20 @@ const QuizFlow: React.FC = () => {
                 answers={answers}
                 onContinue={() => goNext('insight_case', answers)}
                 progress={progress}
+            />
+        );
+    }
+
+    if (step === 'price_gate') {
+        return (
+            <PriceGate
+                onConfirm={(confirmed) => {
+                    // Persist the choice so qualify() and the webhook
+                    // know whether the lead bounced on price.
+                    const updated = { ...answers, price_confirmed: confirmed };
+                    setAnswers(updated);
+                    setStep(nextStep('price_gate', updated));
+                }}
             />
         );
     }
