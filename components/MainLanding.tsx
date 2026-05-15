@@ -7,6 +7,8 @@ import { ClientLogos } from './ClientLogos';
 import { Diagnosis } from './Diagnosis';
 import { Ecosystem } from './Ecosystem';
 import { Partners } from './Partners';
+import { FeaturedCases } from './FeaturedCases';
+import { ReelsShowcase } from './ReelsShowcase';
 import { ClientResults } from './ClientResults';
 import { FAQ } from './FAQ';
 import { Qualification } from './Qualification';
@@ -31,6 +33,8 @@ export const MainLanding: React.FC = () => {
                 <Diagnosis onAuditClick={handleAuditClick} />
                 <Ecosystem onAuditClick={handleAuditClick} />
                 <Partners onAuditClick={handleAuditClick} />
+                <FeaturedCases onAuditClick={handleAuditClick} />
+                <ReelsShowcase />
                 <ClientResults onAuditClick={handleAuditClick} />
                 <FAQ onAuditClick={handleAuditClick} />
                 <Qualification onAuditClick={handleAuditClick} />
