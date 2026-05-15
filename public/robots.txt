@@ -10,3 +10,8 @@ Allow: /
 Disallow: /api/
 
 Sitemap: https://ermarketing.com.br/sitemap.xml
+
+# llms.txt — emerging convention (https://llmstxt.org) for AI crawlers
+# (ChatGPT, Claude, Perplexity, Gemini). Provides a curated, machine-
+# friendly summary of the site for retrieval-augmented systems.
+# Bots that respect the convention should fetch /llms.txt.

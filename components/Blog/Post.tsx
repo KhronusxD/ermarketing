@@ -44,15 +44,22 @@ const BlogPost: React.FC = () => {
                         </p>
 
                         <div className="flex items-center gap-4 border-t border-er-ink/15 pt-6">
-                            <img
-                                src={AUTHOR.avatar}
-                                alt={AUTHOR.name}
-                                className="w-14 h-14 rounded-full object-cover grayscale"
-                                width={56}
-                                height={56}
-                            />
+                            <Link to="/sobre/ed-rodrigues" className="flex-shrink-0">
+                                <img
+                                    src={AUTHOR.avatar}
+                                    alt={AUTHOR.name}
+                                    className="w-14 h-14 rounded-full object-cover grayscale hover:grayscale-0 transition-all"
+                                    width={56}
+                                    height={56}
+                                />
+                            </Link>
                             <div>
-                                <p className="font-bold text-sm">{AUTHOR.name}</p>
+                                <Link
+                                    to="/sobre/ed-rodrigues"
+                                    className="font-bold text-sm hover:text-er-red transition-colors"
+                                >
+                                    {AUTHOR.name}
+                                </Link>
                                 <p className="text-xs text-er-ink/60 leading-snug">
                                     {AUTHOR.role} ·{' '}
                                     <span className="text-er-ink/75">{AUTHOR.bio}</span>
@@ -79,16 +86,23 @@ const BlogPost: React.FC = () => {
                             ◆ Sobre o autor
                         </p>
                         <div className="flex flex-col sm:flex-row gap-5">
-                            <img
-                                src={AUTHOR.avatar}
-                                alt={AUTHOR.name}
-                                className="w-20 h-20 rounded-full object-cover flex-shrink-0"
-                                width={80}
-                                height={80}
-                            />
+                            <Link to="/sobre/ed-rodrigues" className="flex-shrink-0">
+                                <img
+                                    src={AUTHOR.avatar}
+                                    alt={AUTHOR.name}
+                                    className="w-20 h-20 rounded-full object-cover hover:scale-105 transition-transform"
+                                    width={80}
+                                    height={80}
+                                />
+                            </Link>
                             <div>
                                 <h3 className="font-display uppercase text-2xl tracking-tight mb-1">
-                                    {AUTHOR.name}
+                                    <Link
+                                        to="/sobre/ed-rodrigues"
+                                        className="hover:text-er-red transition-colors"
+                                    >
+                                        {AUTHOR.name}
+                                    </Link>
                                 </h3>
                                 <p className="text-er-red font-bold text-sm mb-3">
                                     {AUTHOR.role}
@@ -101,7 +115,13 @@ const BlogPost: React.FC = () => {
                                     >
                                         ER Marketing
                                     </Link>
-                                    , agência baseada em Manaus com mais de 100 parceiros atendidos.
+                                    , agência baseada em Manaus com mais de 100 parceiros atendidos.{' '}
+                                    <Link
+                                        to="/sobre/ed-rodrigues"
+                                        className="text-er-red underline underline-offset-4 decoration-er-red/40 hover:decoration-er-red"
+                                    >
+                                        Ver perfil completo →
+                                    </Link>
                                 </p>
                             </div>
                         </div>
