@@ -2,15 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Hero } from './Hero';
+import { Authority } from './Authority';
+import { ClientLogos } from './ClientLogos';
 import { Diagnosis } from './Diagnosis';
 import { Ecosystem } from './Ecosystem';
-import { CaseStudies } from './CaseStudies';
-import { Authority } from './Authority';
-import { Testimonials } from './Testimonials';
+import { Partners } from './Partners';
+import { ClientResults } from './ClientResults';
 import { FAQ } from './FAQ';
 import { Qualification } from './Qualification';
 import { Footer } from './Footer';
-import { BackgroundParticles } from './BackgroundParticles';
 import { FloatingWhatsApp } from './FloatingWhatsApp';
 
 export const MainLanding: React.FC = () => {
@@ -21,18 +21,17 @@ export const MainLanding: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-er-black text-white font-sans selection:bg-er-red selection:text-white relative">
-            <BackgroundParticles />
-
+        <div className="min-h-screen bg-er-black text-white font-sans selection:bg-er-red selection:text-white">
             <Header onAuditClick={handleAuditClick} />
 
-            <main className="relative z-10">
+            <main>
                 <Hero onAuditClick={handleAuditClick} />
                 <Authority onAuditClick={handleAuditClick} />
-                <CaseStudies onAuditClick={handleAuditClick} />
-                <Testimonials onAuditClick={handleAuditClick} />
-                <Ecosystem onAuditClick={handleAuditClick} />
+                <ClientLogos />
                 <Diagnosis onAuditClick={handleAuditClick} />
+                <Ecosystem onAuditClick={handleAuditClick} />
+                <Partners onAuditClick={handleAuditClick} />
+                <ClientResults onAuditClick={handleAuditClick} />
                 <FAQ onAuditClick={handleAuditClick} />
                 <Qualification onAuditClick={handleAuditClick} />
             </main>

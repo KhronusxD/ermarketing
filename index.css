@@ -13,6 +13,12 @@
 @import '@fontsource/inter/latin-500.css';
 @import '@fontsource/inter/latin-600.css';
 @import '@fontsource/inter/latin-700.css';
+@import '@fontsource/inter/latin-800.css';
+@import '@fontsource/inter/latin-900.css';
+
+/* Anton (display) — condensed grotesque used in the brutalist editorial
+   headlines (Hero, big numbers, section titles). Only 400 weight ships. */
+@import '@fontsource/anton/latin-400.css';
 
 /* Playfair Display (serif) — weights actually used across the LPs */
 @import '@fontsource/playfair-display/latin-400.css';

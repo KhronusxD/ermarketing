@@ -13,6 +13,7 @@ export default {
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
                 serif: ['"Playfair Display"', 'serif'],
+                display: ['Anton', 'Inter', 'sans-serif'],
             },
             colors: {
                 er: {
@@ -20,6 +21,9 @@ export default {
                     red: '#E60000',
                     redHover: '#cc0000',
                     gray: '#1A1A1A',
+                    paper: '#F4F1EB',
+                    paperDark: '#E8E3D8',
+                    ink: '#0A0A0A',
                 },
             },
             animation: {

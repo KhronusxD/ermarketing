@@ -1,74 +1,123 @@
 import React, { useState } from 'react';
-import { Plus, Minus } from 'lucide-react';
 import { SectionProps } from '../types';
 
 interface FAQItem {
-  question: string;
-  answer: string;
+    question: string;
+    answer: string;
 }
 
 const faqs: FAQItem[] = [
-  {
-    question: "Como funciona a Auditoria de Lucro Invisível?",
-    answer: "É uma análise profunda da sua estrutura atual de marketing e vendas. Nossos estrategistas acessam suas campanhas (modo leitura), analisam seu funil e identificam onde você está perdendo dinheiro e onde pode escalar."
-  },
-  {
-    question: "Qual o investimento necessário para começar?",
-    answer: "Não trabalhamos com pacotes fechados. A Auditoria serve justamente para desenhar um projeto compatível com seu momento e objetivos. Porém, focamos em empresas que já investem ou têm capacidade de investimento em tráfego."
-  },
-  {
-    question: "Vocês atendem quais nichos?",
-    answer: "Nossa metodologia é agnóstica a nichos, pois é baseada em fundamentos de negócio e comportamento humano. Temos cases de sucesso em E-commerce, Infoprodutos, Serviços Locais e B2B."
-  },
-  {
-    question: "A ER Marketing faz apenas Tráfego Pago?",
-    answer: "Não. Somos uma assessoria completa de performance. Isso inclui Gestão de Tráfego, Criação de Landing Pages, CRM, Design, Social Media, Produção Audiovisual e Estratégia de Vendas."
-  }
+    {
+        question: 'Como funciona a Auditoria de Lucro Invisível?',
+        answer:
+            'É uma análise profunda da sua estrutura atual de marketing e vendas. Nossos estrategistas acessam suas campanhas (modo leitura), analisam funil, criativos, tracking e CRM, e devolvem em duas semanas o mapa de onde o dinheiro está vazando e onde dá pra escalar.',
+    },
+    {
+        question: 'Qual o investimento necessário pra começar?',
+        answer:
+            'Não trabalhamos com pacotes fechados. A auditoria existe pra desenhar um projeto compatível com o seu momento e objetivo. Focamos em empresas que já investem em tráfego ou têm capacidade pra começar — não atendemos quem ainda precisa validar o produto.',
+    },
+    {
+        question: 'Quais nichos vocês atendem?',
+        answer:
+            'A metodologia é agnóstica de nicho porque é baseada em fundamentos de negócio e comportamento humano. Temos cases consolidados em e-commerce, infoproduto, serviços B2B, food service, varejo local e educação digital.',
+    },
+    {
+        question: 'A ER faz só tráfego pago?',
+        answer:
+            'Não. Somos uma assessoria completa de performance: gestão de tráfego, copy, criativos, landing pages, CRM, automação, social media, produção audiovisual e estratégia comercial. O sócio que cuida do seu projeto fica responsável pelo todo.',
+    },
+    {
+        question: 'Em quanto tempo eu vejo resultado?',
+        answer:
+            'Os primeiros 30 dias são de aprendizado: tracking, ajuste de público e teste de criativos. Os 60 dias seguintes são de aceleração. Quem espera curva real de retorno antes de 90 dias geralmente desliga o canal antes de ele aprender — e perde dinheiro à toa.',
+    },
 ];
 
-export const FAQ: React.FC<SectionProps> = ({ onAuditClick }) => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+export const FAQ: React.FC<SectionProps> = () => {
+    const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
-  return (
-    <section className="py-24 bg-[#050505] relative z-10 border-t border-white/5">
-      <div className="max-w-3xl mx-auto px-6">
-        <h2 className="text-3xl font-bold tracking-tight text-center mb-12">PERGUNTAS FREQUENTES</h2>
-
-        <div className="space-y-4">
-          {faqs.map((faq, index) => (
+    return (
+        <section className="relative bg-er-black text-white overflow-hidden">
             <div
-              key={index}
-              className={`border rounded-lg transition-all duration-300 ${openIndex === index ? 'border-er-red bg-[#0A0A0A]' : 'border-white/10 bg-transparent hover:border-white/20'}`}
+                aria-hidden="true"
+                className="pointer-events-none absolute top-10 -left-8 select-none font-display uppercase leading-[0.78] whitespace-nowrap text-white/5"
+                style={{ fontSize: 'clamp(180px, 24vw, 380px)' }}
             >
-              <button
-                className="w-full flex justify-between items-center p-6 text-left"
-                onClick={() => toggleFAQ(index)}
-              >
-                <span className={`font-semibold ${openIndex === index ? 'text-white' : 'text-gray-300'}`}>
-                  {faq.question}
-                </span>
-                {openIndex === index ? (
-                  <Minus className="text-er-red flex-shrink-0" size={20} />
-                ) : (
-                  <Plus className="text-gray-500 flex-shrink-0" size={20} />
-                )}
-              </button>
-
-              <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
-              >
-                <div className="p-6 pt-0 text-gray-400 leading-relaxed text-sm">
-                  {faq.answer}
-                </div>
-              </div>
+                dúvidas
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+
+            <div className="relative z-10 max-w-[1100px] mx-auto px-6 py-24 md:py-32">
+                <div className="mb-12 md:mb-16">
+                    <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
+                        ◆ FAQ
+                    </p>
+                    <h2
+                        className="font-display uppercase leading-[0.88] tracking-tight"
+                        style={{ fontSize: 'clamp(44px, 6.5vw, 96px)' }}
+                    >
+                        Perguntas que
+                        <br />
+                        <span className="text-er-red">você devia fazer.</span>
+                    </h2>
+                </div>
+
+                <div className="border-t border-white/15">
+                    {faqs.map((faq, index) => {
+                        const open = openIndex === index;
+                        return (
+                            <div
+                                key={faq.question}
+                                className="border-b border-white/15"
+                            >
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setOpenIndex(open ? null : index)
+                                    }
+                                    className="w-full flex items-start justify-between gap-6 text-left py-6 md:py-8 group"
+                                >
+                                    <div className="flex items-start gap-4 md:gap-8 flex-1">
+                                        <span className="text-er-red font-display text-lg md:text-xl leading-none pt-1">
+                                            {`0${index + 1}`}
+                                        </span>
+                                        <span
+                                            className={`font-display uppercase leading-tight tracking-tight transition-colors ${
+                                                open ? 'text-white' : 'text-white/85 group-hover:text-white'
+                                            }`}
+                                            style={{
+                                                fontSize: 'clamp(20px, 2.4vw, 32px)',
+                                            }}
+                                        >
+                                            {faq.question}
+                                        </span>
+                                    </div>
+                                    <span
+                                        className={`flex-shrink-0 w-8 h-8 border border-white/30 flex items-center justify-center text-white/70 transition-transform ${
+                                            open ? 'bg-er-red border-er-red text-white rotate-45' : ''
+                                        }`}
+                                    >
+                                        +
+                                    </span>
+                                </button>
+                                <div
+                                    className={`grid transition-all duration-300 ease-out ${
+                                        open
+                                            ? 'grid-rows-[1fr] opacity-100 pb-8 md:pb-10'
+                                            : 'grid-rows-[0fr] opacity-0'
+                                    }`}
+                                >
+                                    <div className="overflow-hidden">
+                                        <p className="pl-10 md:pl-16 text-sm md:text-base text-white/65 leading-relaxed max-w-3xl">
+                                            {faq.answer}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </section>
+    );
 };

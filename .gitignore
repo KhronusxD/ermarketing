@@ -22,3 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local-only tooling configs (Claude Code preview launcher, etc.)
+.claude/
+
+# Raw uploaded assets — kept locally for future iterations, not shipped.
+# The optimized derivatives the site actually loads live under
+# /public/socios/ and /public/clientes/.
+public/sócios/
+public/Logos Clientes/
+public/informações-resultados-clientes/
+public/referencias/

@@ -1,61 +1,110 @@
 import React from 'react';
 import { SectionProps } from '../types';
-import { Button } from './ui/Button';
-import { ArrowRight, TrendingDown } from 'lucide-react';
 
 export const Hero: React.FC<SectionProps> = ({ onAuditClick }) => {
-  return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background FX */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#1a0505] via-[#050505] to-[#050505] opacity-60"></div>
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
+    return (
+        <section className="relative min-h-screen bg-er-black text-white overflow-hidden pt-28 md:pt-32">
+            {/* Big brutalist outline letters bleeding off the canvas. Positioned
+                behind the headline column — picked up from the "str" cut-off in
+                the No es magia reference. */}
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-8 -left-6 md:-left-12 select-none whitespace-nowrap font-display uppercase leading-[0.78]"
+                style={{
+                    fontSize: 'clamp(160px, 28vw, 440px)',
+                    color: 'transparent',
+                    WebkitTextStroke: '1.5px rgba(255,255,255,0.06)',
+                }}
+            >
+                lucro
+            </div>
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute bottom-0 right-[-10%] md:right-[-6%] select-none whitespace-nowrap font-display uppercase leading-[0.78] text-er-red/80"
+                style={{ fontSize: 'clamp(220px, 32vw, 520px)' }}
+            >
+                ER.
+            </div>
 
-        {/* Grid lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-      </div>
+            {/* Subtle vertical grid like an editorial spread */}
+            <div className="pointer-events-none absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#fff_1px,transparent_1px)] bg-[size:80px_100%]" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center md:text-left flex flex-col items-center">
+            <div className="relative z-10 max-w-[1400px] mx-auto px-6 grid grid-cols-12 gap-6 pb-24 md:pb-36">
+                {/* Top eyebrow row */}
+                <div className="col-span-12 flex items-center justify-between text-[11px] tracking-[0.3em] uppercase text-white/50 mb-10 md:mb-16">
+                    <span className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-er-red animate-pulse" />
+                        Manaus · Brasil
+                    </span>
+                    <span className="hidden md:inline">
+                        Auditoria nº <span className="text-white">003</span> / 2026
+                    </span>
+                </div>
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-900/30 bg-red-950/10 text-er-red text-xs font-bold tracking-widest uppercase mb-8 animate-in slide-in-from-bottom-4 duration-700">
-          <span className="w-2 h-2 rounded-full bg-er-red animate-pulse"></span>
-          Auditoria de Lucro Invisível
-        </div>
+                {/* Main headline — mixed weights/colors like the reference */}
+                <h1 className="col-span-12 lg:col-span-10 font-display uppercase leading-[0.88] tracking-tight">
+                    <span className="block text-white" style={{ fontSize: 'clamp(56px, 11vw, 180px)' }}>
+                        Não é sorte.
+                    </span>
+                    <span
+                        className="block text-er-red"
+                        style={{ fontSize: 'clamp(56px, 11vw, 180px)' }}
+                    >
+                        É estratégia.
+                    </span>
+                </h1>
 
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight mb-6 max-w-4xl mx-auto text-center">
-          Transforme seu marketing em<br />
-          <span className="text-er-red drop-shadow-[0_0_15px_rgba(230,0,0,0.8)] uppercase">
-            LUCRO LÍQUIDO
-          </span>
-        </h1>
-        <p className="text-lg md:text-xl text-gray-400 max-w-3xl text-center mb-10 font-light leading-relaxed">
-          Uma Auditoria baseada em dados de <span className="text-white font-semibold">+150 projetos</span> que identifica exatamente onde está o gargalo do seu crescimento. Sem "achismos", apenas matemática e estratégia.
-        </p>
+                {/* Body copy + CTA — offset right column, editorial */}
+                <div className="col-span-12 lg:col-span-7 lg:col-start-6 mt-10 lg:mt-14">
+                    <p className="text-base md:text-lg text-white/70 leading-relaxed max-w-xl font-light">
+                        A maioria das empresas perde 30 a 60% do orçamento de marketing em
+                        canais errados, criativos fracos e funis sem rastreio. Nossa{' '}
+                        <span className="text-white font-semibold">
+                            Auditoria de Lucro Invisível
+                        </span>{' '}
+                        mostra exatamente onde o seu dinheiro está vazando — e o plano de
+                        resgate para os próximos 90 dias.
+                    </p>
 
-        <div className="flex flex-col items-center gap-4 w-full">
-          <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4 shadow-[0_0_30px_rgba(230,0,0,0.5)] animate-pulse-slow" onClick={onAuditClick}>
-            SOLICITAR AUDITORIA AGORA
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </Button>
+                    <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                        <button
+                            type="button"
+                            onClick={onAuditClick}
+                            className="group inline-flex items-center gap-3 bg-er-red hover:bg-er-redHover text-white font-bold tracking-[0.18em] uppercase text-sm md:text-base px-7 py-4 md:px-9 md:py-5 transition-all shadow-[0_0_40px_rgba(230,0,0,0.35)] hover:shadow-[0_0_60px_rgba(230,0,0,0.55)]"
+                        >
+                            Solicitar minha auditoria
+                            <span className="transition-transform group-hover:translate-x-1">
+                                →
+                            </span>
+                        </button>
+                        <div className="flex items-center gap-3 text-xs tracking-[0.2em] uppercase text-white/40">
+                            <span className="w-8 h-px bg-white/30" />
+                            5 vagas / mês
+                        </div>
+                    </div>
+                </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <TrendingDown size={14} className="text-er-red" />
-            <span>Apenas <span className="text-white font-bold">5 vagas gratuitas</span> para este mês.</span>
-          </div>
-        </div>
-
-        {/* Abstract Data Visual */}
-        <div className="mt-16 w-full max-w-4xl h-32 md:h-48 border-x border-t border-white/5 bg-gradient-to-b from-white/5 to-transparent relative overflow-hidden rounded-t-xl mask-image-gradient">
-          <div className="absolute top-0 left-0 w-full h-1 bg-er-red shadow-[0_0_20px_#E60000]"></div>
-          <div className="grid grid-cols-6 h-full w-full opacity-20">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="border-r border-white/10 h-full flex flex-col justify-end p-2 gap-2">
-                <div className="w-full bg-er-red" style={{ height: `${Math.random() * 80 + 20}%`, opacity: Math.random() * 0.5 + 0.2 }}></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+                {/* Bottom metrics strip — small label + giant number, brutalist */}
+                <div className="col-span-12 mt-20 md:mt-28 grid grid-cols-3 gap-4 border-t border-white/10 pt-8">
+                    {[
+                        { label: 'Em mídia gerida', value: '45M' },
+                        { label: 'ROAS médio global', value: '7.5x' },
+                        { label: 'Leads qualificados', value: '120k+' },
+                    ].map((m) => (
+                        <div key={m.label} className="flex flex-col">
+                            <span className="text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-white/40 mb-2">
+                                {m.label}
+                            </span>
+                            <span
+                                className="font-display text-white leading-none"
+                                style={{ fontSize: 'clamp(36px, 6vw, 88px)' }}
+                            >
+                                {m.value}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
 };
