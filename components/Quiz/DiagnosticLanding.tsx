@@ -55,7 +55,7 @@ const Landing: React.FC<LandingProps> = ({ onStart }) => {
                         >
                             Mostre o seu
                             <br />
-                            negócio.
+                            Business.
                             <br />
                             <span className="text-er-red">A gente mostra</span>
                             <br />
