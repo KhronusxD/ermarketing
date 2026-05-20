@@ -347,6 +347,44 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // Meta App Review pages — public, no-login, HTTPS legal pages
+    // required to submit the ER Ads Manager app for Standard Access
+    // review. Kept deliberately schema-free (just title + description +
+    // canonical) so the reviewer reads the actual policy text.
+    {
+        path: '/meta-app',
+        out: 'meta-app/index.html',
+        meta: {
+            title: 'ER Ads Manager · Ferramenta interna da ER Marketing',
+            description:
+                'Aplicação interna da ER Marketing para gestão programática de campanhas Meta Ads dos clientes da agência, sob autorização explícita.',
+            canonical: `${SITE_ORIGIN}/meta-app`,
+            ogType: 'website',
+        },
+    },
+    {
+        path: '/meta-app/privacidade',
+        out: 'meta-app/privacidade/index.html',
+        meta: {
+            title: 'Política de Privacidade · ER Ads Manager',
+            description:
+                'Política de Privacidade do aplicativo ER Ads Manager: dados acessados, armazenamento, retenção, direitos LGPD e contato.',
+            canonical: `${SITE_ORIGIN}/meta-app/privacidade`,
+            ogType: 'website',
+        },
+    },
+    {
+        path: '/meta-app/termos',
+        out: 'meta-app/termos/index.html',
+        meta: {
+            title: 'Termos de Uso · ER Ads Manager',
+            description:
+                'Termos de Uso do aplicativo ER Ads Manager: natureza interna, uso autorizado, limitação de responsabilidade, foro e lei aplicável.',
+            canonical: `${SITE_ORIGIN}/meta-app/termos`,
+            ogType: 'website',
+        },
+    },
+
     // Blog index
     {
         path: '/blog',
@@ -551,6 +589,22 @@ const sitemapEntries: Array<{
         priority: 0.6,
         changefreq: 'monthly' as const,
     })),
+    // Meta App Review pages — low priority for Google but included for
+    // completeness so the URLs aren't seen as orphan when the reviewer
+    // checks the sitemap.
+    { loc: `${SITE_ORIGIN}/meta-app`, lastmod: today, priority: 0.3, changefreq: 'yearly' },
+    {
+        loc: `${SITE_ORIGIN}/meta-app/privacidade`,
+        lastmod: today,
+        priority: 0.3,
+        changefreq: 'yearly',
+    },
+    {
+        loc: `${SITE_ORIGIN}/meta-app/termos`,
+        lastmod: today,
+        priority: 0.3,
+        changefreq: 'yearly',
+    },
 ];
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

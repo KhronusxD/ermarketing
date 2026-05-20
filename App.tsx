@@ -16,6 +16,9 @@ import BlogIndex from './components/Blog/Index';
 import BlogPost from './components/Blog/Post';
 import Sobre from './components/About/Sobre';
 import AuthorPage from './components/About/AuthorPage';
+import MetaAppIndex from './components/MetaApp/Index';
+import MetaAppPrivacy from './components/MetaApp/Privacy';
+import MetaAppTerms from './components/MetaApp/Terms';
 import NotFound from './components/NotFound';
 
 // Lazy routes — code-split so a first-time visitor only downloads what
@@ -77,6 +80,9 @@ const App: React.FC = () => {
                 <Route path="/sobre/ed-rodrigues" element={<AuthorPage />} />
                 <Route path="/blog" element={<BlogIndex />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/meta-app" element={<MetaAppIndex />} />
+                <Route path="/meta-app/privacidade" element={<MetaAppPrivacy />} />
+                <Route path="/meta-app/termos" element={<MetaAppTerms />} />
 
                 {/* Lazy */}
                 <Route path="/restaurante" element={<RestaurantLanding />} />
