@@ -347,6 +347,21 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // /links — link-tree page used as bio destination on Instagram and
+    // similar profiles. Pre-rendered so the social-app webview paints
+    // the buttons before JS hydrates.
+    {
+        path: '/links',
+        out: 'links/index.html',
+        meta: {
+            title: 'ER Marketing · Todos os nossos links',
+            description:
+                'Marcar diagnóstico, WhatsApp, blog, YouTube e canais sociais da ER Marketing — agência de marketing de performance em Manaus.',
+            canonical: `${SITE_ORIGIN}/links`,
+            ogType: 'website',
+        },
+    },
+
     // Meta App Review pages — public, no-login, HTTPS legal pages
     // required to submit the ER Ads Manager app for Standard Access
     // review. Kept deliberately schema-free (just title + description +
@@ -582,6 +597,7 @@ const sitemapEntries: Array<{
         priority: 0.8,
         changefreq: 'monthly',
     },
+    { loc: `${SITE_ORIGIN}/links`, lastmod: today, priority: 0.5, changefreq: 'monthly' },
     { loc: `${SITE_ORIGIN}/blog`, lastmod: today, priority: 0.7, changefreq: 'weekly' },
     ...POSTS.map((p) => ({
         loc: `${SITE_ORIGIN}/blog/${p.slug}`,
