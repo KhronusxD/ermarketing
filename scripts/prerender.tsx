@@ -362,6 +362,22 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // /lab-de-performance — waitlist LP for the upcoming course/community
+    // (tráfego pago + IA). Submits to the same Make.com webhook with a
+    // dedicated type discriminator (`waitlist_lab_performance`).
+    {
+        path: '/lab-de-performance',
+        out: 'lab-de-performance/index.html',
+        meta: {
+            title:
+                'Lab de Performance · Aprenda tráfego pago + IA · Lista de espera',
+            description:
+                'Lista de espera pra aprender tráfego pago combinado com IA. O método que a ER Marketing usa pra gerenciar +R$ 5M em mídia, em formato de turma. Entre antes da abertura.',
+            canonical: `${SITE_ORIGIN}/lab-de-performance`,
+            ogType: 'website',
+        },
+    },
+
     // Meta App Review pages — public, no-login, HTTPS legal pages
     // required to submit the ER Ads Manager app for Standard Access
     // review. Kept deliberately schema-free (just title + description +
@@ -598,6 +614,12 @@ const sitemapEntries: Array<{
         changefreq: 'monthly',
     },
     { loc: `${SITE_ORIGIN}/links`, lastmod: today, priority: 0.5, changefreq: 'monthly' },
+    {
+        loc: `${SITE_ORIGIN}/lab-de-performance`,
+        lastmod: today,
+        priority: 0.7,
+        changefreq: 'weekly',
+    },
     { loc: `${SITE_ORIGIN}/blog`, lastmod: today, priority: 0.7, changefreq: 'weekly' },
     ...POSTS.map((p) => ({
         loc: `${SITE_ORIGIN}/blog/${p.slug}`,
