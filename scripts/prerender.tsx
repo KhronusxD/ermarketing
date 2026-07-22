@@ -378,6 +378,22 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // /edrodrigues — captura pra Meta Testers (aulão + grupo WhatsApp).
+    // Submit vai pro Make.com com `type: 'meta_testers_waitlist'` e após
+    // salvar o lead a página redireciona pro grupo do WhatsApp.
+    {
+        path: '/edrodrigues',
+        out: 'edrodrigues/index.html',
+        meta: {
+            title:
+                'Meta Testers · Aulão de novidades Meta + API do Meta no Claude',
+            description:
+                'Aulão gratuito de Ed Rodrigues sobre novidades do Meta Ads em 2026 e como instalar a API oficial do Meta no Claude pra rodar campanhas por conversa. Vagas limitadas — entra no grupo do WhatsApp.',
+            canonical: `${SITE_ORIGIN}/edrodrigues`,
+            ogType: 'website',
+        },
+    },
+
     // Meta App Review pages — public, no-login, HTTPS legal pages
     // required to submit the ER Ads Manager app for Standard Access
     // review. Kept deliberately schema-free (just title + description +
@@ -618,6 +634,12 @@ const sitemapEntries: Array<{
         loc: `${SITE_ORIGIN}/lab-de-performance`,
         lastmod: today,
         priority: 0.7,
+        changefreq: 'weekly',
+    },
+    {
+        loc: `${SITE_ORIGIN}/edrodrigues`,
+        lastmod: today,
+        priority: 0.6,
         changefreq: 'weekly',
     },
     { loc: `${SITE_ORIGIN}/blog`, lastmod: today, priority: 0.7, changefreq: 'weekly' },

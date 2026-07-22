@@ -21,6 +21,7 @@ import MetaAppPrivacy from './components/MetaApp/Privacy';
 import MetaAppTerms from './components/MetaApp/Terms';
 import LinksPage from './components/Links';
 import LabPerformance from './components/LabPerformance';
+import EdRodriguesCapture from './components/EdRodriguesCapture';
 import NotFound from './components/NotFound';
 
 // Lazy routes — code-split so a first-time visitor only downloads what
@@ -87,6 +88,7 @@ const App: React.FC = () => {
                 <Route path="/meta-app/termos" element={<MetaAppTerms />} />
                 <Route path="/links" element={<LinksPage />} />
                 <Route path="/lab-de-performance" element={<LabPerformance />} />
+                <Route path="/edrodrigues" element={<EdRodriguesCapture />} />
 
                 {/* Lazy */}
                 <Route path="/restaurante" element={<RestaurantLanding />} />
