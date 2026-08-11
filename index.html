@@ -26,16 +26,6 @@
        on mobile, painted instantly with the preloaded Playfair below. -->
   <link rel="preload" as="image" type="image/avif" href="/photos-food/p-1.avif" media="(min-width: 769px)" fetchpriority="high" />
 
-  <!-- Domain routing: trafegomanaus.com.br é o domínio da Norte Marketing.
-       O mesmo build serve os dois domínios, então a raiz do trafegomanaus
-       redireciona pra LP da Norte antes de qualquer paint. ermarketing.com.br
-       e todas as demais rotas (em ambos os domínios) ficam intactas. -->
-  <script>
-    if (location.hostname.indexOf('trafegomanaus') !== -1 && location.pathname === '/') {
-      location.replace('/norte');
-    }
-  </script>
-
   <!-- Third-party tags (GTM, Flowdesk pixel, Meta Pixel) are deferred until
        after the page is interactive. They still fire within the user's session
        but don't compete with React hydration / image decode for the initial
