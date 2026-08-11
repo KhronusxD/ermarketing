@@ -378,6 +378,22 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // /norte — LP institucional da Norte Marketing (rebrand). Servida
+    // pelo mesmo build; o domínio trafegomanaus.com.br redireciona a
+    // raiz pra cá via script inline no index.html. Canonical aponta pro
+    // domínio da Norte.
+    {
+        path: '/norte',
+        out: 'norte/index.html',
+        meta: {
+            title: 'Norte · Agência de Marketing em Manaus',
+            description:
+                'A gente aponta a direção, você caminha. Tráfego pago, social media, branding, sites, captação de conteúdo e eventos — agência 360 em Manaus com +R$ 5M em mídia gerida.',
+            canonical: 'https://trafegomanaus.com.br/norte',
+            ogType: 'website',
+        },
+    },
+
     // /edrodrigues — captura pra Meta Testers (aulão + grupo WhatsApp).
     // Submit vai pro Make.com com `type: 'meta_testers_waitlist'` e após
     // salvar o lead a página redireciona pro grupo do WhatsApp.
@@ -640,6 +656,12 @@ const sitemapEntries: Array<{
         loc: `${SITE_ORIGIN}/edrodrigues`,
         lastmod: today,
         priority: 0.6,
+        changefreq: 'weekly',
+    },
+    {
+        loc: 'https://trafegomanaus.com.br/norte',
+        lastmod: today,
+        priority: 0.9,
         changefreq: 'weekly',
     },
     { loc: `${SITE_ORIGIN}/blog`, lastmod: today, priority: 0.7, changefreq: 'weekly' },

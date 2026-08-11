@@ -22,6 +22,7 @@ import MetaAppTerms from './components/MetaApp/Terms';
 import LinksPage from './components/Links';
 import LabPerformance from './components/LabPerformance';
 import EdRodriguesCapture from './components/EdRodriguesCapture';
+import NorteLanding from './components/NorteLanding';
 import NotFound from './components/NotFound';
 
 // Lazy routes — code-split so a first-time visitor only downloads what
@@ -89,6 +90,7 @@ const App: React.FC = () => {
                 <Route path="/links" element={<LinksPage />} />
                 <Route path="/lab-de-performance" element={<LabPerformance />} />
                 <Route path="/edrodrigues" element={<EdRodriguesCapture />} />
+                <Route path="/norte" element={<NorteLanding />} />
 
                 {/* Lazy */}
                 <Route path="/restaurante" element={<RestaurantLanding />} />
