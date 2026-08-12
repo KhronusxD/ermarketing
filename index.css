@@ -123,3 +123,17 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #E60000;
 }
+
+/* Carrosséis horizontais (LP da Norte): esconde a barra de rolagem
+   mantendo o scroll por toque/trackpad. O fade nas laterais é aplicado
+   por mask-image inline no componente (EDGE_FADE em Norte/shared). */
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}

@@ -25,6 +25,7 @@ import Beasties from 'beasties';
 import App from '../App';
 import { POSTS } from '../components/Blog/posts';
 import { AUTHOR } from '../components/Blog/types';
+import { SERVICES as NORTE_SERVICES } from '../components/Norte/services';
 
 const SITE_ORIGIN = 'https://ermarketing.com.br';
 const DEFAULT_OG = `${SITE_ORIGIN}/assets/red-logo.png`;
@@ -394,6 +395,18 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // /norte/<slug> — uma LP por serviço da Norte.
+    ...NORTE_SERVICES.map<RouteSpec>((s) => ({
+        path: `/norte/${s.slug}`,
+        out: `norte/${s.slug}/index.html`,
+        meta: {
+            title: `${s.name} em Manaus · Norte Marketing`,
+            description: s.seoDescription,
+            canonical: `https://trafegomanaus.com.br/norte/${s.slug}`,
+            ogType: 'website',
+        },
+    })),
+
     // /edrodrigues — captura pra Meta Testers (aulão + grupo WhatsApp).
     // Submit vai pro Make.com com `type: 'meta_testers_waitlist'` e após
     // salvar o lead a página redireciona pro grupo do WhatsApp.
@@ -664,6 +677,12 @@ const sitemapEntries: Array<{
         priority: 0.9,
         changefreq: 'weekly',
     },
+    ...NORTE_SERVICES.map((s) => ({
+        loc: `https://trafegomanaus.com.br/norte/${s.slug}`,
+        lastmod: today,
+        priority: 0.8,
+        changefreq: 'monthly' as const,
+    })),
     { loc: `${SITE_ORIGIN}/blog`, lastmod: today, priority: 0.7, changefreq: 'weekly' },
     ...POSTS.map((p) => ({
         loc: `${SITE_ORIGIN}/blog/${p.slug}`,

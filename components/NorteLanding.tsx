@@ -1,166 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
+import {
+    WHATSAPP,
+    Arrow,
+    Check,
+    Eyebrow,
+    EDGE_FADE,
+    NorteNav,
+    NorteFooter,
+    IconSearch,
+    IconRoute,
+    IconRocket,
+    IconChart,
+    IconTarget,
+    IconUsers,
+    IconCompass,
+} from './Norte/shared';
+import { SERVICES } from './Norte/services';
 
 // /norte — LP institucional da Norte Marketing.
 //
-// Direção de arte: bento grid. A página inteira é composta de cards
-// arredondados sobre fundo creme — hero escuro com recorte de foto e
-// card flutuante, blocos de tamanhos mistos, barra de stats escura e
-// CTA full-bleed com foto. Densidade alta, zero ornamento gratuito.
+// Bento grid: a página é uma sequência de cards arredondados sobre
+// fundo creme. Hero escuro, blocos de tamanhos mistos, carrosséis com
+// barra oculta e fade nas laterais.
 //
-// Performance: um componente, nenhuma lib nova, ícones SVG inline
-// (bytes irrisórios), imagens lazy e vídeos que só baixam metadata
-// quando o card chega perto do viewport.
-//
-// Paleta:
-//   creme    #F4F1E9   fundo da página
-//   branco   #FFFFFF   cards
-//   floresta #14261A   cards escuros
-//   carvão   #0B0E0C   texto + footer
-//   limão    #8DC63F   acento
-
-const WHATSAPP =
-    'https://wa.me/5592985146299?text=' +
-    encodeURIComponent('Olá! Vim pelo site da Norte e quero conversar sobre marketing.');
-
-// ─── Ícones (stroke 1.6, 24x24, herdam currentColor) ────────────────
-
-type IconProps = { className?: string };
-
-const IconTarget: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
-        <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="1.6" />
-        <circle cx="12" cy="12" r="1.4" fill="currentColor" />
-    </svg>
-);
-
-const IconChat: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <path
-            d="M20 15a2 2 0 0 1-2 2H8l-4 3V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9Z"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinejoin="round"
-        />
-        <path d="M8.5 10.5h7M8.5 13.5h4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-);
-
-const IconPen: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <path
-            d="M12 3 19 9.5 12 21 5 9.5 12 3Z"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinejoin="round"
-        />
-        <path d="M5 9.5h14M12 3v18" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
-);
-
-const IconMonitor: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M9 21h6M12 17v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-);
-
-const IconCamera: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <path
-            d="M3 8.5A2 2 0 0 1 5 6.5h2l1.2-2h7.6L17 6.5h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9Z"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinejoin="round"
-        />
-        <circle cx="12" cy="13" r="3.4" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
-);
-
-const IconCalendar: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <rect x="3.5" y="5" width="17" height="15" rx="2" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M3.5 10h17M8 3.5v3M16 3.5v3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-);
-
-const IconSearch: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.6" />
-        <path d="m16 16 4.5 4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-);
-
-const IconRoute: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <circle cx="6" cy="18" r="2.5" stroke="currentColor" strokeWidth="1.6" />
-        <circle cx="18" cy="6" r="2.5" stroke="currentColor" strokeWidth="1.6" />
-        <path
-            d="M8.5 18h6a3 3 0 0 0 0-6h-5a3 3 0 0 1 0-6h6"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-        />
-    </svg>
-);
-
-const IconRocket: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <path
-            d="M13 4c3.5 1 6 4 7 7.5-2.6 3.4-6 5.5-9.5 6.5L7 15C8 11.5 9.8 8 13 4Z"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinejoin="round"
-        />
-        <circle cx="14.5" cy="9.5" r="1.6" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M7 15c-1.6.6-2.4 2-2.6 4 2-.2 3.4-1 4-2.6" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-    </svg>
-);
-
-const IconChart: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <path d="M4 19h16" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-        <path d="M7 19v-5M12 19V8M17 19v-8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-);
-
-const IconUsers: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <circle cx="9" cy="8" r="3.2" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M3.5 19a5.5 5.5 0 0 1 11 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-        <path d="M16 5.4a3.2 3.2 0 0 1 0 5.2M17.5 14.4a5.5 5.5 0 0 1 3 4.6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-);
-
-const IconCompass: React.FC<IconProps> = ({ className = 'w-6 h-6' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
-        <path d="m15.5 8.5-2 5-5 2 2-5 5-2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-    </svg>
-);
-
-const Check: React.FC<IconProps> = ({ className = 'w-4 h-4' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-const Arrow: React.FC<IconProps> = ({ className = 'w-4 h-4' }) => (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-        <path d="M5 12h14m0 0-5.5-5.5M19 12l-5.5 5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
-// ─── Dados ──────────────────────────────────────────────────────────
-
-const SERVICES = [
-    { icon: IconTarget, title: 'Tráfego Pago', body: 'Meta, Google e TikTok com régua de CAC e ROAS.' },
-    { icon: IconChat, title: 'Social Media', body: 'Feed e stories com planejamento editorial semanal.' },
-    { icon: IconPen, title: 'Branding', body: 'Do naming ao manual de aplicação da marca.' },
-    { icon: IconMonitor, title: 'Sites e LPs', body: 'Páginas rápidas, rastreáveis e feitas pra converter.' },
-    { icon: IconCamera, title: 'Captação', body: 'Equipe audiovisual presencial no seu negócio.' },
-    { icon: IconCalendar, title: 'Eventos', body: 'Ativações que viram conteúdo e conteúdo que vira venda.' },
-];
+// Ícones, nav, footer e constantes de marca vêm de ./Norte/shared —
+// os mesmos usados pelas LPs de serviço em /norte/<slug>.
 
 const STEPS = [
     { icon: IconSearch, title: 'Diagnóstico', body: 'Entender onde vaza' },
@@ -202,7 +66,6 @@ const LOGOS = [
     { src: '/clientes/logos/infinity-cobrancas.png', alt: 'Infinity Cobranças' },
 ];
 
-// Cards com foto no grid "Nossos cases"
 const CASE_CARDS = [
     { name: 'Taychi Sushi Bar', tag: 'Restaurante', metric: '+280%', label: 'reservas/mês', photo: '/photos-food/t-1.jpg' },
     { name: 'La Pizza Rio', tag: 'Delivery', metric: '+190%', label: 'pedidos diretos', photo: '/photos-food/p-1.jpg' },
@@ -243,10 +106,12 @@ const REELS = [
     { client: 'YUAI', title: 'Sushi no copo', src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/YUAI%20-%20SUSHI%20NO%20COPO.mov', poster: '/video-posters/yuai-sushi-copo-sm.jpg' },
 ];
 
+// Recortes com fundo removido e a luz de gel vermelha convertida em
+// verde da marca (ver /tmp/norte-socios.py no histórico do projeto).
 const PARTNERS = [
-    { name: 'Ed Rodrigues', role: 'Gestor estratégico', photo: '/socios/ed.jpg' },
-    { name: 'Brenno Soares', role: 'Administrador', photo: '/socios/brenno.jpg' },
-    { name: 'Francyelle Barbosa', role: 'Diretora de conteúdo', photo: '/socios/francyelle.jpg' },
+    { name: 'Ed Rodrigues', role: 'Gestor estratégico', photo: '/socios/ed-cut.png' },
+    { name: 'Brenno Soares', role: 'Administrador', photo: '/socios/brenno-cut.png' },
+    { name: 'Francyelle Barbosa', role: 'Diretora de conteúdo', photo: '/socios/francyelle-cut.png' },
 ];
 
 const FAQS = [
@@ -257,15 +122,7 @@ const FAQS = [
     { q: 'Em quanto tempo vejo resultado?', a: 'Os primeiros 30 dias são de calibração (tracking, público, criativo). Dos 60 aos 90 dias a curva acelera. Quem desliga antes disso nunca vê o canal maduro.' },
 ];
 
-const NAV_LINKS = [
-    { label: 'Início', href: '#inicio' },
-    { label: 'Serviços', href: '#servicos' },
-    { label: 'Cases', href: '#cases' },
-    { label: 'Sobre', href: '#sobre' },
-    { label: 'Contato', href: '#contato' },
-];
-
-// ─── Reel card (lazy) ───────────────────────────────────────────────
+// ─── Reel card (vídeo só baixa quando chega perto do viewport) ───────
 
 const ReelCard: React.FC<{ reel: (typeof REELS)[number] }> = ({ reel }) => {
     const wrapRef = useRef<HTMLDivElement | null>(null);
@@ -362,21 +219,6 @@ const ReelCard: React.FC<{ reel: (typeof REELS)[number] }> = ({ reel }) => {
     );
 };
 
-// Rótulo de seção reutilizável (bolinha limão + texto)
-const Eyebrow: React.FC<{ children: React.ReactNode; light?: boolean }> = ({
-    children,
-    light = false,
-}) => (
-    <span
-        className={`inline-flex items-center gap-2 text-[11px] tracking-[0.18em] uppercase font-bold ${
-            light ? 'text-white/70' : 'text-[#3d6b12]'
-        }`}
-    >
-        <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F]" />
-        {children}
-    </span>
-);
-
 // ─── Página ─────────────────────────────────────────────────────────
 
 const NorteLanding: React.FC = () => {
@@ -396,66 +238,24 @@ const NorteLanding: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-[#F4F1E9] text-[#0B0E0C] font-sans antialiased selection:bg-[#8DC63F] selection:text-[#0B0E0C]">
-            {/* ─── Nav ─── */}
-            <header className="fixed top-3 left-0 right-0 z-50 px-3 md:px-5">
-                <div
-                    className={`max-w-[1240px] mx-auto flex items-center justify-between gap-4 rounded-full px-4 md:px-5 py-2.5 transition-all duration-300 ${
-                        scrolled
-                            ? 'bg-white/95 backdrop-blur-md shadow-[0_6px_24px_rgba(11,14,12,0.08)]'
-                            : 'bg-white/70 backdrop-blur-sm'
-                    }`}
-                >
-                    <a href="#inicio" className="flex items-center flex-shrink-0">
-                        <img
-                            src="/norte/logo-preta.png"
-                            alt="Norte · Agência de Marketing"
-                            className="h-12 w-auto -my-2 object-contain"
-                        />
-                    </a>
-
-                    <nav className="hidden md:flex items-center gap-0.5">
-                        {NAV_LINKS.map((l) => (
-                            <a
-                                key={l.href}
-                                href={l.href}
-                                className="px-3.5 py-2 rounded-full text-[13px] font-medium text-black/55 hover:text-black hover:bg-black/[0.04] transition-colors"
-                            >
-                                {l.label}
-                            </a>
-                        ))}
-                    </nav>
-
-                    <a
-                        href={WHATSAPP}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-shrink-0 inline-flex items-center gap-2 rounded-full bg-[#8DC63F] hover:bg-[#7db32f] text-[#0B0E0C] font-bold text-[13px] px-4 md:px-5 py-2.5 transition-colors"
-                    >
-                        <span className="hidden sm:inline">Falar com a Norte</span>
-                        <span className="sm:hidden">WhatsApp</span>
-                        <Arrow className="w-4 h-4" />
-                    </a>
-                </div>
-            </header>
+            <NorteNav scrolled={scrolled} />
 
             <main className="max-w-[1240px] mx-auto px-3 md:px-5 pt-20 md:pt-24 space-y-3 md:space-y-4">
-                {/* ─── HERO (card escuro) ─── */}
+                {/* ─── HERO ─── */}
                 <section
                     id="inicio"
                     className="relative rounded-[28px] overflow-hidden bg-[#14261A] text-white"
                 >
-                    {/* Glow suave atrás da foto — substitui as linhas antigas */}
                     <div
                         aria-hidden="true"
-                        className="pointer-events-none absolute right-[-10%] top-[-20%] w-[70%] h-[140%] rounded-full"
+                        className="pointer-events-none absolute right-[-8%] top-[-25%] w-[60%] h-[150%] rounded-full"
                         style={{
                             background:
-                                'radial-gradient(circle at center, rgba(141,198,63,0.20) 0%, rgba(141,198,63,0.06) 40%, transparent 68%)',
+                                'radial-gradient(circle at center, rgba(141,198,63,0.22) 0%, rgba(141,198,63,0.06) 42%, transparent 70%)',
                         }}
                     />
 
-                    <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 md:p-10 lg:p-12">
-                        {/* Copy */}
+                    <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 p-6 md:p-10 lg:p-12">
                         <div className="lg:col-span-7 flex flex-col justify-center">
                             <span className="inline-flex items-center gap-2 self-start rounded-full bg-white/10 border border-white/15 px-3.5 py-1.5 text-[11px] tracking-[0.16em] uppercase font-bold text-white/85 mb-6">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F]" />
@@ -497,52 +297,67 @@ const NorteLanding: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Foto + card flutuante */}
-                        <div className="lg:col-span-5 relative min-h-[260px] lg:min-h-[380px]">
-                            <img
-                                src="/socios/ed-cutout.png"
-                                alt="Ed Rodrigues, sócio fundador da Norte"
-                                className="absolute inset-0 w-full h-full object-contain object-bottom lg:object-right-bottom"
-                                loading="eager"
-                            />
+                        {/* Coluna direita: cards de resultado empilhados.
+                            A foto saiu do hero — o espaço fica reservado pra
+                            o que a gente definir depois. */}
+                        <div className="lg:col-span-5 flex items-center justify-center lg:justify-end">
+                            <div className="relative w-full max-w-[300px]">
+                                {/* Card de trás, só pra dar profundidade */}
+                                <div
+                                    aria-hidden="true"
+                                    className="absolute -top-4 left-4 right-4 h-24 rounded-2xl bg-white/10 border border-white/10"
+                                />
 
-                            {/* Card de case flutuante */}
-                            <div className="absolute bottom-0 left-0 lg:left-auto lg:right-0 w-[230px] rounded-2xl bg-white/95 backdrop-blur-sm text-[#0B0E0C] p-3 shadow-[0_10px_40px_rgba(0,0,0,0.3)]">
-                                <div className="flex items-center gap-2.5">
-                                    <img
-                                        src="/photos-food/t-1.jpg"
-                                        alt=""
-                                        className="w-11 h-11 rounded-xl object-cover flex-shrink-0"
-                                        loading="lazy"
-                                    />
-                                    <div className="min-w-0">
-                                        <p className="font-bold text-[13px] leading-tight truncate">
-                                            Taychi Sushi Bar
-                                        </p>
-                                        <p className="text-[11px] text-black/45">
-                                            Restaurante · Manaus
-                                        </p>
+                                <div className="relative rounded-2xl bg-white/95 backdrop-blur-sm text-[#0B0E0C] p-4 shadow-[0_16px_50px_rgba(0,0,0,0.35)]">
+                                    <div className="flex items-center gap-3">
+                                        <img
+                                            src="/photos-food/t-1.jpg"
+                                            alt=""
+                                            className="w-12 h-12 rounded-xl object-cover flex-shrink-0"
+                                            loading="eager"
+                                        />
+                                        <div className="min-w-0">
+                                            <p className="font-bold text-sm leading-tight truncate">
+                                                Taychi Sushi Bar
+                                            </p>
+                                            <p className="text-[11px] text-black/45">
+                                                Restaurante · Manaus
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="mt-3 flex items-end justify-between">
-                                    <div>
-                                        <p className="text-xl font-extrabold tracking-tight text-[#3d6b12] leading-none">
-                                            +280%
-                                        </p>
-                                        <p className="text-[10px] uppercase tracking-[0.12em] text-black/40 mt-1">
-                                            reservas/mês
-                                        </p>
+
+                                    <div className="mt-4 flex items-end justify-between">
+                                        <div>
+                                            <p className="text-[26px] font-extrabold tracking-tight text-[#3d6b12] leading-none">
+                                                +280%
+                                            </p>
+                                            <p className="text-[10px] uppercase tracking-[0.12em] text-black/40 mt-1.5">
+                                                reservas/mês
+                                            </p>
+                                        </div>
+                                        <span className="text-[11px] text-black/50">7 meses</span>
                                     </div>
-                                    <span className="text-[11px] text-black/50">7 meses</span>
-                                </div>
-                                <div className="mt-2 h-1.5 rounded-full bg-black/8 overflow-hidden">
-                                    <div className="h-full w-[86%] rounded-full bg-[#8DC63F]" />
+
+                                    <div className="mt-3 h-1.5 rounded-full bg-black/8 overflow-hidden">
+                                        <div className="h-full w-[86%] rounded-full bg-[#8DC63F]" />
+                                    </div>
+
+                                    <div className="mt-4 pt-3 border-t border-black/8 flex items-center justify-between">
+                                        <span className="text-[11px] text-black/45">
+                                            De R$ 70k pra R$ 200k/mês
+                                        </span>
+                                        <a
+                                            href="#cases"
+                                            className="text-[11px] font-bold text-[#3d6b12] inline-flex items-center gap-1 hover:gap-1.5 transition-all"
+                                        >
+                                            Ver cases <Arrow className="w-3 h-3" />
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Stats do hero */}
                     <div className="relative border-t border-white/10 grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
                         {[
                             { icon: IconChart, v: '+R$ 5M', l: 'em mídia gerida' },
@@ -556,9 +371,7 @@ const NorteLanding: React.FC = () => {
                             >
                                 <Icon className="w-5 h-5 text-[#8DC63F] flex-shrink-0" />
                                 <div className="min-w-0">
-                                    <p className="font-extrabold tracking-tight text-lg leading-none">
-                                        {v}
-                                    </p>
+                                    <p className="font-extrabold tracking-tight text-lg leading-none">{v}</p>
                                     <p className="text-[11px] text-white/50 mt-0.5 truncate">{l}</p>
                                 </div>
                             </div>
@@ -566,7 +379,7 @@ const NorteLanding: React.FC = () => {
                     </div>
                 </section>
 
-                {/* ─── Serviços (wide) + Método (tall dark) ─── */}
+                {/* ─── Serviços + Método ─── */}
                 <section id="servicos" className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-4">
                     <div className="lg:col-span-8 rounded-[28px] bg-white p-6 md:p-8">
                         <div className="flex items-end justify-between gap-4 mb-6">
@@ -576,28 +389,26 @@ const NorteLanding: React.FC = () => {
                                     Seis frentes. Uma operação só.
                                 </h2>
                             </div>
-                            <a
-                                href={WHATSAPP}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hidden sm:inline-flex items-center gap-1.5 text-[13px] font-bold text-[#3d6b12] hover:gap-2.5 transition-all whitespace-nowrap"
-                            >
-                                Falar com a gente <Arrow className="w-4 h-4" />
-                            </a>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5">
-                            {SERVICES.map(({ icon: Icon, title, body }) => (
-                                <div
-                                    key={title}
-                                    className="rounded-2xl bg-[#F4F1E9] hover:bg-[#8DC63F]/12 p-4 transition-colors group"
+                            {SERVICES.map(({ slug, icon: Icon, name, teaser }) => (
+                                <a
+                                    key={slug}
+                                    href={`/norte/${slug}`}
+                                    className="rounded-2xl bg-[#F4F1E9] hover:bg-[#8DC63F]/15 p-4 transition-colors group flex flex-col"
                                 >
                                     <span className="inline-flex w-9 h-9 rounded-xl bg-white text-[#3d6b12] items-center justify-center mb-3 group-hover:bg-[#8DC63F] group-hover:text-[#0B0E0C] transition-colors">
                                         <Icon className="w-5 h-5" />
                                     </span>
-                                    <h3 className="font-bold text-[15px] mb-1">{title}</h3>
-                                    <p className="text-[13px] text-black/50 leading-snug">{body}</p>
-                                </div>
+                                    <h3 className="font-bold text-[15px] mb-1">{name}</h3>
+                                    <p className="text-[13px] text-black/50 leading-snug mb-3">
+                                        {teaser}
+                                    </p>
+                                    <span className="mt-auto text-[12px] font-bold text-[#3d6b12] inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                                        Ver detalhes <Arrow className="w-3.5 h-3.5" />
+                                    </span>
+                                </a>
                             ))}
                         </div>
                     </div>
@@ -645,24 +456,19 @@ const NorteLanding: React.FC = () => {
                     </div>
                 </section>
 
-                {/* ─── Cases com foto + Reels ─── */}
+                {/* ─── Cases + Reels ─── */}
                 <section id="cases" className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-4">
                     <div className="lg:col-span-7 rounded-[28px] bg-white p-6 md:p-8">
-                        <div className="flex items-end justify-between gap-4 mb-6">
-                            <div>
-                                <Eyebrow>Resultado real</Eyebrow>
-                                <h2 className="mt-2.5 text-2xl md:text-[32px] font-extrabold tracking-[-0.02em] leading-tight">
-                                    Quem seguiu o Norte, chegou lá.
-                                </h2>
-                            </div>
+                        <div className="mb-6">
+                            <Eyebrow>Resultado real</Eyebrow>
+                            <h2 className="mt-2.5 text-2xl md:text-[32px] font-extrabold tracking-[-0.02em] leading-tight">
+                                Quem seguiu o Norte, chegou lá.
+                            </h2>
                         </div>
 
                         <div className="grid grid-cols-2 gap-2.5">
                             {CASE_CARDS.map((c) => (
-                                <div
-                                    key={c.name}
-                                    className="relative rounded-2xl overflow-hidden aspect-[4/3] group"
-                                >
+                                <div key={c.name} className="relative rounded-2xl overflow-hidden aspect-[4/3] group">
                                     <img
                                         src={c.photo}
                                         alt={c.name}
@@ -699,8 +505,8 @@ const NorteLanding: React.FC = () => {
                         </p>
 
                         <div
-                            className="-mx-6 md:-mx-8 px-6 md:px-8 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-1"
-                            style={{ scrollbarWidth: 'thin' }}
+                            className="no-scrollbar -mx-6 md:-mx-8 px-6 md:px-8 overflow-x-auto snap-x snap-mandatory scroll-smooth"
+                            style={EDGE_FADE}
                         >
                             <div className="flex gap-2.5">
                                 {REELS.map((r) => (
@@ -742,8 +548,8 @@ const NorteLanding: React.FC = () => {
 
                     <div
                         ref={resultsRef}
-                        className="-mx-6 md:-mx-8 px-6 md:px-8 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-1"
-                        style={{ scrollbarWidth: 'thin' }}
+                        className="no-scrollbar -mx-6 md:-mx-8 px-6 md:px-8 overflow-x-auto snap-x snap-mandatory scroll-smooth"
+                        style={EDGE_FADE}
                     >
                         <div className="flex gap-2.5">
                             {RESULTS.map((r) => (
@@ -752,9 +558,7 @@ const NorteLanding: React.FC = () => {
                                     className="snap-start flex-shrink-0 w-[250px] rounded-2xl bg-[#F4F1E9] hover:bg-[#8DC63F]/12 p-5 flex flex-col justify-between min-h-[180px] transition-colors"
                                 >
                                     <div className="flex items-start justify-between gap-2">
-                                        <span className="font-bold text-[13px] leading-tight">
-                                            {r.client}
-                                        </span>
+                                        <span className="font-bold text-[13px] leading-tight">{r.client}</span>
                                         <span className="text-[9px] tracking-[0.1em] uppercase text-black/40 bg-white rounded-full px-2 py-0.5 whitespace-nowrap flex-shrink-0">
                                             {r.category}
                                         </span>
@@ -776,14 +580,7 @@ const NorteLanding: React.FC = () => {
                     <p className="text-center text-[11px] tracking-[0.2em] uppercase text-black/35 font-bold mb-7">
                         Marcas que seguiram o Norte
                     </p>
-                    <div
-                        style={{
-                            maskImage:
-                                'linear-gradient(to right, transparent 0, black 7%, black 93%, transparent 100%)',
-                            WebkitMaskImage:
-                                'linear-gradient(to right, transparent 0, black 7%, black 93%, transparent 100%)',
-                        }}
-                    >
+                    <div style={EDGE_FADE}>
                         <div className="flex gap-12 md:gap-16 animate-marquee motion-reduce:animate-none w-max">
                             {[...LOGOS, ...LOGOS].map((logo, i) => (
                                 <div
@@ -802,7 +599,7 @@ const NorteLanding: React.FC = () => {
                     </div>
                 </section>
 
-                {/* ─── Sobre (dark) + Sócios ─── */}
+                {/* ─── Sobre + Sócios ─── */}
                 <section id="sobre" className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-4">
                     <div className="lg:col-span-5 rounded-[28px] bg-[#14261A] text-white p-6 md:p-8 relative overflow-hidden flex flex-col justify-between">
                         <div
@@ -842,12 +639,28 @@ const NorteLanding: React.FC = () => {
                         <div className="grid grid-cols-3 gap-2.5">
                             {PARTNERS.map((p) => (
                                 <div key={p.name}>
-                                    <div className="rounded-2xl overflow-hidden aspect-[3/4] mb-2.5 bg-black/5">
+                                    {/* Recorte sobre gradiente verde — a luz de
+                                        recorte da foto casa com o fundo do card. */}
+                                    <div
+                                        className="relative rounded-2xl overflow-hidden aspect-[3/4] mb-2.5"
+                                        style={{
+                                            background:
+                                                'linear-gradient(165deg, #1d3423 0%, #14261A 55%, #0B0E0C 100%)',
+                                        }}
+                                    >
+                                        <div
+                                            aria-hidden="true"
+                                            className="absolute inset-0"
+                                            style={{
+                                                background:
+                                                    'radial-gradient(circle at 72% 26%, rgba(141,198,63,0.30) 0%, transparent 58%)',
+                                            }}
+                                        />
                                         <img
                                             src={p.photo}
                                             alt={p.name}
                                             loading="lazy"
-                                            className="w-full h-full object-cover"
+                                            className="absolute inset-0 w-full h-full object-contain object-bottom"
                                         />
                                     </div>
                                     <p className="font-bold text-[13px] leading-tight">{p.name}</p>
@@ -876,9 +689,7 @@ const NorteLanding: React.FC = () => {
                                             onClick={() => setOpenFaq(open ? null : i)}
                                             className="w-full flex items-center justify-between gap-5 text-left py-4 group"
                                         >
-                                            <span className="font-bold text-[15px] leading-snug">
-                                                {f.q}
-                                            </span>
+                                            <span className="font-bold text-[15px] leading-snug">{f.q}</span>
                                             <span
                                                 className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm transition-all ${
                                                     open
@@ -940,7 +751,10 @@ const NorteLanding: React.FC = () => {
                                     ['E-mail', 'contato@trafegomanaus.com.br'],
                                     ['Onde', 'Manaus · Amazonas · Brasil'],
                                 ].map(([k, v]) => (
-                                    <div key={k} className="flex gap-4 border-b border-[#0B0E0C]/12 pb-2.5 last:border-0">
+                                    <div
+                                        key={k}
+                                        className="flex gap-4 border-b border-[#0B0E0C]/12 pb-2.5 last:border-0"
+                                    >
                                         <span className="w-20 flex-shrink-0 text-[10px] tracking-[0.16em] uppercase font-bold text-[#0B0E0C]/50 pt-0.5">
                                             {k}
                                         </span>
@@ -953,75 +767,7 @@ const NorteLanding: React.FC = () => {
                 </section>
             </main>
 
-            {/* ─── Footer ─── */}
-            <footer className="mt-3 md:mt-4">
-                <div className="max-w-[1240px] mx-auto px-3 md:px-5 pb-3 md:pb-5">
-                    <div className="rounded-[28px] bg-[#0B0E0C] text-white/70 p-7 md:p-10">
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
-                            <div className="md:col-span-5">
-                                <img
-                                    src="/norte/logo-branca.png"
-                                    alt="Norte · Agência de Marketing"
-                                    className="h-14 w-auto object-contain mb-4"
-                                />
-                                <p className="text-[13px] text-white/50 leading-relaxed max-w-xs">
-                                    Marketing com estratégia, criatividade e
-                                    performance. A gente aponta a direção, você caminha.
-                                </p>
-                            </div>
-
-                            <div className="md:col-span-3">
-                                <p className="text-[11px] tracking-[0.18em] uppercase font-bold text-[#8DC63F] mb-4">
-                                    Navegue
-                                </p>
-                                <ul className="space-y-2.5 text-[13px]">
-                                    {NAV_LINKS.map((l) => (
-                                        <li key={l.href}>
-                                            <a href={l.href} className="hover:text-white transition-colors">
-                                                {l.label}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <div className="md:col-span-4">
-                                <p className="text-[11px] tracking-[0.18em] uppercase font-bold text-[#8DC63F] mb-4">
-                                    Contato
-                                </p>
-                                <ul className="space-y-2.5 text-[13px]">
-                                    <li>
-                                        <a
-                                            href={WHATSAPP}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="hover:text-white transition-colors"
-                                        >
-                                            (92) 98514-6299
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a
-                                            href="mailto:contato@trafegomanaus.com.br"
-                                            className="hover:text-white transition-colors"
-                                        >
-                                            contato@trafegomanaus.com.br
-                                        </a>
-                                    </li>
-                                    <li className="text-white/50">Manaus · Amazonas · Brasil</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-white/35">
-                            <span>
-                                © {new Date().getFullYear()} Norte · Agência de Marketing
-                            </span>
-                            <span>CNPJ 41.079.306/0001-62</span>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            <NorteFooter />
         </div>
     );
 };
