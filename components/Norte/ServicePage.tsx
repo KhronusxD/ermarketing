@@ -10,9 +10,13 @@ import {
 } from './shared';
 import { SERVICES, findService } from './services';
 
-// /norte/<slug> — LP de serviço. Mais enxuta que a institucional:
-// mesma paleta e mesmos cards arredondados, porém com uma coluna só,
-// menos blocos e foco em explicar a entrega e levar ao WhatsApp.
+// /norte/<slug> — LP de serviço. Segue o mesmo desenho em faixas da
+// institucional: seções full-bleed alternando verde-floresta, creme e
+// branco, com cards arredondados só no nível dos itens. Mais enxuta
+// que a home: uma coluna, poucos blocos, tudo levando ao WhatsApp.
+
+const SECTION = 'py-14 md:py-20';
+const CONTAINER = 'max-w-[1240px] mx-auto px-5 md:px-8';
 
 const ServicePage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
@@ -34,19 +38,19 @@ const ServicePage: React.FC = () => {
         <div className="min-h-screen bg-[#F4F1E9] text-[#0B0E0C] font-sans antialiased selection:bg-[#8DC63F] selection:text-[#0B0E0C]">
             <NorteNav scrolled={scrolled} />
 
-            <main className="max-w-[1240px] mx-auto px-3 md:px-5 pt-20 md:pt-24 space-y-3 md:space-y-4">
-                {/* ─── Hero ─── */}
-                <section className="rounded-[28px] bg-[#14261A] text-white p-6 md:p-12 relative overflow-hidden">
-                    <div
-                        aria-hidden="true"
-                        className="pointer-events-none absolute -top-24 -right-16 w-96 h-96 rounded-full"
-                        style={{
-                            background:
-                                'radial-gradient(circle, rgba(141,198,63,0.22) 0%, transparent 65%)',
-                        }}
-                    />
+            {/* ═══ Hero — faixa verde-floresta ═══ */}
+            <section className="relative bg-[#14261A] text-white overflow-hidden pt-28 md:pt-36 pb-14 md:pb-20">
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -top-24 right-[-8%] w-[520px] h-[520px] rounded-full"
+                    style={{
+                        background:
+                            'radial-gradient(circle, rgba(141,198,63,0.20) 0%, transparent 65%)',
+                    }}
+                />
 
-                    <div className="relative max-w-3xl">
+                <div className={`relative ${CONTAINER}`}>
+                    <div className="max-w-3xl">
                         <a
                             href="/norte#servicos"
                             className="inline-flex items-center gap-1.5 text-[12px] text-white/50 hover:text-white transition-colors mb-7"
@@ -82,60 +86,69 @@ const ServicePage: React.FC = () => {
                             <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                         </a>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                {/* ─── Inclui + Pra quem é ─── */}
-                <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-4">
-                    <div className="lg:col-span-7 rounded-[28px] bg-white p-6 md:p-8">
-                        <Eyebrow>O que está incluído</Eyebrow>
-                        <h2 className="mt-2.5 text-2xl md:text-[30px] font-extrabold tracking-[-0.02em] leading-tight mb-6">
-                            A entrega, item por item.
-                        </h2>
-                        <ul className="space-y-3">
-                            {service.includes.map((item) => (
-                                <li key={item} className="flex items-start gap-3">
-                                    <span className="mt-0.5 w-5 h-5 rounded-md bg-[#8DC63F] text-[#0B0E0C] flex items-center justify-center flex-shrink-0">
-                                        <Check className="w-3.5 h-3.5" />
-                                    </span>
-                                    <span className="text-[14px] md:text-[15px] text-black/70 leading-snug">
-                                        {item}
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
+            {/* ═══ Inclui + Pra quem é — faixa branca ═══ */}
+            <section className={`bg-white ${SECTION}`}>
+                <div className={CONTAINER}>
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+                        <div className="lg:col-span-7">
+                            <Eyebrow>O que está incluído</Eyebrow>
+                            <h2 className="mt-2.5 text-2xl md:text-[32px] font-extrabold tracking-[-0.02em] leading-tight mb-6">
+                                A entrega, item por item.
+                            </h2>
+                            <ul className="space-y-3">
+                                {service.includes.map((item) => (
+                                    <li key={item} className="flex items-start gap-3">
+                                        <span className="mt-0.5 w-5 h-5 rounded-md bg-[#8DC63F] text-[#0B0E0C] flex items-center justify-center flex-shrink-0">
+                                            <Check className="w-3.5 h-3.5" />
+                                        </span>
+                                        <span className="text-[14px] md:text-[15px] text-black/70 leading-snug">
+                                            {item}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div className="lg:col-span-5">
+                            <Eyebrow>Pra quem é</Eyebrow>
+                            <h2 className="mt-2.5 text-2xl md:text-[32px] font-extrabold tracking-[-0.02em] leading-tight mb-6">
+                                Faz sentido se…
+                            </h2>
+                            <ul className="space-y-2.5">
+                                {service.forWho.map((w, i) => (
+                                    <li
+                                        key={w}
+                                        className="rounded-2xl bg-[#F4F1E9] p-4 text-[14px] text-black/70 leading-snug"
+                                    >
+                                        <span className="block text-[11px] font-extrabold text-[#3d6b12] mb-1">
+                                            {String(i + 1).padStart(2, '0')}
+                                        </span>
+                                        {w}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
+                </div>
+            </section>
 
-                    <div className="lg:col-span-5 rounded-[28px] bg-white p-6 md:p-8 flex flex-col">
-                        <Eyebrow>Pra quem é</Eyebrow>
-                        <h2 className="mt-2.5 text-2xl md:text-[30px] font-extrabold tracking-[-0.02em] leading-tight mb-6">
-                            Faz sentido se…
-                        </h2>
-                        <ul className="space-y-2.5">
-                            {service.forWho.map((w, i) => (
-                                <li
-                                    key={w}
-                                    className="rounded-2xl bg-[#F4F1E9] p-4 text-[14px] text-black/70 leading-snug"
-                                >
-                                    <span className="block text-[11px] font-extrabold text-[#3d6b12] mb-1">
-                                        {String(i + 1).padStart(2, '0')}
-                                    </span>
-                                    {w}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </section>
-
-                {/* ─── Como funciona ─── */}
-                <section className="rounded-[28px] bg-white p-6 md:p-8">
+            {/* ═══ Como funciona — faixa creme ═══ */}
+            <section className={`bg-[#F4F1E9] ${SECTION}`}>
+                <div className={CONTAINER}>
                     <Eyebrow>Como funciona</Eyebrow>
-                    <h2 className="mt-2.5 text-2xl md:text-[30px] font-extrabold tracking-[-0.02em] leading-tight mb-7">
+                    <h2 className="mt-2.5 text-2xl md:text-[32px] font-extrabold tracking-[-0.02em] leading-tight mb-8">
                         Três etapas, sem mistério.
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {service.steps.map((s, i) => (
-                            <div key={s.title} className="rounded-2xl bg-[#F4F1E9] p-5">
-                                <span className="inline-flex w-8 h-8 rounded-full bg-white text-[#3d6b12] font-extrabold text-[13px] items-center justify-center mb-4">
+                            <div
+                                key={s.title}
+                                className="rounded-2xl bg-white border border-black/5 p-6"
+                            >
+                                <span className="inline-flex w-8 h-8 rounded-full bg-[#F4F1E9] text-[#3d6b12] font-extrabold text-[13px] items-center justify-center mb-4">
                                     {i + 1}
                                 </span>
                                 <h3 className="font-bold text-[15px] mb-1.5">{s.title}</h3>
@@ -143,68 +156,92 @@ const ServicePage: React.FC = () => {
                             </div>
                         ))}
                     </div>
-                </section>
+                </div>
+            </section>
 
-                {/* ─── Prova + CTA ─── */}
-                <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-4">
-                    <div className="lg:col-span-6 rounded-[28px] bg-white p-6 md:p-8 flex flex-col justify-between">
-                        <div>
-                            <Eyebrow>Prova</Eyebrow>
-                            <p className="mt-4 text-[13px] font-bold text-black/50 uppercase tracking-[0.12em]">
+            {/* ═══ Prova — faixa verde-floresta ═══ */}
+            <section className={`relative bg-[#14261A] text-white overflow-hidden ${SECTION}`}>
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -bottom-24 -left-16 w-[420px] h-[420px] rounded-full"
+                    style={{
+                        background:
+                            'radial-gradient(circle, rgba(141,198,63,0.16) 0%, transparent 65%)',
+                    }}
+                />
+                <div className={`relative ${CONTAINER}`}>
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+                        <div className="lg:col-span-5">
+                            <Eyebrow light>Prova</Eyebrow>
+                            <p className="mt-5 text-[13px] font-bold text-white/45 uppercase tracking-[0.14em]">
                                 {service.proof.client}
                             </p>
-                            <p className="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight text-[#3d6b12] leading-none">
+                            <p className="mt-2 text-5xl md:text-6xl font-extrabold tracking-tight text-[#8DC63F] leading-none">
                                 {service.proof.metric}
                             </p>
-                            <p className="mt-1.5 text-[13px] uppercase tracking-[0.14em] text-black/40">
+                            <p className="mt-2 text-[13px] uppercase tracking-[0.14em] text-white/40">
                                 {service.proof.label}
                             </p>
                         </div>
-                        <p className="mt-6 text-[14px] text-black/55 leading-relaxed">
-                            {service.proof.body}
-                        </p>
+                        <div className="lg:col-span-7">
+                            <p className="text-[16px] md:text-[19px] text-white/70 leading-relaxed">
+                                {service.proof.body}
+                            </p>
+                        </div>
                     </div>
+                </div>
+            </section>
 
-                    <div className="lg:col-span-6 rounded-[28px] bg-[#8DC63F] text-[#0B0E0C] p-6 md:p-8 flex flex-col justify-between">
-                        <div>
+            {/* ═══ CTA — faixa verde-limão ═══ */}
+            <section className={`bg-[#8DC63F] text-[#0B0E0C] ${SECTION}`}>
+                <div className={CONTAINER}>
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div className="lg:col-span-8">
                             <span className="inline-flex items-center gap-2 text-[11px] tracking-[0.18em] uppercase font-bold text-[#0B0E0C]/60">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#0B0E0C]" />
                                 Próximo passo
                             </span>
-                            <h2 className="mt-3 text-[28px] md:text-[36px] font-extrabold tracking-[-0.03em] leading-[1.05] mb-4">
+                            <h2
+                                className="mt-3 font-extrabold tracking-[-0.03em] leading-[1.05] mb-4"
+                                style={{ fontSize: 'clamp(30px, 4.4vw, 56px)' }}
+                            >
                                 Vamos falar sobre o seu caso?
                             </h2>
-                            <p className="text-[14px] text-[#0B0E0C]/70 leading-relaxed mb-7">
+                            <p className="text-[15px] md:text-[17px] text-[#0B0E0C]/70 leading-relaxed max-w-lg">
                                 Chama no WhatsApp e a gente entende o momento do seu
                                 negócio antes de propor qualquer coisa.
                             </p>
                         </div>
-                        <a
-                            href={WHATSAPP}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group w-full inline-flex items-center justify-between gap-3 rounded-full bg-[#0B0E0C] hover:bg-[#14261A] text-white font-bold text-sm px-6 py-4 transition-colors"
-                        >
-                            Chamar no WhatsApp
-                            <Arrow className="w-4 h-4 text-[#8DC63F] transition-transform group-hover:translate-x-0.5" />
-                        </a>
+                        <div className="lg:col-span-4 lg:justify-self-end">
+                            <a
+                                href={WHATSAPP}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group inline-flex items-center gap-3 rounded-full bg-[#0B0E0C] hover:bg-[#14261A] text-white font-bold text-sm md:text-base px-8 py-4 transition-colors"
+                            >
+                                Chamar no WhatsApp
+                                <Arrow className="w-4 h-4 text-[#8DC63F] transition-transform group-hover:translate-x-0.5" />
+                            </a>
+                        </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                {/* ─── Outros serviços ─── */}
-                <section className="rounded-[28px] bg-white p-6 md:p-8">
+            {/* ═══ Outros serviços — faixa creme ═══ */}
+            <section className={`bg-[#F4F1E9] ${SECTION}`}>
+                <div className={CONTAINER}>
                     <Eyebrow>Outros serviços</Eyebrow>
-                    <h2 className="mt-2.5 text-2xl md:text-[30px] font-extrabold tracking-[-0.02em] leading-tight mb-6">
+                    <h2 className="mt-2.5 text-2xl md:text-[32px] font-extrabold tracking-[-0.02em] leading-tight mb-7">
                         A operação completa.
                     </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                         {others.map(({ slug: s, name, teaser, icon: OtherIcon }) => (
                             <a
                                 key={s}
                                 href={`/norte/${s}`}
-                                className="rounded-2xl bg-[#F4F1E9] hover:bg-[#8DC63F]/15 p-4 transition-colors group"
+                                className="rounded-2xl bg-white border border-black/5 hover:border-[#8DC63F] p-5 transition-colors group"
                             >
-                                <span className="inline-flex w-9 h-9 rounded-xl bg-white text-[#3d6b12] items-center justify-center mb-3 group-hover:bg-[#8DC63F] group-hover:text-[#0B0E0C] transition-colors">
+                                <span className="inline-flex w-9 h-9 rounded-xl bg-[#F4F1E9] text-[#3d6b12] items-center justify-center mb-3 group-hover:bg-[#8DC63F] group-hover:text-[#0B0E0C] transition-colors">
                                     <OtherIcon className="w-5 h-5" />
                                 </span>
                                 <h3 className="font-bold text-[14px] mb-1 leading-tight">{name}</h3>
@@ -212,8 +249,8 @@ const ServicePage: React.FC = () => {
                             </a>
                         ))}
                     </div>
-                </section>
-            </main>
+                </div>
+            </section>
 
             <NorteFooter />
         </div>

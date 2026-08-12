@@ -162,18 +162,20 @@ export const NAV_LINKS = [
     { label: 'Contato', href: '/norte#contato' },
 ];
 
+// A nav nasce sobre a faixa verde-escura da hero, então antes do scroll
+// ela é transparente com a logo branca; depois vira a pílula branca.
 export const NorteNav: React.FC<{ scrolled: boolean }> = ({ scrolled }) => (
     <header className="fixed top-3 left-0 right-0 z-50 px-3 md:px-5">
         <div
             className={`max-w-[1240px] mx-auto flex items-center justify-between gap-4 rounded-full px-4 md:px-5 py-2.5 transition-all duration-300 ${
                 scrolled
                     ? 'bg-white/95 backdrop-blur-md shadow-[0_6px_24px_rgba(11,14,12,0.08)]'
-                    : 'bg-white/70 backdrop-blur-sm'
+                    : 'bg-transparent'
             }`}
         >
             <a href="/norte" className="flex items-center flex-shrink-0">
                 <img
-                    src="/norte/logo-preta.png"
+                    src={scrolled ? '/norte/logo-preta.png' : '/norte/logo-branca.png'}
                     alt="Norte · Agência de Marketing"
                     className="h-12 w-auto -my-2 object-contain"
                 />
@@ -184,7 +186,11 @@ export const NorteNav: React.FC<{ scrolled: boolean }> = ({ scrolled }) => (
                     <a
                         key={l.href}
                         href={l.href}
-                        className="px-3.5 py-2 rounded-full text-[13px] font-medium text-black/55 hover:text-black hover:bg-black/[0.04] transition-colors"
+                        className={`px-3.5 py-2 rounded-full text-[13px] font-medium transition-colors ${
+                            scrolled
+                                ? 'text-black/55 hover:text-black hover:bg-black/[0.04]'
+                                : 'text-white/70 hover:text-white hover:bg-white/10'
+                        }`}
                     >
                         {l.label}
                     </a>
@@ -206,9 +212,9 @@ export const NorteNav: React.FC<{ scrolled: boolean }> = ({ scrolled }) => (
 );
 
 export const NorteFooter: React.FC = () => (
-    <footer className="mt-3 md:mt-4">
-        <div className="max-w-[1240px] mx-auto px-3 md:px-5 pb-3 md:pb-5">
-            <div className="rounded-[28px] bg-[#0B0E0C] text-white/70 p-7 md:p-10">
+    <footer className="bg-[#0B0E0C] text-white/70">
+        <div className="max-w-[1240px] mx-auto px-5 md:px-8 py-12 md:py-16">
+            <div>
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
                     <div className="md:col-span-5">
                         <img
