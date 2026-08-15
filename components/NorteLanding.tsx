@@ -85,26 +85,44 @@ const FAN: FanCard[] = [
     { kind: 'chart', skin: 'white', tag: 'Restaurante', client: 'Taychi Sushi', metric: '200k', label: 'faturamento/mês', bars: [26, 33, 41, 49, 63, 78, 100] },
     { kind: 'metric', skin: 'glass', tag: 'E-commerce', client: 'Oli e Sofi', metric: '+300%', label: 'no faturamento' },
     { kind: 'dash', skin: 'white', tag: 'Saúde', client: 'Odonto Solutions', metric: 'R$ 1,57', label: 'custo por lead' },
+    { kind: 'metric', skin: 'glass', tag: 'E-commerce', client: 'Dermo Ervas', metric: '+200%', label: 'de faturamento' },
     { kind: 'accent', skin: 'lime', tag: 'Infoproduto', client: 'A Escola de Sites', metric: '+20 mil', label: 'leads gerados' },
     { kind: 'metric', skin: 'glass', tag: 'Construção', client: 'Tecno Obras', metric: '+500 mil', label: 'views/mês' },
     { kind: 'pills', skin: 'white', tag: 'Varejo', client: 'Amazon One', metric: 'R$ 1M', label: 'em 6 meses', pills: ['Meta Ads', 'Google', 'Remarketing', 'CRM'] },
-    { kind: 'metric', skin: 'glass', tag: 'E-commerce', client: 'Dermo Ervas', metric: '+200%', label: 'de faturamento' },
+    { kind: 'metric', skin: 'glass', tag: 'Saúde', client: 'Bem Fisio', metric: '+450', label: 'leads/mês' },
     { kind: 'statement', skin: 'dark', tag: 'Nosso método', line: 'Cada real medido em CAC e ROAS.' },
     { kind: 'metric', skin: 'glass', tag: 'Infoproduto', client: 'Propriedades Compart.', metric: '+10 mil', label: 'leads captados' },
     { kind: 'chart', skin: 'white', tag: 'Franquia', client: 'Abacazo', metric: '+3 lojas', label: 'abertas no período', bars: [30, 38, 35, 52, 61, 74, 100] },
+    { kind: 'metric', skin: 'glass', tag: 'Mentoria', client: 'Full Sales System', metric: '+560', label: 'leads/mês' },
+    { kind: 'dash', skin: 'white', tag: 'Construção', client: 'Conceito Obras', metric: '+150', label: 'leads/mês' },
+    { kind: 'metric', skin: 'glass', tag: 'Varejo', client: 'Pandora Eletrônicos', metric: '+500', label: 'leads/mês' },
+    { kind: 'accent', skin: 'lime', tag: 'Serviços', client: 'iTV Manaus', metric: 'R$ 15k', label: 'de faturamento' },
+    { kind: 'metric', skin: 'glass', tag: 'E-commerce', client: 'Reifel Confecções', metric: 'R$ 30k', label: 'por mês, em 3 meses' },
 ];
 
 // Geometria do anel. Passo = 360° / nº de cartas, então elas se distribuem
 // pela volta inteira e vão se alternando na frente conforme gira.
 //
-// Cinco cartas legíveis por vez. Elas ocupam o arco de -72° a +72°, ou
-// seja uma largura de 1,9·R mais a carta. Pra caber nos 1240 do container
-// sem estourar: 1,9·R + 196 ≤ 1240, logo R ≈ 530. Carta mais estreita
-// abre espaço pras das pontas sem que o miolo fique ralo.
-const RING_R = 530;
+// Quantas cartas aparecem de uma vez é o passo angular que decide, não o
+// raio: só a metade da frente do anel é visível, então cabem 180°/passo.
+// Com 10 cartas o passo era 36° e davam cinco. Com 16 ele cai pra 22,5° e
+// entram oito na cena, que é a densidade da referência.
+//
+// O raio segue a corda entre vizinhas, 2·R·sen(11,25°) ≈ 0,39·R: com 680
+// dá 265px pra uma carta de 196, junto sem amassar.
+//
+// A largura que o conjunto ocupa na tela não é a largura geométrica: a
+// perspectiva puxa as cartas do fundo pra dentro. Com raio 530 e
+// perspectiva 1250 as oito ocupavam 1236px no papel e só 824px na tela,
+// encolhidas no meio com margem sobrando dos dois lados. Raio maior e
+// perspectiva mais distante afrouxam essa compressão.
+const RING_R = 680;
 const CARD_W = 196;
 const RING_STEP = 360 / FAN.length;
-const RING_DUR = 64;
+
+// Mais cartas na volta pedem volta mais longa: a 84s cada uma passa pela
+// frente a cada 5,3s, tempo de ler antes de ela girar.
+const RING_DUR = 84;
 
 // Atraso negativo por carta: sincroniza o fade de cada uma com o momento
 // exato em que ela cruza os 90° do anel.
@@ -112,7 +130,7 @@ const cardDelay = (i: number) => -(RING_DUR * (1 - i / FAN.length));
 
 // Desníveis pequenos e irregulares: alinhamento perfeito lê como planilha,
 // e zigue-zague regular vira serrote quando o anel roda.
-const RING_LIFT = [0, 13, -7, 6, -12, 4, 15, -5, 9, -9];
+const RING_LIFT = [0, 12, -8, 5, -13, 7, 14, -6, 9, -10, 3, 15, -4, 11, -7, 6];
 
 const CARD_SKIN: Record<
     FanSkin,
@@ -893,7 +911,7 @@ const NorteLanding: React.FC = () => {
                         O palco abre a perspectiva e o anel gira num keyframe. */}
                     <div
                         className="fan-stage mt-14 md:mt-16 no-scrollbar overflow-x-auto md:overflow-visible"
-                        style={{ perspective: '1500px', perspectiveOrigin: '50% 45%' }}
+                        style={{ perspective: '2000px', perspectiveOrigin: '50% 45%' }}
                     >
                         <div
                             className="fan-group relative flex gap-3 md:gap-0 w-max md:w-auto px-1"

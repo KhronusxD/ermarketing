@@ -173,11 +173,11 @@ body {
    cada carta escurece e acende exatamente na posição certa da volta. */
 @keyframes norte-card {
     0%        { opacity: 1; }
-    10%       { opacity: 0.88; }
-    20%       { opacity: 0.52; }
+    12%       { opacity: 0.85; }
+    20%       { opacity: 0.60; }
     25%, 75%  { opacity: 0; }
-    80%       { opacity: 0.52; }
-    90%       { opacity: 0.88; }
+    80%       { opacity: 0.60; }
+    88%       { opacity: 0.85; }
     100%      { opacity: 1; }
 }
 
