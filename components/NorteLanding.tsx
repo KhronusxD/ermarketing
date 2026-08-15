@@ -120,7 +120,7 @@ const FAN: FanCard[] = [
 // duas coisas mexendo só no raio — quem afrouxa a compressão das pontas
 // sem afastar o miolo é a perspectiva, por isso ela ficou distante.
 // RING_R e CARD_W vivem no CSS (--r e --cw), porque mudam no breakpoint:
-// 505/196 no desktop, 264/118 no celular. Aqui fica só o que não muda.
+// 505/196 no desktop, 350/118 no celular. Aqui fica só o que não muda.
 const RING_STEP = 360 / FAN.length;
 
 // Mais cartas na volta pedem volta mais longa: a 84s cada uma passa pela

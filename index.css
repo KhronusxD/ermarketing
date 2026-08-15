@@ -157,10 +157,13 @@ body {
    largura visível. Some sem estalo. Precisa valer também pros filhos:
    com preserve-3d o texto não herda o recorte do pai.
 
-   O anel vale também no celular, só que menor: raio e carta encolhem e a
-   perspectiva se aproxima, então cabem duas cartas de frente com as
-   vizinhas sangrando pelas bordas. Os números vivem em custom properties
-   justamente pra que só eles mudem no breakpoint, e não a geometria. */
+   O anel vale também no celular, só que com carta menor. Raio e carta não
+   encolhem juntos: a corda entre vizinhas é 2·R·sen(11,25°) ≈ 0,39·R, e
+   ela precisa ser maior que a carta mais a face lateral, senão elas se
+   invadem. Encolhendo os dois em 20% o raio caiu pra 264, a corda pra 103
+   contra 125 de carta, e as cartas empilharam. Com 350 a corda vai a 137 e
+   sobra folga. Os números vivem em custom properties justamente pra que só
+   eles mudem no breakpoint, e não a geometria. */
 @keyframes norte-card {
     0%        { opacity: 1; }
     12%       { opacity: 0.85; }
@@ -193,7 +196,7 @@ body {
 }
 
 .fan-group {
-    --r: 264px;
+    --r: 350px;
     --cw: 118px;
     --rx: 7deg;
     position: relative;
