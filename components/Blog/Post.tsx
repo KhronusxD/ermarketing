@@ -4,6 +4,7 @@ import { findPostBySlug, relatedPosts } from './posts';
 import { AUTHOR, Node } from './types';
 import { renderInline } from './InlineLinks';
 import { BlogHeader, BlogFooter } from './BlogShell';
+import { Arrow, Eyebrow, H2, H3, TAG, CONTAINER, PAPER } from '../Norte/shared';
 
 // Individual blog post page. Renders the node tree, byline, JSON-LD
 // (handled at prerender time by replacing a placeholder in the template),
@@ -17,110 +18,108 @@ const BlogPost: React.FC = () => {
     const related = relatedPosts(post);
 
     return (
-        <div className="bg-er-paper text-er-ink min-h-screen">
+        <div className="min-h-screen bg-white text-[#131313] font-sans antialiased selection:bg-[#8DC63F] selection:text-[#0B0E0C]">
             <BlogHeader />
 
             <main>
-                {/* Article header */}
-                <header className="border-b border-er-ink/10">
-                    <div className="max-w-[920px] mx-auto px-6 py-16 md:py-24">
+                {/* Cabeçalho do artigo */}
+                <header className="pt-32 md:pt-40 pb-10 md:pb-14">
+                    <div className="max-w-[880px] mx-auto px-5 md:px-8">
                         <Link
                             to="/blog"
-                            className="text-[10px] tracking-[0.3em] uppercase text-er-ink/55 hover:text-er-ink mb-8 inline-block"
+                            className="flex w-fit items-center gap-1.5 text-[12px] text-black/45 hover:text-black transition-colors mb-8"
                         >
-                            ← Voltar pro blog
+                            <Arrow className="w-3.5 h-3.5 rotate-180" />
+                            Voltar pro blog
                         </Link>
-                        <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
-                            ◆ {post.category}
-                        </p>
-                        <h1
-                            className="font-display uppercase leading-[0.95] tracking-tight mb-8"
-                            style={{ fontSize: 'clamp(36px, 6vw, 88px)' }}
-                        >
+
+                        <Eyebrow>{post.category}</Eyebrow>
+
+                        <h1 className={`mt-5 ${H2} text-[clamp(32px,4.8vw,58px)] mb-6`}>
                             {post.title}
                         </h1>
-                        <p className="text-base md:text-lg text-er-ink/70 max-w-3xl leading-relaxed mb-10">
+
+                        <p className="text-[16px] md:text-[19px] tracking-[-0.01em] text-black/45 leading-relaxed mb-10">
                             {post.description}
                         </p>
 
-                        <div className="flex items-center gap-4 border-t border-er-ink/15 pt-6">
+                        <div className="flex items-center gap-4 border-t border-black/[0.08] pt-6">
                             <Link to="/sobre/ed-rodrigues" className="flex-shrink-0">
                                 <img
-                                    src={AUTHOR.avatar}
+                                    src="/socios/ed-avatar.png"
                                     alt={AUTHOR.name}
-                                    className="w-14 h-14 rounded-full object-cover grayscale hover:grayscale-0 transition-all"
-                                    width={56}
-                                    height={56}
+                                    className="w-12 h-12 rounded-full object-cover bg-[#14261A]"
+                                    width={48}
+                                    height={48}
                                 />
                             </Link>
-                            <div>
+                            <div className="min-w-0">
                                 <Link
                                     to="/sobre/ed-rodrigues"
-                                    className="font-bold text-sm hover:text-er-red transition-colors"
+                                    className={`${H3} text-[15px] hover:text-[#3d6b12] transition-colors`}
                                 >
                                     {AUTHOR.name}
                                 </Link>
-                                <p className="text-xs text-er-ink/60 leading-snug">
-                                    {AUTHOR.role} ·{' '}
-                                    <span className="text-er-ink/75">{AUTHOR.bio}</span>
+                                <p className="text-[13px] text-black/45 leading-snug">
+                                    {AUTHOR.role}
                                 </p>
-                                <p className="text-[10px] tracking-[0.25em] uppercase text-er-ink/45 mt-1">
-                                    {formatDate(post.publishedAt)} · {post.readTime}min de leitura
+                                <p className={`${TAG} text-black/35 mt-1.5`}>
+                                    {formatDate(post.publishedAt)} · {post.readTime} min de leitura
                                 </p>
                             </div>
                         </div>
                     </div>
                 </header>
 
-                {/* Article body */}
-                <article className="max-w-[760px] mx-auto px-6 py-16 md:py-24">
+                {/* Corpo */}
+                <article className="max-w-[720px] mx-auto px-5 md:px-8 pb-14 md:pb-20">
                     {post.body.map((node, i) => (
                         <NodeRenderer key={i} node={node} />
                     ))}
                 </article>
 
-                {/* Author callout */}
-                <aside className="max-w-[760px] mx-auto px-6 mb-20 md:mb-28">
-                    <div className="bg-white border border-er-ink/15 p-7 md:p-9">
-                        <p className="text-[10px] tracking-[0.3em] uppercase text-er-red font-bold mb-4">
-                            ◆ Sobre o autor
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-5">
+                {/* Assinatura */}
+                <aside className="max-w-[720px] mx-auto px-5 md:px-8 pb-16 md:pb-24">
+                    <div
+                        className="rounded-[22px] border border-black/[0.07] p-7 md:p-8"
+                        style={{ backgroundColor: PAPER }}
+                    >
+                        <Eyebrow>Sobre o autor</Eyebrow>
+                        <div className="mt-5 flex flex-col sm:flex-row gap-5">
                             <Link to="/sobre/ed-rodrigues" className="flex-shrink-0">
                                 <img
-                                    src={AUTHOR.avatar}
+                                    src="/socios/ed-avatar.png"
                                     alt={AUTHOR.name}
-                                    className="w-20 h-20 rounded-full object-cover hover:scale-105 transition-transform"
+                                    className="w-20 h-20 rounded-full object-cover bg-[#14261A]"
                                     width={80}
                                     height={80}
                                 />
                             </Link>
                             <div>
-                                <h3 className="font-display uppercase text-2xl tracking-tight mb-1">
+                                <h3 className={`${H3} text-[19px] mb-1`}>
                                     <Link
                                         to="/sobre/ed-rodrigues"
-                                        className="hover:text-er-red transition-colors"
+                                        className="hover:text-[#3d6b12] transition-colors"
                                     >
                                         {AUTHOR.name}
                                     </Link>
                                 </h3>
-                                <p className="text-er-red font-bold text-sm mb-3">
-                                    {AUTHOR.role}
-                                </p>
-                                <p className="text-sm text-er-ink/70 leading-relaxed">
+                                <p className={`${TAG} text-[#3d6b12] mb-3`}>{AUTHOR.role}</p>
+                                <p className="text-[14px] text-black/50 leading-relaxed">
                                     {AUTHOR.bio} Sócio fundador da{' '}
                                     <Link
                                         to="/"
-                                        className="text-er-red underline underline-offset-4 decoration-er-red/40 hover:decoration-er-red"
+                                        className="text-[#3d6b12] underline underline-offset-4 decoration-[#8DC63F]"
                                     >
-                                        ER Marketing
+                                        Norte
                                     </Link>
-                                    , agência baseada em Manaus com mais de 100 parceiros atendidos.{' '}
+                                    , agência de marketing em Manaus com mais de 100
+                                    parceiros atendidos.{' '}
                                     <Link
                                         to="/sobre/ed-rodrigues"
-                                        className="text-er-red underline underline-offset-4 decoration-er-red/40 hover:decoration-er-red"
+                                        className="text-[#3d6b12] underline underline-offset-4 decoration-[#8DC63F]"
                                     >
-                                        Ver perfil completo →
+                                        Ver perfil completo
                                     </Link>
                                 </p>
                             </div>
@@ -128,42 +127,35 @@ const BlogPost: React.FC = () => {
                     </div>
                 </aside>
 
-                {/* Related posts */}
+                {/* Leia também */}
                 {related.length > 0 && (
-                    <section className="border-t border-er-ink/15 bg-er-paperDark">
-                        <div className="max-w-[1200px] mx-auto px-6 py-16 md:py-24">
-                            <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
-                                ◆ Leia também
-                            </p>
-                            <h2
-                                className="font-display uppercase leading-[0.95] tracking-tight mb-12"
-                                style={{ fontSize: 'clamp(32px, 4.5vw, 56px)' }}
-                            >
-                                Mais da nossa
-                                <br />
-                                <span className="text-er-red">redação.</span>
+                    <section className="py-14 md:py-20" style={{ backgroundColor: PAPER }}>
+                        <div className={CONTAINER}>
+                            <Eyebrow>Leia também</Eyebrow>
+                            <h2 className={`mt-4 ${H2} text-[clamp(26px,3.4vw,44px)] mb-9`}>
+                                Mais da nossa redação.
                             </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-er-ink/15">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 {related.map((r) => (
                                     <Link
                                         key={r.slug}
                                         to={`/blog/${r.slug}`}
-                                        className="group bg-er-paperDark p-7 hover:bg-er-paper transition-colors min-h-[260px] flex flex-col justify-between"
+                                        className="group rounded-[22px] bg-white border border-black/[0.07] hover:border-[#8DC63F] hover:shadow-[0_18px_54px_rgba(11,14,12,0.08)] p-7 flex flex-col min-h-[230px] transition-all"
                                     >
-                                        <div>
-                                            <p className="text-[10px] tracking-[0.25em] uppercase text-er-red font-bold mb-4">
-                                                {r.category}
-                                            </p>
-                                            <h3 className="font-display uppercase text-xl md:text-2xl leading-[1] tracking-tight group-hover:text-er-red transition-colors">
-                                                {r.title}
-                                            </h3>
-                                        </div>
-                                        <span className="text-[10px] tracking-[0.25em] uppercase text-er-ink/55 mt-6 inline-flex items-center gap-2">
-                                            {r.readTime}min ·
-                                            <span className="group-hover:translate-x-1 transition-transform">
-                                                Ler →
+                                        <p className={`${TAG} text-black/40 mb-4`}>
+                                            {r.category}
+                                        </p>
+                                        <h3 className={`${H3} text-[18px] leading-[1.2]`}>
+                                            {r.title}
+                                        </h3>
+                                        <div className="mt-auto pt-6 flex items-center justify-between gap-3">
+                                            <span className={`${TAG} text-black/35`}>
+                                                {r.readTime} min
                                             </span>
-                                        </span>
+                                            <span className="w-8 h-8 rounded-full bg-[#F5F5F3] text-[#3d6b12] flex items-center justify-center transition-colors group-hover:bg-[#8DC63F] group-hover:text-[#0B0E0C]">
+                                                <Arrow className="w-4 h-4" />
+                                            </span>
+                                        </div>
                                     </Link>
                                 ))}
                             </div>
@@ -177,36 +169,36 @@ const BlogPost: React.FC = () => {
     );
 };
 
+// Tipografia do corpo. Medida de leitura curta (720px de coluna), corpo
+// em Inter e títulos internos em Jakarta peso médio — o mesmo par do
+// resto do site, só que numa escala menor porque aqui o texto é longo.
 const NodeRenderer: React.FC<{ node: Node }> = ({ node }) => {
     switch (node.type) {
         case 'p':
             return (
-                <p className="text-base md:text-lg leading-[1.75] text-er-ink/85 mb-6">
+                <p className="text-[16px] md:text-[17px] leading-[1.75] text-black/70 mb-6">
                     {renderInline(node.text)}
                 </p>
             );
         case 'h2':
             return (
-                <h2
-                    className="font-display uppercase tracking-tight leading-[1] text-er-ink mt-14 mb-6"
-                    style={{ fontSize: 'clamp(28px, 3.5vw, 44px)' }}
-                >
+                <h2 className={`${H2} text-[clamp(24px,3vw,32px)] text-[#131313] mt-14 mb-5`}>
                     {node.text}
                 </h2>
             );
         case 'h3':
             return (
-                <h3 className="font-bold text-lg md:text-xl text-er-ink mt-10 mb-4">
+                <h3 className={`${H3} text-[19px] text-[#131313] mt-10 mb-3`}>
                     {node.text}
                 </h3>
             );
         case 'ul':
             return (
-                <ul className="my-6 space-y-3 list-disc pl-6 marker:text-er-red">
+                <ul className="my-6 space-y-3 list-disc pl-6 marker:text-[#8DC63F]">
                     {node.items.map((item, i) => (
                         <li
                             key={i}
-                            className="text-base md:text-lg leading-[1.65] text-er-ink/85 pl-2"
+                            className="text-[16px] md:text-[17px] leading-[1.7] text-black/70 pl-1"
                         >
                             {renderInline(item)}
                         </li>
@@ -215,11 +207,11 @@ const NodeRenderer: React.FC<{ node: Node }> = ({ node }) => {
             );
         case 'ol':
             return (
-                <ol className="my-6 space-y-3 list-decimal pl-6 marker:text-er-red marker:font-bold">
+                <ol className="my-6 space-y-3 list-decimal pl-6 marker:text-[#3d6b12] marker:font-semibold">
                     {node.items.map((item, i) => (
                         <li
                             key={i}
-                            className="text-base md:text-lg leading-[1.65] text-er-ink/85 pl-2"
+                            className="text-[16px] md:text-[17px] leading-[1.7] text-black/70 pl-1"
                         >
                             {renderInline(item)}
                         </li>
@@ -228,21 +220,21 @@ const NodeRenderer: React.FC<{ node: Node }> = ({ node }) => {
             );
         case 'callout':
             return (
-                <aside className="my-10 border-l-2 border-er-red bg-white px-6 py-5">
-                    <p className="text-base md:text-lg italic text-er-ink leading-[1.6]">
+                <aside className="my-10 rounded-2xl border border-[#8DC63F]/40 bg-[#8DC63F]/10 px-6 py-5">
+                    <p className="text-[16px] md:text-[17px] text-black/75 leading-[1.65]">
                         {renderInline(node.text)}
                     </p>
                 </aside>
             );
         case 'quote':
             return (
-                <blockquote className="my-10 border-l-2 border-er-ink/30 pl-6">
-                    <p className="font-display uppercase text-2xl md:text-3xl leading-[1.1] tracking-tight mb-3">
+                <blockquote className="my-10 border-l-2 border-[#8DC63F] pl-6">
+                    <p className={`${H2} text-[22px] md:text-[26px] mb-3`}>
                         “{renderInline(node.text)}”
                     </p>
                     {node.author && (
-                        <cite className="text-[10px] tracking-[0.25em] uppercase text-er-ink/55 not-italic">
-                            — {node.author}
+                        <cite className={`${TAG} text-black/40 not-italic`}>
+                            {node.author}
                         </cite>
                     )}
                 </blockquote>
@@ -252,11 +244,11 @@ const NodeRenderer: React.FC<{ node: Node }> = ({ node }) => {
                 <div className="my-12">
                     <Link
                         to={node.href}
-                        className="group inline-flex items-center gap-3 bg-er-ink text-er-paper hover:bg-er-red transition-colors font-bold tracking-[0.18em] uppercase text-sm px-7 py-4"
+                        className="group inline-flex items-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm pl-6 pr-2 py-2 transition-colors"
                     >
                         {node.label}
-                        <span className="transition-transform group-hover:translate-x-1">
-                            →
+                        <span className="w-8 h-8 rounded-full bg-[#0B0E0C] text-[#8DC63F] flex items-center justify-center transition-transform group-hover:rotate-45">
+                            <Arrow className="w-4 h-4 -rotate-45" />
                         </span>
                     </Link>
                 </div>

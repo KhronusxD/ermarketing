@@ -18,6 +18,14 @@ import {
     IconRocket,
     IconChart,
     IconCompass,
+    H1,
+    H2,
+    H3,
+    TAG,
+    SECTION,
+    CONTAINER,
+    PAPER,
+    NORTE_INK as INK,
     type IconType,
 } from './Norte/shared';
 import { SERVICES } from './Norte/services';
@@ -33,15 +41,6 @@ import { POSTS } from './Blog/posts';
 // títulos (extrabold grita; peso médio apertado lê como editorial), Inter
 // no corpo e mono em caixa alta nos eyebrows.
 
-const SECTION = 'py-16 md:py-24';
-const CONTAINER = 'max-w-[1240px] mx-auto px-5 md:px-8';
-
-const INK = '#131313';
-const PAPER = '#F5F5F3';
-
-const H1 = 'font-norte font-medium tracking-[-0.06em] leading-[1.04]';
-const H2 = 'font-norte font-medium tracking-[-0.055em] leading-[1.06]';
-const H3 = 'font-norte font-semibold tracking-[-0.02em]';
 
 // Trilhos horizontais sangram até a borda da tela, mas o primeiro card
 // nasce alinhado com o container central. O scroll-padding é obrigatório:
@@ -173,8 +172,6 @@ const CARD_SKIN: Record<
         edge: 'rgba(38,38,38,1)',
     },
 };
-
-const TAG = 'font-mono text-[9px] tracking-[0.14em] uppercase';
 
 // ─── Maquetes dos serviços ──────────────────────────────────────────
 // Cada frente é ilustrada por duas peças de interface empilhadas e

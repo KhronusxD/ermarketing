@@ -38,21 +38,20 @@ const Schedule: React.FC<ScheduleProps> = ({ level, lead, answers }) => {
         }).toString();
 
     return (
-        <div className="min-h-screen bg-er-paper text-er-ink">
-            <div className="border-b border-er-ink/10">
+        <div className="min-h-screen bg-white text-[#131313]">
+            <div className="border-b border-black/10">
                 <div className="max-w-[1400px] mx-auto px-6 py-5 flex items-center justify-between">
                     <a
                         href="/"
-                        className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-er-ink/60 hover:text-er-ink"
+                        className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#131313]/60 hover:text-[#131313]"
                     >
                         <img
-                            src="/assets/red-logo.png"
-                            alt="ER Marketing"
+                            src="/norte/logo-preta.png"
+                            alt="Norte · Agência de Marketing"
                             className="h-6 w-auto"
                         />
-                        ER Marketing
                     </a>
-                    <span className="text-[10px] tracking-[0.3em] uppercase text-er-red font-bold">
+                    <span className="text-[10px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold">
                         {level === 'premium' ? 'Premium · 30 min' : 'Diagnóstico · 15 min'}
                     </span>
                 </div>
@@ -61,18 +60,18 @@ const Schedule: React.FC<ScheduleProps> = ({ level, lead, answers }) => {
             <main className="max-w-[1400px] mx-auto px-6 py-10 md:py-14 grid grid-cols-12 gap-8">
                 {/* Recap column */}
                 <aside className="col-span-12 lg:col-span-4">
-                    <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
+                    <p className="text-[11px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold mb-6">
                         ◆ Resumo do diagnóstico
                     </p>
                     <h1
-                        className="font-display uppercase leading-[0.95] tracking-tight mb-8"
+                        className="font-norte font-medium leading-[0.95] tracking-[-0.055em] mb-8"
                         style={{ fontSize: 'clamp(32px, 4vw, 56px)' }}
                     >
                         {level === 'premium' ? (
                             <>
                                 Reservamos
                                 <br />
-                                <span className="text-er-red">
+                                <span className="text-[#3d6b12]">
                                     30 min
                                 </span>
                                 <br />
@@ -82,7 +81,7 @@ const Schedule: React.FC<ScheduleProps> = ({ level, lead, answers }) => {
                             <>
                                 Reservamos
                                 <br />
-                                <span className="text-er-red">
+                                <span className="text-[#3d6b12]">
                                     15 min
                                 </span>
                                 <br />
@@ -91,7 +90,7 @@ const Schedule: React.FC<ScheduleProps> = ({ level, lead, answers }) => {
                         )}
                     </h1>
 
-                    <dl className="space-y-4 border-t border-er-ink/15 pt-6 text-sm">
+                    <dl className="space-y-4 border-t border-black/15 pt-6 text-sm">
                         <RecapRow label="Lead" value={lead.name} />
                         <RecapRow label="Empresa" value={lead.company} />
                         <RecapRow
@@ -119,17 +118,17 @@ const Schedule: React.FC<ScheduleProps> = ({ level, lead, answers }) => {
                     </dl>
 
                     {answers.niche && (
-                        <div className="mt-8 p-5 bg-white border border-er-ink/15">
-                            <span className="text-[10px] tracking-[0.3em] uppercase text-er-red font-bold mb-2 block">
+                        <div className="mt-8 p-5 bg-white border border-black/15">
+                            <span className="text-[10px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold mb-2 block">
                                 ◆ Case do seu nicho
                             </span>
-                            <span className="font-display uppercase text-2xl leading-[1] tracking-tight mb-1 block">
+                            <span className="font-norte font-medium text-2xl leading-[1] tracking-[-0.055em] mb-1 block">
                                 {CASE_BY_NICHE[answers.niche].client}
                             </span>
-                            <span className="font-display text-er-red text-lg leading-none mb-3 block">
+                            <span className="font-norte font-medium text-[#3d6b12] text-lg leading-none mb-3 block">
                                 {CASE_BY_NICHE[answers.niche].headline}
                             </span>
-                            <p className="text-xs text-er-ink/65 leading-relaxed">
+                            <p className="text-xs text-[#131313]/65 leading-relaxed">
                                 {CASE_BY_NICHE[answers.niche].body}
                             </p>
                         </div>
@@ -138,11 +137,11 @@ const Schedule: React.FC<ScheduleProps> = ({ level, lead, answers }) => {
 
                 {/* Calendly embed */}
                 <div className="col-span-12 lg:col-span-8">
-                    <p className="text-[11px] tracking-[0.3em] uppercase text-er-ink/60 mb-3">
+                    <p className="text-[11px] tracking-[0.3em] uppercase text-[#131313]/60 mb-3">
                         ◆ Escolha o melhor horário
                     </p>
                     <div
-                        className="calendly-inline-widget bg-white border border-er-ink/15"
+                        className="calendly-inline-widget bg-white border border-black/15"
                         data-url={prefilledUrl}
                         style={{ minWidth: 320, height: 720 }}
                     />
@@ -157,8 +156,8 @@ const RecapRow: React.FC<{ label: string; value: string }> = ({
     value,
 }) => (
     <div className="flex justify-between gap-4">
-        <dt className="text-er-ink/55 text-xs tracking-wide uppercase">{label}</dt>
-        <dd className="text-er-ink font-semibold text-right">{value}</dd>
+        <dt className="text-[#131313]/55 text-xs tracking-wide uppercase">{label}</dt>
+        <dd className="text-[#131313] font-semibold text-right">{value}</dd>
     </div>
 );
 

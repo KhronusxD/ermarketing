@@ -32,21 +32,20 @@ const NurtureWaitlist: React.FC<NurtureWaitlistProps> = ({
     };
 
     return (
-        <div className="min-h-screen bg-er-paper text-er-ink flex flex-col">
-            <div className="border-b border-er-ink/10">
+        <div className="min-h-screen bg-white text-[#131313] flex flex-col">
+            <div className="border-b border-black/10">
                 <div className="max-w-[1100px] mx-auto px-6 py-5 flex items-center justify-between">
                     <a
                         href="/"
-                        className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-er-ink/60 hover:text-er-ink"
+                        className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#131313]/60 hover:text-[#131313]"
                     >
                         <img
-                            src="/assets/red-logo.png"
-                            alt="ER Marketing"
-                            className="h-6 w-auto"
+                            src="/norte/logo-preta.png"
+                            alt="Norte · Agência de Marketing"
+                            className="h-7 w-auto object-contain"
                         />
-                        ER Marketing
                     </a>
-                    <span className="text-[10px] tracking-[0.3em] uppercase text-er-ink/55">
+                    <span className="text-[10px] tracking-[0.3em] uppercase text-[#131313]/55">
                         Análise concluída
                     </span>
                 </div>
@@ -55,21 +54,21 @@ const NurtureWaitlist: React.FC<NurtureWaitlistProps> = ({
             <main className="flex-1 flex items-center">
                 <div className="max-w-[1100px] mx-auto w-full px-6 py-12 md:py-20 grid grid-cols-12 gap-8">
                     <div className="col-span-12 md:col-span-7">
-                        <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
+                        <p className="text-[11px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold mb-6">
                             ◆ Sinceridade direta
                         </p>
                         <h2
-                            className="font-display uppercase leading-[0.92] tracking-tight mb-8 max-w-2xl"
+                            className="font-norte font-medium leading-[0.92] tracking-[-0.055em] mb-8 max-w-2xl"
                             style={{ fontSize: 'clamp(40px, 6.5vw, 96px)' }}
                         >
                             O 1:1 com nosso
                             <br />
                             time ainda não é
                             <br />
-                            <span className="text-er-red">o seu momento</span>.
+                            <span className="text-[#3d6b12]">o seu momento</span>.
                         </h2>
 
-                        <div className="space-y-5 text-base md:text-lg text-er-ink/75 leading-relaxed max-w-2xl">
+                        <div className="space-y-5 text-base md:text-lg text-[#131313]/75 leading-relaxed max-w-2xl">
                             <p>
                                 Nossa operação principal é desenhada pra empresas que
                                 já investem em marketing ou estão prontas pra começar
@@ -91,12 +90,12 @@ const NurtureWaitlist: React.FC<NurtureWaitlistProps> = ({
 
                     <form
                         onSubmit={onFormSubmit}
-                        className="col-span-12 md:col-span-5 bg-white border border-er-ink/15 p-6 md:p-8 space-y-5 self-start"
+                        className="col-span-12 md:col-span-5 rounded-[22px] bg-white border border-black/[0.08] p-6 md:p-8 space-y-5 self-start"
                     >
-                        <p className="text-[10px] tracking-[0.3em] uppercase text-er-red font-bold mb-2">
+                        <p className="text-[10px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold mb-2">
                             ◆ Lista prioritária
                         </p>
-                        <h3 className="font-display uppercase text-2xl leading-[1] tracking-tight mb-4">
+                        <h3 className="font-norte font-medium text-2xl leading-[1] tracking-[-0.055em] mb-4">
                             Quero ser avisado primeiro.
                         </h3>
 
@@ -127,14 +126,14 @@ const NurtureWaitlist: React.FC<NurtureWaitlistProps> = ({
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full inline-flex items-center justify-center gap-3 bg-er-ink text-er-paper hover:bg-er-red disabled:bg-er-ink/40 disabled:cursor-not-allowed transition-colors font-bold tracking-[0.18em] uppercase text-sm px-7 py-4 mt-2"
+                            className="w-full mt-2 disabled:bg-black/15 disabled:text-black/35 disabled:cursor-not-allowed group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm md:text-base px-8 py-4 transition-colors"
                         >
                             {isSubmitting
                                 ? 'Salvando…'
                                 : 'Entrar na lista'}
                         </button>
 
-                        <p className="text-xs text-er-ink/55 leading-relaxed">
+                        <p className="text-xs text-[#131313]/55 leading-relaxed">
                             Sem spam. Apenas o aviso quando a nova frente abrir +
                             conteúdo eventual de valor.
                         </p>
@@ -163,9 +162,9 @@ const Field: React.FC<FieldProps> = ({
     required,
 }) => (
     <label className="block">
-        <span className="block text-[10px] tracking-[0.25em] uppercase text-er-ink/60 mb-2">
+        <span className="block text-[10px] tracking-[0.25em] uppercase text-[#131313]/60 mb-2">
             {label}
-            {required && <span className="text-er-red"> *</span>}
+            {required && <span className="text-[#3d6b12]"> *</span>}
         </span>
         <input
             type={type}
@@ -173,48 +172,47 @@ const Field: React.FC<FieldProps> = ({
             onChange={onChange}
             required={required}
             placeholder={placeholder}
-            className="w-full bg-er-paper border border-er-ink/20 px-4 py-3 text-base text-er-ink placeholder-er-ink/35 focus:outline-none focus:border-er-red focus:ring-1 focus:ring-er-red transition-colors"
+            className="w-full rounded-xl bg-white border border-black/15 px-4 py-3 text-base text-[#131313] placeholder-black/35 focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-colors"
         />
     </label>
 );
 
 export const WaitlistThanks: React.FC = () => (
-    <div className="min-h-screen bg-er-paper text-er-ink flex flex-col">
-        <div className="border-b border-er-ink/10">
+    <div className="min-h-screen bg-white text-[#131313] flex flex-col">
+        <div className="border-b border-black/10">
             <div className="max-w-[1100px] mx-auto px-6 py-5 flex items-center justify-between">
                 <a
                     href="/"
-                    className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-er-ink/60 hover:text-er-ink"
+                    className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#131313]/60 hover:text-[#131313]"
                 >
                     <img
-                        src="/assets/red-logo.png"
-                        alt="ER Marketing"
-                        className="h-6 w-auto"
+                        src="/norte/logo-preta.png"
+                        alt="Norte · Agência de Marketing"
+                        className="h-7 w-auto object-contain"
                     />
-                    ER Marketing
                 </a>
             </div>
         </div>
         <main className="flex-1 flex items-center">
             <div className="max-w-[900px] mx-auto px-6 py-20 text-center">
-                <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
+                <p className="text-[11px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold mb-6">
                     ◆ Confirmado
                 </p>
                 <h2
-                    className="font-display uppercase leading-[0.95] tracking-tight mb-6"
+                    className="font-norte font-medium leading-[0.95] tracking-[-0.055em] mb-6"
                     style={{ fontSize: 'clamp(40px, 7vw, 96px)' }}
                 >
                     Você está
                     <br />
-                    <span className="text-er-red">na lista</span>.
+                    <span className="text-[#3d6b12]">na lista</span>.
                 </h2>
-                <p className="text-base md:text-lg text-er-ink/70 leading-relaxed max-w-2xl mx-auto">
+                <p className="text-base md:text-lg text-[#131313]/70 leading-relaxed max-w-2xl mx-auto">
                     Assim que a nova frente abrir, você recebe um aviso direto no
                     WhatsApp. Enquanto isso, segue o trabalho — o seu turno chega.
                 </p>
                 <a
                     href="/"
-                    className="mt-10 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-er-ink/60 hover:text-er-ink"
+                    className="mt-10 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#131313]/60 hover:text-[#131313]"
                 >
                     ← Voltar pro site
                 </a>

@@ -29,42 +29,41 @@ const LeadForm: React.FC<LeadFormProps> = ({ onSubmit, isSubmitting }) => {
     };
 
     return (
-        <div className="min-h-screen bg-er-paper text-er-ink flex flex-col">
-            <div className="border-b border-er-ink/10">
+        <div className="min-h-screen bg-white text-[#131313] flex flex-col">
+            <div className="border-b border-black/10">
                 <div className="max-w-[1100px] mx-auto px-6 py-5 flex items-center justify-between">
                     <a
                         href="/"
-                        className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-er-ink/60 hover:text-er-ink"
+                        className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#131313]/60 hover:text-[#131313]"
                     >
                         <img
-                            src="/assets/red-logo.png"
-                            alt="ER Marketing"
-                            className="h-6 w-auto"
+                            src="/norte/logo-preta.png"
+                            alt="Norte · Agência de Marketing"
+                            className="h-7 w-auto object-contain"
                         />
-                        ER Marketing
                     </a>
-                    <span className="text-[10px] tracking-[0.3em] uppercase text-er-red font-bold">
+                    <span className="text-[10px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold">
                         Último passo
                     </span>
                 </div>
-                <div className="h-[3px] bg-er-red" />
+                <div className="h-[3px] bg-[#8DC63F]" />
             </div>
 
             <main className="flex-1">
                 <div className="max-w-[900px] mx-auto px-6 py-12 md:py-20 grid grid-cols-12 gap-6">
                     <div className="col-span-12 md:col-span-5">
-                        <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
+                        <p className="text-[11px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold mb-6">
                             ◆ Identificação
                         </p>
                         <h2
-                            className="font-display uppercase leading-[0.95] tracking-tight mb-6"
+                            className="font-norte font-medium leading-[0.95] tracking-[-0.055em] mb-6"
                             style={{ fontSize: 'clamp(32px, 4.5vw, 56px)' }}
                         >
                             Diagnóstico
                             <br />
-                            <span className="text-er-red">pronto.</span>
+                            <span className="text-[#3d6b12]">pronto.</span>
                         </h2>
-                        <p className="text-base text-er-ink/70 leading-relaxed">
+                        <p className="text-base text-[#131313]/70 leading-relaxed">
                             Preencha seus dados pra liberar o agendamento da call de
                             15 minutos com o nosso time.
                         </p>
@@ -121,7 +120,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ onSubmit, isSubmitting }) => {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="group w-full md:w-auto inline-flex items-center justify-center gap-3 bg-er-ink text-er-paper hover:bg-er-red disabled:bg-er-ink/40 disabled:cursor-not-allowed transition-colors font-bold tracking-[0.18em] uppercase text-sm px-8 py-5 mt-6"
+                            className="w-full md:w-auto mt-6 disabled:bg-black/15 disabled:text-black/35 disabled:cursor-not-allowed group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm md:text-base px-8 py-4 transition-colors"
                         >
                             {isSubmitting
                                 ? 'Processando…'
@@ -133,7 +132,7 @@ const LeadForm: React.FC<LeadFormProps> = ({ onSubmit, isSubmitting }) => {
                             )}
                         </button>
 
-                        <p className="text-xs text-er-ink/45 leading-relaxed">
+                        <p className="text-xs text-[#131313]/45 leading-relaxed">
                             Seus dados ficam só com a ER. Nunca enviamos spam — usamos
                             apenas pra confirmar o horário da call.
                         </p>
@@ -164,9 +163,9 @@ const Field: React.FC<FieldProps> = ({
     required,
 }) => (
     <label className="block">
-        <span className="block text-[10px] tracking-[0.25em] uppercase text-er-ink/60 mb-2">
+        <span className="block text-[10px] tracking-[0.25em] uppercase text-[#131313]/60 mb-2">
             {label}
-            {required && <span className="text-er-red"> *</span>}
+            {required && <span className="text-[#3d6b12]"> *</span>}
         </span>
         <input
             type={type}
@@ -175,7 +174,7 @@ const Field: React.FC<FieldProps> = ({
             onChange={onChange}
             required={required}
             placeholder={placeholder}
-            className="w-full bg-white border border-er-ink/20 px-4 py-3.5 text-base text-er-ink placeholder-er-ink/35 focus:outline-none focus:border-er-red focus:ring-1 focus:ring-er-red transition-colors"
+            className="w-full rounded-xl bg-white border border-black/15 px-4 py-3.5 text-base text-[#131313] placeholder-black/35 focus:outline-none focus:border-[#8DC63F] focus:ring-1 focus:ring-[#8DC63F] transition-colors"
         />
     </label>
 );

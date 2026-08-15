@@ -12,6 +12,22 @@ export const LIME = '#8DC63F';
 export const FOREST = '#14261A';
 export const INK = '#0B0E0C';
 export const CREAM = '#F4F1E9';
+export const PAPER = '#F5F5F3';
+export const NORTE_INK = '#131313';
+
+// ─── Sistema tipográfico ────────────────────────────────────────────
+// Jakarta peso médio com tracking bem fechado nos títulos (extrabold
+// grita; peso médio apertado lê como editorial), Inter no corpo e mono em
+// caixa alta nos rótulos. Vive aqui e não em cada página pra que blog,
+// diagnóstico e institucional não saiam com três sistemas diferentes.
+export const H1 = 'font-norte font-medium tracking-[-0.06em] leading-[1.04]';
+export const H2 = 'font-norte font-medium tracking-[-0.055em] leading-[1.06]';
+export const H3 = 'font-norte font-semibold tracking-[-0.02em]';
+export const TAG = 'font-mono text-[9px] tracking-[0.14em] uppercase';
+export const LABEL = 'font-mono text-[12px] tracking-[0.12em] uppercase';
+
+export const SECTION = 'py-16 md:py-24';
+export const CONTAINER = 'max-w-[1240px] mx-auto px-5 md:px-8';
 
 // ─── Ícones (stroke 1.6, grid 24) ───────────────────────────────────
 

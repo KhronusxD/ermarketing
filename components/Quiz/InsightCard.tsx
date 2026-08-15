@@ -22,27 +22,26 @@ const InsightCard: React.FC<InsightCardProps> = ({
     progress,
 }) => {
     return (
-        <div className="min-h-screen bg-er-paper text-er-ink flex flex-col">
-            <div className="border-b border-er-ink/10">
+        <div className="min-h-screen bg-white text-[#131313] flex flex-col">
+            <div className="border-b border-black/10">
                 <div className="max-w-[1100px] mx-auto px-6 py-5 flex items-center justify-between">
                     <a
                         href="/"
-                        className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-er-ink/60 hover:text-er-ink"
+                        className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#131313]/60 hover:text-[#131313]"
                     >
                         <img
-                            src="/assets/red-logo.png"
-                            alt="ER Marketing"
-                            className="h-6 w-auto"
+                            src="/norte/logo-preta.png"
+                            alt="Norte · Agência de Marketing"
+                            className="h-7 w-auto object-contain"
                         />
-                        ER Marketing
                     </a>
-                    <span className="text-[10px] tracking-[0.3em] uppercase text-er-ink/60">
+                    <span className="text-[10px] tracking-[0.3em] uppercase text-[#131313]/60">
                         Passo {progress.current} de {progress.total}
                     </span>
                 </div>
-                <div className="h-[3px] bg-er-ink/5 relative">
+                <div className="h-[3px] bg-[#131313]/5 relative">
                     <div
-                        className="absolute inset-y-0 left-0 bg-er-red transition-all duration-500"
+                        className="absolute inset-y-0 left-0 bg-[#8DC63F] transition-all duration-500"
                         style={{
                             width: `${(progress.current / progress.total) * 100}%`,
                         }}
@@ -61,7 +60,7 @@ const InsightCard: React.FC<InsightCardProps> = ({
                     <button
                         type="button"
                         onClick={onContinue}
-                        className="group mt-12 md:mt-16 inline-flex items-center gap-3 bg-er-ink text-er-paper hover:bg-er-red transition-colors font-bold tracking-[0.18em] uppercase text-sm md:text-base px-7 py-4 md:px-9 md:py-5"
+                        className="mt-12 md:mt-16 group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm md:text-base px-8 py-4 transition-colors"
                     >
                         {variant === 'financial'
                             ? 'Continuar diagnóstico'
@@ -84,18 +83,18 @@ const FinancialInsight: React.FC<{ answers: QuizAnswers }> = ({ answers }) => {
     if (!insight) {
         return (
             <>
-                <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
+                <p className="text-[11px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold mb-6">
                     ◆ Análise parcial
                 </p>
                 <h2
-                    className="font-display uppercase leading-[0.95] tracking-tight mb-8 max-w-4xl"
+                    className="font-norte font-medium leading-[0.95] tracking-[-0.055em] mb-8 max-w-4xl"
                     style={{ fontSize: 'clamp(36px, 6vw, 88px)' }}
                 >
                     Você está na fase
                     <br />
-                    em que <span className="text-er-red">tudo é decisão</span>.
+                    em que <span className="text-[#3d6b12]">tudo é decisão</span>.
                 </h2>
-                <p className="text-base md:text-lg text-er-ink/70 leading-relaxed max-w-2xl">
+                <p className="text-base md:text-lg text-[#131313]/70 leading-relaxed max-w-2xl">
                     Negócios em fase de validação têm um perigo invisível: cada
                     real gasto fora do funil certo trava o caixa do mês
                     seguinte. Vamos olhar isso na call.
@@ -106,24 +105,24 @@ const FinancialInsight: React.FC<{ answers: QuizAnswers }> = ({ answers }) => {
 
     return (
         <>
-            <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
+            <p className="text-[11px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold mb-6">
                 ◆ Análise parcial · você está perdendo dinheiro
             </p>
             <h2
-                className="font-display uppercase leading-[0.9] tracking-tight mb-8 max-w-4xl"
+                className="font-norte font-medium leading-[0.9] tracking-[-0.055em] mb-8 max-w-4xl"
                 style={{ fontSize: 'clamp(48px, 8vw, 128px)' }}
             >
-                <span className="text-er-red">
+                <span className="text-[#3d6b12]">
                     {fmtBRL(insight.annualLeakLow)}
                 </span>
                 <br />a {fmtBRL(insight.annualLeakHigh)}
                 <br />
-                <span className="text-er-ink/60">por ano.</span>
+                <span className="text-[#131313]/60">por ano.</span>
             </h2>
-            <p className="text-base md:text-lg text-er-ink/75 leading-relaxed max-w-2xl">
+            <p className="text-base md:text-lg text-[#131313]/75 leading-relaxed max-w-2xl">
                 {insight.headline}
             </p>
-            <p className="mt-6 text-sm text-er-ink/50 italic max-w-2xl">
+            <p className="mt-6 text-sm text-[#131313]/50 italic max-w-2xl">
                 Estimativa baseada em benchmarks de operações que já passaram
                 pela nossa metodologia. Refinamos esse número com você na call.
             </p>
@@ -135,19 +134,19 @@ const CaseInsight: React.FC<{ answers: QuizAnswers }> = ({ answers }) => {
     const match = CASE_BY_NICHE[answers.niche ?? 'other'];
     return (
         <>
-            <p className="text-[11px] tracking-[0.3em] uppercase text-er-red font-bold mb-6">
+            <p className="text-[11px] tracking-[0.3em] uppercase text-[#3d6b12] font-bold mb-6">
                 ◆ Resultado real · {match.client}
             </p>
             <h2
-                className="font-display uppercase leading-[0.9] tracking-tight mb-8 max-w-4xl"
+                className="font-norte font-medium leading-[0.9] tracking-[-0.055em] mb-8 max-w-4xl"
                 style={{ fontSize: 'clamp(40px, 7vw, 112px)' }}
             >
                 {match.headline}
             </h2>
-            <p className="text-base md:text-lg text-er-ink/75 leading-relaxed max-w-2xl">
+            <p className="text-base md:text-lg text-[#131313]/75 leading-relaxed max-w-2xl">
                 {match.body}
             </p>
-            <p className="mt-6 text-sm text-er-ink/50 max-w-2xl">
+            <p className="mt-6 text-sm text-[#131313]/50 max-w-2xl">
                 É o tipo de resultado que entregamos pra empresas no mesmo perfil
                 do seu. Vamos detalhar como aplicar isso ao seu caso na reunião.
             </p>
