@@ -16,7 +16,6 @@ import {
     IconRocket,
     IconChart,
     IconTarget,
-    IconUsers,
     IconCompass,
     type IconType,
 } from './Norte/shared';
@@ -263,12 +262,6 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
     );
 };
 
-const STATS = [
-    { icon: IconChart, prefix: '+R$ ', value: 5, suffix: 'M', label: 'em mídia gerida' },
-    { icon: IconTarget, value: 7.5, decimals: 1, suffix: 'x', label: 'ROAS médio' },
-    { icon: IconUsers, prefix: '+', value: 150, suffix: 'k', label: 'leads captados' },
-    { icon: IconCompass, prefix: '+', value: 100, label: 'parceiros' },
-];
 
 // Manifesto: as palavras acendem conforme a frase sobe na tela, e dois
 // chips de ícone vivem dentro do texto.
@@ -367,10 +360,13 @@ const REELS = [
     { client: 'YUAI', title: 'Sushi no copo', src: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/YUAI%20-%20SUSHI%20NO%20COPO.mov', poster: '/video-posters/yuai-sushi-copo-sm.jpg' },
 ];
 
+// `photo` é o recorte de corpo inteiro usado na seção de sócios;
+// `avatar` é o mesmo recorte já cortado na cabeça e sobre um disco
+// verde, pro empilhamento de bolinhas do bento.
 const PARTNERS = [
-    { name: 'Ed Rodrigues', role: 'Gestor estratégico', photo: '/socios/ed-cut.png' },
-    { name: 'Brenno Soares', role: 'Administrador', photo: '/socios/brenno-cut.png' },
-    { name: 'Francyelle Barbosa', role: 'Diretora de conteúdo', photo: '/socios/francyelle-cut.png' },
+    { name: 'Ed Rodrigues', role: 'Gestor estratégico', photo: '/socios/ed-cut.png', avatar: '/socios/ed-avatar.png' },
+    { name: 'Brenno Soares', role: 'Administrador', photo: '/socios/brenno-cut.png', avatar: '/socios/brenno-avatar.png' },
+    { name: 'Francyelle Barbosa', role: 'Diretora de conteúdo', photo: '/socios/francyelle-cut.png', avatar: '/socios/francyelle-avatar.png' },
 ];
 
 const FAQS = [
@@ -568,11 +564,6 @@ const NorteLanding: React.FC = () => {
 
                 <div className={`relative ${CONTAINER} pb-14 md:pb-16`}>
                     <div className="text-center max-w-4xl mx-auto">
-                        <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-3.5 py-1.5 font-mono text-[11px] tracking-[0.14em] uppercase text-white/80 mb-8">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F]" />
-                            Agência de marketing · Manaus
-                        </span>
-
                         {/* Revelação em cascata: a primeira palavra já nasce
                             nítida e as últimas ganham foco conforme rola. */}
                         <h1 className={`${H1} text-[clamp(36px,5.4vw,66px)] mb-6`}>
@@ -626,8 +617,7 @@ const NorteLanding: React.FC = () => {
                     </div>
 
                     {/* Anel de resultados — dez clientes dando a volta sozinhos.
-                        O palco abre a perspectiva; o anel gira num keyframe
-                        e pausa no hover pra dar tempo de ler. */}
+                        O palco abre a perspectiva e o anel gira num keyframe. */}
                     <div
                         className="fan-stage mt-14 md:mt-16 no-scrollbar overflow-x-auto md:overflow-visible"
                         style={{ perspective: '1250px', perspectiveOrigin: '50% 45%' }}
@@ -682,27 +672,107 @@ const NorteLanding: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Números que sobem quando a barra entra na tela */}
-                <div className="relative border-t border-white/10">
-                    <div className={CONTAINER}>
-                        <div className="grid grid-cols-2 md:grid-cols-4 md:divide-x divide-white/10">
-                            {STATS.map(({ icon: Icon, label, ...n }, i) => (
-                                <div
-                                    key={label}
-                                    className={`flex items-center gap-3 py-5 ${i > 0 ? 'md:pl-6' : ''} ${i > 1 ? 'border-t md:border-t-0 border-white/10' : ''}`}
-                                >
-                                    <Icon className="w-5 h-5 text-[#8DC63F] flex-shrink-0" />
-                                    <div className="min-w-0">
-                                        <CountUp
-                                            {...n}
-                                            className={`${H2} text-[20px] leading-none block`}
-                                        />
-                                        <p className="text-[11px] text-white/45 mt-1 truncate">
-                                            {label}
-                                        </p>
-                                    </div>
+            </section>
+
+            {/* ═══ Números — bento logo abaixo da hero ═══
+                Quatro caixas de pesos diferentes em vez da barra fina de
+                antes: foto, papel, limão e preto. Cada número sobe do zero
+                quando entra na tela. */}
+            <section className="bg-white pt-12 md:pt-16 pb-4 md:pb-6">
+                <div className={CONTAINER}>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:h-[430px]">
+                        {/* Mídia gerida — foto de cliente com a cifra por cima */}
+                        <div className="relative rounded-[20px] overflow-hidden bg-[#14261A] min-h-[300px]">
+                            <img
+                                src="/clientes/fotos/taychi-salao.jpg"
+                                alt="Salão do Taychi Sushi Bar, cliente da Norte em Manaus"
+                                loading="lazy"
+                                className="absolute inset-0 w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E0C]/70 via-transparent to-[#0B0E0C]/30" />
+
+                            <img
+                                src="/norte/logo-branca.png"
+                                alt=""
+                                className="absolute top-5 left-5 h-9 w-auto object-contain"
+                            />
+                            <span className="absolute top-5 right-5 w-10 h-10 rounded-xl bg-white text-[#131313] flex items-center justify-center">
+                                <IconChart className="w-5 h-5" />
+                            </span>
+
+                            <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-white p-5">
+                                <CountUp
+                                    prefix="+R$ "
+                                    value={5}
+                                    suffix="M"
+                                    className={`${H2} text-[42px] leading-none block`}
+                                />
+                                <p className="mt-3 text-[13px] text-black/50 leading-snug">
+                                    em mídia gerida no Meta Ads e no Google Ads desde 2020.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Parceiros — número, os três sócios e a régua do time */}
+                        <div
+                            className="rounded-[20px] p-7 flex flex-col"
+                            style={{ backgroundColor: PAPER }}
+                        >
+                            <p className="text-[14px] text-black/55">Parceiros impactados</p>
+                            <CountUp
+                                prefix="+"
+                                value={100}
+                                className={`${H2} text-[54px] leading-none block mt-2`}
+                            />
+
+                            <div className="mt-auto">
+                                <div className="flex -space-x-2.5 mb-5">
+                                    {PARTNERS.map((p) => (
+                                        <span
+                                            key={p.name}
+                                            title={p.name}
+                                            className="w-11 h-11 rounded-full overflow-hidden border-2 border-[#F5F5F3] bg-[#14261A]"
+                                        >
+                                            <img
+                                                src={p.avatar}
+                                                alt={p.name}
+                                                loading="lazy"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </span>
+                                    ))}
                                 </div>
-                            ))}
+                                <p className="text-[15px] text-black/65 leading-snug">
+                                    Time fixo e nominal por conta — você sabe exatamente quem
+                                    responde pelo seu projeto.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Leads e ROAS empilhados */}
+                        <div className="flex flex-col gap-3">
+                            <div className="rounded-[20px] bg-[#8DC63F] text-[#0B0E0C] p-7 flex-1 flex flex-col">
+                                <p className="text-[14px] text-[#0B0E0C]/60">Leads captados</p>
+                                <CountUp
+                                    prefix="+"
+                                    value={150}
+                                    suffix="k"
+                                    className={`${H2} text-[54px] leading-none block mt-2`}
+                                />
+                                <p className="mt-auto pt-5 text-[15px] text-[#0B0E0C]/70 leading-snug">
+                                    gerados para clientes em Manaus e fora dela.
+                                </p>
+                            </div>
+
+                            <div className="rounded-[20px] bg-[#131313] text-white px-7 py-6 flex items-center justify-between gap-4">
+                                <p className="text-[14px] text-white/55">ROAS médio</p>
+                                <CountUp
+                                    value={7.5}
+                                    decimals={1}
+                                    suffix="x"
+                                    className={`${H2} text-[40px] leading-none`}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

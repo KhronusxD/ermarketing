@@ -202,8 +202,6 @@ body {
         animation: norte-ring var(--dur, 64s) linear infinite;
     }
 
-    .fan-group:hover { animation-play-state: paused; }
-
     .fan-item {
         position: absolute;
         top: 0;
@@ -212,8 +210,6 @@ body {
         transform: rotateY(var(--ry)) translateZ(var(--r)) translateY(var(--ty, 0px));
         animation: norte-card var(--dur, 64s) linear infinite;
     }
-
-    .fan-group:hover .fan-item { animation-play-state: paused; }
 
     .fan-item,
     .fan-item > * { backface-visibility: hidden; }
