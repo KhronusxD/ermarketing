@@ -73,12 +73,20 @@ const FAN = [
     { client: 'Tecno Obras', tag: 'Construção', metric: '+500 mil', label: 'views/mês' },
 ];
 
+// Posição de cada carta no anel. O passo de 20° é o mesmo da referência
+// que o Ed trouxe: ângulo monotônico, não leque simétrico — é o que faz a
+// fileira envolver em vez de ficar chapada. RING_R é o raio; RING_SPIN, o
+// quanto o anel roda do topo até o fim do curso de scroll.
+const RING_R = 640;
+const RING_SPIN = -18;
+const CARD_W = 212;
+
 const FAN_GEOMETRY = [
-    { ry: 24, ty: 30, sc: 0.88 },
-    { ry: 12, ty: 10, sc: 0.95 },
-    { ry: 0, ty: 0, sc: 1 },
-    { ry: -12, ty: 10, sc: 0.95 },
-    { ry: -24, ty: 30, sc: 0.88 },
+    { ry: -40, ty: 18 },
+    { ry: -20, ty: 4 },
+    { ry: 0, ty: 0 },
+    { ry: 20, ty: 4 },
+    { ry: 40, ty: 18 },
 ];
 
 const STATS = [
@@ -452,11 +460,14 @@ const NorteLanding: React.FC = () => {
                         deitando numa mesa. */}
                     <div
                         className="mt-14 md:mt-16 no-scrollbar overflow-x-auto md:overflow-visible"
-                        style={{ perspective: '1400px', perspectiveOrigin: '50% 0%' }}
+                        style={{ perspective: '1250px', perspectiveOrigin: '50% 45%' }}
                     >
                         <div
-                            className="fan-group flex gap-3 md:gap-2 w-max md:w-auto md:justify-center px-1"
-                            style={{ ['--rx' as string]: `${6 + fanProgress * 20}deg` }}
+                            className="fan-group relative flex gap-3 md:gap-0 w-max md:w-auto px-1"
+                            style={{
+                                ['--r' as string]: `${RING_R}px`,
+                                ['--rx' as string]: `${5 + fanProgress * 9}deg`,
+                            }}
                         >
                             {FAN.map((card, i) => {
                                 const g = FAN_GEOMETRY[i];
@@ -473,9 +484,11 @@ const NorteLanding: React.FC = () => {
                                                 : 'bg-white/[0.07] border-white/15 text-white backdrop-blur-sm'
                                         }`}
                                         style={{
-                                            ['--ry' as string]: `${g.ry}deg`,
+                                            // o giro do scroll soma ao ângulo da carta:
+                                            // é isso que faz o anel rodar de verdade
+                                            ['--ry' as string]: `${g.ry + fanProgress * RING_SPIN}deg`,
                                             ['--ty' as string]: `${g.ty}px`,
-                                            ['--sc' as string]: `${g.sc}`,
+                                            ['--cw' as string]: `${CARD_W}px`,
                                         }}
                                     >
                                         {/* Espessura: duas faces laterais de 14px.

@@ -145,22 +145,26 @@ body {
 
 /* ── Norte ─────────────────────────────────────────────────────────── */
 
-/* Leque de cards da hero. O "3D" é CSS puro: o palco abre a perspectiva,
-   o grupo tomba no eixo X conforme a página rola (--rx vem do scroll) e
-   cada carta gira no eixo Y. As faces laterais dão espessura de objeto —
-   backface-visibility esconde automaticamente a que está de costas.
+/* Leque de cards da hero — anel, não fileira.
+   Medi a referência: as cartas dela não estão num plano. Cada uma tem um
+   rotateY próprio num passo constante, e o grupo inteiro gira conforme a
+   página rola. Aqui é um cilindro de verdade: cada carta gira no eixo Y e
+   é empurrada por translateZ(--r) ao longo do próprio eixo, caindo numa
+   circunferência; o grupo recua o mesmo --r pra que a carta central volte
+   pro plano zero. O giro do scroll entra somando ângulo a cada carta, o
+   que faz o anel realmente rodar em vez de só entortar.
 
-   No mobile e sob prefers-reduced-motion tudo vira um trilho reto:
-   rotação em tela estreita só atrapalha a leitura e come área útil. */
+   As faces laterais dão espessura — backface-visibility esconde sozinha
+   a que está de costas.
+
+   No mobile e sob prefers-reduced-motion nada disso vale: as cartas
+   voltam pro fluxo normal e viram um trilho reto. */
 .fan-group {
     transform-style: preserve-3d;
-    transform: rotateX(var(--rx, 0deg));
-    transition: transform 120ms linear;
 }
 
 .fan-item {
     transform-style: preserve-3d;
-    transform: rotateY(var(--ry, 0deg)) translateY(var(--ty, 0px)) scale(var(--sc, 1));
 }
 
 .fan-edge {
@@ -169,12 +173,30 @@ body {
     transform: rotateY(var(--edge-rot));
 }
 
-@media (max-width: 767px) {
-    .fan-group, .fan-item { transform: none; }
-    .fan-edge { display: none; }
+@media (min-width: 768px) {
+    .fan-group {
+        height: 296px;
+        transform: rotateX(var(--rx, 0deg)) translateZ(calc(var(--r) * -1));
+        transition: transform 120ms linear;
+    }
+
+    .fan-item {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        margin-left: calc(var(--cw) / -2);
+        transform: rotateY(var(--ry, 0deg)) translateZ(var(--r))
+            translateY(var(--ty, 0px));
+        transition: transform 120ms linear;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .fan-group, .fan-item { transform: none; }
+    .fan-group, .fan-item {
+        position: static;
+        height: auto;
+        margin-left: 0;
+        transform: none;
+    }
     .fan-edge { display: none; }
 }
