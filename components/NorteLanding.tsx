@@ -119,13 +119,20 @@ const FAN: FanCard[] = [
 // R·passo ≈ largura da carta e visíveis = 180°/passo. Não dá pra ter as
 // duas coisas mexendo só no raio — quem afrouxa a compressão das pontas
 // sem afastar o miolo é a perspectiva, por isso ela ficou distante.
-const RING_R = 505;
-const CARD_W = 196;
+// RING_R e CARD_W vivem no CSS (--r e --cw), porque mudam no breakpoint:
+// 505/196 no desktop, 330/148 no celular. Aqui fica só o que não muda.
 const RING_STEP = 360 / FAN.length;
 
 // Mais cartas na volta pedem volta mais longa: a 84s cada uma passa pela
 // frente a cada 5,3s, tempo de ler antes de ela girar.
 const RING_DUR = 84;
+
+// A perspectiva acompanha o raio: mantida em 2000 numa tela de 390px o
+// anel viraria quase uma fileira reta, sem profundidade nenhuma.
+const PERSPECTIVE: React.CSSProperties = {
+    perspective: 'clamp(760px, 140vw, 2000px)',
+    perspectiveOrigin: '50% 45%',
+};
 
 // Atraso negativo por carta: sincroniza o fade de cada uma com o momento
 // exato em que ela cruza os 90° do anel.
@@ -384,7 +391,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
         return (
             <>
                 <p className={`${TAG} ${s.tag} mb-5`}>{card.tag}</p>
-                <p className={`${H2} text-[19px] leading-[1.15]`}>{card.line}</p>
+                <p className={`${H2} text-[15px] md:text-[19px] leading-[1.15]`}>{card.line}</p>
                 <span className="mt-auto inline-flex items-center gap-2 text-[11px] text-white/45">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F]" />
                     Norte
@@ -396,10 +403,10 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
     if (card.kind === 'accent') {
         return (
             <>
-                <span className="w-11 h-11 rounded-full bg-[#0B0E0C] text-[#8DC63F] flex items-center justify-center mb-5">
+                <span className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-[#0B0E0C] text-[#8DC63F] flex items-center justify-center mb-3 md:mb-5">
                     <IconRocket className="w-5 h-5" />
                 </span>
-                <p className={`${H2} text-[28px] leading-none mb-1.5 ${s.metric}`}>{card.metric}</p>
+                <p className={`${H2} text-[22px] md:text-[28px] leading-none mb-1.5 ${s.metric}`}>{card.metric}</p>
                 <p className={`text-[11px] ${s.label}`}>{card.label}</p>
                 <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
             </>
@@ -410,7 +417,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
         return (
             <>
                 <p className={`${TAG} ${s.tag} mb-4`}>{card.tag}</p>
-                <div className="flex items-end gap-[3px] h-[56px] mb-5">
+                <div className="flex items-end gap-[3px] h-[38px] md:h-[56px] mb-4 md:mb-5">
                     {card.bars!.map((b, i) => (
                         <div
                             key={i}
@@ -421,7 +428,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
                         />
                     ))}
                 </div>
-                <p className={`${H2} text-[24px] leading-none mb-1 ${s.metric}`}>{card.metric}</p>
+                <p className={`${H2} text-[19px] md:text-[24px] leading-none mb-1 ${s.metric}`}>{card.metric}</p>
                 <p className={`text-[11px] ${s.label}`}>{card.label}</p>
                 <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
             </>
@@ -431,7 +438,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
     if (card.kind === 'dash') {
         return (
             <>
-                <div className="rounded-xl bg-[#131313] text-white px-3 py-2.5 flex items-center justify-between mb-5">
+                <div className="rounded-xl bg-[#131313] text-white px-2.5 md:px-3 py-2 md:py-2.5 flex items-center justify-between mb-4 md:mb-5">
                     <div>
                         <p className={`${H3} text-[12px] leading-none`}>Performance</p>
                         <p className="text-[9px] text-white/40 mt-1">últimos 30 dias</p>
@@ -446,7 +453,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
                         />
                     </svg>
                 </div>
-                <p className={`${H2} text-[27px] leading-none mb-2 ${s.metric}`}>{card.metric}</p>
+                <p className={`${H2} text-[21px] md:text-[27px] leading-none mb-2 ${s.metric}`}>{card.metric}</p>
                 <p className={`text-[11px] ${s.label}`}>{card.label}</p>
                 <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
             </>
@@ -467,7 +474,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
                     ))}
                 </div>
                 <p className={`${TAG} ${s.tag} mb-2`}>{card.tag}</p>
-                <p className={`${H2} text-[25px] leading-none mb-1 ${s.metric}`}>{card.metric}</p>
+                <p className={`${H2} text-[20px] md:text-[25px] leading-none mb-1 ${s.metric}`}>{card.metric}</p>
                 <p className={`text-[11px] ${s.label}`}>{card.label}</p>
                 <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
             </>
@@ -477,7 +484,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
     return (
         <>
             <p className={`${TAG} ${s.tag} mb-5`}>{card.tag}</p>
-            <p className={`${H2} text-[27px] leading-none mb-1.5 ${s.metric}`}>{card.metric}</p>
+            <p className={`${H2} text-[21px] md:text-[27px] leading-none mb-1.5 ${s.metric}`}>{card.metric}</p>
             <p className={`text-[11px] ${s.label}`}>{card.label}</p>
             <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
         </>
@@ -1295,36 +1302,32 @@ const NorteLanding: React.FC = () => {
                     {/* Anel de resultados — dez clientes dando a volta sozinhos.
                         O palco abre a perspectiva e o anel gira num keyframe. */}
                     <div
-                        className="fan-stage mt-14 md:mt-16 no-scrollbar overflow-x-auto md:overflow-visible"
-                        style={{ perspective: '2000px', perspectiveOrigin: '50% 45%' }}
+                        className="fan-stage -mx-5 md:mx-0 mt-12 md:mt-16 no-scrollbar overflow-hidden md:overflow-visible"
+                        style={PERSPECTIVE}
                     >
                         <div
-                            className="fan-group relative flex gap-3 md:gap-0 w-max md:w-auto px-1"
-                            style={{
-                                ['--r' as string]: `${RING_R}px`,
-                                ['--rx' as string]: '6deg',
-                                ['--cw' as string]: `${CARD_W}px`,
-                                ['--dur' as string]: `${RING_DUR}s`,
-                            }}
+                            className="fan-group"
+                            style={{ ['--dur' as string]: `${RING_DUR}s` }}
                         >
                             {FAN.map((card, i) => {
                                 const skin = CARD_SKIN[card.skin];
                                 return (
                                     <div
                                         key={card.client ?? card.line}
-                                        className={`fan-item relative flex flex-col flex-shrink-0 w-[196px] md:h-[226px] rounded-2xl p-[18px] border ${skin.box}`}
+                                        className={`fan-item flex flex-col w-[148px] h-[196px] md:w-[196px] md:h-[226px] rounded-2xl p-3.5 md:p-[18px] border ${skin.box}`}
                                         style={{
                                             ['--ry' as string]: `${i * RING_STEP}deg`,
                                             ['--ty' as string]: `${RING_LIFT[i]}px`,
                                             animationDelay: `${cardDelay(i)}s`,
                                         }}
                                     >
-                                        {/* Espessura: duas faces laterais de 10px.
+                                        {/* Espessura: duas faces laterais, 7px no celular e 10 no
+                                            desktop — proporção da carta, não medida fixa.
                                             Só a que estiver de frente aparece —
                                             backface-visibility cuida da outra. */}
                                         <span
                                             aria-hidden="true"
-                                            className="fan-edge absolute top-0 right-0 h-full w-[10px] rounded-r-2xl"
+                                            className="fan-edge absolute top-0 right-0 h-full w-[7px] md:w-[10px] rounded-r-2xl"
                                             style={{
                                                 background: skin.edge,
                                                 ['--edge-origin' as string]: 'left',
@@ -1333,7 +1336,7 @@ const NorteLanding: React.FC = () => {
                                         />
                                         <span
                                             aria-hidden="true"
-                                            className="fan-edge absolute top-0 left-0 h-full w-[10px] rounded-l-2xl"
+                                            className="fan-edge absolute top-0 left-0 h-full w-[7px] md:w-[10px] rounded-l-2xl"
                                             style={{
                                                 background: skin.edge,
                                                 ['--edge-origin' as string]: 'right',

@@ -146,31 +146,21 @@ body {
 /* ── Norte ─────────────────────────────────────────────────────────── */
 
 /* Anel de cards da hero — carrossel 3D contínuo.
-   Cada carta gira no eixo Y no seu ângulo (360° / 10 = 36° de passo) e é
-   empurrada por translateZ(--r) ao longo do próprio eixo, caindo numa
+   Cada carta gira no eixo Y no seu ângulo (360° / 16 = 22,5° de passo) e
+   é empurrada por translateZ(--r) ao longo do próprio eixo, caindo numa
    circunferência. O anel recua o mesmo --r pra que a carta da frente
    volte pro plano zero, e gira sozinho num keyframe — o giro é do grupo,
-   uma animação composta só, não dez.
+   uma animação composta só, não dezesseis.
 
    backface-visibility resolve as cartas da metade de trás: elas somem
    exatamente aos 90°, que é justamente onde estão de perfil e já não têm
    largura visível. Some sem estalo. Precisa valer também pros filhos:
    com preserve-3d o texto não herda o recorte do pai.
 
-   Pausa no hover pra dar chance de ler. No mobile e sob
-   prefers-reduced-motion vira um trilho reto, sem giro. */
-/* Opacidade de cada carta ao longo da volta. Faz duas coisas de uma vez.
-
-   Primeira: dá o esfumado nas laterais. A carta da frente vem sólida e as
-   vizinhas vão ficando translúcidas conforme se afastam, então o anel
-   parece dissolver nas bordas em vez de terminar num corte seco.
-
-   Segunda: apaga quem está de perfil. Sem isso, a carta que cruza os 90°
-   vira um risco fino de 1px atravessado sobre as da frente — parece bug,
-   não profundidade.
-
-   Roda no mesmo período do anel, com atraso negativo por índice, então
-   cada carta escurece e acende exatamente na posição certa da volta. */
+   O anel vale também no celular, só que menor: raio e carta encolhem e a
+   perspectiva se aproxima, então cabem duas cartas de frente com as
+   vizinhas sangrando pelas bordas. Os números vivem em custom properties
+   justamente pra que só eles mudem no breakpoint, e não a geometria. */
 @keyframes norte-card {
     0%        { opacity: 1; }
     12%       { opacity: 0.85; }
@@ -186,8 +176,29 @@ body {
     to   { transform: rotateX(var(--rx)) translateZ(calc(var(--r) * -1)) rotateY(-360deg); }
 }
 
-.fan-group { transform-style: preserve-3d; }
-.fan-item { transform-style: preserve-3d; }
+.fan-group {
+    --r: 330px;
+    --cw: 148px;
+    --rx: 7deg;
+    position: relative;
+    height: 208px;
+    transform-style: preserve-3d;
+    will-change: transform;
+    animation: norte-ring var(--dur, 84s) linear infinite;
+}
+
+.fan-item {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: calc(var(--cw) / -2);
+    transform-style: preserve-3d;
+    transform: rotateY(var(--ry)) translateZ(var(--r)) translateY(var(--ty, 0px));
+    animation: norte-card var(--dur, 84s) linear infinite;
+}
+
+.fan-item,
+.fan-item > * { backface-visibility: hidden; }
 
 .fan-edge {
     backface-visibility: hidden;
@@ -197,40 +208,36 @@ body {
 
 @media (min-width: 768px) {
     .fan-group {
+        --r: 505px;
+        --cw: 196px;
+        --rx: 6deg;
         height: 268px;
-        will-change: transform;
-        animation: norte-ring var(--dur, 64s) linear infinite;
+    }
+}
+
+/* Sem animação: o anel não faz sentido parado, então vira trilho que se
+   arrasta com o dedo. */
+@media (prefers-reduced-motion: reduce) {
+    .fan-stage { overflow-x: auto; }
+
+    .fan-group {
+        position: static;
+        height: auto;
+        display: flex;
+        gap: 12px;
+        width: max-content;
+        transform: none;
+        animation: none;
     }
 
     .fan-item {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        margin-left: calc(var(--cw) / -2);
-        transform: rotateY(var(--ry)) translateZ(var(--r)) translateY(var(--ty, 0px));
-        animation: norte-card var(--dur, 64s) linear infinite;
-    }
-
-    .fan-item,
-    .fan-item > * { backface-visibility: hidden; }
-}
-
-@media (max-width: 767px) {
-    .fan-stage {
-        mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
-        -webkit-mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .fan-group, .fan-item {
         position: static;
-        height: auto;
         margin-left: 0;
         transform: none;
         animation: none;
         opacity: 1;
     }
+
     .fan-edge { display: none; }
 }
 
