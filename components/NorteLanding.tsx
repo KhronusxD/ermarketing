@@ -21,6 +21,7 @@ import {
     type IconType,
 } from './Norte/shared';
 import { SERVICES } from './Norte/services';
+import { POSTS } from './Blog/posts';
 
 // /norte — site institucional da Norte Marketing.
 //
@@ -668,6 +669,15 @@ const PARTNERS = [
     { name: 'Ed Rodrigues', role: 'Gestor estratégico', photo: '/socios/ed-cut.png', avatar: '/socios/ed-avatar.png' },
     { name: 'Brenno Soares', role: 'Administrador', photo: '/socios/brenno-cut.png', avatar: '/socios/brenno-avatar.png' },
     { name: 'Francyelle Barbosa', role: 'Diretora de conteúdo', photo: '/socios/francyelle-cut.png', avatar: '/socios/francyelle-avatar.png' },
+];
+
+// Três posts em destaque na home. A capa vem de foto nossa de cliente —
+// o blog não tem imagem de capa própria, e banco de imagem genérico
+// contradiz o resto da página, que é registro real.
+const BLOG_PICKS = [
+    { slug: 'agencia-de-marketing-em-manaus', photo: '/clientes/fotos/itv-interior.jpg' },
+    { slug: 'trafego-pago-restaurantes-manaus-2026', photo: '/clientes/fotos/taychi-salao.jpg' },
+    { slug: 'quanto-custa-marketing-digital-em-manaus', photo: '/clientes/fotos/tecnoobras-obra.jpg' },
 ];
 
 const FAQS = [
@@ -1721,6 +1731,68 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
+            {/* ═══ Blog ═══ */}
+            <section className={`${SECTION}`} style={{ backgroundColor: PAPER }}>
+                <div className={CONTAINER}>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 md:mb-14">
+                        <div className="max-w-xl">
+                            <Eyebrow>Blog e artigos</Eyebrow>
+                            <h2 className={`mt-4 ${H2} text-[clamp(28px,3.9vw,50px)]`}>
+                                O que a gente aprende, a gente escreve.
+                            </h2>
+                            <p className="mt-5 text-[15px] md:text-[17px] tracking-[-0.01em] text-black/45 leading-relaxed">
+                                Sem fórmula mágica e sem jargão: o que funciona em Manaus,
+                                com número na mesa.
+                            </p>
+                        </div>
+
+                        <a
+                            href="/blog"
+                            className="group inline-flex flex-shrink-0 items-center gap-2.5 rounded-full bg-[#131313] hover:bg-[#14261A] text-white font-semibold text-sm pl-6 pr-2 py-2 transition-colors"
+                        >
+                            Ver tudo
+                            <span className="w-8 h-8 rounded-full bg-[#8DC63F] text-[#0B0E0C] flex items-center justify-center transition-transform group-hover:rotate-45">
+                                <Arrow className="w-4 h-4 -rotate-45" />
+                            </span>
+                        </a>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {BLOG_PICKS.map(({ slug, photo }) => {
+                            const post = POSTS.find((x) => x.slug === slug);
+                            if (!post) return null;
+                            return (
+                                <a
+                                    key={slug}
+                                    href={`/blog/${slug}`}
+                                    className="group relative rounded-[22px] overflow-hidden aspect-[4/5] flex flex-col justify-end p-6"
+                                >
+                                    <img
+                                        src={photo}
+                                        alt=""
+                                        loading="lazy"
+                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E0C] via-[#0B0E0C]/50 to-[#0B0E0C]/10" />
+
+                                    <span
+                                        className={`relative ${TAG} text-white/60 mb-3`}
+                                    >
+                                        {post.category}
+                                    </span>
+                                    <h3 className={`relative ${H2} text-[21px] text-white leading-[1.15]`}>
+                                        {post.title}
+                                    </h3>
+                                    <span className="relative mt-4 font-mono text-[11px] tracking-[0.1em] uppercase text-[#8DC63F] inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                                        Ler artigo <Arrow className="w-3.5 h-3.5" />
+                                    </span>
+                                </a>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
             {/* ═══ FAQ ═══ */}
             <section className={`${SECTION}`} style={{ backgroundColor: PAPER }}>
                 <div className="max-w-[880px] mx-auto px-5 md:px-8">
@@ -1779,12 +1851,37 @@ const NorteLanding: React.FC = () => {
                 id="contato"
                 className={`relative bg-[#14261A] text-white overflow-hidden ${SECTION}`}
             >
+                {/* Cachoeira e trilha. Abaixo da dobra, então carrega
+                    preguiçoso: não disputa banda com a hero. O véu é mais
+                    fechado que o da hero porque a foto é clara — sem ele o
+                    texto branco e o botão limão sumiriam. */}
+                <picture aria-hidden="true">
+                    <source
+                        type="image/webp"
+                        sizes="100vw"
+                        srcSet={
+                            '/norte/hero/fundo-contato-640.webp 640w, ' +
+                            '/norte/hero/fundo-contato-1024.webp 1024w, ' +
+                            '/norte/hero/fundo-contato-1440.webp 1440w, ' +
+                            '/norte/hero/fundo-contato-1920.webp 1920w, ' +
+                            '/norte/hero/fundo-contato-2400.webp 2400w'
+                        }
+                    />
+                    <img
+                        src="/norte/hero/fundo-contato-1440.jpg"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
+                </picture>
+
                 <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[-60%] w-[110%] h-[150%]"
+                    className="absolute inset-0"
                     style={{
                         background:
-                            'radial-gradient(ellipse at center, rgba(141,198,63,0.18) 0%, transparent 68%)',
+                            'linear-gradient(105deg, rgba(11,20,14,0.95) 0%, rgba(13,26,18,0.91) 44%, rgba(14,30,20,0.85) 74%, rgba(15,32,21,0.80) 100%)',
                     }}
                 />
                 <div className={`relative ${CONTAINER}`}>
