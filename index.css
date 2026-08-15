@@ -173,11 +173,11 @@ body {
    cada carta escurece e acende exatamente na posição certa da volta. */
 @keyframes norte-card {
     0%        { opacity: 1; }
-    10%       { opacity: 0.72; }
-    20%       { opacity: 0.26; }
+    10%       { opacity: 0.88; }
+    20%       { opacity: 0.52; }
     25%, 75%  { opacity: 0; }
-    80%       { opacity: 0.26; }
-    90%       { opacity: 0.72; }
+    80%       { opacity: 0.52; }
+    90%       { opacity: 0.88; }
     100%      { opacity: 1; }
 }
 
@@ -197,7 +197,7 @@ body {
 
 @media (min-width: 768px) {
     .fan-group {
-        height: 292px;
+        height: 268px;
         will-change: transform;
         animation: norte-ring var(--dur, 64s) linear infinite;
     }
@@ -232,4 +232,34 @@ body {
         opacity: 1;
     }
     .fan-edge { display: none; }
+}
+
+/* Entrada dos cards de serviço: sobem de baixo com a opacidade abrindo.
+   O estado escondido mora numa classe que só o JS aplica — sem ela o card
+   fica visível, que é como o HTML pré-renderizado precisa sair. As barras
+   e as réguas de progresso crescem junto, cada uma com o seu atraso. */
+.svc {
+    transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+        transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.svc-off {
+    opacity: 0;
+    transform: translateY(28px);
+}
+
+.svc-bar,
+.svc-fill {
+    transition: transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.svc-bar { transform-origin: bottom center; }
+.svc-fill { transform-origin: left center; }
+
+.svc-off .svc-bar { transform: scaleY(0); }
+.svc-off .svc-fill { transform: scaleX(0); }
+
+@media (prefers-reduced-motion: reduce) {
+    .svc, .svc-bar, .svc-fill { transition: none; }
+    .svc-off { opacity: 1; transform: none; }
 }

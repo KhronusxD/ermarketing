@@ -10,6 +10,7 @@ import {
     CountUp,
     useScrollReveal,
     useElementReveal,
+    useRevealOnView,
     stagger,
     IconSearch,
     IconRoute,
@@ -96,12 +97,12 @@ const FAN: FanCard[] = [
 // Geometria do anel. Passo = 360° / nº de cartas, então elas se distribuem
 // pela volta inteira e vão se alternando na frente conforme gira.
 //
-// O raio sai da corda entre vizinhas: 2·R·sen(18°) ≈ 0,62·R. Com 395 a
-// corda fica em 244px pra uma carta de 230 — as vizinhas quase se tocam,
-// que é o agrupamento que a referência tem. Raio maior espalha demais e
-// o conjunto perde a leitura de baralho.
-const RING_R = 395;
-const CARD_W = 230;
+// Cinco cartas legíveis por vez. Elas ocupam o arco de -72° a +72°, ou
+// seja uma largura de 1,9·R mais a carta. Pra caber nos 1240 do container
+// sem estourar: 1,9·R + 196 ≤ 1240, logo R ≈ 530. Carta mais estreita
+// abre espaço pras das pontas sem que o miolo fique ralo.
+const RING_R = 530;
+const CARD_W = 196;
 const RING_STEP = 360 / FAN.length;
 const RING_DUR = 64;
 
@@ -168,15 +169,20 @@ const ServiceMock: React.FC<{ slug: string }> = ({ slug }) => {
                 <div className={`${MOCK} left-0 top-3 w-[150px] p-3.5 !bg-[#131313] !border-[#131313] -rotate-6`}>
                     <p className={`${H3} text-[11px] text-white leading-none`}>Custo por lead</p>
                     <p className="text-[8px] text-white/40 mt-1">últimos 30 dias</p>
-                    <p className={`${H2} text-[30px] text-white leading-none mt-4`}>R$ 1,57</p>
+                    <CountUp
+                        prefix="R$ "
+                        value={1.57}
+                        decimals={2}
+                        className={`${H2} text-[30px] text-white leading-none mt-4 block`}
+                    />
                 </div>
                 <div className={`${MOCK} right-0 bottom-2 w-[176px] p-3.5 rotate-3`}>
                     <div className="flex items-baseline justify-between mb-2">
                         <span className="text-[9px] text-black/45">Verba do mês</span>
-                        <span className={`${H3} text-[11px]`}>68%</span>
+                        <CountUp value={68} suffix="%" className={`${H3} text-[11px]`} />
                     </div>
                     <div className="h-1.5 rounded-full bg-black/[0.08] mb-3">
-                        <div className="h-full w-[68%] rounded-full bg-[#8DC63F]" />
+                        <div className="svc-fill h-full w-[68%] rounded-full bg-[#8DC63F]" />
                     </div>
                     {['Meta Ads', 'Google Ads', 'TikTok'].map((c, i) => (
                         <div key={c} className="flex items-center justify-between py-1.5 border-t border-black/5">
@@ -203,8 +209,8 @@ const ServiceMock: React.FC<{ slug: string }> = ({ slug }) => {
                         {[38, 52, 44, 68, 82, 61, 100].map((h, i) => (
                             <div
                                 key={i}
-                                className={`flex-1 rounded-[2px] ${i === 6 ? 'bg-[#8DC63F]' : 'bg-black/[0.09]'}`}
-                                style={{ height: `${h}%` }}
+                                className={`svc-bar flex-1 rounded-[2px] ${i === 6 ? 'bg-[#8DC63F]' : 'bg-black/[0.09]'}`}
+                                style={{ height: `${h}%`, transitionDelay: `${180 + i * 55}ms` }}
                             />
                         ))}
                     </div>
@@ -300,7 +306,12 @@ const ServiceMock: React.FC<{ slug: string }> = ({ slug }) => {
                     ))}
                 </div>
                 <div className={`${MOCK} right-6 bottom-0 w-[104px] px-3 py-2 rotate-[-2deg]`}>
-                    <p className={`${H3} text-[11px] leading-none`}>+500 mil</p>
+                    <CountUp
+                        prefix="+"
+                        value={500}
+                        suffix=" mil"
+                        className={`${H3} text-[11px] leading-none block`}
+                    />
                     <p className="text-[8px] text-black/45 mt-1">views/mês</p>
                 </div>
             </>
@@ -333,9 +344,13 @@ const ServiceMock: React.FC<{ slug: string }> = ({ slug }) => {
                         />
                     ))}
                 </div>
-                <p className={`${H3} text-[13px] leading-none`}>240 confirmados</p>
+                <CountUp
+                    value={240}
+                    suffix=" confirmados"
+                    className={`${H3} text-[13px] leading-none block`}
+                />
                 <div className="h-1.5 rounded-full bg-black/[0.08] mt-3">
-                    <div className="h-full w-[82%] rounded-full bg-[#8DC63F]" />
+                    <div className="svc-fill h-full w-[82%] rounded-full bg-[#8DC63F]" />
                 </div>
             </div>
         </>
@@ -350,7 +365,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
         return (
             <>
                 <p className={`${TAG} ${s.tag} mb-5`}>{card.tag}</p>
-                <p className={`${H2} text-[21px] leading-[1.15]`}>{card.line}</p>
+                <p className={`${H2} text-[19px] leading-[1.15]`}>{card.line}</p>
                 <span className="mt-auto inline-flex items-center gap-2 text-[11px] text-white/45">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F]" />
                     Norte
@@ -365,7 +380,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
                 <span className="w-11 h-11 rounded-full bg-[#0B0E0C] text-[#8DC63F] flex items-center justify-center mb-5">
                     <IconRocket className="w-5 h-5" />
                 </span>
-                <p className={`${H2} text-[32px] leading-none mb-1.5 ${s.metric}`}>{card.metric}</p>
+                <p className={`${H2} text-[28px] leading-none mb-1.5 ${s.metric}`}>{card.metric}</p>
                 <p className={`text-[11px] ${s.label}`}>{card.label}</p>
                 <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
             </>
@@ -387,7 +402,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
                         />
                     ))}
                 </div>
-                <p className={`${H2} text-[27px] leading-none mb-1 ${s.metric}`}>{card.metric}</p>
+                <p className={`${H2} text-[24px] leading-none mb-1 ${s.metric}`}>{card.metric}</p>
                 <p className={`text-[11px] ${s.label}`}>{card.label}</p>
                 <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
             </>
@@ -412,7 +427,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
                         />
                     </svg>
                 </div>
-                <p className={`${H2} text-[30px] leading-none mb-2 ${s.metric}`}>{card.metric}</p>
+                <p className={`${H2} text-[27px] leading-none mb-2 ${s.metric}`}>{card.metric}</p>
                 <p className={`text-[11px] ${s.label}`}>{card.label}</p>
                 <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
             </>
@@ -433,7 +448,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
                     ))}
                 </div>
                 <p className={`${TAG} ${s.tag} mb-2`}>{card.tag}</p>
-                <p className={`${H2} text-[28px] leading-none mb-1 ${s.metric}`}>{card.metric}</p>
+                <p className={`${H2} text-[25px] leading-none mb-1 ${s.metric}`}>{card.metric}</p>
                 <p className={`text-[11px] ${s.label}`}>{card.label}</p>
                 <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
             </>
@@ -443,7 +458,7 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
     return (
         <>
             <p className={`${TAG} ${s.tag} mb-5`}>{card.tag}</p>
-            <p className={`${H2} text-[30px] leading-none mb-1.5 ${s.metric}`}>{card.metric}</p>
+            <p className={`${H2} text-[27px] leading-none mb-1.5 ${s.metric}`}>{card.metric}</p>
             <p className={`text-[11px] ${s.label}`}>{card.label}</p>
             <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
         </>
@@ -562,6 +577,41 @@ const FAQS = [
     { q: 'Em quanto tempo vejo resultado?', a: 'Os primeiros 30 dias são de calibração (tracking, público, criativo). Dos 60 aos 90 dias a curva acelera. Quem desliga antes disso nunca vê o canal maduro.' },
 ];
 
+// Célula de serviço. Sobe de baixo quando entra na tela; as barras e as
+// réguas da maquete crescem junto, pelas classes que o CSS observa.
+const ServiceCell: React.FC<{
+    slug: string;
+    name: string;
+    teaser: string;
+    column: number;
+}> = ({ slug, name, teaser, column }) => {
+    const [ref, state] = useRevealOnView<HTMLAnchorElement>();
+
+    return (
+        <a
+            ref={ref}
+            href={`/norte/${slug}`}
+            className={`svc ${state === 'off' ? 'svc-off' : ''} group rounded-[24px] bg-white border border-black/[0.07] hover:border-[#8DC63F] hover:shadow-[0_18px_54px_rgba(11,14,12,0.09)] px-7 pt-8 pb-9 transition-all flex flex-col`}
+            style={{ transitionDelay: `${column * 90}ms` }}
+        >
+            <div className="relative h-[214px] mb-7">
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[290px] h-[200px] transition-transform duration-500 group-hover:-translate-y-[calc(50%+6px)]">
+                    <ServiceMock slug={slug} />
+                </div>
+            </div>
+
+            <h3 className={`${H2} text-[24px] text-center mb-3`}>{name}</h3>
+            <p className="text-[14px] text-black/45 leading-relaxed text-center max-w-[30ch] mx-auto">
+                {teaser}
+            </p>
+
+            <span className="mt-6 mx-auto font-mono text-[11px] tracking-[0.1em] uppercase text-[#3d6b12] inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                Ver detalhes <Arrow className="w-3.5 h-3.5" />
+            </span>
+        </a>
+    );
+};
+
 // ─── Reel card (vídeo só baixa quando chega perto do viewport) ───────
 
 const ReelCard: React.FC<{ reel: (typeof REELS)[number] }> = ({ reel }) => {
@@ -670,7 +720,7 @@ const Manifesto: React.FC = () => {
     return (
         <p
             ref={ref}
-            className={`${H2} text-[clamp(30px,4.6vw,60px)] max-w-[16ch] md:max-w-[20ch]`}
+            className={`${H2} text-[clamp(30px,4.6vw,60px)] max-w-[16ch] md:max-w-[20ch] mx-auto`}
         >
             {MANIFESTO.map((token, i) => {
                 const t = stagger(i, total, progress, 0);
@@ -843,7 +893,7 @@ const NorteLanding: React.FC = () => {
                         O palco abre a perspectiva e o anel gira num keyframe. */}
                     <div
                         className="fan-stage mt-14 md:mt-16 no-scrollbar overflow-x-auto md:overflow-visible"
-                        style={{ perspective: '1250px', perspectiveOrigin: '50% 45%' }}
+                        style={{ perspective: '1500px', perspectiveOrigin: '50% 45%' }}
                     >
                         <div
                             className="fan-group relative flex gap-3 md:gap-0 w-max md:w-auto px-1"
@@ -859,7 +909,7 @@ const NorteLanding: React.FC = () => {
                                 return (
                                     <div
                                         key={card.client ?? card.line}
-                                        className={`fan-item relative flex flex-col flex-shrink-0 w-[214px] md:w-[230px] md:h-[248px] rounded-2xl p-5 border ${skin.box}`}
+                                        className={`fan-item relative flex flex-col flex-shrink-0 w-[196px] md:h-[226px] rounded-2xl p-[18px] border ${skin.box}`}
                                         style={{
                                             ['--ry' as string]: `${i * RING_STEP}deg`,
                                             ['--ty' as string]: `${RING_LIFT[i]}px`,
@@ -1028,13 +1078,15 @@ const NorteLanding: React.FC = () => {
             {/* ═══ Manifesto ═══ */}
             <section className={`bg-white ${SECTION} border-t border-black/5`}>
                 <div className={CONTAINER}>
-                    <Eyebrow>Por que Norte</Eyebrow>
-                    <div className="mt-6">
-                        <Manifesto />
+                    <div className="flex flex-col items-center text-center">
+                        <Eyebrow>Por que Norte</Eyebrow>
+                        <div className="mt-6">
+                            <Manifesto />
+                        </div>
+                        <p className="mt-9 font-mono text-[12px] tracking-[0.12em] uppercase text-[#3d6b12]">
+                            A gente aponta a direção · Você caminha
+                        </p>
                     </div>
-                    <p className="mt-9 font-mono text-[12px] tracking-[0.12em] uppercase text-[#3d6b12]">
-                        A gente aponta a direção · Você caminha
-                    </p>
                 </div>
             </section>
 
@@ -1055,27 +1107,14 @@ const NorteLanding: React.FC = () => {
                     {/* Três por linha, cada célula com a maquete da frente em
                         cima e o texto centralizado embaixo. */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {SERVICES.map(({ slug, name, teaser }) => (
-                            <a
+                        {SERVICES.map(({ slug, name, teaser }, i) => (
+                            <ServiceCell
                                 key={slug}
-                                href={`/norte/${slug}`}
-                                className="group rounded-[24px] bg-white border border-black/[0.07] hover:border-[#8DC63F] hover:shadow-[0_18px_54px_rgba(11,14,12,0.09)] px-7 pt-8 pb-9 transition-all flex flex-col"
-                            >
-                                <div className="relative h-[214px] mb-7">
-                                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[290px] h-[200px] transition-transform duration-500 group-hover:-translate-y-[calc(50%+6px)]">
-                                        <ServiceMock slug={slug} />
-                                    </div>
-                                </div>
-
-                                <h3 className={`${H2} text-[24px] text-center mb-3`}>{name}</h3>
-                                <p className="text-[14px] text-black/45 leading-relaxed text-center max-w-[30ch] mx-auto">
-                                    {teaser}
-                                </p>
-
-                                <span className="mt-6 mx-auto font-mono text-[11px] tracking-[0.1em] uppercase text-[#3d6b12] inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                                    Ver detalhes <Arrow className="w-3.5 h-3.5" />
-                                </span>
-                            </a>
+                                slug={slug}
+                                name={name}
+                                teaser={teaser}
+                                column={i % 3}
+                            />
                         ))}
                     </div>
                 </div>

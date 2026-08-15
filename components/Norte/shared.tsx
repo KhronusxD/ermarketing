@@ -220,6 +220,46 @@ export const stagger = (i: number, total: number, progress: number, floor = 0.12
     return Math.max(0, Math.min(1, base + progress));
 };
 
+/** Entrada de baixo pra cima quando o elemento chega na tela.
+ *
+ *  Devolve 'idle' | 'off' | 'in'. O estado inicial é 'idle' e nele o
+ *  elemento fica no lugar, visível: é assim que o HTML pré-renderizado
+ *  sai, sem depender de JS pra ser lido. Só depois da montagem, e só se o
+ *  elemento ainda estiver abaixo da dobra, ele vai pra 'off' e espera a
+ *  vez. Quem já está na tela no carregamento nunca é escondido — esconder
+ *  nessa hora daria um piscar em vez de uma entrada. */
+export const useRevealOnView = <T extends HTMLElement>(): [
+    React.RefObject<T>,
+    'idle' | 'off' | 'in',
+] => {
+    const ref = React.useRef<T>(null);
+    const [state, setState] = React.useState<'idle' | 'off' | 'in'>('idle');
+
+    React.useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.85) return;
+
+        setState('off');
+        const io = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((e) => {
+                    if (e.isIntersecting) {
+                        setState('in');
+                        io.disconnect();
+                    }
+                });
+            },
+            { threshold: 0.18 },
+        );
+        io.observe(el);
+        return () => io.disconnect();
+    }, []);
+
+    return [ref, state];
+};
+
 /** Número que sobe de 0 até o valor quando entra na tela. Renderiza o
  *  valor final no HTML estático — crawler e leitor de tela veem o número. */
 export const CountUp: React.FC<{
