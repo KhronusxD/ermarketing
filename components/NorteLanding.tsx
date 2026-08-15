@@ -352,6 +352,9 @@ const NorteLanding: React.FC = () => {
     const [openFaq, setOpenFaq] = useState<number | null>(0);
     const resultsRef = useRef<HTMLDivElement | null>(null);
     const heroProgress = useScrollReveal(420);
+    // Curso mais longo que o do título: o leque continua tombando depois
+    // que as palavras já ficaram nítidas.
+    const fanProgress = useScrollReveal(760, 0);
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 30);
@@ -443,19 +446,28 @@ const NorteLanding: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Leque de resultados — mão de cartas em perspectiva */}
+                    {/* Leque de resultados — mão de cartas em perspectiva.
+                        O palco abre a perspectiva; o grupo tomba no eixo X
+                        conforme a página rola, como se as cartas fossem
+                        deitando numa mesa. */}
                     <div
                         className="mt-14 md:mt-16 no-scrollbar overflow-x-auto md:overflow-visible"
-                        style={{ perspective: '1500px' }}
+                        style={{ perspective: '1400px', perspectiveOrigin: '50% 0%' }}
                     >
-                        <div className="flex gap-3 md:gap-2 w-max md:w-auto md:justify-center px-1">
+                        <div
+                            className="fan-group flex gap-3 md:gap-2 w-max md:w-auto md:justify-center px-1"
+                            style={{ ['--rx' as string]: `${6 + fanProgress * 20}deg` }}
+                        >
                             {FAN.map((card, i) => {
                                 const g = FAN_GEOMETRY[i];
                                 const center = i === 2;
+                                const edge = center
+                                    ? 'rgba(206,206,199,1)'
+                                    : 'rgba(255,255,255,0.10)';
                                 return (
                                     <div
                                         key={card.client}
-                                        className={`fan-item flex-shrink-0 w-[200px] md:w-[212px] rounded-2xl p-5 border ${
+                                        className={`fan-item relative flex-shrink-0 w-[200px] md:w-[212px] rounded-2xl p-5 border ${
                                             center
                                                 ? 'bg-white border-white text-[#0B0E0C] shadow-[0_24px_60px_rgba(0,0,0,0.4)]'
                                                 : 'bg-white/[0.07] border-white/15 text-white backdrop-blur-sm'
@@ -466,6 +478,27 @@ const NorteLanding: React.FC = () => {
                                             ['--sc' as string]: `${g.sc}`,
                                         }}
                                     >
+                                        {/* Espessura: duas faces laterais de 14px.
+                                            Só a que estiver de frente aparece —
+                                            backface-visibility cuida da outra. */}
+                                        <span
+                                            aria-hidden="true"
+                                            className="fan-edge absolute top-0 right-0 h-full w-[14px] rounded-r-2xl"
+                                            style={{
+                                                background: edge,
+                                                ['--edge-origin' as string]: 'left',
+                                                ['--edge-rot' as string]: '90deg',
+                                            }}
+                                        />
+                                        <span
+                                            aria-hidden="true"
+                                            className="fan-edge absolute top-0 left-0 h-full w-[14px] rounded-l-2xl"
+                                            style={{
+                                                background: edge,
+                                                ['--edge-origin' as string]: 'right',
+                                                ['--edge-rot' as string]: '-90deg',
+                                            }}
+                                        />
                                         <p
                                             className={`font-mono text-[9px] tracking-[0.14em] uppercase mb-4 ${
                                                 center ? 'text-black/40' : 'text-white/45'

@@ -149,10 +149,11 @@ export const Eyebrow: React.FC<{ children: React.ReactNode; light?: boolean }> =
 // ─── Mecânicas de scroll ────────────────────────────────────────────
 
 /** Progresso 0→1 conforme a página rola `distance` px a partir do topo.
- *  Começa em 1 para que o HTML pré-renderizado saia legível e indexável —
- *  o valor real só entra depois da montagem. */
-export const useScrollReveal = (distance = 420): number => {
-    const [p, setP] = React.useState(1);
+ *  `initial` é o valor usado no pré-render, antes de existir scroll: 1 para
+ *  texto (o HTML estático precisa sair legível e indexável) e 0 para efeito
+ *  decorativo, que deve nascer no estado de repouso e não dar salto. */
+export const useScrollReveal = (distance = 420, initial = 1): number => {
+    const [p, setP] = React.useState(initial);
 
     React.useEffect(() => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;

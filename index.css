@@ -145,15 +145,36 @@ body {
 
 /* ── Norte ─────────────────────────────────────────────────────────── */
 
-/* Leque de cards da hero: a inclinação 3D só existe no desktop. No mobile
-   os cards viram um trilho reto — rotação em tela estreita só atrapalha
-   a leitura e come área útil. */
+/* Leque de cards da hero. O "3D" é CSS puro: o palco abre a perspectiva,
+   o grupo tomba no eixo X conforme a página rola (--rx vem do scroll) e
+   cada carta gira no eixo Y. As faces laterais dão espessura de objeto —
+   backface-visibility esconde automaticamente a que está de costas.
+
+   No mobile e sob prefers-reduced-motion tudo vira um trilho reto:
+   rotação em tela estreita só atrapalha a leitura e come área útil. */
+.fan-group {
+    transform-style: preserve-3d;
+    transform: rotateX(var(--rx, 0deg));
+    transition: transform 120ms linear;
+}
+
 .fan-item {
+    transform-style: preserve-3d;
     transform: rotateY(var(--ry, 0deg)) translateY(var(--ty, 0px)) scale(var(--sc, 1));
 }
-@media (max-width: 767px) {
-    .fan-item { transform: none; }
+
+.fan-edge {
+    backface-visibility: hidden;
+    transform-origin: var(--edge-origin) center;
+    transform: rotateY(var(--edge-rot));
 }
+
+@media (max-width: 767px) {
+    .fan-group, .fan-item { transform: none; }
+    .fan-edge { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .fan-item { transform: none; }
+    .fan-group, .fan-item { transform: none; }
+    .fan-edge { display: none; }
 }
