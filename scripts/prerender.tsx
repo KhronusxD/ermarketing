@@ -27,7 +27,12 @@ import { POSTS } from '../components/Blog/posts';
 import { AUTHOR } from '../components/Blog/types';
 import { SERVICES as NORTE_SERVICES } from '../components/Norte/services';
 
-const SITE_ORIGIN = 'https://ermarketing.com.br';
+// O site é servido em trafegomanaus.com.br. Até aqui o SITE_ORIGIN
+// apontava pra ermarketing.com.br, que não resolve DNS — ou seja, cada
+// canonical, cada URL do sitemap e o llms.txt diziam ao Google que a
+// versão oficial de cada página mora num domínio inexistente. Canonical
+// cruzado assim é o tipo de coisa que tira a página inteira do índice.
+const SITE_ORIGIN = 'https://trafegomanaus.com.br';
 const DEFAULT_OG = `${SITE_ORIGIN}/assets/red-logo.png`;
 const PHONE_E164 = '+55-92-98514-6299';
 
@@ -39,7 +44,8 @@ const ORG_SCHEMA = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${SITE_ORIGIN}/#organization`,
-    name: 'ER Marketing',
+    name: 'Norte Marketing',
+    alternateName: 'ER Marketing',
     legalName: 'ER Marketing',
     url: SITE_ORIGIN,
     logo: {
@@ -81,7 +87,8 @@ const LOCAL_BUSINESS_SCHEMA = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     '@id': `${SITE_ORIGIN}/#localbusiness`,
-    name: 'ER Marketing',
+    name: 'Norte Marketing',
+    alternateName: 'ER Marketing',
     image: `${SITE_ORIGIN}/assets/red-logo.png`,
     url: SITE_ORIGIN,
     telephone: PHONE_E164,
@@ -115,7 +122,7 @@ const WEBSITE_SCHEMA = {
     '@type': 'WebSite',
     '@id': `${SITE_ORIGIN}/#website`,
     url: SITE_ORIGIN,
-    name: 'ER Marketing',
+    name: 'Norte Marketing',
     description:
         'Agência de marketing de performance em Manaus. Tráfego pago, criativo, CRM e BI.',
     publisher: { '@id': `${SITE_ORIGIN}/#organization` },
@@ -185,6 +192,39 @@ const FAQ_SCHEMA = {
 };
 
 // Generic breadcrumb generator — used on every non-home page.
+// FAQ da home da Norte — mesmo conteúdo que aparece na página, que é o
+// que o Google espera: schema tem que refletir texto visível.
+const NORTE_FAQ_SCHEMA = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+        [
+            'Como funciona a primeira conversa?',
+            'Você chama no WhatsApp, a gente entende o momento do teu negócio e devolve um plano claro de por onde começar. Sem compromisso e sem call de vendas disfarçada.',
+        ],
+        [
+            'Qual o investimento pra começar?',
+            'Não trabalhamos com pacote fechado. O projeto é desenhado pro teu momento e objetivo — focamos em negócios que já investem em marketing ou têm capacidade pra começar.',
+        ],
+        [
+            'Quais nichos vocês atendem?',
+            'A metodologia é agnóstica de nicho. Temos cases em e-commerce, infoproduto, food service, saúde, construção, varejo local e educação — em Manaus e fora.',
+        ],
+        [
+            'A Norte faz só tráfego pago?',
+            'Não. Somos agência 360: tráfego, social media, branding, sites, captação de conteúdo e eventos. Cada frente alimenta a outra.',
+        ],
+        [
+            'Em quanto tempo vejo resultado?',
+            'Os primeiros 30 dias são de calibração (tracking, público, criativo). Dos 60 aos 90 dias a curva acelera. Quem desliga antes disso nunca vê o canal maduro.',
+        ],
+    ].map(([q, a]) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+};
+
 const breadcrumb = (items: Array<{ name: string; href: string }>) => ({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -217,21 +257,41 @@ interface RouteSpec {
 }
 
 const ROUTES: RouteSpec[] = [
-    // Homepage — the one that mattered most to pre-render. Bundles
-    // Organization + LocalBusiness + WebSite + FAQ schemas so Google
-    // has everything it needs to feed both classic SERP rich results
-    // and AI knowledge cards (Perplexity, ChatGPT Search, etc.).
+    // Homepage — agora é a Norte. Carrega Organization + LocalBusiness +
+    // WebSite + FAQ pra alimentar tanto rich result clássico quanto card
+    // de conhecimento de busca por IA.
     {
         path: '/',
         out: 'index.html',
         meta: {
-            title:
-                'ER Marketing · Agência de marketing de performance em Manaus',
+            title: 'Norte · Agência de Marketing em Manaus',
             description:
-                'Tráfego pago, copy, captação audiovisual e BI ponta a ponta — agência baseada em Manaus, 7 anos de operação, mais de R$ 5 milhões em mídia gerida.',
+                'A gente aponta a direção, você caminha. Tráfego pago, social media, branding, sites, captação de conteúdo e eventos — agência 360 em Manaus com +R$ 5M em mídia gerida.',
             canonical: `${SITE_ORIGIN}/`,
             ogType: 'website',
-            jsonLd: [ORG_SCHEMA, LOCAL_BUSINESS_SCHEMA, WEBSITE_SCHEMA, FAQ_SCHEMA],
+            jsonLd: [ORG_SCHEMA, LOCAL_BUSINESS_SCHEMA, WEBSITE_SCHEMA, NORTE_FAQ_SCHEMA],
+        },
+    },
+
+    // /er-marketing — a LP de performance que era a home antes do
+    // rebrand. Continua no ar porque é a página que o funil de anúncio
+    // conhece, e porque o FAQ_SCHEMA dela responde outras perguntas.
+    {
+        path: '/er-marketing',
+        out: 'er-marketing/index.html',
+        meta: {
+            title: 'ER Marketing · Agência de marketing de performance em Manaus',
+            description:
+                'Tráfego pago, copy, captação audiovisual e BI ponta a ponta — agência baseada em Manaus, 7 anos de operação, mais de R$ 5 milhões em mídia gerida.',
+            canonical: `${SITE_ORIGIN}/er-marketing`,
+            ogType: 'website',
+            jsonLd: [
+                FAQ_SCHEMA,
+                breadcrumb([
+                    { name: 'Início', href: '/' },
+                    { name: 'ER Marketing', href: '/er-marketing' },
+                ]),
+            ],
         },
     },
 
@@ -355,9 +415,9 @@ const ROUTES: RouteSpec[] = [
         path: '/links',
         out: 'links/index.html',
         meta: {
-            title: 'ER Marketing · Todos os nossos links',
+            title: 'Norte · Todos os nossos links',
             description:
-                'Marcar diagnóstico, WhatsApp, blog, YouTube e canais sociais da ER Marketing — agência de marketing de performance em Manaus.',
+                'WhatsApp, diagnóstico, site, blog e YouTube da Norte — agência de marketing 360 em Manaus.',
             canonical: `${SITE_ORIGIN}/links`,
             ogType: 'website',
         },
@@ -379,10 +439,9 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
-    // /norte — LP institucional da Norte Marketing (rebrand). Servida
-    // pelo mesmo build; o domínio trafegomanaus.com.br redireciona a
-    // raiz pra cá via script inline no index.html. Canonical aponta pro
-    // domínio da Norte.
+    // /norte — mesmo conteúdo da raiz, mantido de pé porque o endereço
+    // já circulou. Canonical aponta pra raiz pra o Google consolidar os
+    // dois num só e não tratar como conteúdo duplicado.
     {
         path: '/norte',
         out: 'norte/index.html',
@@ -390,7 +449,7 @@ const ROUTES: RouteSpec[] = [
             title: 'Norte · Agência de Marketing em Manaus',
             description:
                 'A gente aponta a direção, você caminha. Tráfego pago, social media, branding, sites, captação de conteúdo e eventos — agência 360 em Manaus com +R$ 5M em mídia gerida.',
-            canonical: 'https://trafegomanaus.com.br/norte',
+            canonical: `${SITE_ORIGIN}/`,
             ogType: 'website',
         },
     },
@@ -402,7 +461,7 @@ const ROUTES: RouteSpec[] = [
         meta: {
             title: `${s.name} em Manaus · Norte Marketing`,
             description: s.seoDescription,
-            canonical: `https://trafegomanaus.com.br/norte/${s.slug}`,
+            canonical: `${SITE_ORIGIN}/norte/${s.slug}`,
             ogType: 'website',
         },
     })),
@@ -671,14 +730,17 @@ const sitemapEntries: Array<{
         priority: 0.6,
         changefreq: 'weekly',
     },
+    // /er-marketing entra no lugar de /norte: a página da Norte agora é a
+    // raiz, e listar /norte aqui mandaria sinal contraditório, já que o
+    // canonical dela aponta pra /.
     {
-        loc: 'https://trafegomanaus.com.br/norte',
+        loc: `${SITE_ORIGIN}/er-marketing`,
         lastmod: today,
-        priority: 0.9,
-        changefreq: 'weekly',
+        priority: 0.7,
+        changefreq: 'monthly',
     },
     ...NORTE_SERVICES.map((s) => ({
-        loc: `https://trafegomanaus.com.br/norte/${s.slug}`,
+        loc: `${SITE_ORIGIN}/norte/${s.slug}`,
         lastmod: today,
         priority: 0.8,
         changefreq: 'monthly' as const,

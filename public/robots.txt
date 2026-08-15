@@ -9,7 +9,7 @@ Allow: /
 # server-side and don't need to be indexed.
 Disallow: /api/
 
-Sitemap: https://ermarketing.com.br/sitemap.xml
+Sitemap: https://trafegomanaus.com.br/sitemap.xml
 
 # llms.txt — emerging convention (https://llmstxt.org) for AI crawlers
 # (ChatGPT, Claude, Perplexity, Gemini). Provides a curated, machine-

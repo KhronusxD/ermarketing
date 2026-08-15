@@ -78,7 +78,12 @@ const App: React.FC = () => {
         <Suspense fallback={<RouteFallback />}>
             <Routes>
                 {/* Pre-rendered (eager) */}
-                <Route path="/" element={<MainLanding />} />
+                {/* A home é a Norte desde o rebrand. A LP anterior da ER
+                    Marketing continua servida em /er-marketing, e /norte
+                    segue de pé pra não quebrar link já divulgado — o
+                    canonical dela aponta pra raiz. */}
+                <Route path="/" element={<NorteLanding />} />
+                <Route path="/er-marketing" element={<MainLanding />} />
                 <Route path="/auditoria-de-lucro-invisivel" element={<QuizFlow />} />
                 <Route path="/restaurantes-manaus" element={<RestaurantesManausLanding />} />
                 <Route path="/sobre" element={<Sobre />} />

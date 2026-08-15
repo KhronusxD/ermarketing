@@ -1,15 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Arrow, WHATSAPP } from './Norte/shared';
 
-// /links — link-tree style page intended to be the destination behind
-// the bio link on Instagram and similar profiles. Mobile-first centered
-// layout, same brutalist editorial language as the rest of the site,
-// dark by default because these pages are mostly opened on phones in
-// social-app webviews where dark reads cleaner.
+// /links — árvore de links usada como destino do link da bio no Instagram
+// e afins. Segue o sistema da Norte: foto da trilha ao fundo com véu
+// fechado, Jakarta peso 500 nos títulos, mono em caixa alta nos rótulos.
+//
+// Coluna única e estreita porque quase todo acesso vem de webview de app
+// social, no celular, com uma mão só. A foto entra na largura de 1024 no
+// máximo: aqui ela é textura de fundo, não é o assunto da página, e não
+// vale gastar banda de plano de celular com o arquivo grande.
 
 interface LinkItem {
     label: string;
-    hint?: string;
+    hint: string;
     href: string;
     external?: boolean;
     accent?: boolean;
@@ -17,29 +20,25 @@ interface LinkItem {
 
 const ITEMS: ReadonlyArray<LinkItem> = [
     {
-        label: 'Marcar diagnóstico (15 min)',
-        hint: 'Reunião com a equipe · sem custo',
-        href: '/auditoria-de-lucro-invisivel',
+        label: 'Falar no WhatsApp',
+        hint: '(92) 98514-6299 · resposta no mesmo dia',
+        href: WHATSAPP,
+        external: true,
         accent: true,
     },
     {
-        label: 'Site principal',
-        hint: 'Cases, time e metodologia',
+        label: 'Marcar diagnóstico de 15 min',
+        hint: 'Reunião com a equipe · sem custo',
+        href: '/auditoria-de-lucro-invisivel',
+    },
+    {
+        label: 'Site da Norte',
+        hint: 'Serviços, cases e time',
         href: '/',
     },
     {
-        label: 'Falar no WhatsApp',
-        hint: '(92) 98514-6299',
-        href:
-            'https://wa.me/5592985146299?text=' +
-            encodeURIComponent(
-                'Olá, vim pelo link da bio e gostaria de falar com a equipe da ER Marketing.',
-            ),
-        external: true,
-    },
-    {
         label: 'Blog',
-        hint: 'Análises, guias e bastidor de operação',
+        hint: 'O que funciona em Manaus, com número na mesa',
         href: '/blog',
     },
     {
@@ -50,147 +49,108 @@ const ITEMS: ReadonlyArray<LinkItem> = [
     },
 ];
 
-const LinksPage: React.FC = () => {
-    return (
-        <div className="min-h-screen bg-er-black text-white flex flex-col">
-            {/* Big outline word bleeding off — consistent with the rest
-                of the brutalist editorial language. */}
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute top-8 left-1/2 -translate-x-1/2 select-none whitespace-nowrap font-display uppercase leading-[0.78]"
-                style={{
-                    fontSize: 'clamp(120px, 26vw, 320px)',
-                    color: 'transparent',
-                    WebkitTextStroke: '1.5px rgba(255,255,255,0.05)',
-                }}
-            >
-                links
-            </div>
+const H2 = 'font-norte font-medium tracking-[-0.055em] leading-[1.06]';
+const H3 = 'font-norte font-semibold tracking-[-0.02em]';
 
-            <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-12">
-                <div className="w-full max-w-md">
-                    {/* Brand header */}
-                    <header className="text-center mb-10 md:mb-12">
-                        <img
-                            src="/assets/white-logo.png"
-                            alt="ER Marketing"
-                            className="h-12 w-auto mx-auto mb-5"
-                        />
-                        <h1 className="font-display uppercase text-3xl md:text-4xl leading-[0.95] tracking-tight mb-2">
-                            ER Marketing
-                        </h1>
-                        <p className="text-[11px] tracking-[0.3em] uppercase text-white/55">
-                            Performance · Manaus
-                        </p>
-                        <p className="text-sm text-white/65 mt-4 leading-relaxed">
-                            Marketing de performance sem rodeio. Pelo que quer
-                            conversar?
-                        </p>
-                    </header>
+const LinksPage: React.FC = () => (
+    <div className="relative min-h-screen bg-[#14261A] text-white font-sans antialiased selection:bg-[#8DC63F] selection:text-[#0B0E0C] overflow-hidden">
+        <picture aria-hidden="true">
+            <source
+                type="image/webp"
+                sizes="100vw"
+                srcSet={
+                    '/norte/hero/fundo-hero-640.webp 640w, ' +
+                    '/norte/hero/fundo-hero-1024.webp 1024w'
+                }
+            />
+            <img
+                src="/norte/hero/fundo-hero-1024.webp"
+                alt=""
+                fetchPriority="high"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+        </picture>
 
-                    {/* Link stack */}
-                    <ul className="space-y-3">
-                        {ITEMS.map((item) => (
-                            <li key={item.href}>
-                                <LinkButton item={item} />
-                            </li>
-                        ))}
-                    </ul>
+        <div
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{
+                background:
+                    'linear-gradient(to bottom, rgba(11,18,13,0.90) 0%, rgba(14,28,19,0.80) 38%, rgba(16,32,22,0.92) 78%, #14261A 100%)',
+            }}
+        />
 
-                    {/* Social handles row */}
-                    <div className="mt-12 pt-6 border-t border-white/10">
-                        <p className="text-[10px] tracking-[0.3em] uppercase text-white/45 text-center mb-4">
-                            ◆ Também estamos aqui
-                        </p>
-                        <div className="flex items-center justify-center gap-5 text-xs tracking-[0.2em] uppercase text-white/60">
-                            <a
-                                href="https://instagram.com/edrodrigues.mkt"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:text-white transition-colors"
-                            >
-                                Instagram
-                            </a>
-                            <span className="text-white/20">·</span>
-                            <a
-                                href="https://www.linkedin.com/in/edrodriguesmkt/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:text-white transition-colors"
-                            >
-                                LinkedIn
-                            </a>
-                            <span className="text-white/20">·</span>
-                            <a
-                                href="mailto:contato@trafegomanaus.com.br"
-                                className="hover:text-white transition-colors"
-                            >
-                                E-mail
-                            </a>
-                        </div>
-                    </div>
+        <main className="relative flex flex-col items-center px-5 pt-14 pb-16 min-h-screen">
+            <div className="w-full max-w-[440px] flex flex-col items-center text-center">
+                <img
+                    src="/norte/logo-branca.png"
+                    alt="Norte · Agência de Marketing"
+                    className="h-16 w-auto object-contain mb-7"
+                />
 
-                    {/* Tiny footer */}
-                    <p className="mt-10 text-[10px] tracking-[0.3em] uppercase text-white/30 text-center">
-                        © {new Date().getFullYear()} ER Marketing · Manaus, AM
-                    </p>
-                </div>
-            </main>
-        </div>
-    );
-};
-
-const LinkButton: React.FC<{ item: LinkItem }> = ({ item }) => {
-    const content = (
-        <>
-            <div className="flex-1 min-w-0">
-                <span className="block font-bold text-base md:text-lg leading-tight">
-                    {item.label}
+                <span className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.14em] uppercase text-white/60 mb-5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F]" />
+                    Agência de marketing · Manaus
                 </span>
-                {item.hint && (
-                    <span
-                        className={`block text-xs mt-1 ${
-                            item.accent ? 'text-white/85' : 'text-white/55'
-                        }`}
-                    >
-                        {item.hint}
-                    </span>
-                )}
+
+                <h1 className={`${H2} text-[30px] mb-3`}>
+                    A gente aponta a direção.{' '}
+                    <span className="text-[#8DC63F]">Você caminha.</span>
+                </h1>
+
+                <p className="text-[14px] text-white/55 leading-relaxed mb-9 max-w-[36ch]">
+                    Tráfego, conteúdo, branding e sites — tudo em casa. Escolhe por
+                    onde você quer começar.
+                </p>
+
+                <nav className="w-full flex flex-col gap-2.5">
+                    {ITEMS.map(({ label, hint, href, external, accent }) => (
+                        <a
+                            key={href}
+                            href={href}
+                            {...(external
+                                ? { target: '_blank', rel: 'noopener noreferrer' }
+                                : {})}
+                            className={`group flex items-center gap-4 rounded-2xl px-5 py-4 text-left transition-colors border ${
+                                accent
+                                    ? 'bg-[#8DC63F] hover:bg-[#9ed650] border-[#8DC63F] text-[#0B0E0C]'
+                                    : 'bg-white/[0.09] hover:bg-white/[0.15] border-white/15 text-white'
+                            }`}
+                        >
+                            <span className="flex-1 min-w-0">
+                                <span className={`block ${H3} text-[15px] leading-tight`}>
+                                    {label}
+                                </span>
+                                <span
+                                    className={`block text-[12px] mt-1 leading-snug ${
+                                        accent ? 'text-[#0B0E0C]/65' : 'text-white/45'
+                                    }`}
+                                >
+                                    {hint}
+                                </span>
+                            </span>
+
+                            <span
+                                className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-transform group-hover:rotate-45 ${
+                                    accent
+                                        ? 'bg-[#0B0E0C] text-[#8DC63F]'
+                                        : 'bg-white/12 text-[#8DC63F]'
+                                }`}
+                            >
+                                <Arrow className="w-4 h-4 -rotate-45" />
+                            </span>
+                        </a>
+                    ))}
+                </nav>
+
+                <div className="mt-auto pt-12 font-mono text-[10px] tracking-[0.12em] uppercase text-white/30 leading-relaxed">
+                    <p>Norte · Agência de Marketing</p>
+                    <p className="mt-1">Manaus · Amazonas · Brasil</p>
+                </div>
             </div>
-            <span
-                className={`flex-shrink-0 text-lg transition-transform group-hover:translate-x-1 ${
-                    item.accent ? 'text-white' : 'text-white/40'
-                }`}
-                aria-hidden="true"
-            >
-                →
-            </span>
-        </>
-    );
-
-    const className = `group w-full flex items-center gap-4 px-5 py-4 md:px-6 md:py-5 border transition-colors ${
-        item.accent
-            ? 'bg-er-red border-er-red text-white hover:bg-er-redHover'
-            : 'bg-white/5 border-white/15 hover:border-white/40 hover:bg-white/10'
-    }`;
-
-    if (item.external) {
-        return (
-            <a
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={className}
-            >
-                {content}
-            </a>
-        );
-    }
-    return (
-        <Link to={item.href} className={className}>
-            {content}
-        </Link>
-    );
-};
+        </main>
+    </div>
+);
 
 export default LinksPage;
