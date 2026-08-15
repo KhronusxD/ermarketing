@@ -15,7 +15,6 @@ import {
     IconRoute,
     IconRocket,
     IconChart,
-    IconTarget,
     IconCompass,
     type IconType,
 } from './Norte/shared';
@@ -119,7 +118,7 @@ const CARD_SKIN: Record<
     { box: string; tag: string; metric: string; label: string; muted: string; edge: string }
 > = {
     glass: {
-        box: 'bg-white/[0.11] border-white/25 text-white',
+        box: 'bg-[#14261A]/55 border-white/25 text-white',
         tag: 'text-white/45',
         metric: 'text-[#8DC63F]',
         label: 'text-white/50',
@@ -153,6 +152,195 @@ const CARD_SKIN: Record<
 };
 
 const TAG = 'font-mono text-[9px] tracking-[0.14em] uppercase';
+
+// ─── Maquetes dos serviços ──────────────────────────────────────────
+// Cada frente é ilustrada por duas peças de interface empilhadas e
+// levemente tortas. Tudo HTML e CSS: nenhuma imagem nova entra no
+// bundle, e escala em qualquer densidade de tela sem serrilhar.
+
+const MOCK = 'absolute rounded-xl bg-white border border-black/[0.07] shadow-[0_12px_34px_rgba(11,14,12,0.13)]';
+const LINE = 'rounded-full bg-black/[0.09]';
+
+const ServiceMock: React.FC<{ slug: string }> = ({ slug }) => {
+    if (slug === 'trafego-pago') {
+        return (
+            <>
+                <div className={`${MOCK} left-0 top-3 w-[150px] p-3.5 !bg-[#131313] !border-[#131313] -rotate-6`}>
+                    <p className={`${H3} text-[11px] text-white leading-none`}>Custo por lead</p>
+                    <p className="text-[8px] text-white/40 mt-1">últimos 30 dias</p>
+                    <p className={`${H2} text-[30px] text-white leading-none mt-4`}>R$ 1,57</p>
+                </div>
+                <div className={`${MOCK} right-0 bottom-2 w-[176px] p-3.5 rotate-3`}>
+                    <div className="flex items-baseline justify-between mb-2">
+                        <span className="text-[9px] text-black/45">Verba do mês</span>
+                        <span className={`${H3} text-[11px]`}>68%</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-black/[0.08] mb-3">
+                        <div className="h-full w-[68%] rounded-full bg-[#8DC63F]" />
+                    </div>
+                    {['Meta Ads', 'Google Ads', 'TikTok'].map((c, i) => (
+                        <div key={c} className="flex items-center justify-between py-1.5 border-t border-black/5">
+                            <span className="text-[9px] text-black/55">{c}</span>
+                            <span className={`h-1.5 ${LINE}`} style={{ width: [34, 24, 15][i] }} />
+                        </div>
+                    ))}
+                </div>
+            </>
+        );
+    }
+
+    if (slug === 'social-media') {
+        return (
+            <>
+                <div className={`${MOCK} left-1 top-0 w-[142px] p-2.5 -rotate-3`}>
+                    <div className="h-[86px] rounded-lg bg-gradient-to-br from-[#8DC63F]/35 to-[#14261A]/20 mb-2.5" />
+                    <div className={`h-1.5 w-full ${LINE} mb-1.5`} />
+                    <div className={`h-1.5 w-2/3 ${LINE}`} />
+                </div>
+                <div className={`${MOCK} right-0 top-8 w-[128px] p-3 rotate-6`}>
+                    <p className={`${TAG} text-black/35 mb-2.5`}>Semana</p>
+                    <div className="flex items-end gap-1 h-[42px]">
+                        {[38, 52, 44, 68, 82, 61, 100].map((h, i) => (
+                            <div
+                                key={i}
+                                className={`flex-1 rounded-[2px] ${i === 6 ? 'bg-[#8DC63F]' : 'bg-black/[0.09]'}`}
+                                style={{ height: `${h}%` }}
+                            />
+                        ))}
+                    </div>
+                </div>
+                <div className={`${MOCK} left-8 bottom-1 w-[112px] px-3 py-2 rotate-2 flex items-center gap-2`}>
+                    <span className="w-6 h-6 rounded-full bg-[#8DC63F]" />
+                    <div className="flex-1">
+                        <div className={`h-1.5 w-full ${LINE} mb-1`} />
+                        <div className={`h-1.5 w-1/2 ${LINE}`} />
+                    </div>
+                </div>
+            </>
+        );
+    }
+
+    if (slug === 'branding') {
+        return (
+            <>
+                <div className={`${MOCK} left-0 top-2 w-[126px] p-3.5 -rotate-6`}>
+                    <p className={`${TAG} text-black/35 mb-3`}>Paleta</p>
+                    <div className="grid grid-cols-4 gap-1.5">
+                        {['#14261A', '#8DC63F', '#F5F5F3', '#131313'].map((c) => (
+                            <span
+                                key={c}
+                                className="aspect-square rounded-md border border-black/5"
+                                style={{ backgroundColor: c }}
+                            />
+                        ))}
+                    </div>
+                    <div className={`h-1.5 w-3/4 ${LINE} mt-3`} />
+                </div>
+                <div className={`${MOCK} right-1 bottom-1 w-[136px] p-3.5 rotate-3`}>
+                    <p className={`${H2} text-[42px] leading-none`}>Aa</p>
+                    <div className="mt-3 space-y-1.5">
+                        <div className={`h-1.5 w-full ${LINE}`} />
+                        <div className={`h-1.5 w-4/5 ${LINE}`} />
+                        <div className={`h-1.5 w-2/3 ${LINE}`} />
+                    </div>
+                </div>
+            </>
+        );
+    }
+
+    if (slug === 'sites-e-landing-pages') {
+        return (
+            <>
+                <div className={`${MOCK} left-0 top-1 w-[184px] overflow-hidden -rotate-3`}>
+                    <div className="flex items-center gap-1 px-2.5 py-2 border-b border-black/[0.07]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-black/15" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-black/15" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-black/15" />
+                        <span className={`ml-2 h-1.5 flex-1 ${LINE}`} />
+                    </div>
+                    <div className="p-3">
+                        <div className="h-[42px] rounded-md bg-gradient-to-br from-[#8DC63F]/30 to-transparent mb-2.5" />
+                        <div className={`h-1.5 w-3/4 ${LINE} mb-1.5`} />
+                        <div className={`h-1.5 w-1/2 ${LINE} mb-3`} />
+                        <span className="inline-block rounded-full bg-[#8DC63F] h-4 w-16" />
+                    </div>
+                </div>
+                <div className={`${MOCK} right-2 bottom-0 w-[76px] p-2 rotate-6`}>
+                    <div className="h-[30px] rounded-md bg-[#14261A] mb-2" />
+                    <div className={`h-1.5 w-full ${LINE} mb-1`} />
+                    <div className={`h-1.5 w-2/3 ${LINE} mb-2`} />
+                    <span className="block rounded-full bg-[#8DC63F] h-3 w-full" />
+                </div>
+            </>
+        );
+    }
+
+    if (slug === 'captacao-de-conteudo') {
+        return (
+            <>
+                <div className={`${MOCK} left-3 top-0 w-[104px] aspect-[9/16] !p-0 overflow-hidden -rotate-6`}>
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#14261A] via-[#1d3423] to-[#0B0E0C]" />
+                    <span className="absolute inset-0 flex items-center justify-center">
+                        <span className="w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-[9px] text-[#0B0E0C]">
+                            ▶
+                        </span>
+                    </span>
+                    <span className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-black/50 px-1.5 py-0.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#E8503A]" />
+                        <span className="text-[7px] text-white tracking-wider">REC</span>
+                    </span>
+                </div>
+                <div className={`${MOCK} right-0 top-6 w-[132px] p-3 rotate-3`}>
+                    <p className={`${TAG} text-black/35 mb-2.5`}>Roteiro</p>
+                    {[100, 78, 88, 60].map((w, i) => (
+                        <div key={i} className="flex items-center gap-2 mb-1.5 last:mb-0">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F] flex-shrink-0" />
+                            <span className={`h-1.5 ${LINE}`} style={{ width: `${w}%` }} />
+                        </div>
+                    ))}
+                </div>
+                <div className={`${MOCK} right-6 bottom-0 w-[104px] px-3 py-2 rotate-[-2deg]`}>
+                    <p className={`${H3} text-[11px] leading-none`}>+500 mil</p>
+                    <p className="text-[8px] text-black/45 mt-1">views/mês</p>
+                </div>
+            </>
+        );
+    }
+
+    // eventos
+    return (
+        <>
+            <div className={`${MOCK} left-0 top-1 w-[136px] p-3.5 -rotate-3`}>
+                <p className={`${TAG} text-black/35 mb-3`}>Novembro</p>
+                <div className="grid grid-cols-7 gap-1">
+                    {Array.from({ length: 21 }).map((_, i) => (
+                        <span
+                            key={i}
+                            className={`aspect-square rounded-[3px] ${
+                                i === 12 ? 'bg-[#8DC63F]' : 'bg-black/[0.07]'
+                            }`}
+                        />
+                    ))}
+                </div>
+            </div>
+            <div className={`${MOCK} right-0 bottom-2 w-[150px] p-3.5 rotate-3`}>
+                <div className="flex -space-x-2 mb-3">
+                    {['#14261A', '#8DC63F', '#131313', '#3d6b12'].map((c) => (
+                        <span
+                            key={c}
+                            className="w-6 h-6 rounded-full border-2 border-white"
+                            style={{ backgroundColor: c }}
+                        />
+                    ))}
+                </div>
+                <p className={`${H3} text-[13px] leading-none`}>240 confirmados</p>
+                <div className="h-1.5 rounded-full bg-black/[0.08] mt-3">
+                    <div className="h-full w-[82%] rounded-full bg-[#8DC63F]" />
+                </div>
+            </div>
+        </>
+    );
+};
 
 // Corpo da carta — um desenho por `kind`, todos na mesma caixa.
 const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
@@ -268,14 +456,11 @@ const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
 type Token = string | { chip: IconType };
 
 const MANIFESTO: Token[] = [
-    'Norte', 'é', { chip: IconCompass }, 'direção:', 'o', 'ponteiro', 'que', 'tira',
-    'o', 'negócio', 'do', 'improviso', 'e', 'coloca', 'num', 'caminho', 'medido.',
-    'E', 'Norte', 'é', { chip: IconTarget }, 'origem:', 'nascemos', 'em', 'Manaus,',
-    'provando', 'que', 'daqui', 'se', 'constrói', 'marketing', 'de', 'padrão',
-    'nacional.',
+    'Estratégias', 'de', { chip: IconCompass }, 'Marketing', 'que',
+    { chip: IconRocket }, 'impulsionam', 'seu', 'faturamento.',
 ];
 
-const MANIFESTO_STRONG = new Set(['direção:', 'origem:', 'Manaus,']);
+const MANIFESTO_STRONG = new Set(['impulsionam', 'faturamento.']);
 
 const STEPS = [
     { icon: IconSearch, title: 'Diagnóstico', body: 'Entender onde vaza' },
@@ -485,7 +670,7 @@ const Manifesto: React.FC = () => {
     return (
         <p
             ref={ref}
-            className={`${H2} text-[clamp(26px,3.6vw,46px)] max-w-[20ch] sm:max-w-[26ch] md:max-w-[30ch]`}
+            className={`${H2} text-[clamp(30px,4.6vw,60px)] max-w-[16ch] md:max-w-[20ch]`}
         >
             {MANIFESTO.map((token, i) => {
                 const t = stagger(i, total, progress, 0);
@@ -553,12 +738,50 @@ const NorteLanding: React.FC = () => {
                 id="inicio"
                 className="relative bg-[#14261A] text-white overflow-hidden pt-32 md:pt-40"
             >
+                {/* Foto da trilha na mata. Entra como <img> e não como
+                    background-image de propósito: assim o navegador acha a
+                    imagem já no HTML pré-renderizado, escolhe a largura certa
+                    pelo srcset e trata como LCP. WebP em cinco tamanhos, do
+                    celular ao retina, com JPEG de reserva. */}
+                <picture aria-hidden="true">
+                    <source
+                        type="image/webp"
+                        sizes="100vw"
+                        srcSet={
+                            '/norte/hero/fundo-hero-640.webp 640w, ' +
+                            '/norte/hero/fundo-hero-1024.webp 1024w, ' +
+                            '/norte/hero/fundo-hero-1440.webp 1440w, ' +
+                            '/norte/hero/fundo-hero-1920.webp 1920w, ' +
+                            '/norte/hero/fundo-hero-2400.webp 2400w'
+                        }
+                    />
+                    <img
+                        src="/norte/hero/fundo-hero-1440.jpg"
+                        alt=""
+                        fetchPriority="high"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
+                </picture>
+
+                {/* Véu: derruba o contraste da foto pro texto respirar, mas
+                    deixa a trilha aparecer no meio — ela é o próprio conceito
+                    da marca. Mais fechado embaixo, onde ficam os cards. */}
+                <div
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    style={{
+                        background:
+                            'linear-gradient(to bottom, rgba(11,18,13,0.88) 0%, rgba(15,29,20,0.60) 30%, rgba(14,28,19,0.88) 62%, rgba(18,35,24,0.96) 84%, #14261A 100%)',
+                    }}
+                />
+
                 <div
                     aria-hidden="true"
                     className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-[-45%] w-[120%] h-[150%]"
                     style={{
                         background:
-                            'radial-gradient(ellipse at center, rgba(141,198,63,0.20) 0%, rgba(141,198,63,0.05) 42%, transparent 70%)',
+                            'radial-gradient(ellipse at center, rgba(141,198,63,0.16) 0%, rgba(141,198,63,0.04) 42%, transparent 70%)',
                     }}
                 />
 
@@ -829,21 +1052,27 @@ const NorteLanding: React.FC = () => {
                         </p>
                     </div>
 
+                    {/* Três por linha, cada célula com a maquete da frente em
+                        cima e o texto centralizado embaixo. */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {SERVICES.map(({ slug, icon: Icon, name, teaser }) => (
+                        {SERVICES.map(({ slug, name, teaser }) => (
                             <a
                                 key={slug}
                                 href={`/norte/${slug}`}
-                                className="rounded-2xl bg-white hover:shadow-[0_16px_50px_rgba(11,14,12,0.08)] border border-black/5 hover:border-[#8DC63F] p-6 transition-all group flex flex-col"
+                                className="group rounded-[24px] bg-white border border-black/[0.07] hover:border-[#8DC63F] hover:shadow-[0_18px_54px_rgba(11,14,12,0.09)] px-7 pt-8 pb-9 transition-all flex flex-col"
                             >
-                                <span className="inline-flex w-11 h-11 rounded-xl bg-[#F5F5F3] text-[#3d6b12] items-center justify-center mb-5 group-hover:bg-[#8DC63F] group-hover:text-[#0B0E0C] transition-colors">
-                                    <Icon className="w-5 h-5" />
-                                </span>
-                                <h3 className={`${H3} text-[17px] mb-2`}>{name}</h3>
-                                <p className="text-[13px] text-black/45 leading-snug mb-5">
+                                <div className="relative h-[214px] mb-7">
+                                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[290px] h-[200px] transition-transform duration-500 group-hover:-translate-y-[calc(50%+6px)]">
+                                        <ServiceMock slug={slug} />
+                                    </div>
+                                </div>
+
+                                <h3 className={`${H2} text-[24px] text-center mb-3`}>{name}</h3>
+                                <p className="text-[14px] text-black/45 leading-relaxed text-center max-w-[30ch] mx-auto">
                                     {teaser}
                                 </p>
-                                <span className="mt-auto font-mono text-[11px] tracking-[0.1em] uppercase text-[#3d6b12] inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+
+                                <span className="mt-6 mx-auto font-mono text-[11px] tracking-[0.1em] uppercase text-[#3d6b12] inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
                                     Ver detalhes <Arrow className="w-3.5 h-3.5" />
                                 </span>
                             </a>
