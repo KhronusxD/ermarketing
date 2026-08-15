@@ -7,6 +7,10 @@ import {
     EDGE_FADE,
     NorteNav,
     NorteFooter,
+    CountUp,
+    useScrollReveal,
+    useElementReveal,
+    stagger,
     IconSearch,
     IconRoute,
     IconRocket,
@@ -14,19 +18,29 @@ import {
     IconTarget,
     IconUsers,
     IconCompass,
+    type IconType,
 } from './Norte/shared';
 import { SERVICES } from './Norte/services';
 
 // /norte — site institucional da Norte Marketing.
 //
-// Estrutura em faixas: cada seção principal ocupa a largura toda da
-// tela com a sua própria cor de fundo (verde-floresta ou creme), e o
-// conteúdo respira dentro de um container central. Cards arredondados
-// continuam existindo, mas só no nível dos itens — não como moldura
-// da seção inteira.
+// Base branca com o verde-floresta reservado para dois momentos: a hero e
+// o CTA final. O verde ganha força justamente por aparecer pouco. Entre
+// eles, faixas de branco e cinza-papel se alternam.
+//
+// Tipografia: Plus Jakarta Sans peso 500 com tracking bem fechado nos
+// títulos (extrabold grita; peso médio apertado lê como editorial), Inter
+// no corpo e mono em caixa alta nos eyebrows.
 
 const SECTION = 'py-16 md:py-24';
 const CONTAINER = 'max-w-[1240px] mx-auto px-5 md:px-8';
+
+const INK = '#131313';
+const PAPER = '#F5F5F3';
+
+const H1 = 'font-norte font-medium tracking-[-0.06em] leading-[1.04]';
+const H2 = 'font-norte font-medium tracking-[-0.055em] leading-[1.06]';
+const H3 = 'font-norte font-semibold tracking-[-0.02em]';
 
 // Trilhos horizontais sangram até a borda da tela, mas o primeiro card
 // nasce alinhado com o container central. O scroll-padding é obrigatório:
@@ -44,6 +58,49 @@ const RAIL_SCROLLER: React.CSSProperties = {
     scrollPaddingLeft: RAIL_GUTTER,
     scrollPaddingRight: RAIL_GUTTER,
 };
+
+const HERO_WORDS = [
+    { w: 'A' }, { w: 'gente' }, { w: 'aponta' }, { w: 'a' }, { w: 'direção.', br: true },
+    { w: 'Você', lime: true }, { w: 'caminha.', lime: true },
+];
+
+// Leque de cards da hero — mão de cartas com resultado real.
+const FAN = [
+    { client: 'Taychi Sushi', tag: 'Restaurante', metric: '200k', label: 'faturamento/mês' },
+    { client: 'Oli e Sofi', tag: 'E-commerce', metric: '+300%', label: 'no faturamento' },
+    { client: 'Odonto Solutions', tag: 'Saúde', metric: 'R$ 1,57', label: 'por lead' },
+    { client: 'A Escola de Sites', tag: 'Infoproduto', metric: '+20 mil', label: 'leads gerados' },
+    { client: 'Tecno Obras', tag: 'Construção', metric: '+500 mil', label: 'views/mês' },
+];
+
+const FAN_GEOMETRY = [
+    { ry: 24, ty: 30, sc: 0.88 },
+    { ry: 12, ty: 10, sc: 0.95 },
+    { ry: 0, ty: 0, sc: 1 },
+    { ry: -12, ty: 10, sc: 0.95 },
+    { ry: -24, ty: 30, sc: 0.88 },
+];
+
+const STATS = [
+    { icon: IconChart, prefix: '+R$ ', value: 5, suffix: 'M', label: 'em mídia gerida' },
+    { icon: IconTarget, value: 7.5, decimals: 1, suffix: 'x', label: 'ROAS médio' },
+    { icon: IconUsers, prefix: '+', value: 150, suffix: 'k', label: 'leads captados' },
+    { icon: IconCompass, prefix: '+', value: 100, label: 'parceiros' },
+];
+
+// Manifesto: as palavras acendem conforme a frase sobe na tela, e dois
+// chips de ícone vivem dentro do texto.
+type Token = string | { chip: IconType };
+
+const MANIFESTO: Token[] = [
+    'Norte', 'é', { chip: IconCompass }, 'direção:', 'o', 'ponteiro', 'que', 'tira',
+    'o', 'negócio', 'do', 'improviso', 'e', 'coloca', 'num', 'caminho', 'medido.',
+    'E', 'Norte', 'é', { chip: IconTarget }, 'origem:', 'nascemos', 'em', 'Manaus,',
+    'provando', 'que', 'daqui', 'se', 'constrói', 'marketing', 'de', 'padrão',
+    'nacional.',
+];
+
+const MANIFESTO_STRONG = new Set(['direção:', 'origem:', 'Manaus,']);
 
 const STEPS = [
     { icon: IconSearch, title: 'Diagnóstico', body: 'Entender onde vaza' },
@@ -89,34 +146,10 @@ const LOGOS = [
 // Taychi e La Pizza vêm de frames das captações que a equipe fez na
 // própria loja; iTV e Tecno Obras, de registros cedidos pelo cliente.
 const CASE_CARDS = [
-    {
-        name: 'iTV Manaus',
-        tag: 'Assistência técnica',
-        metric: 'R$ 15k',
-        label: 'de faturamento',
-        photo: '/clientes/fotos/itv-fachada.jpg',
-    },
-    {
-        name: 'Taychi Sushi Bar',
-        tag: 'Restaurante',
-        metric: '+280%',
-        label: 'reservas/mês',
-        photo: '/clientes/fotos/taychi-salao.jpg',
-    },
-    {
-        name: 'La Pizza Rio',
-        tag: 'Delivery',
-        metric: '+190%',
-        label: 'pedidos diretos',
-        photo: '/clientes/fotos/lapizzario-fachada.jpg',
-    },
-    {
-        name: 'Tecno Obras',
-        tag: 'Construção',
-        metric: '+500 mil',
-        label: 'views/mês',
-        photo: '/clientes/fotos/tecnoobras-obra.jpg',
-    },
+    { name: 'iTV Manaus', tag: 'Assistência técnica', metric: 'R$ 15k', label: 'de faturamento', photo: '/clientes/fotos/itv-fachada.jpg' },
+    { name: 'Taychi Sushi Bar', tag: 'Restaurante', metric: '+280%', label: 'reservas/mês', photo: '/clientes/fotos/taychi-salao.jpg' },
+    { name: 'La Pizza Rio', tag: 'Delivery', metric: '+190%', label: 'pedidos diretos', photo: '/clientes/fotos/lapizzario-fachada.jpg' },
+    { name: 'Tecno Obras', tag: 'Construção', metric: '+500 mil', label: 'views/mês', photo: '/clientes/fotos/tecnoobras-obra.jpg' },
 ];
 
 const RESULTS = [
@@ -256,10 +289,59 @@ const ReelCard: React.FC<{ reel: (typeof REELS)[number] }> = ({ reel }) => {
             </button>
 
             <div className="absolute bottom-3 left-3 right-3">
-                <p className="text-[9px] tracking-[0.18em] uppercase text-white/65">{reel.client}</p>
-                <p className="text-white font-semibold text-[13px] leading-tight">{reel.title}</p>
+                <p className="font-mono text-[9px] tracking-[0.14em] uppercase text-white/60">
+                    {reel.client}
+                </p>
+                <p className={`text-white ${H3} text-[13px] leading-tight`}>{reel.title}</p>
             </div>
         </div>
+    );
+};
+
+// ─── Manifesto ──────────────────────────────────────────────────────
+
+const Manifesto: React.FC = () => {
+    const [ref, progress] = useElementReveal<HTMLParagraphElement>();
+    const total = MANIFESTO.length;
+
+    return (
+        <p
+            ref={ref}
+            className={`${H2} text-[clamp(26px,3.6vw,46px)] max-w-[20ch] sm:max-w-[26ch] md:max-w-[30ch]`}
+        >
+            {MANIFESTO.map((token, i) => {
+                const t = stagger(i, total, progress, 0);
+
+                if (typeof token !== 'string') {
+                    const Chip = token.chip;
+                    return (
+                        <span
+                            key={`chip-${i}`}
+                            className="inline-flex align-middle w-[0.85em] h-[0.85em] rounded-full bg-[#8DC63F] text-[#0B0E0C] items-center justify-center mx-[0.12em] -translate-y-[0.05em]"
+                            style={{ opacity: 0.25 + t * 0.75 }}
+                            aria-hidden="true"
+                        >
+                            <Chip className="w-[62%] h-[62%]" />
+                        </span>
+                    );
+                }
+
+                const strong = MANIFESTO_STRONG.has(token);
+                return (
+                    <span
+                        key={`${token}-${i}`}
+                        style={{
+                            color: strong
+                                ? `rgba(61,107,18,${0.22 + t * 0.78})`
+                                : `rgba(19,19,19,${0.18 + t * 0.82})`,
+                            transition: 'color 120ms linear',
+                        }}
+                    >
+                        {token}{' '}
+                    </span>
+                );
+            })}
+        </p>
     );
 };
 
@@ -269,6 +351,7 @@ const NorteLanding: React.FC = () => {
     const [scrolled, setScrolled] = useState(false);
     const [openFaq, setOpenFaq] = useState<number | null>(0);
     const resultsRef = useRef<HTMLDivElement | null>(null);
+    const heroProgress = useScrollReveal(420);
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 30);
@@ -281,139 +364,157 @@ const NorteLanding: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#F4F1E9] text-[#0B0E0C] font-sans antialiased selection:bg-[#8DC63F] selection:text-[#0B0E0C]">
+        <div
+            className="min-h-screen bg-white font-sans antialiased selection:bg-[#8DC63F] selection:text-[#0B0E0C]"
+            style={{ color: INK }}
+        >
             <NorteNav scrolled={scrolled} />
 
-            {/* ═══ HERO — faixa verde-floresta ═══ */}
+            {/* ═══ HERO — a primeira das duas faixas verdes ═══ */}
             <section
                 id="inicio"
-                className="relative bg-[#14261A] text-white overflow-hidden pt-28 md:pt-32"
+                className="relative bg-[#14261A] text-white overflow-hidden pt-32 md:pt-40"
             >
                 <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute right-[-6%] top-[-30%] w-[55%] h-[150%] rounded-full"
+                    className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-[-45%] w-[120%] h-[150%]"
                     style={{
-                        // ellipse, não circle: num box estreito e alto o circle
-                        // é cortado pelas laterais e deixa uma emenda vertical.
                         background:
-                            'radial-gradient(ellipse at center, rgba(141,198,63,0.20) 0%, rgba(141,198,63,0.05) 44%, transparent 72%)',
+                            'radial-gradient(ellipse at center, rgba(141,198,63,0.20) 0%, rgba(141,198,63,0.05) 42%, transparent 70%)',
                     }}
                 />
 
-                <div className={`relative ${CONTAINER} pb-14 md:pb-20`}>
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
-                        <div className="lg:col-span-7">
-                            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-3.5 py-1.5 text-[11px] tracking-[0.16em] uppercase font-bold text-white/85 mb-7">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F]" />
-                                Agência de marketing · Manaus
-                            </span>
+                <div className={`relative ${CONTAINER} pb-14 md:pb-16`}>
+                    <div className="text-center max-w-4xl mx-auto">
+                        <span className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-3.5 py-1.5 font-mono text-[11px] tracking-[0.14em] uppercase text-white/80 mb-8">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F]" />
+                            Agência de marketing · Manaus
+                        </span>
 
-                            <h1
-                                className="font-extrabold tracking-[-0.02em] leading-[1.05] mb-6"
-                                style={{ fontSize: 'clamp(32px, 4.2vw, 58px)' }}
-                            >
-                                A gente aponta a direção.
-                                <br />
-                                <span className="text-[#8DC63F]">Você caminha.</span>
-                            </h1>
-
-                            <p className="text-[15px] md:text-[17px] text-white/65 leading-relaxed max-w-xl mb-8">
-                                Marketing com estratégia, criatividade e performance.
-                                A Norte transforma atenção em oportunidade e
-                                estratégia em resultado — do tráfego ao criativo,
-                                tudo em casa.
-                            </p>
-
-                            <div className="flex flex-col sm:flex-row gap-2.5">
-                                <a
-                                    href={WHATSAPP}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#8DC63F] hover:bg-[#7db32f] text-[#0B0E0C] font-bold text-sm px-6 py-3.5 transition-colors"
-                                >
-                                    Conversar com um estrategista
-                                    <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                                </a>
-                                <a
-                                    href="#servicos"
-                                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/25 hover:bg-white/10 text-white font-bold text-sm px-6 py-3.5 transition-colors"
-                                >
-                                    Ver o que fazemos
-                                </a>
-                            </div>
-                        </div>
-
-                        <div className="lg:col-span-5 flex justify-center lg:justify-end">
-                            <div className="relative w-full max-w-[310px]">
-                                <div className="relative rounded-2xl bg-white/95 backdrop-blur-sm text-[#0B0E0C] p-4 shadow-[0_16px_50px_rgba(0,0,0,0.35)]">
-                                    <div className="flex items-center gap-3">
-                                        <img
-                                            src="/photos-food/t-1.jpg"
-                                            alt=""
-                                            className="w-12 h-12 rounded-xl object-cover flex-shrink-0"
-                                            loading="eager"
-                                        />
-                                        <div className="min-w-0">
-                                            <p className="font-bold text-sm leading-tight truncate">
-                                                Taychi Sushi Bar
-                                            </p>
-                                            <p className="text-[11px] text-black/45">
-                                                Restaurante · Manaus
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-4 flex items-end justify-between">
-                                        <div>
-                                            <p className="text-[26px] font-extrabold tracking-tight text-[#3d6b12] leading-none">
-                                                +280%
-                                            </p>
-                                            <p className="text-[10px] uppercase tracking-[0.12em] text-black/40 mt-1.5">
-                                                reservas/mês
-                                            </p>
-                                        </div>
-                                        <span className="text-[11px] text-black/50">7 meses</span>
-                                    </div>
-
-                                    <div className="mt-3 h-1.5 rounded-full bg-black/8 overflow-hidden">
-                                        <div className="h-full w-[86%] rounded-full bg-[#8DC63F]" />
-                                    </div>
-
-                                    <div className="mt-4 pt-3 border-t border-black/8 flex items-center justify-between">
-                                        <span className="text-[11px] text-black/45">
-                                            De R$ 70k pra R$ 200k/mês
-                                        </span>
-                                        <a
-                                            href="#cases"
-                                            className="text-[11px] font-bold text-[#3d6b12] inline-flex items-center gap-1 hover:gap-1.5 transition-all"
+                        {/* Revelação em cascata: a primeira palavra já nasce
+                            nítida e as últimas ganham foco conforme rola. */}
+                        <h1 className={`${H1} text-[clamp(36px,5.4vw,66px)] mb-6`}>
+                            {HERO_WORDS.map((word, i) => {
+                                // Piso alto de propósito: o H1 é o elemento de LCP e
+                                // o que o crawler lê. A cascata suaviza, não esconde.
+                                const t = stagger(i, HERO_WORDS.length, heroProgress, 0.45);
+                                return (
+                                    <React.Fragment key={`${word.w}-${i}`}>
+                                        <span
+                                            className={`inline-block ${word.lime ? 'text-[#8DC63F]' : ''}`}
+                                            style={{
+                                                opacity: 0.38 + t * 0.62,
+                                                filter: `blur(${(1 - t) * 4.5}px)`,
+                                                willChange: 'filter, opacity',
+                                            }}
                                         >
-                                            Ver cases <Arrow className="w-3 h-3" />
-                                        </a>
+                                            {word.w}
+                                        </span>{' '}
+                                        {word.br && <br />}
+                                    </React.Fragment>
+                                );
+                            })}
+                        </h1>
+
+                        <p className="text-[15px] md:text-[19px] tracking-[-0.01em] text-white/60 leading-relaxed max-w-xl mx-auto mb-9">
+                            Marketing com estratégia, criatividade e performance. A Norte
+                            transforma atenção em oportunidade e estratégia em resultado —
+                            do tráfego ao criativo, tudo em casa.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row gap-2.5 justify-center">
+                            <a
+                                href={WHATSAPP}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm pl-6 pr-2 py-2 transition-colors"
+                            >
+                                Conversar com um estrategista
+                                <span className="w-8 h-8 rounded-full bg-[#0B0E0C] text-[#8DC63F] flex items-center justify-center transition-transform group-hover:rotate-45">
+                                    <Arrow className="w-4 h-4 -rotate-45" />
+                                </span>
+                            </a>
+                            <a
+                                href="#servicos"
+                                className="inline-flex items-center justify-center rounded-full border border-white/25 hover:bg-white/10 text-white font-semibold text-sm px-7 py-3.5 transition-colors"
+                            >
+                                Ver o que fazemos
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Leque de resultados — mão de cartas em perspectiva */}
+                    <div
+                        className="mt-14 md:mt-16 no-scrollbar overflow-x-auto md:overflow-visible"
+                        style={{ perspective: '1500px' }}
+                    >
+                        <div className="flex gap-3 md:gap-2 w-max md:w-auto md:justify-center px-1">
+                            {FAN.map((card, i) => {
+                                const g = FAN_GEOMETRY[i];
+                                const center = i === 2;
+                                return (
+                                    <div
+                                        key={card.client}
+                                        className={`fan-item flex-shrink-0 w-[200px] md:w-[212px] rounded-2xl p-5 border ${
+                                            center
+                                                ? 'bg-white border-white text-[#0B0E0C] shadow-[0_24px_60px_rgba(0,0,0,0.4)]'
+                                                : 'bg-white/[0.07] border-white/15 text-white backdrop-blur-sm'
+                                        }`}
+                                        style={{
+                                            ['--ry' as string]: `${g.ry}deg`,
+                                            ['--ty' as string]: `${g.ty}px`,
+                                            ['--sc' as string]: `${g.sc}`,
+                                        }}
+                                    >
+                                        <p
+                                            className={`font-mono text-[9px] tracking-[0.14em] uppercase mb-4 ${
+                                                center ? 'text-black/40' : 'text-white/45'
+                                            }`}
+                                        >
+                                            {card.tag}
+                                        </p>
+                                        <p
+                                            className={`${H2} text-[26px] leading-none mb-2 ${
+                                                center ? 'text-[#3d6b12]' : 'text-[#8DC63F]'
+                                            }`}
+                                        >
+                                            {card.metric}
+                                        </p>
+                                        <p
+                                            className={`text-[11px] mb-4 ${
+                                                center ? 'text-black/45' : 'text-white/50'
+                                            }`}
+                                        >
+                                            {card.label}
+                                        </p>
+                                        <p className={`${H3} text-[13px] leading-tight`}>
+                                            {card.client}
+                                        </p>
                                     </div>
-                                </div>
-                            </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
 
-                {/* Stats rodando a largura toda da faixa */}
+                {/* Números que sobem quando a barra entra na tela */}
                 <div className="relative border-t border-white/10">
                     <div className={CONTAINER}>
                         <div className="grid grid-cols-2 md:grid-cols-4 md:divide-x divide-white/10">
-                            {[
-                                { icon: IconChart, v: '+R$ 5M', l: 'em mídia gerida' },
-                                { icon: IconTarget, v: '7.5x', l: 'ROAS médio' },
-                                { icon: IconUsers, v: '+150k', l: 'leads captados' },
-                                { icon: IconCompass, v: '+100', l: 'parceiros' },
-                            ].map(({ icon: Icon, v, l }, i) => (
+                            {STATS.map(({ icon: Icon, label, ...n }, i) => (
                                 <div
-                                    key={l}
+                                    key={label}
                                     className={`flex items-center gap-3 py-5 ${i > 0 ? 'md:pl-6' : ''} ${i > 1 ? 'border-t md:border-t-0 border-white/10' : ''}`}
                                 >
                                     <Icon className="w-5 h-5 text-[#8DC63F] flex-shrink-0" />
                                     <div className="min-w-0">
-                                        <p className="font-extrabold tracking-tight text-lg leading-none">{v}</p>
-                                        <p className="text-[11px] text-white/50 mt-0.5 truncate">{l}</p>
+                                        <CountUp
+                                            {...n}
+                                            className={`${H2} text-[20px] leading-none block`}
+                                        />
+                                        <p className="text-[11px] text-white/45 mt-1 truncate">
+                                            {label}
+                                        </p>
                                     </div>
                                 </div>
                             ))}
@@ -422,9 +523,9 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
-            {/* ═══ Logos — faixa creme fina ═══ */}
-            <section className="bg-[#F4F1E9] py-10 md:py-12 border-b border-black/5 overflow-hidden">
-                <p className="text-center text-[11px] tracking-[0.2em] uppercase text-black/35 font-bold mb-8">
+            {/* ═══ Logos ═══ */}
+            <section className="bg-white py-10 md:py-14 overflow-hidden">
+                <p className="text-center font-mono text-[11px] tracking-[0.16em] uppercase text-black/35 mb-8">
                     Marcas que seguiram o Norte
                 </p>
                 <div style={EDGE_FADE}>
@@ -438,7 +539,7 @@ const NorteLanding: React.FC = () => {
                                     src={logo.src}
                                     alt={logo.alt}
                                     loading="lazy"
-                                    className="max-h-full max-w-full object-contain rounded-full grayscale opacity-55 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                                    className="max-h-full max-w-full object-contain rounded-full grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
                                 />
                             </div>
                         ))}
@@ -446,20 +547,30 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
-            {/* ═══ Serviços — faixa creme ═══ */}
-            <section id="servicos" className={`bg-[#F4F1E9] ${SECTION}`}>
+            {/* ═══ Manifesto ═══ */}
+            <section className={`bg-white ${SECTION} border-t border-black/5`}>
+                <div className={CONTAINER}>
+                    <Eyebrow>Por que Norte</Eyebrow>
+                    <div className="mt-6">
+                        <Manifesto />
+                    </div>
+                    <p className="mt-9 font-mono text-[12px] tracking-[0.12em] uppercase text-[#3d6b12]">
+                        A gente aponta a direção · Você caminha
+                    </p>
+                </div>
+            </section>
+
+            {/* ═══ Serviços ═══ */}
+            <section id="servicos" className={`${SECTION}`} style={{ backgroundColor: PAPER }}>
                 <div className={CONTAINER}>
                     <div className="max-w-2xl mb-10 md:mb-14">
                         <Eyebrow>O que fazemos</Eyebrow>
-                        <h2
-                            className="mt-3 font-extrabold tracking-[-0.02em] leading-[1.08]"
-                            style={{ fontSize: 'clamp(28px, 3.6vw, 46px)' }}
-                        >
+                        <h2 className={`mt-4 ${H2} text-[clamp(28px,3.9vw,50px)]`}>
                             Seis frentes. Uma operação só.
                         </h2>
-                        <p className="mt-4 text-[15px] md:text-base text-black/50 leading-relaxed">
-                            Agência 360: cada frente alimenta a outra pra que o
-                            resultado não dependa de sorte — dependa de sistema.
+                        <p className="mt-5 text-[15px] md:text-[17px] tracking-[-0.01em] text-black/45 leading-relaxed">
+                            Agência 360: cada frente alimenta a outra pra que o resultado
+                            não dependa de sorte — dependa de sistema.
                         </p>
                     </div>
 
@@ -468,14 +579,16 @@ const NorteLanding: React.FC = () => {
                             <a
                                 key={slug}
                                 href={`/norte/${slug}`}
-                                className="rounded-2xl bg-white hover:shadow-[0_12px_40px_rgba(11,14,12,0.08)] border border-black/5 hover:border-[#8DC63F] p-6 transition-all group flex flex-col"
+                                className="rounded-2xl bg-white hover:shadow-[0_16px_50px_rgba(11,14,12,0.08)] border border-black/5 hover:border-[#8DC63F] p-6 transition-all group flex flex-col"
                             >
-                                <span className="inline-flex w-11 h-11 rounded-xl bg-[#F4F1E9] text-[#3d6b12] items-center justify-center mb-4 group-hover:bg-[#8DC63F] group-hover:text-[#0B0E0C] transition-colors">
+                                <span className="inline-flex w-11 h-11 rounded-xl bg-[#F5F5F3] text-[#3d6b12] items-center justify-center mb-5 group-hover:bg-[#8DC63F] group-hover:text-[#0B0E0C] transition-colors">
                                     <Icon className="w-5 h-5" />
                                 </span>
-                                <h3 className="font-bold text-[16px] mb-1.5">{name}</h3>
-                                <p className="text-[13px] text-black/50 leading-snug mb-4">{teaser}</p>
-                                <span className="mt-auto text-[12px] font-bold text-[#3d6b12] inline-flex items-center gap-1 group-hover:gap-2 transition-all">
+                                <h3 className={`${H3} text-[17px] mb-2`}>{name}</h3>
+                                <p className="text-[13px] text-black/45 leading-snug mb-5">
+                                    {teaser}
+                                </p>
+                                <span className="mt-auto font-mono text-[11px] tracking-[0.1em] uppercase text-[#3d6b12] inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
                                     Ver detalhes <Arrow className="w-3.5 h-3.5" />
                                 </span>
                             </a>
@@ -484,29 +597,18 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
-            {/* ═══ Método — faixa verde-floresta ═══ */}
-            <section className={`relative bg-[#14261A] text-white overflow-hidden ${SECTION}`}>
-                <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -bottom-24 -right-24 w-[420px] h-[420px] rounded-full"
-                    style={{
-                        background:
-                            'radial-gradient(circle, rgba(141,198,63,0.18) 0%, transparent 65%)',
-                    }}
-                />
-                <div className={`relative ${CONTAINER}`}>
+            {/* ═══ Método ═══ */}
+            <section className={`bg-white ${SECTION}`}>
+                <div className={CONTAINER}>
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
                         <div className="lg:col-span-5">
-                            <Eyebrow light>Nosso método</Eyebrow>
-                            <h2
-                                className="mt-3 font-extrabold tracking-[-0.02em] leading-[1.08] mb-5"
-                                style={{ fontSize: 'clamp(28px, 3.4vw, 42px)' }}
-                            >
+                            <Eyebrow>Nosso método</Eyebrow>
+                            <h2 className={`mt-4 ${H2} text-[clamp(28px,3.6vw,46px)] mb-5`}>
                                 Direção antes de esforço.
                             </h2>
-                            <p className="text-[15px] text-white/60 leading-relaxed mb-7">
-                                Cada decisão passa por uma régua: dá pra medir?
-                                Se não dá, não entra no plano.
+                            <p className="text-[15px] md:text-[17px] tracking-[-0.01em] text-black/45 leading-relaxed mb-8">
+                                Cada decisão passa por uma régua: dá pra medir? Se não dá,
+                                não entra no plano.
                             </p>
 
                             <ul className="space-y-3">
@@ -515,7 +617,9 @@ const NorteLanding: React.FC = () => {
                                         <span className="mt-0.5 w-5 h-5 rounded-md bg-[#8DC63F] text-[#0B0E0C] flex items-center justify-center flex-shrink-0">
                                             <Check className="w-3.5 h-3.5" />
                                         </span>
-                                        <span className="text-[14px] text-white/85 leading-snug">{m}</span>
+                                        <span className="text-[14px] text-black/65 leading-snug">
+                                            {m}
+                                        </span>
                                     </li>
                                 ))}
                             </ul>
@@ -523,15 +627,19 @@ const NorteLanding: React.FC = () => {
 
                         <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3 content-start">
                             {STEPS.map(({ icon: Icon, title, body }, i) => (
-                                <div key={title} className="rounded-2xl bg-white/[0.06] border border-white/10 p-5">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <Icon className="w-6 h-6 text-[#8DC63F]" />
-                                        <span className="text-[11px] font-extrabold text-white/25">
+                                <div
+                                    key={title}
+                                    className="rounded-2xl border border-black/8 p-6"
+                                    style={{ backgroundColor: PAPER }}
+                                >
+                                    <div className="flex items-center justify-between mb-5">
+                                        <Icon className="w-6 h-6 text-[#3d6b12]" />
+                                        <span className="font-mono text-[11px] text-black/25">
                                             {String(i + 1).padStart(2, '0')}
                                         </span>
                                     </div>
-                                    <p className="font-bold text-[15px] leading-tight mb-1">{title}</p>
-                                    <p className="text-[13px] text-white/50">{body}</p>
+                                    <p className={`${H3} text-[16px] leading-tight mb-1`}>{title}</p>
+                                    <p className="text-[13px] text-black/45">{body}</p>
                                 </div>
                             ))}
                         </div>
@@ -539,26 +647,26 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
-            {/* ═══ Resultado real — faixa branca ═══ */}
-            <section id="cases" className={`bg-white ${SECTION}`}>
+            {/* ═══ Resultado real ═══ */}
+            <section id="cases" className={`${SECTION}`} style={{ backgroundColor: PAPER }}>
                 <div className={CONTAINER}>
                     <div className="max-w-2xl mb-10 md:mb-14">
                         <Eyebrow>Resultado real</Eyebrow>
-                        <h2
-                            className="mt-3 font-extrabold tracking-[-0.02em] leading-[1.08]"
-                            style={{ fontSize: 'clamp(28px, 3.6vw, 46px)' }}
-                        >
+                        <h2 className={`mt-4 ${H2} text-[clamp(28px,3.9vw,50px)]`}>
                             Quem seguiu o Norte, chegou lá.
                         </h2>
-                        <p className="mt-4 text-[15px] md:text-base text-black/50 leading-relaxed">
-                            Negócios reais, operações reais — e o número que mudou
-                            depois que a estratégia entrou.
+                        <p className="mt-5 text-[15px] md:text-[17px] tracking-[-0.01em] text-black/45 leading-relaxed">
+                            Negócios reais, operações reais — e o número que mudou depois
+                            que a estratégia entrou.
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                         {CASE_CARDS.map((c) => (
-                            <div key={c.name} className="relative rounded-2xl overflow-hidden aspect-[4/5] group">
+                            <div
+                                key={c.name}
+                                className="relative rounded-2xl overflow-hidden aspect-[4/5] group"
+                            >
                                 <img
                                     src={c.photo}
                                     alt={c.name}
@@ -566,13 +674,15 @@ const NorteLanding: React.FC = () => {
                                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E0C] via-[#0B0E0C]/35 to-transparent" />
-                                <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-[9px] tracking-[0.12em] uppercase font-bold">
+                                <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 font-mono text-[9px] tracking-[0.1em] uppercase">
                                     {c.tag}
                                 </span>
                                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                                    <p className="font-bold text-[14px] leading-tight mb-2">{c.name}</p>
+                                    <p className={`${H3} text-[14px] leading-tight mb-2`}>
+                                        {c.name}
+                                    </p>
                                     <div className="flex items-baseline gap-1.5">
-                                        <span className="text-[26px] font-extrabold tracking-tight text-[#8DC63F] leading-none">
+                                        <span className={`${H2} text-[26px] text-[#8DC63F] leading-none`}>
                                             {c.metric}
                                         </span>
                                         <span className="text-[10px] text-white/70">{c.label}</span>
@@ -584,16 +694,13 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
-            {/* ═══ Carrossel de resultados — faixa creme ═══ */}
-            <section className={`bg-[#F4F1E9] ${SECTION}`}>
+            {/* ═══ Carrossel de resultados ═══ */}
+            <section className={`bg-white ${SECTION}`}>
                 <div className={CONTAINER}>
-                    <div className="flex items-end justify-between gap-6 mb-8">
+                    <div className="flex items-end justify-between gap-6 mb-9">
                         <div className="max-w-xl">
                             <Eyebrow>+100 parceiros impactados</Eyebrow>
-                            <h2
-                                className="mt-3 font-extrabold tracking-[-0.02em] leading-[1.08]"
-                                style={{ fontSize: 'clamp(26px, 3.2vw, 40px)' }}
-                            >
+                            <h2 className={`mt-4 ${H2} text-[clamp(26px,3.4vw,44px)]`}>
                                 Dados. Não promessas.
                             </h2>
                         </div>
@@ -602,7 +709,7 @@ const NorteLanding: React.FC = () => {
                                 type="button"
                                 aria-label="Voltar"
                                 onClick={() => scrollResults(-1)}
-                                className="w-10 h-10 rounded-full border border-black/12 hover:bg-[#0B0E0C] hover:text-white hover:border-[#0B0E0C] transition-colors flex items-center justify-center"
+                                className="w-10 h-10 rounded-full border border-black/12 hover:bg-[#131313] hover:text-white hover:border-[#131313] transition-colors flex items-center justify-center"
                             >
                                 <Arrow className="w-4 h-4 rotate-180" />
                             </button>
@@ -610,7 +717,7 @@ const NorteLanding: React.FC = () => {
                                 type="button"
                                 aria-label="Avançar"
                                 onClick={() => scrollResults(1)}
-                                className="w-10 h-10 rounded-full bg-[#0B0E0C] text-white hover:bg-[#14261A] transition-colors flex items-center justify-center"
+                                className="w-10 h-10 rounded-full bg-[#131313] text-white hover:bg-[#14261A] transition-colors flex items-center justify-center"
                             >
                                 <Arrow className="w-4 h-4" />
                             </button>
@@ -627,19 +734,22 @@ const NorteLanding: React.FC = () => {
                         {RESULTS.map((r) => (
                             <div
                                 key={r.client}
-                                className="snap-start flex-shrink-0 w-[260px] rounded-2xl bg-white border border-black/5 hover:border-[#8DC63F] p-6 flex flex-col justify-between min-h-[190px] transition-colors"
+                                className="snap-start flex-shrink-0 w-[262px] rounded-2xl border border-black/8 hover:border-[#8DC63F] p-6 flex flex-col justify-between min-h-[196px] transition-colors"
+                                style={{ backgroundColor: PAPER }}
                             >
                                 <div className="flex items-start justify-between gap-2">
-                                    <span className="font-bold text-[13px] leading-tight">{r.client}</span>
-                                    <span className="text-[9px] tracking-[0.1em] uppercase text-black/40 bg-[#F4F1E9] rounded-full px-2 py-0.5 whitespace-nowrap flex-shrink-0">
+                                    <span className={`${H3} text-[13px] leading-tight`}>
+                                        {r.client}
+                                    </span>
+                                    <span className="font-mono text-[9px] tracking-[0.08em] uppercase text-black/40 bg-white rounded-full px-2 py-0.5 whitespace-nowrap flex-shrink-0">
                                         {r.category}
                                     </span>
                                 </div>
                                 <div className="mt-6">
-                                    <p className="text-[20px] font-extrabold tracking-tight text-[#3d6b12] leading-tight mb-1.5">
+                                    <p className={`${H2} text-[21px] text-[#3d6b12] leading-tight mb-2`}>
                                         {r.headline}
                                     </p>
-                                    <p className="text-[12px] text-black/50 leading-snug">{r.body}</p>
+                                    <p className="text-[12px] text-black/45 leading-snug">{r.body}</p>
                                 </div>
                             </div>
                         ))}
@@ -647,18 +757,15 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
-            {/* ═══ Reels — faixa branca ═══ */}
-            <section className={`bg-white ${SECTION}`}>
+            {/* ═══ Reels ═══ */}
+            <section className={`${SECTION}`} style={{ backgroundColor: PAPER }}>
                 <div className={CONTAINER}>
-                    <div className="max-w-2xl mb-8">
+                    <div className="max-w-2xl mb-9">
                         <Eyebrow>Reels feitos em casa</Eyebrow>
-                        <h2
-                            className="mt-3 font-extrabold tracking-[-0.02em] leading-[1.08]"
-                            style={{ fontSize: 'clamp(26px, 3.2vw, 40px)' }}
-                        >
+                        <h2 className={`mt-4 ${H2} text-[clamp(26px,3.4vw,44px)]`}>
                             Captação, roteiro e edição.
                         </h2>
-                        <p className="mt-3 text-[14px] text-black/45">
+                        <p className="mt-4 text-[14px] text-black/40">
                             Toque pra reproduzir · ative o som no canto
                         </p>
                     </div>
@@ -676,45 +783,23 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
-            {/* ═══ Sobre + Sócios — faixa verde-floresta ═══ */}
-            <section id="sobre" className={`relative bg-[#14261A] text-white overflow-hidden ${SECTION}`}>
-                <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full"
-                    style={{
-                        background:
-                            'radial-gradient(circle, rgba(141,198,63,0.16) 0%, transparent 65%)',
-                    }}
-                />
-                <div className={`relative ${CONTAINER}`}>
+            {/* ═══ Sócios ═══ */}
+            <section id="sobre" className={`bg-white ${SECTION}`}>
+                <div className={CONTAINER}>
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
                         <div className="lg:col-span-5">
-                            <Eyebrow light>Por que Norte?</Eyebrow>
-                            <h2
-                                className="mt-3 font-extrabold tracking-[-0.02em] leading-[1.08] mb-5"
-                                style={{ fontSize: 'clamp(28px, 3.4vw, 42px)' }}
-                            >
-                                Um nome que é bússola e origem.
+                            <Eyebrow>Quem assina</Eyebrow>
+                            <h2 className={`mt-4 ${H2} text-[clamp(28px,3.6vw,46px)] mb-5`}>
+                                Time fixo, nome e sobrenome.
                             </h2>
-                            <div className="space-y-4 text-[15px] text-white/65 leading-relaxed">
-                                <p>
-                                    Norte é direção: o ponteiro da bússola que tira o
-                                    negócio do improviso e coloca num caminho medido.
-                                </p>
-                                <p>
-                                    E Norte é origem: nascemos em Manaus, provando que
-                                    daqui se constrói marketing de padrão nacional.
-                                </p>
-                            </div>
-                            <p className="mt-7 text-[16px] font-bold text-[#8DC63F]">
-                                A gente aponta a direção. Você caminha.
+                            <p className="text-[15px] md:text-[17px] tracking-[-0.01em] text-black/45 leading-relaxed">
+                                Não é central de atendimento nem estagiário rodando conta.
+                                Cada projeto tem gente responsável por ele — e você sabe
+                                exatamente quem é.
                             </p>
                         </div>
 
                         <div className="lg:col-span-7">
-                            <p className="text-[11px] tracking-[0.18em] uppercase font-bold text-white/45 mb-5">
-                                Quem assina pelo projeto
-                            </p>
                             <div className="grid grid-cols-3 gap-3">
                                 {PARTNERS.map((p) => (
                                     <div key={p.name}>
@@ -740,8 +825,10 @@ const NorteLanding: React.FC = () => {
                                                 className="absolute inset-0 w-full h-full object-contain object-bottom"
                                             />
                                         </div>
-                                        <p className="font-bold text-[13px] leading-tight">{p.name}</p>
-                                        <p className="text-[11px] text-white/45 mt-0.5">{p.role}</p>
+                                        <p className={`${H3} text-[14px] leading-tight`}>{p.name}</p>
+                                        <p className="font-mono text-[10px] tracking-[0.08em] uppercase text-black/40 mt-1">
+                                            {p.role}
+                                        </p>
                                     </div>
                                 ))}
                             </div>
@@ -750,15 +837,12 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
-            {/* ═══ FAQ — faixa creme ═══ */}
-            <section className={`bg-[#F4F1E9] ${SECTION}`}>
+            {/* ═══ FAQ ═══ */}
+            <section className={`${SECTION}`} style={{ backgroundColor: PAPER }}>
                 <div className="max-w-[880px] mx-auto px-5 md:px-8">
-                    <div className="mb-8">
+                    <div className="mb-9">
                         <Eyebrow>Perguntas frequentes</Eyebrow>
-                        <h2
-                            className="mt-3 font-extrabold tracking-[-0.02em] leading-[1.08]"
-                            style={{ fontSize: 'clamp(26px, 3.2vw, 40px)' }}
-                        >
+                        <h2 className={`mt-4 ${H2} text-[clamp(26px,3.4vw,44px)]`}>
                             O que você devia perguntar.
                         </h2>
                     </div>
@@ -773,7 +857,7 @@ const NorteLanding: React.FC = () => {
                                         onClick={() => setOpenFaq(open ? null : i)}
                                         className="w-full flex items-center justify-between gap-5 text-left py-5 group"
                                     >
-                                        <span className="font-bold text-[15px] md:text-base leading-snug">
+                                        <span className={`${H3} text-[16px] md:text-[18px] leading-snug`}>
                                             {f.q}
                                         </span>
                                         <span
@@ -794,7 +878,7 @@ const NorteLanding: React.FC = () => {
                                         }`}
                                     >
                                         <div className="overflow-hidden">
-                                            <p className="text-[14px] md:text-[15px] text-black/55 leading-relaxed pr-10">
+                                            <p className="text-[14px] md:text-[15px] text-black/50 leading-relaxed pr-10">
                                                 {f.a}
                                             </p>
                                         </div>
@@ -806,22 +890,27 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
-            {/* ═══ Contato — faixa verde-limão ═══ */}
-            <section id="contato" className={`bg-[#8DC63F] text-[#0B0E0C] ${SECTION}`}>
-                <div className={CONTAINER}>
+            {/* ═══ CTA final — a segunda e última faixa verde ═══ */}
+            <section
+                id="contato"
+                className={`relative bg-[#14261A] text-white overflow-hidden ${SECTION}`}
+            >
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[-60%] w-[110%] h-[150%]"
+                    style={{
+                        background:
+                            'radial-gradient(ellipse at center, rgba(141,198,63,0.18) 0%, transparent 68%)',
+                    }}
+                />
+                <div className={`relative ${CONTAINER}`}>
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
                         <div className="lg:col-span-7">
-                            <span className="inline-flex items-center gap-2 text-[11px] tracking-[0.18em] uppercase font-bold text-[#0B0E0C]/60">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#0B0E0C]" />
-                                Contato
-                            </span>
-                            <h2
-                                className="mt-3 font-extrabold tracking-[-0.03em] leading-[1.02] mb-5"
-                                style={{ fontSize: 'clamp(34px, 5vw, 68px)' }}
-                            >
+                            <Eyebrow light>Contato</Eyebrow>
+                            <h2 className={`mt-4 ${H1} text-[clamp(34px,5.2vw,66px)] mb-6`}>
                                 Vamos crescer juntos?
                             </h2>
-                            <p className="text-[15px] md:text-[17px] text-[#0B0E0C]/70 leading-relaxed max-w-lg mb-8">
+                            <p className="text-[15px] md:text-[19px] tracking-[-0.01em] text-white/60 leading-relaxed max-w-lg mb-9">
                                 Seja tráfego, conteúdo, branding ou o pacote completo —
                                 estamos prontos pra conversar sobre o seu negócio.
                             </p>
@@ -829,10 +918,12 @@ const NorteLanding: React.FC = () => {
                                 href={WHATSAPP}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group inline-flex items-center gap-3 rounded-full bg-[#0B0E0C] hover:bg-[#14261A] text-white font-bold text-sm md:text-base px-8 py-4 transition-colors"
+                                className="group inline-flex items-center gap-3 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm md:text-base pl-7 pr-2.5 py-2.5 transition-colors"
                             >
                                 Chamar no WhatsApp
-                                <Arrow className="w-4 h-4 text-[#8DC63F] transition-transform group-hover:translate-x-0.5" />
+                                <span className="w-9 h-9 rounded-full bg-[#0B0E0C] text-[#8DC63F] flex items-center justify-center transition-transform group-hover:rotate-45">
+                                    <Arrow className="w-4 h-4 -rotate-45" />
+                                </span>
                             </a>
                         </div>
 
@@ -845,12 +936,12 @@ const NorteLanding: React.FC = () => {
                             ].map(([k, v]) => (
                                 <div
                                     key={k}
-                                    className="flex gap-5 border-b border-[#0B0E0C]/15 pb-3 last:border-0"
+                                    className="flex gap-5 border-b border-white/12 pb-3 last:border-0"
                                 >
-                                    <span className="w-24 flex-shrink-0 text-[10px] tracking-[0.16em] uppercase font-bold text-[#0B0E0C]/50 pt-1">
+                                    <span className="w-24 flex-shrink-0 font-mono text-[10px] tracking-[0.12em] uppercase text-white/40 pt-1">
                                         {k}
                                     </span>
-                                    <span className="font-semibold text-[15px]">{v}</span>
+                                    <span className={`${H3} text-[15px]`}>{v}</span>
                                 </div>
                             ))}
                         </div>

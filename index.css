@@ -20,6 +20,11 @@
    headlines (Hero, big numbers, section titles). Only 400 weight ships. */
 @import '@fontsource/anton/latin-400.css';
 
+/* Plus Jakarta Sans — títulos da Norte. Só 500 e 600: o desenho da marca
+   pede peso médio com tracking apertado, nunca extrabold. */
+@import '@fontsource/plus-jakarta-sans/latin-500.css';
+@import '@fontsource/plus-jakarta-sans/latin-600.css';
+
 /* Playfair Display (serif) — weights actually used across the LPs */
 @import '@fontsource/playfair-display/latin-400.css';
 @import '@fontsource/playfair-display/latin-500.css';
@@ -136,4 +141,19 @@ body {
     display: none;
     width: 0;
     height: 0;
+}
+
+/* ── Norte ─────────────────────────────────────────────────────────── */
+
+/* Leque de cards da hero: a inclinação 3D só existe no desktop. No mobile
+   os cards viram um trilho reto — rotação em tela estreita só atrapalha
+   a leitura e come área útil. */
+.fan-item {
+    transform: rotateY(var(--ry, 0deg)) translateY(var(--ty, 0px)) scale(var(--sc, 1));
+}
+@media (max-width: 767px) {
+    .fan-item { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .fan-item { transform: none; }
 }

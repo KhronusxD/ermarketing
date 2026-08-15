@@ -130,19 +130,143 @@ export const Arrow: IconType = ({ className = 'w-4 h-4' }) => (
 
 // ─── Chrome ─────────────────────────────────────────────────────────
 
+// Eyebrow em mono: o contraste entre a mono estreita em caixa alta e o
+// título em Jakarta peso 500 é o que dá o ar editorial da marca.
 export const Eyebrow: React.FC<{ children: React.ReactNode; light?: boolean }> = ({
     children,
     light = false,
 }) => (
     <span
-        className={`inline-flex items-center gap-2 text-[11px] tracking-[0.18em] uppercase font-bold ${
-            light ? 'text-white/70' : 'text-[#3d6b12]'
+        className={`inline-flex items-center gap-2 font-mono text-[12px] tracking-[0.12em] uppercase font-medium ${
+            light ? 'text-white/60' : 'text-black/45'
         }`}
     >
         <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F]" />
         {children}
     </span>
 );
+
+// ─── Mecânicas de scroll ────────────────────────────────────────────
+
+/** Progresso 0→1 conforme a página rola `distance` px a partir do topo.
+ *  Começa em 1 para que o HTML pré-renderizado saia legível e indexável —
+ *  o valor real só entra depois da montagem. */
+export const useScrollReveal = (distance = 420): number => {
+    const [p, setP] = React.useState(1);
+
+    React.useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        let frame = 0;
+        const update = () => {
+            frame = 0;
+            setP(Math.min(1, window.scrollY / distance));
+        };
+        update();
+        const onScroll = () => {
+            if (!frame) frame = requestAnimationFrame(update);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            if (frame) cancelAnimationFrame(frame);
+        };
+    }, [distance]);
+
+    return p;
+};
+
+/** Progresso 0→1 conforme o elemento atravessa a janela, de 80% a 35%
+ *  da altura do viewport. Também nasce em 1 por causa do pré-render. */
+export const useElementReveal = <T extends HTMLElement>(): [
+    React.RefObject<T>,
+    number,
+] => {
+    const ref = React.useRef<T>(null);
+    const [p, setP] = React.useState(1);
+
+    React.useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        let frame = 0;
+        const update = () => {
+            frame = 0;
+            const el = ref.current;
+            if (!el) return;
+            const top = el.getBoundingClientRect().top;
+            const start = window.innerHeight * 0.8;
+            const end = window.innerHeight * 0.35;
+            setP(Math.max(0, Math.min(1, (start - top) / (start - end))));
+        };
+        update();
+        const onScroll = () => {
+            if (!frame) frame = requestAnimationFrame(update);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            window.removeEventListener('resize', onScroll);
+            if (frame) cancelAnimationFrame(frame);
+        };
+    }, []);
+
+    return [ref, p];
+};
+
+/** Reparte `progress` entre N itens em cascata: o item 0 já nasce quase
+ *  pronto e o último precisa do progresso inteiro. */
+export const stagger = (i: number, total: number, progress: number, floor = 0.12) => {
+    const base = total > 1 ? 1 - (i / (total - 1)) * (1 - floor) : 1;
+    return Math.max(0, Math.min(1, base + progress));
+};
+
+/** Número que sobe de 0 até o valor quando entra na tela. Renderiza o
+ *  valor final no HTML estático — crawler e leitor de tela veem o número. */
+export const CountUp: React.FC<{
+    value: number;
+    decimals?: number;
+    prefix?: string;
+    suffix?: string;
+    className?: string;
+}> = ({ value, decimals = 0, prefix = '', suffix = '', className }) => {
+    const ref = React.useRef<HTMLSpanElement>(null);
+    const [shown, setShown] = React.useState(value);
+
+    React.useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        const io = new IntersectionObserver(
+            (entries) => {
+                if (!entries.some((e) => e.isIntersecting)) return;
+                io.disconnect();
+                const t0 = performance.now();
+                const tick = (now: number) => {
+                    const t = Math.min(1, (now - t0) / 1400);
+                    // ease-out cubic: rápido no começo, assenta no fim
+                    setShown(value * (1 - Math.pow(1 - t, 3)));
+                    if (t < 1) requestAnimationFrame(tick);
+                };
+                setShown(0);
+                requestAnimationFrame(tick);
+            },
+            { threshold: 0.4 },
+        );
+        io.observe(el);
+        return () => io.disconnect();
+    }, [value]);
+
+    return (
+        <span ref={ref} className={className}>
+            {prefix}
+            {shown.toLocaleString('pt-BR', {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals,
+            })}
+            {suffix}
+        </span>
+    );
+};
 
 // Máscara de fade nas laterais dos carrosséis — a barra de rolagem é
 // escondida via .no-scrollbar (index.css) e o gradiente dá a impressão
@@ -201,7 +325,7 @@ export const NorteNav: React.FC<{ scrolled: boolean }> = ({ scrolled }) => (
                 href={WHATSAPP}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-shrink-0 inline-flex items-center gap-2 rounded-full bg-[#8DC63F] hover:bg-[#7db32f] text-[#0B0E0C] font-bold text-[13px] px-4 md:px-5 py-2.5 transition-colors"
+                className="flex-shrink-0 inline-flex items-center gap-2 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-[13px] px-4 md:px-5 py-2.5 transition-colors"
             >
                 <span className="hidden sm:inline">Falar com a Norte</span>
                 <span className="sm:hidden">WhatsApp</span>
@@ -229,7 +353,7 @@ export const NorteFooter: React.FC = () => (
                     </div>
 
                     <div className="md:col-span-3">
-                        <p className="text-[11px] tracking-[0.18em] uppercase font-bold text-[#8DC63F] mb-4">
+                        <p className="font-mono text-[11px] tracking-[0.12em] uppercase text-[#8DC63F] mb-4">
                             Navegue
                         </p>
                         <ul className="space-y-2.5 text-[13px]">
@@ -244,7 +368,7 @@ export const NorteFooter: React.FC = () => (
                     </div>
 
                     <div className="md:col-span-4">
-                        <p className="text-[11px] tracking-[0.18em] uppercase font-bold text-[#8DC63F] mb-4">
+                        <p className="font-mono text-[11px] tracking-[0.12em] uppercase text-[#8DC63F] mb-4">
                             Contato
                         </p>
                         <ul className="space-y-2.5 text-[13px]">

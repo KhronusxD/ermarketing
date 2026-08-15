@@ -35,7 +35,7 @@ const ServicePage: React.FC = () => {
     const others = SERVICES.filter((s) => s.slug !== service.slug);
 
     return (
-        <div className="min-h-screen bg-[#F4F1E9] text-[#0B0E0C] font-sans antialiased selection:bg-[#8DC63F] selection:text-[#0B0E0C]">
+        <div className="min-h-screen bg-white text-[#131313] font-sans antialiased selection:bg-[#8DC63F] selection:text-[#0B0E0C]">
             <NorteNav scrolled={scrolled} />
 
             {/* ═══ Hero — faixa verde-floresta ═══ */}
@@ -66,7 +66,7 @@ const ServicePage: React.FC = () => {
                         <Eyebrow light>{service.name}</Eyebrow>
 
                         <h1
-                            className="mt-3 font-extrabold tracking-[-0.02em] leading-[1.08] mb-5"
+                            className="mt-3 font-norte font-medium tracking-[-0.06em] leading-[1.04] mb-5"
                             style={{ fontSize: 'clamp(28px, 3.6vw, 48px)' }}
                         >
                             {service.headline}
@@ -80,7 +80,7 @@ const ServicePage: React.FC = () => {
                             href={WHATSAPP}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group inline-flex items-center gap-2 rounded-full bg-[#8DC63F] hover:bg-[#7db32f] text-[#0B0E0C] font-bold text-sm px-6 py-3.5 transition-colors"
+                            className="group inline-flex items-center gap-2 rounded-full bg-[#8DC63F] hover:bg-[#7db32f] text-[#0B0E0C] font-semibold text-sm px-6 py-3.5 transition-colors"
                         >
                             Falar sobre {service.name.toLowerCase()}
                             <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -95,7 +95,7 @@ const ServicePage: React.FC = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
                         <div className="lg:col-span-7">
                             <Eyebrow>O que está incluído</Eyebrow>
-                            <h2 className="mt-2.5 text-2xl md:text-[32px] font-extrabold tracking-[-0.02em] leading-tight mb-6">
+                            <h2 className="mt-2.5 text-2xl md:text-[34px] font-norte font-medium tracking-[-0.055em] leading-[1.06] mb-6">
                                 A entrega, item por item.
                             </h2>
                             <ul className="space-y-3">
@@ -114,16 +114,16 @@ const ServicePage: React.FC = () => {
 
                         <div className="lg:col-span-5">
                             <Eyebrow>Pra quem é</Eyebrow>
-                            <h2 className="mt-2.5 text-2xl md:text-[32px] font-extrabold tracking-[-0.02em] leading-tight mb-6">
+                            <h2 className="mt-2.5 text-2xl md:text-[34px] font-norte font-medium tracking-[-0.055em] leading-[1.06] mb-6">
                                 Faz sentido se…
                             </h2>
                             <ul className="space-y-2.5">
                                 {service.forWho.map((w, i) => (
                                     <li
                                         key={w}
-                                        className="rounded-2xl bg-[#F4F1E9] p-4 text-[14px] text-black/70 leading-snug"
+                                        className="rounded-2xl bg-[#F5F5F3] p-4 text-[14px] text-black/70 leading-snug"
                                     >
-                                        <span className="block text-[11px] font-extrabold text-[#3d6b12] mb-1">
+                                        <span className="block font-mono text-[11px] text-[#3d6b12] mb-1">
                                             {String(i + 1).padStart(2, '0')}
                                         </span>
                                         {w}
@@ -136,10 +136,10 @@ const ServicePage: React.FC = () => {
             </section>
 
             {/* ═══ Como funciona — faixa creme ═══ */}
-            <section className={`bg-[#F4F1E9] ${SECTION}`}>
+            <section className={`bg-[#F5F5F3] ${SECTION}`}>
                 <div className={CONTAINER}>
                     <Eyebrow>Como funciona</Eyebrow>
-                    <h2 className="mt-2.5 text-2xl md:text-[32px] font-extrabold tracking-[-0.02em] leading-tight mb-8">
+                    <h2 className="mt-2.5 text-2xl md:text-[34px] font-norte font-medium tracking-[-0.055em] leading-[1.06] mb-8">
                         Três etapas, sem mistério.
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -148,10 +148,10 @@ const ServicePage: React.FC = () => {
                                 key={s.title}
                                 className="rounded-2xl bg-white border border-black/5 p-6"
                             >
-                                <span className="inline-flex w-8 h-8 rounded-full bg-[#F4F1E9] text-[#3d6b12] font-extrabold text-[13px] items-center justify-center mb-4">
+                                <span className="inline-flex w-8 h-8 rounded-full bg-[#F5F5F3] text-[#3d6b12] font-mono text-[12px] items-center justify-center mb-4">
                                     {i + 1}
                                 </span>
-                                <h3 className="font-bold text-[15px] mb-1.5">{s.title}</h3>
+                                <h3 className="font-norte font-semibold tracking-[-0.02em] text-[16px] mb-1.5">{s.title}</h3>
                                 <p className="text-[13px] text-black/55 leading-snug">{s.body}</p>
                             </div>
                         ))}
@@ -173,13 +173,13 @@ const ServicePage: React.FC = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
                         <div className="lg:col-span-5">
                             <Eyebrow light>Prova</Eyebrow>
-                            <p className="mt-5 text-[13px] font-bold text-white/45 uppercase tracking-[0.14em]">
+                            <p className="mt-5 font-mono text-[12px] text-white/45 uppercase tracking-[0.12em]">
                                 {service.proof.client}
                             </p>
-                            <p className="mt-2 text-5xl md:text-6xl font-extrabold tracking-tight text-[#8DC63F] leading-none">
+                            <p className="mt-2 text-5xl md:text-6xl font-norte font-medium tracking-[-0.055em] text-[#8DC63F] leading-none">
                                 {service.proof.metric}
                             </p>
-                            <p className="mt-2 text-[13px] uppercase tracking-[0.14em] text-white/40">
+                            <p className="mt-2 font-mono text-[12px] uppercase tracking-[0.12em] text-white/40">
                                 {service.proof.label}
                             </p>
                         </div>
@@ -197,12 +197,12 @@ const ServicePage: React.FC = () => {
                 <div className={CONTAINER}>
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                         <div className="lg:col-span-8">
-                            <span className="inline-flex items-center gap-2 text-[11px] tracking-[0.18em] uppercase font-bold text-[#0B0E0C]/60">
+                            <span className="inline-flex items-center gap-2 font-mono text-[12px] tracking-[0.12em] uppercase text-[#0B0E0C]/60">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#0B0E0C]" />
                                 Próximo passo
                             </span>
                             <h2
-                                className="mt-3 font-extrabold tracking-[-0.03em] leading-[1.05] mb-4"
+                                className="mt-3 font-norte font-medium tracking-[-0.06em] leading-[1.04] mb-4"
                                 style={{ fontSize: 'clamp(30px, 4.4vw, 56px)' }}
                             >
                                 Vamos falar sobre o seu caso?
@@ -217,7 +217,7 @@ const ServicePage: React.FC = () => {
                                 href={WHATSAPP}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group inline-flex items-center gap-3 rounded-full bg-[#0B0E0C] hover:bg-[#14261A] text-white font-bold text-sm md:text-base px-8 py-4 transition-colors"
+                                className="group inline-flex items-center gap-3 rounded-full bg-[#0B0E0C] hover:bg-[#14261A] text-white font-semibold text-sm md:text-base px-8 py-4 transition-colors"
                             >
                                 Chamar no WhatsApp
                                 <Arrow className="w-4 h-4 text-[#8DC63F] transition-transform group-hover:translate-x-0.5" />
@@ -228,10 +228,10 @@ const ServicePage: React.FC = () => {
             </section>
 
             {/* ═══ Outros serviços — faixa creme ═══ */}
-            <section className={`bg-[#F4F1E9] ${SECTION}`}>
+            <section className={`bg-[#F5F5F3] ${SECTION}`}>
                 <div className={CONTAINER}>
                     <Eyebrow>Outros serviços</Eyebrow>
-                    <h2 className="mt-2.5 text-2xl md:text-[32px] font-extrabold tracking-[-0.02em] leading-tight mb-7">
+                    <h2 className="mt-2.5 text-2xl md:text-[34px] font-norte font-medium tracking-[-0.055em] leading-[1.06] mb-7">
                         A operação completa.
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -241,10 +241,10 @@ const ServicePage: React.FC = () => {
                                 href={`/norte/${s}`}
                                 className="rounded-2xl bg-white border border-black/5 hover:border-[#8DC63F] p-5 transition-colors group"
                             >
-                                <span className="inline-flex w-9 h-9 rounded-xl bg-[#F4F1E9] text-[#3d6b12] items-center justify-center mb-3 group-hover:bg-[#8DC63F] group-hover:text-[#0B0E0C] transition-colors">
+                                <span className="inline-flex w-9 h-9 rounded-xl bg-[#F5F5F3] text-[#3d6b12] items-center justify-center mb-3 group-hover:bg-[#8DC63F] group-hover:text-[#0B0E0C] transition-colors">
                                     <OtherIcon className="w-5 h-5" />
                                 </span>
-                                <h3 className="font-bold text-[14px] mb-1 leading-tight">{name}</h3>
+                                <h3 className="font-norte font-semibold tracking-[-0.02em] text-[14px] mb-1 leading-tight">{name}</h3>
                                 <p className="text-[12px] text-black/50 leading-snug">{teaser}</p>
                             </a>
                         ))}
