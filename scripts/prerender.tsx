@@ -349,9 +349,9 @@ const ROUTES: RouteSpec[] = [
         out: 'sobre/ed-rodrigues/index.html',
         meta: {
             title:
-                'Ed Rodrigues · Gestor de tráfego pago · ER Marketing',
+                'Ed Rodrigues · Gestor de tráfego pago · Norte',
             description:
-                'Bio, trajetória e áreas de especialidade de Ed Rodrigues — gestor de tráfego pago desde 2020, sócio fundador da ER Marketing, +R$ 5 milhões em mídia gerida.',
+                'Bio, trajetória e áreas de especialidade de Ed Rodrigues — gestor de tráfego pago desde 2020, sócio fundador da Norte, +R$ 5 milhões em mídia gerida.',
             canonical: `${SITE_ORIGIN}/sobre/ed-rodrigues`,
             ogType: 'profile',
             jsonLd: [
@@ -525,7 +525,7 @@ const ROUTES: RouteSpec[] = [
         path: '/blog',
         out: 'blog/index.html',
         meta: {
-            title: 'Blog ER Marketing · Marketing de performance sem rodeio',
+            title: 'Blog da Norte · Marketing sem rodeio, com número na mesa',
             description:
                 'Análises, guias e bastidor de operação sobre tráfego pago, marketing digital em Manaus e ROI real. Por Ed Rodrigues, gestor de mais de R$ 5 milhões em mídia paga.',
             canonical: `${SITE_ORIGIN}/blog`,
@@ -534,7 +534,7 @@ const ROUTES: RouteSpec[] = [
                 {
                     '@context': 'https://schema.org',
                     '@type': 'Blog',
-                    name: 'Blog ER Marketing',
+                    name: 'Blog da Norte',
                     url: `${SITE_ORIGIN}/blog`,
                     publisher: { '@id': `${SITE_ORIGIN}/#organization` },
                     blogPost: POSTS.map((p) => ({
@@ -557,7 +557,7 @@ const ROUTES: RouteSpec[] = [
         path: `/blog/${p.slug}`,
         out: `blog/${p.slug}/index.html`,
         meta: {
-            title: `${p.title} · Blog ER Marketing`,
+            title: `${p.title} · Blog da Norte`,
             description: p.description,
             canonical: `${SITE_ORIGIN}/blog/${p.slug}`,
             ogType: 'article',
@@ -625,7 +625,7 @@ const injectHead = (html: string, meta: RouteMeta): string => {
         `<meta property="og:url" content="${meta.canonical}">`,
         `<meta property="og:type" content="${meta.ogType ?? 'website'}">`,
         `<meta property="og:image" content="${og}">`,
-        `<meta property="og:site_name" content="ER Marketing">`,
+        `<meta property="og:site_name" content="Norte">`,
         `<meta property="og:locale" content="pt_BR">`,
         `<meta name="twitter:card" content="summary_large_image">`,
         `<meta name="twitter:title" content="${escapeAttr(meta.title)}">`,

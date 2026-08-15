@@ -41,7 +41,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'Na [ER Marketing](/) a gente conta os cases por nicho de forma transparente: [Taychi Sushi Bar](/), La Pizza Rio, ITV Manaus e mais 16 operações documentadas. Você vê o número antes de assinar.',
+                text: 'Na [Norte](/) a gente conta os cases por nicho de forma transparente: [Taychi Sushi Bar](/), La Pizza Rio, ITV Manaus e mais 16 operações documentadas. Você vê o número antes de assinar.',
             },
             {
                 type: 'h2',
@@ -113,7 +113,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'Em Manaus tem outro detalhe: criativo com produção local performa 30-40% melhor que criativo "genérico Brasil". O público reconhece. Vale captar dentro do negócio do cliente — comida, atendimento, fachada, time. É exatamente o que a [equipe da ER produz in loco](/) pros parceiros.',
+                text: 'Em Manaus tem outro detalhe: criativo com produção local performa 30-40% melhor que criativo "genérico Brasil". O público reconhece. Vale captar dentro do negócio do cliente — comida, atendimento, fachada, time. É exatamente o que a [equipe da Norte produz in loco](/) pros parceiros.',
             },
             {
                 type: 'h2',
@@ -251,7 +251,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'Sim, vale a pena fazer tráfego pago em 2026 — desde que você trate como sistema integrado, não como conta no Meta Ads. A [ER Marketing](/) trabalha com esse modelo há 7 anos, e os cases mostram que funciona quando o cliente entra inteiro no jogo.',
+                text: 'Sim, vale a pena fazer tráfego pago em 2026 — desde que você trate como sistema integrado, não como conta no Meta Ads. A [Norte](/) trabalha com esse modelo há 7 anos, e os cases mostram que funciona quando o cliente entra inteiro no jogo.',
             },
             {
                 type: 'cta',
@@ -317,7 +317,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'Em 2026, criativo genérico não para o scroll. Quem produz dentro do seu negócio — cozinha, vitrine, atendimento, bastidor — gera material que converte porque carrega autenticidade local. A [ER Marketing](/) tem time de captação que vai presencial no cliente todo mês.',
+                text: 'Em 2026, criativo genérico não para o scroll. Quem produz dentro do seu negócio — cozinha, vitrine, atendimento, bastidor — gera material que converte porque carrega autenticidade local. A [Norte](/) tem time de captação que vai presencial no cliente todo mês.',
             },
             {
                 type: 'h3',
@@ -355,7 +355,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'h2',
-                text: 'O modelo que a gente trabalha na ER',
+                text: 'O modelo que a gente trabalha na Norte',
             },
             {
                 type: 'p',
@@ -371,11 +371,11 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'Se você quer ver como a ER toca um projeto antes de decidir contratar, a [reunião de diagnóstico](/auditoria-de-lucro-invisivel) é o teste-drive. 15 minutos, sem compromisso, com plano de 90 dias no final.',
+                text: 'Se você quer ver como a Norte toca um projeto antes de decidir contratar, a [reunião de diagnóstico](/auditoria-de-lucro-invisivel) é o teste-drive. 15 minutos, sem compromisso, com plano de 90 dias no final.',
             },
             {
                 type: 'cta',
-                label: 'Agendar com a ER agora',
+                label: 'Agendar com a Norte agora',
                 href: '/auditoria-de-lucro-invisivel',
             },
         ],
@@ -461,11 +461,11 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'h2',
-                text: 'Como a ER cobra',
+                text: 'Como a Norte cobra',
             },
             {
                 type: 'p',
-                text: 'A [ER Marketing](/) começa em R$ 1.500/mês de fee, mais R$ 1.000/mês de verba mínima recomendada. Total: R$ 2.500/mês. É o ponto de partida — escala junto com o resultado. Sem multa pra rescisão antes de 90 dias.',
+                text: 'A [Norte](/) começa em R$ 1.500/mês de fee, mais R$ 1.000/mês de verba mínima recomendada. Total: R$ 2.500/mês. É o ponto de partida — escala junto com o resultado. Sem multa pra rescisão antes de 90 dias.',
             },
             {
                 type: 'cta',
@@ -628,7 +628,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'A [ER Marketing](/) trabalha com modelo de planos por estágio: ponto de partida em R$ 1.500/mês de fee + R$ 1.000 de verba mínima — desenhado pra negócio em crescimento, com escalada acompanhando o resultado.',
+                text: 'A [Norte](/) trabalha com modelo de planos por estágio: ponto de partida em R$ 1.500/mês de fee + R$ 1.000 de verba mínima — desenhado pra negócio em crescimento, com escalada acompanhando o resultado.',
             },
             {
                 type: 'cta',
@@ -709,7 +709,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'Na [ER Marketing](/) cada cliente tem dashboard próprio cruzando mídia, CRM e financeiro. Quem assina vê ROI real toda semana — não no fim do mês, não em print. Quer entender como esse setup funciona pro seu caso? [Agenda 15 minutos com a gente](/auditoria-de-lucro-invisivel).',
+                text: 'Na [Norte](/) cada cliente tem dashboard próprio cruzando mídia, CRM e financeiro. Quem assina vê ROI real toda semana — não no fim do mês, não em print. Quer entender como esse setup funciona pro seu caso? [Agenda 15 minutos com a gente](/auditoria-de-lucro-invisivel).',
             },
             {
                 type: 'cta',
@@ -800,7 +800,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'A gente faz esse setup completo em qualquer projeto que entra na [ER Marketing](/). Não é cobrado separado, faz parte do mínimo viável de operação de tráfego em 2026.',
+                text: 'A gente faz esse setup completo em qualquer projeto que entra na [Norte](/). Não é cobrado separado, faz parte do mínimo viável de operação de tráfego em 2026.',
             },
             {
                 type: 'h2',

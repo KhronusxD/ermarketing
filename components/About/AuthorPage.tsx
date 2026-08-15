@@ -32,7 +32,7 @@ const AuthorPage: React.FC = () => {
                             </h1>
                             <p className="text-base md:text-xl text-er-ink/75 leading-relaxed max-w-xl">
                                 Gestor de tráfego pago desde 2020. Sócio
-                                fundador da ER Marketing. Já gerenciou mais
+                                fundador da Norte. Já gerenciou mais
                                 de R$ 5 milhões em Meta Ads e Google Ads pra
                                 negócios locais em Manaus, e-commerce nacional,
                                 infoproduto e B2B high-ticket.
@@ -41,7 +41,7 @@ const AuthorPage: React.FC = () => {
                         <div className="col-span-12 md:col-span-5">
                             <img
                                 src={AUTHOR.avatar}
-                                alt="Ed Rodrigues, gestor de tráfego pago e sócio fundador da ER Marketing"
+                                alt="Ed Rodrigues, gestor de tráfego pago e sócio fundador da Norte"
                                 className="w-full aspect-[3/4] object-cover"
                                 width={500}
                                 height={667}
@@ -108,14 +108,15 @@ const AuthorPage: React.FC = () => {
                                 e o que é jogo de figurinha.
                             </p>
                             <p>
-                                Em 2022 fundou a ER Marketing junto com Brenno
-                                Soares e Francyelle Barbosa. A operação cresceu
+                                Em 2022 fundou a agência junto com Brenno
+                                Soares e Francyelle Barbosa — nascida como ER
+                                Marketing e hoje Norte. A operação cresceu
                                 de "gestor solo" pra agência completa de
                                 performance: estratégia, copy, captação
                                 audiovisual presencial, CRM e BI próprio.
                             </p>
                             <p>
-                                Hoje a ER atende mais de 100 parceiros em
+                                Hoje a Norte atende mais de 100 parceiros em
                                 Manaus, no Brasil e fora — e Ed continua na
                                 frente das contas estratégicas, escrevendo no
                                 blog, e desenhando a metodologia que separa
