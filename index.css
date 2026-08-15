@@ -176,12 +176,28 @@ body {
     to   { transform: rotateX(var(--rx)) translateZ(calc(var(--r) * -1)) rotateY(-360deg); }
 }
 
+/* Esfumado lateral do anel. Mora num embrulho por fora do palco em vez
+   de no próprio palco: máscara é propriedade de agrupamento, e aplicá-la
+   no elemento que abre a perspectiva é pedir pra achatar o 3D dos
+   filhos. Só no celular — no desktop o anel não chega perto da borda. */
+.fan-mask {
+    mask-image: linear-gradient(to right, transparent 0, black 13%, black 87%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 13%, black 87%, transparent 100%);
+}
+
+@media (min-width: 768px) {
+    .fan-mask {
+        mask-image: none;
+        -webkit-mask-image: none;
+    }
+}
+
 .fan-group {
-    --r: 330px;
-    --cw: 148px;
+    --r: 264px;
+    --cw: 118px;
     --rx: 7deg;
     position: relative;
-    height: 208px;
+    height: 172px;
     transform-style: preserve-3d;
     will-change: transform;
     animation: norte-ring var(--dur, 84s) linear infinite;
@@ -218,6 +234,8 @@ body {
 /* Sem animação: o anel não faz sentido parado, então vira trilho que se
    arrasta com o dedo. */
 @media (prefers-reduced-motion: reduce) {
+    /* o embrulho da máscara recorta; virando trilho ele precisa soltar */
+    .fan-mask { overflow: visible; }
     .fan-stage { overflow-x: auto; }
 
     .fan-group {

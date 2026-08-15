@@ -120,7 +120,7 @@ const FAN: FanCard[] = [
 // duas coisas mexendo só no raio — quem afrouxa a compressão das pontas
 // sem afastar o miolo é a perspectiva, por isso ela ficou distante.
 // RING_R e CARD_W vivem no CSS (--r e --cw), porque mudam no breakpoint:
-// 505/196 no desktop, 330/148 no celular. Aqui fica só o que não muda.
+// 505/196 no desktop, 264/118 no celular. Aqui fica só o que não muda.
 const RING_STEP = 360 / FAN.length;
 
 // Mais cartas na volta pedem volta mais longa: a 84s cada uma passa pela
@@ -1301,10 +1301,8 @@ const NorteLanding: React.FC = () => {
 
                     {/* Anel de resultados — dez clientes dando a volta sozinhos.
                         O palco abre a perspectiva e o anel gira num keyframe. */}
-                    <div
-                        className="fan-stage -mx-5 md:mx-0 mt-12 md:mt-16 no-scrollbar overflow-hidden md:overflow-visible"
-                        style={PERSPECTIVE}
-                    >
+                    <div className="fan-mask -mx-5 md:mx-0 mt-12 md:mt-16 overflow-hidden md:overflow-visible">
+                    <div className="fan-stage no-scrollbar" style={PERSPECTIVE}>
                         <div
                             className="fan-group"
                             style={{ ['--dur' as string]: `${RING_DUR}s` }}
@@ -1314,7 +1312,7 @@ const NorteLanding: React.FC = () => {
                                 return (
                                     <div
                                         key={card.client ?? card.line}
-                                        className={`fan-item flex flex-col w-[148px] h-[196px] md:w-[196px] md:h-[226px] rounded-2xl p-3.5 md:p-[18px] border ${skin.box}`}
+                                        className={`fan-item flex flex-col w-[118px] h-[158px] md:w-[196px] md:h-[226px] rounded-xl md:rounded-2xl p-3 md:p-[18px] border ${skin.box}`}
                                         style={{
                                             ['--ry' as string]: `${i * RING_STEP}deg`,
                                             ['--ty' as string]: `${RING_LIFT[i]}px`,
@@ -1348,6 +1346,7 @@ const NorteLanding: React.FC = () => {
                                 );
                             })}
                         </div>
+                    </div>
                     </div>
                 </div>
 
