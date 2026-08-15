@@ -263,3 +263,69 @@ body {
     .svc, .svc-bar, .svc-fill { transition: none; }
     .svc-off { opacity: 1; transform: none; }
 }
+
+/* Sanfona do método. Fechada, cada painel é um filete com a palavra em
+   pé; aberto, ocupa o espaço que sobra e mostra o conteúdo. O filete e o
+   corpo ficam sobrepostos e trocam por opacidade — trocar por display
+   mataria a transição.
+
+   No celular não existe passar o mouse, então a sanfona vira uma lista
+   comum: filete escondido, todos os corpos abertos. */
+.acc {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.acc-spine { display: none; }
+
+@media (min-width: 768px) {
+    .acc {
+        flex-direction: row;
+        height: 400px;
+        gap: 10px;
+    }
+
+    .acc-item {
+        position: relative;
+        flex: 0 0 70px;
+        min-width: 0;
+        transition: flex-basis 0.55s cubic-bezier(0.2, 0.8, 0.2, 1),
+            background-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .acc-item.is-open { flex: 1 1 0; }
+
+    .acc-spine {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        opacity: 1;
+        transition: opacity 0.25s ease;
+    }
+
+    .acc-item.is-open .acc-spine { opacity: 0; }
+
+    .acc-body {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease 0.15s;
+    }
+
+    .acc-item.is-open .acc-body {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+/* Palavra em pé, lida de baixo pra cima */
+.acc-word {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .acc-item, .acc-spine, .acc-body { transition: none; }
+}

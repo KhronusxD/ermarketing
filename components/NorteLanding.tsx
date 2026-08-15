@@ -108,15 +108,16 @@ const FAN: FanCard[] = [
 // Com 10 cartas o passo era 36° e davam cinco. Com 16 ele cai pra 22,5° e
 // entram oito na cena, que é a densidade da referência.
 //
-// O raio segue a corda entre vizinhas, 2·R·sen(11,25°) ≈ 0,39·R: com 680
-// dá 265px pra uma carta de 196, junto sem amassar.
+// O raio manda no aperto entre vizinhas pela corda 2·R·sen(11,25°) ≈
+// 0,39·R. Com 505 a corda dá 197px pra uma carta de 196: elas encostam na
+// frente e se sobrepõem nas laterais, que é o baralho que a referência
+// tem. Raio 680 abria 69px de folga e voltava a parecer espalhado.
 //
-// A largura que o conjunto ocupa na tela não é a largura geométrica: a
-// perspectiva puxa as cartas do fundo pra dentro. Com raio 530 e
-// perspectiva 1250 as oito ocupavam 1236px no papel e só 824px na tela,
-// encolhidas no meio com margem sobrando dos dois lados. Raio maior e
-// perspectiva mais distante afrouxam essa compressão.
-const RING_R = 680;
+// Num anel fechado, aperto e quantidade em cena são a mesma conta:
+// R·passo ≈ largura da carta e visíveis = 180°/passo. Não dá pra ter as
+// duas coisas mexendo só no raio — quem afrouxa a compressão das pontas
+// sem afastar o miolo é a perspectiva, por isso ela ficou distante.
+const RING_R = 505;
 const CARD_W = 196;
 const RING_STEP = 360 / FAN.length;
 
@@ -496,10 +497,30 @@ const MANIFESTO: Token[] = [
 const MANIFESTO_STRONG = new Set(['impulsionam', 'faturamento.']);
 
 const STEPS = [
-    { icon: IconSearch, title: 'Diagnóstico', body: 'Entender onde vaza' },
-    { icon: IconRoute, title: 'Estratégia', body: 'Definir a direção' },
-    { icon: IconRocket, title: 'Execução', body: 'Rodar e medir' },
-    { icon: IconChart, title: 'Escala', body: 'Crescer com dado' },
+    {
+        icon: IconSearch,
+        title: 'Diagnóstico',
+        lead: 'Entender onde vaza',
+        body: 'Antes de propor qualquer coisa, olhamos conta, criativo, oferta e funil pra achar por onde o dinheiro está escapando.',
+    },
+    {
+        icon: IconRoute,
+        title: 'Estratégia',
+        lead: 'Definir a direção',
+        body: 'Canal, público, oferta e régua de medição definidos. Nada entra no plano sem responder à pergunta: dá pra medir?',
+    },
+    {
+        icon: IconRocket,
+        title: 'Execução',
+        lead: 'Rodar e medir',
+        body: 'Campanha no ar, criativo em teste e otimização semanal. Time fixo, com nome e sobrenome na sua conta.',
+    },
+    {
+        icon: IconChart,
+        title: 'Escala',
+        lead: 'Crescer com dado',
+        body: 'Com CAC e ROAS estáveis, a verba sobe onde o dado manda subir — não onde o achismo manda.',
+    },
 ];
 
 const MISSION = [
@@ -627,6 +648,71 @@ const ServiceCell: React.FC<{
                 Ver detalhes <Arrow className="w-3.5 h-3.5" />
             </span>
         </a>
+    );
+};
+
+// Sanfona do método. Fechado, o painel é um filete com a palavra em pé;
+// aberto, mostra o conteúdo. O estado vive em React em vez de :hover puro
+// porque um painel precisa continuar aberto quando o mouse sai de todos —
+// e porque assim o teclado abre pelo foco, do mesmo jeito.
+const MethodAccordion: React.FC = () => {
+    const [open, setOpen] = useState(0);
+
+    return (
+        <div className="acc">
+            {STEPS.map(({ icon: Icon, title, lead, body }, i) => {
+                const isOpen = open === i;
+                return (
+                    <button
+                        key={title}
+                        type="button"
+                        onMouseEnter={() => setOpen(i)}
+                        onFocus={() => setOpen(i)}
+                        onClick={() => setOpen(i)}
+                        aria-expanded={isOpen}
+                        className={`acc-item text-left rounded-[20px] overflow-hidden border transition-colors ${
+                            isOpen
+                                ? 'is-open bg-white border-black/[0.07] shadow-[0_18px_54px_rgba(11,14,12,0.09)]'
+                                : 'bg-[#F5F5F3] border-transparent hover:bg-[#EFEFEB]'
+                        }`}
+                    >
+                        {/* Filete: número em cima, palavra em pé embaixo */}
+                        <span className="acc-spine flex-col items-center justify-between py-6">
+                            <span className="font-mono text-[11px] text-black/30">
+                                {String(i + 1).padStart(2, '0')}
+                            </span>
+                            <span
+                                className={`acc-word ${H3} text-[15px] uppercase tracking-[0.16em] text-black/60`}
+                            >
+                                {title}
+                            </span>
+                            <Icon className="w-5 h-5 text-[#3d6b12]" />
+                        </span>
+
+                        <span className="acc-body flex flex-col p-7 md:p-8">
+                            <span className="flex items-center justify-between mb-auto">
+                                <span className="inline-flex w-11 h-11 rounded-xl bg-[#8DC63F] text-[#0B0E0C] items-center justify-center">
+                                    <Icon className="w-5 h-5" />
+                                </span>
+                                <span className="font-mono text-[11px] text-black/25">
+                                    {String(i + 1).padStart(2, '0')}
+                                </span>
+                            </span>
+
+                            <span className="block mt-8">
+                                <span className={`block ${TAG} text-black/40 mb-3`}>{lead}</span>
+                                <span className={`block ${H2} text-[26px] md:text-[30px] mb-3`}>
+                                    {title}
+                                </span>
+                                <span className="block text-[14px] text-black/50 leading-relaxed max-w-[34ch]">
+                                    {body}
+                                </span>
+                            </span>
+                        </span>
+                    </button>
+                );
+            })}
+        </div>
     );
 };
 
@@ -1166,23 +1252,8 @@ const NorteLanding: React.FC = () => {
                             </ul>
                         </div>
 
-                        <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3 content-start">
-                            {STEPS.map(({ icon: Icon, title, body }, i) => (
-                                <div
-                                    key={title}
-                                    className="rounded-2xl border border-black/8 p-6"
-                                    style={{ backgroundColor: PAPER }}
-                                >
-                                    <div className="flex items-center justify-between mb-5">
-                                        <Icon className="w-6 h-6 text-[#3d6b12]" />
-                                        <span className="font-mono text-[11px] text-black/25">
-                                            {String(i + 1).padStart(2, '0')}
-                                        </span>
-                                    </div>
-                                    <p className={`${H3} text-[16px] leading-tight mb-1`}>{title}</p>
-                                    <p className="text-[13px] text-black/45">{body}</p>
-                                </div>
-                            ))}
+                        <div className="lg:col-span-7">
+                            <MethodAccordion />
                         </div>
                     </div>
                 </div>
