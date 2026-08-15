@@ -163,6 +163,7 @@ export const useScrollReveal = (distance = 420, initial = 1): number => {
             setP(Math.min(1, window.scrollY / distance));
         };
         update();
+        const settle = [200, 700, 1500].map((t) => window.setTimeout(update, t));
         const onScroll = () => {
             if (!frame) frame = requestAnimationFrame(update);
         };
@@ -198,6 +199,7 @@ export const useElementReveal = <T extends HTMLElement>(): [
             setP(Math.max(0, Math.min(1, (start - top) / (start - end))));
         };
         update();
+        const settle = [200, 700, 1500].map((t) => window.setTimeout(update, t));
         const onScroll = () => {
             if (!frame) frame = requestAnimationFrame(update);
         };
@@ -218,6 +220,99 @@ export const useElementReveal = <T extends HTMLElement>(): [
 export const stagger = (i: number, total: number, progress: number, floor = 0.12) => {
     const base = total > 1 ? 1 - (i / (total - 1)) * (1 - floor) : 1;
     return Math.max(0, Math.min(1, base + progress));
+};
+
+/** Máscara lateral que acompanha a rolagem do trilho.
+ *
+ *  Fade fixo dos dois lados mente: no começo não há nada à esquerda pra
+ *  sumir, então o esfumado só apaga a borda da primeira carta e parece
+ *  defeito. Aqui cada lado só ganha fade quando existe conteúdo escondido
+ *  daquele lado. */
+export const useRailMask = <T extends HTMLElement>(
+    centerOnMount = false,
+): [React.RefObject<T>, React.CSSProperties] => {
+    const ref = React.useRef<T>(null);
+    const [edges, setEdges] = React.useState({ left: false, right: true });
+
+    // `touched` marca que a pessoa já mexeu no trilho: a partir daí a
+    // centralização automática sai de cena e não rouba a posição dela.
+    const touched = React.useRef(false);
+    const lastMax = React.useRef(-1);
+
+    React.useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        let frame = 0;
+
+        const update = () => {
+            frame = 0;
+            const max = el.scrollWidth - el.clientWidth;
+
+            // Trilho que nasce no meio: com carta sobrando dos dois lados,
+            // o esfumado tem o que apagar em ambas as bordas. Encostado no
+            // começo, o lado esquerdo não tem nada pra sumir e a primeira
+            // carta parece cortada em vez de continuar.
+            //
+            // Centraliza o trilho.
+            //
+            // Sem usar scrollWidth: a pista tem width:max-content com recuo
+            // lateral, e nesse arranjo o scrollWidth do scroller só passa a
+            // contar o recuo depois de um flush de layout — centralizar por
+            // ele deixava o trilho 100px fora do lugar. A borda direita da
+            // última carta mais o recuo dá a largura real e é medida estável.
+            const track = el.firstElementChild as HTMLElement | null;
+            const last = track?.lastElementChild as HTMLElement | null;
+            if (centerOnMount && !touched.current && track && last) {
+                const padRight = parseFloat(getComputedStyle(track).paddingRight) || 0;
+                const total = last.offsetLeft + last.offsetWidth + padRight;
+                const target = Math.round((total - el.clientWidth) / 2);
+                if (target > 0 && target !== lastMax.current) {
+                    lastMax.current = target;
+                    el.scrollLeft = target;
+                    return;
+                }
+            }
+
+            setEdges({ left: el.scrollLeft > 8, right: el.scrollLeft < max - 8 });
+        };
+
+        update();
+        const settle = [200, 700, 1500].map((t) => window.setTimeout(update, t));
+        const onScroll = () => {
+            if (!frame) frame = requestAnimationFrame(update);
+        };
+        const onTouch = () => {
+            touched.current = true;
+        };
+        el.addEventListener('scroll', onScroll, { passive: true });
+        el.addEventListener('wheel', onTouch, { passive: true });
+        el.addEventListener('pointerdown', onTouch, { passive: true });
+        el.addEventListener('keydown', onTouch);
+        window.addEventListener('resize', onScroll);
+
+        // O trilho muda de largura conforme fontes e cartazes entram;
+        // o observador reavalia sem precisar de timer chutado.
+        const ro = new ResizeObserver(onScroll);
+        ro.observe(el);
+        if (el.firstElementChild) ro.observe(el.firstElementChild);
+
+        return () => {
+            el.removeEventListener('scroll', onScroll);
+            el.removeEventListener('wheel', onTouch);
+            el.removeEventListener('pointerdown', onTouch);
+            el.removeEventListener('keydown', onTouch);
+            window.removeEventListener('resize', onScroll);
+            settle.forEach(window.clearTimeout);
+            ro.disconnect();
+            if (frame) cancelAnimationFrame(frame);
+        };
+    }, [centerOnMount]);
+
+    const from = edges.left ? 'transparent 0, black 5%' : 'black 0';
+    const to = edges.right ? 'black 95%, transparent 100%' : 'black 100%';
+    const mask = `linear-gradient(to right, ${from}, ${to})`;
+
+    return [ref, { maskImage: mask, WebkitMaskImage: mask }];
 };
 
 /** Entrada de baixo pra cima quando o elemento chega na tela.

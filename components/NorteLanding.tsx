@@ -11,6 +11,7 @@ import {
     useScrollReveal,
     useElementReveal,
     useRevealOnView,
+    useRailMask,
     stagger,
     IconSearch,
     IconRoute,
@@ -52,8 +53,9 @@ const RAIL_PAD: React.CSSProperties = {
     paddingRight: RAIL_GUTTER,
 };
 
-const RAIL_SCROLLER: React.CSSProperties = {
-    ...EDGE_FADE,
+// Só o scroll-padding: a máscara agora vem do useRailMask, que liga cada
+// lado conforme existe conteúdo escondido nele.
+const RAIL_SCROLL_PAD: React.CSSProperties = {
     scrollPaddingLeft: RAIL_GUTTER,
     scrollPaddingRight: RAIL_GUTTER,
 };
@@ -556,15 +558,75 @@ const LOGOS = [
     { src: '/clientes/logos/infinity-cobrancas.png', alt: 'Infinity Cobranças' },
 ];
 
-// Fotos do estabelecimento de cada cliente — nada de banco de imagens.
-// Taychi e La Pizza vêm de frames das captações que a equipe fez na
-// própria loja; iTV e Tecno Obras, de registros cedidos pelo cliente.
-const CASE_CARDS = [
-    { name: 'iTV Manaus', tag: 'Assistência técnica', metric: 'R$ 15k', label: 'de faturamento', photo: '/clientes/fotos/itv-fachada.jpg' },
-    { name: 'Taychi Sushi Bar', tag: 'Restaurante', metric: '+280%', label: 'reservas/mês', photo: '/clientes/fotos/taychi-salao.jpg' },
-    { name: 'La Pizza Rio', tag: 'Delivery', metric: '+190%', label: 'pedidos diretos', photo: '/clientes/fotos/lapizzario-fachada.jpg' },
-    { name: 'Tecno Obras', tag: 'Construção', metric: '+500 mil', label: 'views/mês', photo: '/clientes/fotos/tecnoobras-obra.jpg' },
+// Depoimentos da vitrine "Resultado real".
+//
+// ATENÇÃO: os textos abaixo são RASCUNHO escrito pela Norte, não fala
+// literal de cliente. Inventar citação e atribuir a empresa real é
+// declaração de fato falsa em nome de terceiro. Por isso a atribuição vai
+// só no nome da empresa e no segmento, sem nome de pessoa, e a página
+// não deve ser divulgada antes de cada cliente validar a sua frase.
+// Os números, esses sim, são os resultados reais de cada conta.
+type Depo = {
+    client: string;
+    tag: string;
+    quote: string;
+    metric: string;
+    label: string;
+    photo?: string;
+    skin?: 'dark' | 'lime';
+};
+
+const DEPOIMENTOS: Depo[] = [
+    {
+        client: 'Taychi Sushi Bar',
+        tag: 'Restaurante · Manaus',
+        quote: 'A casa já era boa. O que faltava era gente sabendo. Em sete meses o salão passou a encher também em dia de semana.',
+        metric: '+280%',
+        label: 'reservas/mês',
+        photo: '/clientes/fotos/taychi-salao.jpg',
+    },
+    {
+        client: 'La Pizza Rio',
+        tag: 'Delivery · Manaus',
+        quote: 'A gente vivia de indicação. Hoje entra pedido direto todo dia, sem depender de aplicativo pra vender.',
+        metric: '+190%',
+        label: 'pedidos diretos',
+        photo: '/clientes/fotos/lapizzario-fachada.jpg',
+    },
+    {
+        client: 'Oli e Sofi',
+        tag: 'E-commerce',
+        quote: 'Triplicamos o faturamento sem precisar triplicar a verba. A conta finalmente fecha.',
+        metric: '+300%',
+        label: 'no faturamento',
+        skin: 'dark',
+    },
+    {
+        client: 'iTV Manaus',
+        tag: 'Assistência técnica',
+        quote: 'Investimento baixo e retorno que dá pra contar. Foi a primeira vez que soubemos de onde veio cada cliente.',
+        metric: 'R$ 15k',
+        label: 'de faturamento',
+        photo: '/clientes/fotos/itv-fachada.jpg',
+    },
+    {
+        client: 'Odonto Solutions',
+        tag: 'Saúde',
+        quote: 'Lead a R$ 1,57 e agenda cheia. O time comercial parou de reclamar da qualidade do que chegava.',
+        metric: '5.193',
+        label: 'leads qualificados',
+        skin: 'lime',
+    },
+    {
+        client: 'Tecno Obras',
+        tag: 'Construção · Curitiba',
+        quote: 'Saímos do zero pra referência na região. Hoje o cliente chega falando que já viu a gente.',
+        metric: '+500 mil',
+        label: 'views/mês',
+        photo: '/clientes/fotos/tecnoobras-obra.jpg',
+    },
 ];
+
 
 const RESULTS = [
     { client: 'Taychi Sushi', category: 'Restaurante', headline: '70k → 200k/mês', body: 'em 7 meses, com funis direcionados pra loja física.' },
@@ -712,6 +774,235 @@ const MethodAccordion: React.FC = () => {
                     </button>
                 );
             })}
+        </div>
+    );
+};
+
+// Carta da vitrine de depoimentos. Com foto do estabelecimento quando
+// existe registro; sem foto, cai num fundo sólido escuro ou limão pra a
+// fileira não ficar monótona.
+const DepoCard: React.FC<{ depo: Depo }> = ({ depo }) => {
+    const solid = !depo.photo;
+    const lime = depo.skin === 'lime';
+
+    return (
+        <article
+            className={`relative flex-shrink-0 w-[300px] md:w-[352px] h-[420px] md:h-[470px] rounded-[22px] overflow-hidden flex flex-col justify-end p-6 md:p-7 ${
+                lime ? 'bg-[#8DC63F] text-[#0B0E0C]' : 'bg-[#131313] text-white'
+            }`}
+        >
+            {depo.photo && (
+                <>
+                    <img
+                        src={depo.photo}
+                        alt={`${depo.client} — cliente da Norte`}
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E0C] via-[#0B0E0C]/55 to-[#0B0E0C]/15" />
+                </>
+            )}
+
+            {solid && !lime && (
+                <div
+                    aria-hidden="true"
+                    className="absolute -top-16 -right-10 w-[260px] h-[260px] rounded-full"
+                    style={{
+                        background:
+                            'radial-gradient(circle, rgba(141,198,63,0.22) 0%, transparent 68%)',
+                    }}
+                />
+            )}
+
+            {/* Assinatura do cliente no alto, como marca d'água */}
+            <p
+                className={`absolute top-6 left-6 md:top-7 md:left-7 inline-flex items-center gap-2 ${H3} text-[15px] ${
+                    lime ? 'text-[#0B0E0C]/80' : 'text-white/90'
+                }`}
+            >
+                <span
+                    className={`w-1.5 h-1.5 rounded-full ${lime ? 'bg-[#0B0E0C]' : 'bg-[#8DC63F]'}`}
+                />
+                {depo.client}
+            </p>
+
+            <div className="relative">
+                <span
+                    className={`block ${H2} text-[40px] leading-none mb-3 ${
+                        lime ? 'text-[#0B0E0C]/35' : 'text-[#8DC63F]'
+                    }`}
+                    aria-hidden="true"
+                >
+                    “
+                </span>
+
+                <p
+                    className={`text-[15px] md:text-[16px] leading-snug mb-6 ${
+                        lime ? 'text-[#0B0E0C]/85' : 'text-white/90'
+                    }`}
+                >
+                    {depo.quote}
+                </p>
+
+                <div
+                    className={`flex items-end justify-between gap-3 pt-4 border-t ${
+                        lime ? 'border-[#0B0E0C]/20' : 'border-white/15'
+                    }`}
+                >
+                    <span
+                        className={`${TAG} ${lime ? 'text-[#0B0E0C]/55' : 'text-white/50'}`}
+                    >
+                        {depo.tag}
+                    </span>
+                    <span className="text-right">
+                        <span
+                            className={`block ${H2} text-[26px] leading-none ${
+                                lime ? 'text-[#14261A]' : 'text-[#8DC63F]'
+                            }`}
+                        >
+                            {depo.metric}
+                        </span>
+                        <span
+                            className={`block text-[10px] mt-1 ${
+                                lime ? 'text-[#0B0E0C]/55' : 'text-white/50'
+                            }`}
+                        >
+                            {depo.label}
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </article>
+    );
+};
+
+// Visual das cartas do carrossel de resultados. Quatro motivos que se
+// alternam pela lista — barras, linha, arco e ranking. São ilustração, e
+// não gráfico de dado: o que afirma alguma coisa é o número embaixo, que
+// é sempre real. Por isso a forma sai de uma semente presa ao índice, o
+// mesmo desenho toda vez, sem sorteio a cada render.
+const vizBars = (seed: number) =>
+    Array.from({ length: 7 }, (_, i) => {
+        const base = 26 + ((seed * 17 + i * 29) % 34);
+        return Math.min(100, Math.round(base + i * (7 + (seed % 4))));
+    });
+
+// Cores espalhadas pelo carrossel. A ordem é fixa em vez de sorteada em
+// tempo de render: com Math.random o servidor pré-renderiza uma cor e o
+// navegador monta outra, e a página pisca ao hidratar. Aqui o embaralhado
+// é escrito uma vez e vale sempre.
+type ResSkin = 'white' | 'dark' | 'lime';
+
+const RESULT_SKINS: ResSkin[] = [
+    'white', 'dark', 'white', 'lime', 'white', 'white', 'dark', 'white', 'lime',
+    'white', 'dark', 'white', 'white', 'lime', 'white', 'dark', 'white', 'white', 'lime',
+];
+
+const RES_SKIN: Record<ResSkin, {
+    box: string; name: string; pill: string; head: string; body: string;
+    muted: string; accent: string; ring: string;
+}> = {
+    white: {
+        box: 'bg-white border-black/[0.07] hover:border-[#8DC63F]',
+        name: 'text-[#131313]', pill: 'text-black/40 bg-[#F5F5F3]',
+        head: 'text-[#3d6b12]', body: 'text-black/45',
+        muted: 'bg-black/[0.09]', accent: 'bg-[#8DC63F]', ring: 'rgba(0,0,0,0.09)',
+    },
+    dark: {
+        box: 'bg-[#131313] border-[#131313] hover:border-[#8DC63F]',
+        name: 'text-white', pill: 'text-white/45 bg-white/10',
+        head: 'text-[#8DC63F]', body: 'text-white/50',
+        muted: 'bg-white/[0.14]', accent: 'bg-[#8DC63F]', ring: 'rgba(255,255,255,0.16)',
+    },
+    lime: {
+        box: 'bg-[#8DC63F] border-[#8DC63F] hover:border-[#14261A]',
+        name: 'text-[#0B0E0C]', pill: 'text-[#0B0E0C]/55 bg-[#0B0E0C]/10',
+        head: 'text-[#14261A]', body: 'text-[#0B0E0C]/60',
+        muted: 'bg-[#0B0E0C]/15', accent: 'bg-[#14261A]', ring: 'rgba(11,14,12,0.16)',
+    },
+};
+
+const ResultViz: React.FC<{ index: number; skin: ResSkin }> = ({ index, skin }) => {
+    const kind = index % 4;
+    const bars = vizBars(index + 1);
+    const c = RES_SKIN[skin];
+
+    if (kind === 0) {
+        return (
+            <div className="flex items-end gap-[3px] h-[42px]">
+                {bars.map((h, i) => (
+                    <div
+                        key={i}
+                        className={`flex-1 rounded-[2px] ${
+                            i === bars.length - 1 ? c.accent : c.muted
+                        }`}
+                        style={{ height: `${h}%` }}
+                    />
+                ))}
+            </div>
+        );
+    }
+
+    if (kind === 1) {
+        const pts = bars
+            .map((h, i) => `${(i / (bars.length - 1)) * 100},${42 - (h / 100) * 38}`)
+            .join(' ');
+        return (
+            <svg viewBox="0 0 100 42" className="w-full h-[42px]" fill="none" aria-hidden="true">
+                <polyline
+                    points={pts}
+                    stroke={skin === 'lime' ? '#14261A' : '#8DC63F'}
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    vectorEffect="non-scaling-stroke"
+                />
+                <circle
+                    cx="100"
+                    cy={42 - (bars[bars.length - 1] / 100) * 38}
+                    r="3"
+                    fill={skin === 'lime' ? '#14261A' : skin === 'dark' ? '#8DC63F' : '#3d6b12'}
+                />
+            </svg>
+        );
+    }
+
+    if (kind === 2) {
+        const pct = 58 + (index * 7) % 34;
+        const circ = 2 * Math.PI * 17;
+        return (
+            <div className="flex items-center gap-3 h-[42px]">
+                <svg viewBox="0 0 40 40" className="w-[42px] h-[42px] -rotate-90" aria-hidden="true">
+                    <circle cx="20" cy="20" r="17" stroke={c.ring} strokeWidth="5" fill="none" />
+                    <circle
+                        cx="20"
+                        cy="20"
+                        r="17"
+                        stroke={skin === 'lime' ? '#14261A' : '#8DC63F'}
+                        strokeWidth="5"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeDasharray={`${(pct / 100) * circ} ${circ}`}
+                    />
+                </svg>
+                <div className="flex-1 space-y-1.5">
+                    <div className={`h-1.5 rounded-full ${c.muted} w-full`} />
+                    <div className={`h-1.5 rounded-full ${c.muted} w-3/5`} />
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="space-y-[7px] h-[42px] flex flex-col justify-center">
+            {[100, 72, 48].map((w, i) => (
+                <div key={i} className="flex items-center gap-2">
+                    <span
+                        className={`h-[7px] rounded-full ${i === 0 ? c.accent : c.muted}`}
+                        style={{ width: `${w}%` }}
+                    />
+                </div>
+            ))}
         </div>
     );
 };
@@ -867,7 +1158,8 @@ const Manifesto: React.FC = () => {
 const NorteLanding: React.FC = () => {
     const [scrolled, setScrolled] = useState(false);
     const [openFaq, setOpenFaq] = useState<number | null>(0);
-    const resultsRef = useRef<HTMLDivElement | null>(null);
+    const [resultsRef, resultsMask] = useRailMask<HTMLDivElement>();
+    const [reelsRef, reelsMask] = useRailMask<HTMLDivElement>(true);
     const heroProgress = useScrollReveal(420);
 
     useEffect(() => {
@@ -1259,8 +1551,8 @@ const NorteLanding: React.FC = () => {
                 </div>
             </section>
 
-            {/* ═══ Resultado real ═══ */}
-            <section id="cases" className={`${SECTION}`} style={{ backgroundColor: PAPER }}>
+            {/* ═══ Resultado real — vitrine em pulso ═══ */}
+            <section id="cases" className={`${SECTION} overflow-hidden`} style={{ backgroundColor: PAPER }}>
                 <div className={CONTAINER}>
                     <div className="max-w-2xl mb-10 md:mb-14">
                         <Eyebrow>Resultado real</Eyebrow>
@@ -1272,35 +1564,12 @@ const NorteLanding: React.FC = () => {
                             que a estratégia entrou.
                         </p>
                     </div>
+                </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                        {CASE_CARDS.map((c) => (
-                            <div
-                                key={c.name}
-                                className="relative rounded-2xl overflow-hidden aspect-[4/5] group"
-                            >
-                                <img
-                                    src={c.photo}
-                                    alt={c.name}
-                                    loading="lazy"
-                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E0C] via-[#0B0E0C]/35 to-transparent" />
-                                <span className="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 font-mono text-[9px] tracking-[0.1em] uppercase">
-                                    {c.tag}
-                                </span>
-                                <div className="absolute bottom-4 left-4 right-4 text-white">
-                                    <p className={`${H3} text-[14px] leading-tight mb-2`}>
-                                        {c.name}
-                                    </p>
-                                    <div className="flex items-baseline gap-1.5">
-                                        <span className={`${H2} text-[26px] text-[#8DC63F] leading-none`}>
-                                            {c.metric}
-                                        </span>
-                                        <span className="text-[10px] text-white/70">{c.label}</span>
-                                    </div>
-                                </div>
-                            </div>
+                <div className="rr no-scrollbar overflow-x-auto md:overflow-hidden" style={EDGE_FADE}>
+                    <div className="rr-track gap-3" style={RAIL_PAD}>
+                        {[...DEPOIMENTOS, ...DEPOIMENTOS].map((d, i) => (
+                            <DepoCard key={`${d.client}-${i}`} depo={d} />
                         ))}
                     </div>
                 </div>
@@ -1340,31 +1609,39 @@ const NorteLanding: React.FC = () => {
                 <div
                     ref={resultsRef}
                     className="no-scrollbar overflow-x-auto snap-x snap-mandatory scroll-smooth"
-                    style={RAIL_SCROLLER}
+                    style={{ ...resultsMask, ...RAIL_SCROLL_PAD }}
                 >
                     <div className="flex gap-3 w-max" style={RAIL_PAD}>
-                        {RESULTS.map((r) => (
-                            <div
-                                key={r.client}
-                                className="snap-start flex-shrink-0 w-[262px] rounded-2xl border border-black/8 hover:border-[#8DC63F] p-6 flex flex-col justify-between min-h-[196px] transition-colors"
-                                style={{ backgroundColor: PAPER }}
-                            >
-                                <div className="flex items-start justify-between gap-2">
-                                    <span className={`${H3} text-[13px] leading-tight`}>
-                                        {r.client}
-                                    </span>
-                                    <span className="font-mono text-[9px] tracking-[0.08em] uppercase text-black/40 bg-white rounded-full px-2 py-0.5 whitespace-nowrap flex-shrink-0">
-                                        {r.category}
-                                    </span>
+                        {RESULTS.map((r, i) => {
+                            const skin = RESULT_SKINS[i % RESULT_SKINS.length];
+                            const c = RES_SKIN[skin];
+                            return (
+                                <div
+                                    key={r.client}
+                                    className={`snap-start flex-shrink-0 w-[262px] rounded-2xl border p-6 flex flex-col min-h-[236px] transition-colors ${c.box}`}
+                                >
+                                    <div className="flex items-start justify-between gap-2 mb-5">
+                                        <span className={`${H3} text-[13px] leading-tight ${c.name}`}>
+                                            {r.client}
+                                        </span>
+                                        <span
+                                            className={`${TAG} rounded-full px-2 py-0.5 whitespace-nowrap flex-shrink-0 ${c.pill}`}
+                                        >
+                                            {r.category}
+                                        </span>
+                                    </div>
+
+                                    <ResultViz index={i} skin={skin} />
+
+                                    <div className="mt-auto pt-5">
+                                        <p className={`${H2} text-[21px] leading-tight mb-2 ${c.head}`}>
+                                            {r.headline}
+                                        </p>
+                                        <p className={`text-[12px] leading-snug ${c.body}`}>{r.body}</p>
+                                    </div>
                                 </div>
-                                <div className="mt-6">
-                                    <p className={`${H2} text-[21px] text-[#3d6b12] leading-tight mb-2`}>
-                                        {r.headline}
-                                    </p>
-                                    <p className="text-[12px] text-black/45 leading-snug">{r.body}</p>
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>
@@ -1384,8 +1661,9 @@ const NorteLanding: React.FC = () => {
                 </div>
 
                 <div
+                    ref={reelsRef}
                     className="no-scrollbar overflow-x-auto snap-x snap-mandatory scroll-smooth"
-                    style={RAIL_SCROLLER}
+                    style={{ ...reelsMask, ...RAIL_SCROLL_PAD }}
                 >
                     <div className="flex gap-3 w-max" style={RAIL_PAD}>
                         {REELS.map((r) => (
@@ -1398,53 +1676,47 @@ const NorteLanding: React.FC = () => {
             {/* ═══ Sócios ═══ */}
             <section id="sobre" className={`bg-white ${SECTION}`}>
                 <div className={CONTAINER}>
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-                        <div className="lg:col-span-5">
-                            <Eyebrow>Quem assina</Eyebrow>
-                            <h2 className={`mt-4 ${H2} text-[clamp(28px,3.6vw,46px)] mb-5`}>
-                                Time fixo, nome e sobrenome.
-                            </h2>
-                            <p className="text-[15px] md:text-[17px] tracking-[-0.01em] text-black/45 leading-relaxed">
-                                Não é central de atendimento nem estagiário rodando conta.
-                                Cada projeto tem gente responsável por ele — e você sabe
-                                exatamente quem é.
-                            </p>
-                        </div>
+                    <div className="max-w-2xl mb-10 md:mb-14">
+                        <Eyebrow>Quem assina</Eyebrow>
+                        <h2 className={`mt-4 ${H2} text-[clamp(28px,3.9vw,50px)]`}>
+                            Time fixo, nome e sobrenome.
+                        </h2>
+                        <p className="mt-5 text-[15px] md:text-[17px] tracking-[-0.01em] text-black/45 leading-relaxed">
+                            Não é central de atendimento nem estagiário rodando conta. Cada
+                            projeto tem gente responsável por ele — e você sabe exatamente
+                            quem é.
+                        </p>
+                    </div>
 
-                        <div className="lg:col-span-7">
-                            <div className="grid grid-cols-3 gap-3">
-                                {PARTNERS.map((p) => (
-                                    <div key={p.name}>
-                                        <div
-                                            className="relative rounded-2xl overflow-hidden aspect-[3/4] mb-3"
-                                            style={{
-                                                background:
-                                                    'linear-gradient(165deg, #1d3423 0%, #14261A 55%, #0B0E0C 100%)',
-                                            }}
-                                        >
-                                            <div
-                                                aria-hidden="true"
-                                                className="absolute inset-0"
-                                                style={{
-                                                    background:
-                                                        'radial-gradient(circle at 72% 26%, rgba(141,198,63,0.28) 0%, transparent 58%)',
-                                                }}
-                                            />
-                                            <img
-                                                src={p.photo}
-                                                alt={p.name}
-                                                loading="lazy"
-                                                className="absolute inset-0 w-full h-full object-contain object-bottom"
-                                            />
-                                        </div>
-                                        <p className={`${H3} text-[14px] leading-tight`}>{p.name}</p>
-                                        <p className="font-mono text-[10px] tracking-[0.08em] uppercase text-black/40 mt-1">
-                                            {p.role}
-                                        </p>
-                                    </div>
-                                ))}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {PARTNERS.map((p) => (
+                            <div key={p.name}>
+                                <div
+                                    className="relative rounded-[22px] overflow-hidden aspect-[4/5] mb-4"
+                                    style={{
+                                        background:
+                                            'linear-gradient(165deg, #1d3423 0%, #14261A 55%, #0B0E0C 100%)',
+                                    }}
+                                >
+                                    <div
+                                        aria-hidden="true"
+                                        className="absolute inset-0"
+                                        style={{
+                                            background:
+                                                'radial-gradient(circle at 72% 26%, rgba(141,198,63,0.28) 0%, transparent 58%)',
+                                        }}
+                                    />
+                                    <img
+                                        src={p.photo}
+                                        alt={p.name}
+                                        loading="lazy"
+                                        className="absolute inset-0 w-full h-full object-contain object-bottom"
+                                    />
+                                </div>
+                                <p className={`${H3} text-[17px] leading-tight`}>{p.name}</p>
+                                <p className={`${TAG} text-black/40 mt-1.5`}>{p.role}</p>
                             </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </section>
