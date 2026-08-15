@@ -159,15 +159,26 @@ body {
 
    Pausa no hover pra dar chance de ler. No mobile e sob
    prefers-reduced-motion vira um trilho reto, sem giro. */
-/* Cada carta apaga na virada. Sem isso, a que está exatamente de perfil
+/* Opacidade de cada carta ao longo da volta. Faz duas coisas de uma vez.
+
+   Primeira: dá o esfumado nas laterais. A carta da frente vem sólida e as
+   vizinhas vão ficando translúcidas conforme se afastam, então o anel
+   parece dissolver nas bordas em vez de terminar num corte seco.
+
+   Segunda: apaga quem está de perfil. Sem isso, a carta que cruza os 90°
    vira um risco fino de 1px atravessado sobre as da frente — parece bug,
-   não profundidade. O fade roda no mesmo período do anel, com atraso
-   negativo por índice, então cada carta apaga precisamente onde cruza os
-   90° e reacende ao voltar. */
+   não profundidade.
+
+   Roda no mesmo período do anel, com atraso negativo por índice, então
+   cada carta escurece e acende exatamente na posição certa da volta. */
 @keyframes norte-card {
-    0%, 17%   { opacity: 1; }
+    0%        { opacity: 1; }
+    10%       { opacity: 0.72; }
+    20%       { opacity: 0.26; }
     25%, 75%  { opacity: 0; }
-    83%, 100% { opacity: 1; }
+    80%       { opacity: 0.26; }
+    90%       { opacity: 0.72; }
+    100%      { opacity: 1; }
 }
 
 @keyframes norte-ring {
@@ -206,6 +217,13 @@ body {
 
     .fan-item,
     .fan-item > * { backface-visibility: hidden; }
+}
+
+@media (max-width: 767px) {
+    .fan-stage {
+        mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

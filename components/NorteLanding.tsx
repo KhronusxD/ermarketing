@@ -64,30 +64,46 @@ const HERO_WORDS = [
     { w: 'Você', lime: true }, { w: 'caminha.', lime: true },
 ];
 
-// Anel de cards da hero — dez clientes dando a volta.
-const FAN = [
-    { client: 'Taychi Sushi', tag: 'Restaurante', metric: '200k', label: 'faturamento/mês' },
-    { client: 'Oli e Sofi', tag: 'E-commerce', metric: '+300%', label: 'no faturamento' },
-    { client: 'Odonto Solutions', tag: 'Saúde', metric: 'R$ 1,57', label: 'por lead' },
-    { client: 'A Escola de Sites', tag: 'Infoproduto', metric: '+20 mil', label: 'leads gerados' },
-    { client: 'Tecno Obras', tag: 'Construção', metric: '+500 mil', label: 'views/mês' },
-    { client: 'Amazon One', tag: 'Varejo', metric: 'R$ 1M', label: 'em 6 meses' },
-    { client: 'Dermo Ervas', tag: 'E-commerce', metric: '+200%', label: 'de faturamento' },
-    { client: 'Bem Fisio', tag: 'Saúde', metric: '+450', label: 'leads/mês' },
-    { client: 'Propriedades Compart.', tag: 'Infoproduto', metric: '+10 mil', label: 'leads captados' },
-    { client: 'Abacazo', tag: 'Franquia', metric: '+3 lojas', label: 'abertas no período' },
+// Anel de cards da hero. Não são dez repetições do mesmo bloco: cada
+// carta tem um desenho próprio — gráfico, painel, nuvem de tags, destaque
+// sólido, manifesto — pra que o anel pareça um punhado de telas de
+// trabalho e não uma tabela girando. O dado é sempre real.
+type FanSkin = 'glass' | 'white' | 'lime' | 'dark';
+
+type FanCard = {
+    kind: 'metric' | 'chart' | 'dash' | 'pills' | 'accent' | 'statement';
+    skin: FanSkin;
+    tag: string;
+    client?: string;
+    metric?: string;
+    label?: string;
+    bars?: number[];
+    pills?: string[];
+    line?: string;
+};
+
+const FAN: FanCard[] = [
+    { kind: 'chart', skin: 'white', tag: 'Restaurante', client: 'Taychi Sushi', metric: '200k', label: 'faturamento/mês', bars: [26, 33, 41, 49, 63, 78, 100] },
+    { kind: 'metric', skin: 'glass', tag: 'E-commerce', client: 'Oli e Sofi', metric: '+300%', label: 'no faturamento' },
+    { kind: 'dash', skin: 'white', tag: 'Saúde', client: 'Odonto Solutions', metric: 'R$ 1,57', label: 'custo por lead' },
+    { kind: 'accent', skin: 'lime', tag: 'Infoproduto', client: 'A Escola de Sites', metric: '+20 mil', label: 'leads gerados' },
+    { kind: 'metric', skin: 'glass', tag: 'Construção', client: 'Tecno Obras', metric: '+500 mil', label: 'views/mês' },
+    { kind: 'pills', skin: 'white', tag: 'Varejo', client: 'Amazon One', metric: 'R$ 1M', label: 'em 6 meses', pills: ['Meta Ads', 'Google', 'Remarketing', 'CRM'] },
+    { kind: 'metric', skin: 'glass', tag: 'E-commerce', client: 'Dermo Ervas', metric: '+200%', label: 'de faturamento' },
+    { kind: 'statement', skin: 'dark', tag: 'Nosso método', line: 'Cada real medido em CAC e ROAS.' },
+    { kind: 'metric', skin: 'glass', tag: 'Infoproduto', client: 'Propriedades Compart.', metric: '+10 mil', label: 'leads captados' },
+    { kind: 'chart', skin: 'white', tag: 'Franquia', client: 'Abacazo', metric: '+3 lojas', label: 'abertas no período', bars: [30, 38, 35, 52, 61, 74, 100] },
 ];
 
 // Geometria do anel. Passo = 360° / nº de cartas, então elas se distribuem
 // pela volta inteira e vão se alternando na frente conforme gira.
 //
-// O raio sai da corda entre vizinhas: 2·R·sen(18°) ≈ 0,62·R. Com R=430 a
-// corda dava 266px pra uma carta de 212 mais duas faces de 14 — folga de
-// 26px, e como as cartas são cordas retas num círculo as quinas se
-// encontravam e as faces laterais atravessavam a carta do lado. Com 560 a
-// corda vai a 346px e sobra folga de verdade.
-const RING_R = 560;
-const CARD_W = 212;
+// O raio sai da corda entre vizinhas: 2·R·sen(18°) ≈ 0,62·R. Com 395 a
+// corda fica em 244px pra uma carta de 230 — as vizinhas quase se tocam,
+// que é o agrupamento que a referência tem. Raio maior espalha demais e
+// o conjunto perde a leitura de baralho.
+const RING_R = 395;
+const CARD_W = 230;
 const RING_STEP = 360 / FAN.length;
 const RING_DUR = 64;
 
@@ -99,21 +115,16 @@ const cardDelay = (i: number) => -(RING_DUR * (1 - i / FAN.length));
 // e zigue-zague regular vira serrote quando o anel roda.
 const RING_LIFT = [0, 13, -7, 6, -12, 4, 15, -5, 9, -9];
 
-// Ritmo visual: a maioria em vidro, com duas brancas e duas limão entrando
-// e saindo de cena conforme o anel gira.
-const cardVariant = (i: number): 'glass' | 'white' | 'lime' => {
-    const m = i % 5;
-    if (m === 1) return 'white';
-    if (m === 3) return 'lime';
-    return 'glass';
-};
-
-const CARD_SKIN = {
+const CARD_SKIN: Record<
+    FanSkin,
+    { box: string; tag: string; metric: string; label: string; muted: string; edge: string }
+> = {
     glass: {
         box: 'bg-white/[0.11] border-white/25 text-white',
         tag: 'text-white/45',
         metric: 'text-[#8DC63F]',
         label: 'text-white/50',
+        muted: 'bg-white/15',
         edge: 'rgba(255,255,255,0.10)',
     },
     white: {
@@ -121,6 +132,7 @@ const CARD_SKIN = {
         tag: 'text-black/40',
         metric: 'text-[#3d6b12]',
         label: 'text-black/45',
+        muted: 'bg-black/[0.07]',
         edge: 'rgba(206,206,199,1)',
     },
     lime: {
@@ -128,9 +140,128 @@ const CARD_SKIN = {
         tag: 'text-[#0B0E0C]/50',
         metric: 'text-[#14261A]',
         label: 'text-[#0B0E0C]/55',
+        muted: 'bg-[#0B0E0C]/12',
         edge: 'rgba(112,158,48,1)',
     },
-} as const;
+    dark: {
+        box: 'bg-[#131313] border-[#131313] text-white shadow-[0_24px_60px_rgba(0,0,0,0.45)]',
+        tag: 'text-white/40',
+        metric: 'text-[#8DC63F]',
+        label: 'text-white/45',
+        muted: 'bg-white/12',
+        edge: 'rgba(38,38,38,1)',
+    },
+};
+
+const TAG = 'font-mono text-[9px] tracking-[0.14em] uppercase';
+
+// Corpo da carta — um desenho por `kind`, todos na mesma caixa.
+const FanCardBody: React.FC<{ card: FanCard }> = ({ card }) => {
+    const s = CARD_SKIN[card.skin];
+
+    if (card.kind === 'statement') {
+        return (
+            <>
+                <p className={`${TAG} ${s.tag} mb-5`}>{card.tag}</p>
+                <p className={`${H2} text-[21px] leading-[1.15]`}>{card.line}</p>
+                <span className="mt-auto inline-flex items-center gap-2 text-[11px] text-white/45">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#8DC63F]" />
+                    Norte
+                </span>
+            </>
+        );
+    }
+
+    if (card.kind === 'accent') {
+        return (
+            <>
+                <span className="w-11 h-11 rounded-full bg-[#0B0E0C] text-[#8DC63F] flex items-center justify-center mb-5">
+                    <IconRocket className="w-5 h-5" />
+                </span>
+                <p className={`${H2} text-[32px] leading-none mb-1.5 ${s.metric}`}>{card.metric}</p>
+                <p className={`text-[11px] ${s.label}`}>{card.label}</p>
+                <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
+            </>
+        );
+    }
+
+    if (card.kind === 'chart') {
+        return (
+            <>
+                <p className={`${TAG} ${s.tag} mb-4`}>{card.tag}</p>
+                <div className="flex items-end gap-[3px] h-[56px] mb-5">
+                    {card.bars!.map((b, i) => (
+                        <div
+                            key={i}
+                            className={`flex-1 rounded-[2px] ${
+                                i === card.bars!.length - 1 ? 'bg-[#8DC63F]' : s.muted
+                            }`}
+                            style={{ height: `${b}%` }}
+                        />
+                    ))}
+                </div>
+                <p className={`${H2} text-[27px] leading-none mb-1 ${s.metric}`}>{card.metric}</p>
+                <p className={`text-[11px] ${s.label}`}>{card.label}</p>
+                <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
+            </>
+        );
+    }
+
+    if (card.kind === 'dash') {
+        return (
+            <>
+                <div className="rounded-xl bg-[#131313] text-white px-3 py-2.5 flex items-center justify-between mb-5">
+                    <div>
+                        <p className={`${H3} text-[12px] leading-none`}>Performance</p>
+                        <p className="text-[9px] text-white/40 mt-1">últimos 30 dias</p>
+                    </div>
+                    <svg viewBox="0 0 24 16" className="w-6 h-4" fill="none" aria-hidden="true">
+                        <path
+                            d="M1 14 7 7l4 4 5-8 6 3"
+                            stroke="#8DC63F"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+                </div>
+                <p className={`${H2} text-[30px] leading-none mb-2 ${s.metric}`}>{card.metric}</p>
+                <p className={`text-[11px] ${s.label}`}>{card.label}</p>
+                <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
+            </>
+        );
+    }
+
+    if (card.kind === 'pills') {
+        return (
+            <>
+                <div className="flex flex-wrap gap-1.5 mb-5">
+                    {card.pills!.map((p) => (
+                        <span
+                            key={p}
+                            className={`rounded-full ${s.muted} text-[9px] px-2.5 py-1 leading-none`}
+                        >
+                            {p}
+                        </span>
+                    ))}
+                </div>
+                <p className={`${TAG} ${s.tag} mb-2`}>{card.tag}</p>
+                <p className={`${H2} text-[28px] leading-none mb-1 ${s.metric}`}>{card.metric}</p>
+                <p className={`text-[11px] ${s.label}`}>{card.label}</p>
+                <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
+            </>
+        );
+    }
+
+    return (
+        <>
+            <p className={`${TAG} ${s.tag} mb-5`}>{card.tag}</p>
+            <p className={`${H2} text-[30px] leading-none mb-1.5 ${s.metric}`}>{card.metric}</p>
+            <p className={`text-[11px] ${s.label}`}>{card.label}</p>
+            <p className={`${H3} text-[13px] leading-tight mt-auto`}>{card.client}</p>
+        </>
+    );
+};
 
 const STATS = [
     { icon: IconChart, prefix: '+R$ ', value: 5, suffix: 'M', label: 'em mídia gerida' },
@@ -498,7 +629,7 @@ const NorteLanding: React.FC = () => {
                         O palco abre a perspectiva; o anel gira num keyframe
                         e pausa no hover pra dar tempo de ler. */}
                     <div
-                        className="mt-14 md:mt-16 no-scrollbar overflow-x-auto md:overflow-visible"
+                        className="fan-stage mt-14 md:mt-16 no-scrollbar overflow-x-auto md:overflow-visible"
                         style={{ perspective: '1250px', perspectiveOrigin: '50% 45%' }}
                     >
                         <div
@@ -511,11 +642,11 @@ const NorteLanding: React.FC = () => {
                             }}
                         >
                             {FAN.map((card, i) => {
-                                const skin = CARD_SKIN[cardVariant(i)];
+                                const skin = CARD_SKIN[card.skin];
                                 return (
                                     <div
-                                        key={card.client}
-                                        className={`fan-item relative flex-shrink-0 w-[200px] md:w-[212px] rounded-2xl p-5 border ${skin.box}`}
+                                        key={card.client ?? card.line}
+                                        className={`fan-item relative flex flex-col flex-shrink-0 w-[214px] md:w-[230px] md:h-[248px] rounded-2xl p-5 border ${skin.box}`}
                                         style={{
                                             ['--ry' as string]: `${i * RING_STEP}deg`,
                                             ['--ty' as string]: `${RING_LIFT[i]}px`,
@@ -543,20 +674,7 @@ const NorteLanding: React.FC = () => {
                                                 ['--edge-rot' as string]: '-90deg',
                                             }}
                                         />
-                                        <p
-                                            className={`font-mono text-[9px] tracking-[0.14em] uppercase mb-4 ${skin.tag}`}
-                                        >
-                                            {card.tag}
-                                        </p>
-                                        <p className={`${H2} text-[26px] leading-none mb-2 ${skin.metric}`}>
-                                            {card.metric}
-                                        </p>
-                                        <p className={`text-[11px] mb-4 ${skin.label}`}>
-                                            {card.label}
-                                        </p>
-                                        <p className={`${H3} text-[13px] leading-tight`}>
-                                            {card.client}
-                                        </p>
+                                        <FanCardBody card={card} />
                                     </div>
                                 );
                             })}
