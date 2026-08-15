@@ -64,30 +64,73 @@ const HERO_WORDS = [
     { w: 'Você', lime: true }, { w: 'caminha.', lime: true },
 ];
 
-// Leque de cards da hero — mão de cartas com resultado real.
+// Anel de cards da hero — dez clientes dando a volta.
 const FAN = [
     { client: 'Taychi Sushi', tag: 'Restaurante', metric: '200k', label: 'faturamento/mês' },
     { client: 'Oli e Sofi', tag: 'E-commerce', metric: '+300%', label: 'no faturamento' },
     { client: 'Odonto Solutions', tag: 'Saúde', metric: 'R$ 1,57', label: 'por lead' },
     { client: 'A Escola de Sites', tag: 'Infoproduto', metric: '+20 mil', label: 'leads gerados' },
     { client: 'Tecno Obras', tag: 'Construção', metric: '+500 mil', label: 'views/mês' },
+    { client: 'Amazon One', tag: 'Varejo', metric: 'R$ 1M', label: 'em 6 meses' },
+    { client: 'Dermo Ervas', tag: 'E-commerce', metric: '+200%', label: 'de faturamento' },
+    { client: 'Bem Fisio', tag: 'Saúde', metric: '+450', label: 'leads/mês' },
+    { client: 'Propriedades Compart.', tag: 'Infoproduto', metric: '+10 mil', label: 'leads captados' },
+    { client: 'Abacazo', tag: 'Franquia', metric: '+3 lojas', label: 'abertas no período' },
 ];
 
-// Posição de cada carta no anel. O passo de 20° é o mesmo da referência
-// que o Ed trouxe: ângulo monotônico, não leque simétrico — é o que faz a
-// fileira envolver em vez de ficar chapada. RING_R é o raio; RING_SPIN, o
-// quanto o anel roda do topo até o fim do curso de scroll.
-const RING_R = 640;
-const RING_SPIN = -18;
+// Geometria do anel. Passo = 360° / nº de cartas, então elas se distribuem
+// pela volta inteira e vão se alternando na frente conforme gira.
+//
+// O raio sai da corda entre vizinhas: 2·R·sen(18°) ≈ 0,62·R. Com R=430 a
+// corda dava 266px pra uma carta de 212 mais duas faces de 14 — folga de
+// 26px, e como as cartas são cordas retas num círculo as quinas se
+// encontravam e as faces laterais atravessavam a carta do lado. Com 560 a
+// corda vai a 346px e sobra folga de verdade.
+const RING_R = 560;
 const CARD_W = 212;
+const RING_STEP = 360 / FAN.length;
+const RING_DUR = 64;
 
-const FAN_GEOMETRY = [
-    { ry: -40, ty: 18 },
-    { ry: -20, ty: 4 },
-    { ry: 0, ty: 0 },
-    { ry: 20, ty: 4 },
-    { ry: 40, ty: 18 },
-];
+// Atraso negativo por carta: sincroniza o fade de cada uma com o momento
+// exato em que ela cruza os 90° do anel.
+const cardDelay = (i: number) => -(RING_DUR * (1 - i / FAN.length));
+
+// Desníveis pequenos e irregulares: alinhamento perfeito lê como planilha,
+// e zigue-zague regular vira serrote quando o anel roda.
+const RING_LIFT = [0, 13, -7, 6, -12, 4, 15, -5, 9, -9];
+
+// Ritmo visual: a maioria em vidro, com duas brancas e duas limão entrando
+// e saindo de cena conforme o anel gira.
+const cardVariant = (i: number): 'glass' | 'white' | 'lime' => {
+    const m = i % 5;
+    if (m === 1) return 'white';
+    if (m === 3) return 'lime';
+    return 'glass';
+};
+
+const CARD_SKIN = {
+    glass: {
+        box: 'bg-white/[0.11] border-white/25 text-white',
+        tag: 'text-white/45',
+        metric: 'text-[#8DC63F]',
+        label: 'text-white/50',
+        edge: 'rgba(255,255,255,0.10)',
+    },
+    white: {
+        box: 'bg-white border-white text-[#0B0E0C] shadow-[0_24px_60px_rgba(0,0,0,0.4)]',
+        tag: 'text-black/40',
+        metric: 'text-[#3d6b12]',
+        label: 'text-black/45',
+        edge: 'rgba(206,206,199,1)',
+    },
+    lime: {
+        box: 'bg-[#8DC63F] border-[#8DC63F] text-[#0B0E0C] shadow-[0_24px_60px_rgba(0,0,0,0.3)]',
+        tag: 'text-[#0B0E0C]/50',
+        metric: 'text-[#14261A]',
+        label: 'text-[#0B0E0C]/55',
+        edge: 'rgba(112,158,48,1)',
+    },
+} as const;
 
 const STATS = [
     { icon: IconChart, prefix: '+R$ ', value: 5, suffix: 'M', label: 'em mídia gerida' },
@@ -360,9 +403,6 @@ const NorteLanding: React.FC = () => {
     const [openFaq, setOpenFaq] = useState<number | null>(0);
     const resultsRef = useRef<HTMLDivElement | null>(null);
     const heroProgress = useScrollReveal(420);
-    // Curso mais longo que o do título: o leque continua tombando depois
-    // que as palavras já ficaram nítidas.
-    const fanProgress = useScrollReveal(760, 0);
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 30);
@@ -454,10 +494,9 @@ const NorteLanding: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Leque de resultados — mão de cartas em perspectiva.
-                        O palco abre a perspectiva; o grupo tomba no eixo X
-                        conforme a página rola, como se as cartas fossem
-                        deitando numa mesa. */}
+                    {/* Anel de resultados — dez clientes dando a volta sozinhos.
+                        O palco abre a perspectiva; o anel gira num keyframe
+                        e pausa no hover pra dar tempo de ler. */}
                     <div
                         className="mt-14 md:mt-16 no-scrollbar overflow-x-auto md:overflow-visible"
                         style={{ perspective: '1250px', perspectiveOrigin: '50% 45%' }}
@@ -466,71 +505,53 @@ const NorteLanding: React.FC = () => {
                             className="fan-group relative flex gap-3 md:gap-0 w-max md:w-auto px-1"
                             style={{
                                 ['--r' as string]: `${RING_R}px`,
-                                ['--rx' as string]: `${5 + fanProgress * 9}deg`,
+                                ['--rx' as string]: '6deg',
+                                ['--cw' as string]: `${CARD_W}px`,
+                                ['--dur' as string]: `${RING_DUR}s`,
                             }}
                         >
                             {FAN.map((card, i) => {
-                                const g = FAN_GEOMETRY[i];
-                                const center = i === 2;
-                                const edge = center
-                                    ? 'rgba(206,206,199,1)'
-                                    : 'rgba(255,255,255,0.10)';
+                                const skin = CARD_SKIN[cardVariant(i)];
                                 return (
                                     <div
                                         key={card.client}
-                                        className={`fan-item relative flex-shrink-0 w-[200px] md:w-[212px] rounded-2xl p-5 border ${
-                                            center
-                                                ? 'bg-white border-white text-[#0B0E0C] shadow-[0_24px_60px_rgba(0,0,0,0.4)]'
-                                                : 'bg-white/[0.07] border-white/15 text-white backdrop-blur-sm'
-                                        }`}
+                                        className={`fan-item relative flex-shrink-0 w-[200px] md:w-[212px] rounded-2xl p-5 border ${skin.box}`}
                                         style={{
-                                            // o giro do scroll soma ao ângulo da carta:
-                                            // é isso que faz o anel rodar de verdade
-                                            ['--ry' as string]: `${g.ry + fanProgress * RING_SPIN}deg`,
-                                            ['--ty' as string]: `${g.ty}px`,
-                                            ['--cw' as string]: `${CARD_W}px`,
+                                            ['--ry' as string]: `${i * RING_STEP}deg`,
+                                            ['--ty' as string]: `${RING_LIFT[i]}px`,
+                                            animationDelay: `${cardDelay(i)}s`,
                                         }}
                                     >
-                                        {/* Espessura: duas faces laterais de 14px.
+                                        {/* Espessura: duas faces laterais de 10px.
                                             Só a que estiver de frente aparece —
                                             backface-visibility cuida da outra. */}
                                         <span
                                             aria-hidden="true"
-                                            className="fan-edge absolute top-0 right-0 h-full w-[14px] rounded-r-2xl"
+                                            className="fan-edge absolute top-0 right-0 h-full w-[10px] rounded-r-2xl"
                                             style={{
-                                                background: edge,
+                                                background: skin.edge,
                                                 ['--edge-origin' as string]: 'left',
                                                 ['--edge-rot' as string]: '90deg',
                                             }}
                                         />
                                         <span
                                             aria-hidden="true"
-                                            className="fan-edge absolute top-0 left-0 h-full w-[14px] rounded-l-2xl"
+                                            className="fan-edge absolute top-0 left-0 h-full w-[10px] rounded-l-2xl"
                                             style={{
-                                                background: edge,
+                                                background: skin.edge,
                                                 ['--edge-origin' as string]: 'right',
                                                 ['--edge-rot' as string]: '-90deg',
                                             }}
                                         />
                                         <p
-                                            className={`font-mono text-[9px] tracking-[0.14em] uppercase mb-4 ${
-                                                center ? 'text-black/40' : 'text-white/45'
-                                            }`}
+                                            className={`font-mono text-[9px] tracking-[0.14em] uppercase mb-4 ${skin.tag}`}
                                         >
                                             {card.tag}
                                         </p>
-                                        <p
-                                            className={`${H2} text-[26px] leading-none mb-2 ${
-                                                center ? 'text-[#3d6b12]' : 'text-[#8DC63F]'
-                                            }`}
-                                        >
+                                        <p className={`${H2} text-[26px] leading-none mb-2 ${skin.metric}`}>
                                             {card.metric}
                                         </p>
-                                        <p
-                                            className={`text-[11px] mb-4 ${
-                                                center ? 'text-black/45' : 'text-white/50'
-                                            }`}
-                                        >
+                                        <p className={`text-[11px] mb-4 ${skin.label}`}>
                                             {card.label}
                                         </p>
                                         <p className={`${H3} text-[13px] leading-tight`}>

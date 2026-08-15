@@ -145,27 +145,38 @@ body {
 
 /* ── Norte ─────────────────────────────────────────────────────────── */
 
-/* Leque de cards da hero — anel, não fileira.
-   Medi a referência: as cartas dela não estão num plano. Cada uma tem um
-   rotateY próprio num passo constante, e o grupo inteiro gira conforme a
-   página rola. Aqui é um cilindro de verdade: cada carta gira no eixo Y e
-   é empurrada por translateZ(--r) ao longo do próprio eixo, caindo numa
-   circunferência; o grupo recua o mesmo --r pra que a carta central volte
-   pro plano zero. O giro do scroll entra somando ângulo a cada carta, o
-   que faz o anel realmente rodar em vez de só entortar.
+/* Anel de cards da hero — carrossel 3D contínuo.
+   Cada carta gira no eixo Y no seu ângulo (360° / 10 = 36° de passo) e é
+   empurrada por translateZ(--r) ao longo do próprio eixo, caindo numa
+   circunferência. O anel recua o mesmo --r pra que a carta da frente
+   volte pro plano zero, e gira sozinho num keyframe — o giro é do grupo,
+   uma animação composta só, não dez.
 
-   As faces laterais dão espessura — backface-visibility esconde sozinha
-   a que está de costas.
+   backface-visibility resolve as cartas da metade de trás: elas somem
+   exatamente aos 90°, que é justamente onde estão de perfil e já não têm
+   largura visível. Some sem estalo. Precisa valer também pros filhos:
+   com preserve-3d o texto não herda o recorte do pai.
 
-   No mobile e sob prefers-reduced-motion nada disso vale: as cartas
-   voltam pro fluxo normal e viram um trilho reto. */
-.fan-group {
-    transform-style: preserve-3d;
+   Pausa no hover pra dar chance de ler. No mobile e sob
+   prefers-reduced-motion vira um trilho reto, sem giro. */
+/* Cada carta apaga na virada. Sem isso, a que está exatamente de perfil
+   vira um risco fino de 1px atravessado sobre as da frente — parece bug,
+   não profundidade. O fade roda no mesmo período do anel, com atraso
+   negativo por índice, então cada carta apaga precisamente onde cruza os
+   90° e reacende ao voltar. */
+@keyframes norte-card {
+    0%, 17%   { opacity: 1; }
+    25%, 75%  { opacity: 0; }
+    83%, 100% { opacity: 1; }
 }
 
-.fan-item {
-    transform-style: preserve-3d;
+@keyframes norte-ring {
+    from { transform: rotateX(var(--rx)) translateZ(calc(var(--r) * -1)) rotateY(0deg); }
+    to   { transform: rotateX(var(--rx)) translateZ(calc(var(--r) * -1)) rotateY(-360deg); }
 }
+
+.fan-group { transform-style: preserve-3d; }
+.fan-item { transform-style: preserve-3d; }
 
 .fan-edge {
     backface-visibility: hidden;
@@ -175,20 +186,26 @@ body {
 
 @media (min-width: 768px) {
     .fan-group {
-        height: 296px;
-        transform: rotateX(var(--rx, 0deg)) translateZ(calc(var(--r) * -1));
-        transition: transform 120ms linear;
+        height: 292px;
+        will-change: transform;
+        animation: norte-ring var(--dur, 64s) linear infinite;
     }
+
+    .fan-group:hover { animation-play-state: paused; }
 
     .fan-item {
         position: absolute;
         top: 0;
         left: 50%;
         margin-left: calc(var(--cw) / -2);
-        transform: rotateY(var(--ry, 0deg)) translateZ(var(--r))
-            translateY(var(--ty, 0px));
-        transition: transform 120ms linear;
+        transform: rotateY(var(--ry)) translateZ(var(--r)) translateY(var(--ty, 0px));
+        animation: norte-card var(--dur, 64s) linear infinite;
     }
+
+    .fan-group:hover .fan-item { animation-play-state: paused; }
+
+    .fan-item,
+    .fan-item > * { backface-visibility: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -197,6 +214,8 @@ body {
         height: auto;
         margin-left: 0;
         transform: none;
+        animation: none;
+        opacity: 1;
     }
     .fan-edge { display: none; }
 }
