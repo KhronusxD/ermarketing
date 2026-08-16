@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Arrow, NorteNav, WHATSAPP, H2, H3, TAG } from './shared';
-import {
-    QUESTION_BY_STEP,
-    nicheSpecificQuestion,
-    CALENDLY_STANDARD,
-    CALENDLY_PREMIUM,
-} from '../Quiz/constants';
+import { Arrow, NorteNav, WHATSAPP, TAG } from './shared';
+import { QUESTION_BY_STEP, nicheSpecificQuestion } from '../Quiz/constants';
+import { whatsappUrlWithSummary } from '../Quiz/summary';
 import { financialInsight, nextStep, qualify } from '../Quiz/branching';
 import { submitLead, submitWaitlist } from '../Quiz/services';
 import {
@@ -58,6 +54,10 @@ const PRICE_OPTIONS = [
 
 const CASE_MESSAGE =
     'Só pra você ter referência: o Taychi saiu de R$ 70 mil pra R$ 200 mil por mês em sete meses, e a Odonto Solutions passou a captar lead a R$ 1,57. Nenhum dos dois mudou de produto — mudou o que estava sendo medido.';
+
+// Mesmo número do WHATSAPP compartilhado; aqui só o dígito, porque a
+// mensagem é montada com o resumo em vez do texto padrão.
+const WA_PHONE = '5592985146299';
 
 let seq = 0;
 const uid = () => `m${(seq += 1)}`;
@@ -211,7 +211,7 @@ const Conversa: React.FC = () => {
                     ? ['Obrigado! Te aviso assim que abrir.']
                     : [
                           `Perfeito, ${full.name.split(' ')[0]}. Já tenho o que precisava.`,
-                          'Agora é só escolher o horário da conversa. Se preferir, pode chamar a gente direto no WhatsApp.',
+                          'Vou te levar pro WhatsApp com tudo o que você respondeu já escrito — assim ninguém te pergunta a mesma coisa de novo.',
                       ],
             );
         },
@@ -434,25 +434,15 @@ const Conversa: React.FC = () => {
                     )}
 
                     {done && done !== 'nurture' && (
-                        <div className="flex flex-col sm:flex-row gap-2.5">
-                            <a
-                                href={done === 'premium' ? CALENDLY_PREMIUM : CALENDLY_STANDARD}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group flex-1 inline-flex items-center justify-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm px-6 py-4 transition-colors"
-                            >
-                                Escolher horário
-                                <Arrow className="w-4 h-4" />
-                            </a>
-                            <a
-                                href={WHATSAPP}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center rounded-full border border-white/25 hover:bg-white/10 text-white font-semibold text-sm px-6 py-4 transition-colors"
-                            >
-                                Falar no WhatsApp
-                            </a>
-                        </div>
+                        <a
+                            href={whatsappUrlWithSummary(WA_PHONE, lead, answers)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm px-6 py-4 transition-colors"
+                        >
+                            Abrir o WhatsApp com o resumo
+                            <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                        </a>
                     )}
 
                     {sending && (
