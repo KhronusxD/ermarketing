@@ -33,7 +33,10 @@ import { SERVICES as NORTE_SERVICES } from '../components/Norte/services';
 // versão oficial de cada página mora num domínio inexistente. Canonical
 // cruzado assim é o tipo de coisa que tira a página inteira do índice.
 const SITE_ORIGIN = 'https://trafegomanaus.com.br';
-const DEFAULT_OG = `${SITE_ORIGIN}/assets/red-logo.png`;
+// Cartão de compartilhamento da Norte. Era o logo vermelho da ER, que
+// depois do rebrand aparecia toda vez que alguém colava um link do site
+// no WhatsApp ou no LinkedIn.
+const DEFAULT_OG = `${SITE_ORIGIN}/og-norte.jpg`;
 const PHONE_E164 = '+55-92-98514-6299';
 
 // ──────────────────────────────────────────────────────────────────────
@@ -50,7 +53,7 @@ const ORG_SCHEMA = {
     url: SITE_ORIGIN,
     logo: {
         '@type': 'ImageObject',
-        url: `${SITE_ORIGIN}/assets/red-logo.png`,
+        url: `${SITE_ORIGIN}/icon-512.png`,
     },
     description:
         'Agência de marketing de performance baseada em Manaus. Tráfego pago, copy, criativos, CRM e BI ponta a ponta.',
@@ -89,7 +92,7 @@ const LOCAL_BUSINESS_SCHEMA = {
     '@id': `${SITE_ORIGIN}/#localbusiness`,
     name: 'Norte Marketing',
     alternateName: 'ER Marketing',
-    image: `${SITE_ORIGIN}/assets/red-logo.png`,
+    image: `${SITE_ORIGIN}/icon-512.png`,
     url: SITE_ORIGIN,
     telephone: PHONE_E164,
     priceRange: 'R$ 1.500 - R$ 10.000+',
