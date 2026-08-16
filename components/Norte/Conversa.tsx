@@ -38,10 +38,10 @@ type ContactField = {
     optional?: boolean;
 };
 
+// Só a lista de espera ainda pede contato: ali não existe agenda pra
+// coletar depois.
 const CONTACT_FIELDS: ContactField[] = [
     { key: 'name', prompt: 'Fechado. Como é o seu nome?', placeholder: 'Seu nome', type: 'text' },
-    { key: 'company', prompt: 'Prazer! E o nome do seu negócio?', placeholder: 'Nome da empresa', type: 'text' },
-    { key: 'whatsapp', prompt: 'Qual o melhor WhatsApp pra te chamar?', placeholder: '(92) 90000-0000', type: 'tel' },
     { key: 'email', prompt: 'E o seu e-mail?', placeholder: 'voce@empresa.com.br', type: 'email' },
 ];
 
@@ -93,9 +93,25 @@ const Conversa: React.FC = () => {
 
     // Rola pro fim a cada balão novo — sem isso a conversa cresce pra
     // baixo da dobra e a pessoa não vê a resposta chegar.
+    // Acompanha a conversa enquanto ela corre. Depois que a agenda entra,
+    // para: rolar a página por baixo de um campo em foco dentro do iframe
+    // é o que tira a seleção a cada tecla.
     useEffect(() => {
+        if (done) return;
         endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }, [messages, typing]);
+    }, [messages, typing, done]);
+
+    // Uma única descida quando o fechamento aparece, senão a agenda nasce
+    // fora da vista e a pessoa não sabe que ela está ali.
+    const closingRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (!done) return;
+        const t = window.setTimeout(
+            () => closingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+            400,
+        );
+        return () => window.clearTimeout(t);
+    }, [done]);
 
     // O robô "digita" antes de falar. A pausa é proporcional ao tamanho
     // da frase, com teto: sem isso, mensagem longa aparece instantânea e
@@ -161,10 +177,12 @@ const Conversa: React.FC = () => {
                 return;
             }
 
+            // A agenda do GyreHub pede nome, telefone e e-mail no próprio
+            // formulário, e o WhatsApp já identifica quem manda. Pedir aqui
+            // antes era obrigar a pessoa a digitar duas vezes a mesma coisa.
             if (target === 'lead_form') {
-                setContactIdx(0);
-                say(CONTACT_FIELDS[0].prompt);
                 setStep('lead_form');
+                void finishRef.current?.(withAnswers);
                 return;
             }
 
@@ -204,24 +222,35 @@ const Conversa: React.FC = () => {
         ]);
     }, [sayMany]);
 
+    // O lead é registrado com as respostas assim que a qualificação fecha,
+    // antes de qualquer contato. Se a pessoa desistir de agendar, a
+    // passagem por aqui não se perde; o contato chega depois pela agenda
+    // ou pela própria mensagem de WhatsApp, que já identifica quem manda.
     const finish = useCallback(
-        async (full: LeadData, withAnswers: QuizAnswers) => {
+        async (withAnswers: QuizAnswers) => {
             const level = qualify(withAnswers);
             setSending(true);
-            await submitLead(full, withAnswers, level);
+            await submitLead(
+                { name: '', company: '', whatsapp: '', email: '' },
+                withAnswers,
+                level,
+            );
             setSending(false);
             setDone(level);
-            sayMany(
-                level === 'nurture'
-                    ? ['Obrigado! Te aviso assim que abrir.']
-                    : [
-                          `Perfeito, ${full.name.split(' ')[0]}. Já tenho o que precisava.`,
-                          'Escolhe aí embaixo o melhor horário. Se preferir resolver por mensagem, o botão do WhatsApp já vai com tudo o que você respondeu escrito.',
-                      ],
-            );
+            sayMany([
+                'Perfeito. Já tenho o que precisava pra gente conversar com contexto.',
+                'Escolhe aí o melhor horário. Se preferir resolver por mensagem, o botão do WhatsApp vai com tudo o que você respondeu escrito.',
+            ]);
         },
         [sayMany],
     );
+
+    // `advance` é criado antes de `finish`; a referência evita a dependência
+    // circular sem espalhar a lógica de fechamento em dois lugares.
+    const finishRef = useRef<((a: QuizAnswers) => void) | null>(null);
+    useEffect(() => {
+        finishRef.current = finish;
+    }, [finish]);
 
     const pickOption = (label: string, field: keyof QuizAnswers, value: string) => {
         reply(label);
@@ -242,10 +271,7 @@ const Conversa: React.FC = () => {
         const value = draft.trim();
         if (!value) return;
 
-        const isWaitlist = step === 'nurture_waitlist';
-        const fields = isWaitlist
-            ? CONTACT_FIELDS.filter((f) => f.key === 'name' || f.key === 'email')
-            : CONTACT_FIELDS;
+        const fields = CONTACT_FIELDS;
         const field = fields[contactIdx];
 
         reply(value);
@@ -260,7 +286,7 @@ const Conversa: React.FC = () => {
             return;
         }
 
-        if (isWaitlist) {
+        {
             setSending(true);
             void submitWaitlist(
                 {
@@ -274,25 +300,18 @@ const Conversa: React.FC = () => {
                 setDone('nurture');
                 say('Obrigado! Te aviso assim que abrir.');
             });
-            return;
         }
-
-        void finish(nextLead as LeadData, answers);
     };
 
     const question = currentQuestion();
     const showOptions = !typing && !done && question && step !== 'lead_form';
     const showPrice = !typing && !done && step === 'price_gate';
-    const isTextStep = step === 'lead_form' || step === 'nurture_waitlist';
+    const isTextStep = step === 'nurture_waitlist';
     const waitingText = !typing && !done && isTextStep;
 
     const activeField = (() => {
         if (!waitingText) return undefined;
-        const fields =
-            step === 'nurture_waitlist'
-                ? CONTACT_FIELDS.filter((f) => f.key === 'name' || f.key === 'email')
-                : CONTACT_FIELDS;
-        return fields[contactIdx];
+        return CONTACT_FIELDS[contactIdx];
     })();
 
     useEffect(() => {
@@ -373,8 +392,32 @@ const Conversa: React.FC = () => {
                     <div ref={endRef} />
                 </div>
 
+                {/* Fechamento fora do rodapé grudado. Preso lá embaixo, a
+                    agenda disputava espaço com a borda da tela e ficava
+                    espremida; aqui ela ocupa o fluxo e respira. */}
+                {done && done !== 'nurture' && (
+                    <div ref={closingRef} className="mt-6 space-y-3 scroll-mt-24">
+                        <div className="rounded-2xl bg-white overflow-hidden">
+                            <GyreHubAgenda
+                                workspace={GYREHUB_WORKSPACE}
+                                agenda={GYREHUB_AGENDA}
+                            />
+                        </div>
+
+                        <a
+                            href={whatsappUrlWithSummary(WA_PHONE, lead, answers)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group w-full inline-flex items-center justify-center gap-2.5 rounded-full border border-white/25 hover:bg-white/10 text-white font-semibold text-sm px-6 py-4 transition-colors"
+                        >
+                            Prefiro falar no WhatsApp
+                            <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                        </a>
+                    </div>
+                )}
+
                 {/* ─── Área de resposta ─── */}
-                <div className="sticky bottom-0 pt-5 pb-2 bg-gradient-to-t from-[#14261A] via-[#14261A] to-transparent">
+                <div className={`${done ? "" : "sticky bottom-0"} pt-5 pb-2 bg-gradient-to-t from-[#14261A] via-[#14261A] to-transparent`}>
                     {showOptions && question && (
                         <div className="flex flex-wrap gap-2">
                             {question.options.map((o) => (
@@ -436,29 +479,6 @@ const Conversa: React.FC = () => {
                                 <Arrow className="w-5 h-5" />
                             </button>
                         </form>
-                    )}
-
-                    {done && done !== 'nurture' && (
-                        <div className="space-y-3">
-                            {/* A agenda é o caminho principal; o WhatsApp fica
-                                como saída pra quem prefere resolver falando. */}
-                            <div className="rounded-2xl bg-white overflow-hidden">
-                                <GyreHubAgenda
-                                    workspace={GYREHUB_WORKSPACE}
-                                    agenda={GYREHUB_AGENDA}
-                                />
-                            </div>
-
-                            <a
-                                href={whatsappUrlWithSummary(WA_PHONE, lead, answers)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group w-full inline-flex items-center justify-center gap-2.5 rounded-full border border-white/25 hover:bg-white/10 text-white font-semibold text-sm px-6 py-4 transition-colors"
-                            >
-                                Prefiro falar no WhatsApp
-                                <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                            </a>
-                        </div>
                     )}
 
                     {sending && (

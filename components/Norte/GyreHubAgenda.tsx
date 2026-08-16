@@ -38,7 +38,7 @@ const GyreHubAgenda: React.FC<Props> = ({ workspace, agenda, className }) => {
     const frameRef = useRef<HTMLIFrameElement>(null);
     // Altura que mostra o seletor de dias e três a quatro fileiras de
     // horário sem obrigar a rolar logo de cara.
-    const [height, setHeight] = useState(600);
+    const [height, setHeight] = useState(760);
 
     // Se um dia o embed passar a reportar a própria altura, o iframe
     // acompanha e o scroll interno deixa de ser necessário.
@@ -54,11 +54,16 @@ const GyreHubAgenda: React.FC<Props> = ({ workspace, agenda, className }) => {
         return () => window.removeEventListener('message', onMessage);
     }, []);
 
-    const src =
-        `${GYREHUB_ORIGIN}/a/${encodeURIComponent(workspace)}/${encodeURIComponent(agenda)}` +
-        `/embed?origem=${encodeURIComponent(
-            typeof window === 'undefined' ? '' : window.location.origin,
-        )}`;
+    // Calculado uma vez. Se o src for recomputado a cada render do pai, o
+    // React troca o atributo e o iframe recarrega — e recarregar no meio do
+    // preenchimento apaga o horário escolhido e o que já foi digitado.
+    const [src] = useState(
+        () =>
+            `${GYREHUB_ORIGIN}/a/${encodeURIComponent(workspace)}/${encodeURIComponent(agenda)}` +
+            `/embed?origem=${encodeURIComponent(
+                typeof window === 'undefined' ? '' : window.location.origin,
+            )}`,
+    );
 
     return (
         <iframe
@@ -73,11 +78,12 @@ const GyreHubAgenda: React.FC<Props> = ({ workspace, agenda, className }) => {
                 border: 0,
                 display: 'block',
                 height,
-                minHeight: 460,
-                transition: 'height .2s ease',
+                minHeight: 620,
             }}
         />
     );
 };
 
-export default GyreHubAgenda;
+// memo: o pai re-renderiza a cada mensagem e a cada evento de scroll, e
+// nada disso deve chegar no iframe.
+export default React.memo(GyreHubAgenda);
