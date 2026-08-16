@@ -461,6 +461,23 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // /agendar — destino de quem termina a conversa. A agenda saiu de
+    // dentro do bate-papo pra cá: embutida lá, o iframe vivia numa tela
+    // que muda a cada mensagem e o campo perdia o foco ao digitar.
+    // noindex pelo mesmo motivo de /conversa: é etapa de funil.
+    {
+        path: '/agendar',
+        out: 'agendar/index.html',
+        meta: {
+            title: 'Agendar conversa · Norte',
+            description:
+                'Escolha o melhor horário pra conversar com um estrategista da Norte. 30 minutos, no horário de Manaus.',
+            canonical: `${SITE_ORIGIN}/agendar`,
+            ogType: 'website',
+            noindex: true,
+        },
+    },
+
     // /norte — mesmo conteúdo da raiz, mantido de pé porque o endereço
     // já circulou. Canonical aponta pra raiz pra o Google consolidar os
     // dois num só e não tratar como conteúdo duplicado.

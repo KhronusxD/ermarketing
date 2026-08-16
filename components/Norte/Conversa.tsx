@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Arrow, NorteNav, WHATSAPP, TAG } from './shared';
+import { useNavigate } from 'react-router-dom';
+import { Arrow, NorteNav, TAG } from './shared';
+import { HANDOFF_KEY } from './Agendar';
 import { QUESTION_BY_STEP, nicheSpecificQuestion } from '../Quiz/constants';
 import { whatsappUrlWithSummary } from '../Quiz/summary';
-import GyreHubAgenda from './GyreHubAgenda';
 import { financialInsight, nextStep, qualify } from '../Quiz/branching';
 import { submitLead, submitWaitlist } from '../Quiz/services';
 import {
@@ -60,10 +61,6 @@ const CASE_MESSAGE =
 // mensagem é montada com o resumo em vez do texto padrão.
 const WA_PHONE = '5592985146299';
 
-// Agenda da Norte no GyreHub.
-const GYREHUB_WORKSPACE = '298c4d68-d1f9-46ab-ae76-3e6e2f69671a';
-const GYREHUB_AGENDA = 'norte-call';
-
 let seq = 0;
 const uid = () => `m${(seq += 1)}`;
 
@@ -80,6 +77,7 @@ const Conversa: React.FC = () => {
     // A nav nasce transparente sobre a foto; sem virar pílula opaca no
     // scroll, os balões passam por baixo dela e ficam ilegíveis.
     const [scrolled, setScrolled] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 24);
@@ -100,18 +98,6 @@ const Conversa: React.FC = () => {
         if (done) return;
         endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }, [messages, typing, done]);
-
-    // Uma única descida quando o fechamento aparece, senão a agenda nasce
-    // fora da vista e a pessoa não sabe que ela está ali.
-    const closingRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        if (!done) return;
-        const t = window.setTimeout(
-            () => closingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
-            400,
-        );
-        return () => window.clearTimeout(t);
-    }, [done]);
 
     // O robô "digita" antes de falar. A pausa é proporcional ao tamanho
     // da frase, com teto: sem isso, mensagem longa aparece instantânea e
@@ -237,12 +223,25 @@ const Conversa: React.FC = () => {
             );
             setSending(false);
             setDone(level);
-            sayMany([
-                'Perfeito. Já tenho o que precisava pra gente conversar com contexto.',
-                'Escolhe aí o melhor horário. Se preferir resolver por mensagem, o botão do WhatsApp vai com tudo o que você respondeu escrito.',
-            ]);
+
+            // A agenda vive em página própria. Embutida aqui, o iframe
+            // ficava num ambiente que muda a cada mensagem e a cada
+            // rolagem, e o campo perdia o foco enquanto a pessoa digitava.
+            try {
+                sessionStorage.setItem(
+                    HANDOFF_KEY,
+                    JSON.stringify({ answers: withAnswers }),
+                );
+            } catch {
+                // sem storage o agendamento segue, só sem o resumo no botão
+            }
+
+            sayMany(
+                ['Perfeito. Já tenho o que precisava — vou te levar pra escolher o horário.'],
+                () => window.setTimeout(() => navigate('/agendar'), 900),
+            );
         },
-        [sayMany],
+        [sayMany, navigate],
     );
 
     // `advance` é criado antes de `finish`; a referência evita a dependência
@@ -391,30 +390,6 @@ const Conversa: React.FC = () => {
 
                     <div ref={endRef} />
                 </div>
-
-                {/* Fechamento fora do rodapé grudado. Preso lá embaixo, a
-                    agenda disputava espaço com a borda da tela e ficava
-                    espremida; aqui ela ocupa o fluxo e respira. */}
-                {done && done !== 'nurture' && (
-                    <div ref={closingRef} className="mt-6 space-y-3 scroll-mt-24">
-                        <div className="rounded-2xl bg-white overflow-hidden">
-                            <GyreHubAgenda
-                                workspace={GYREHUB_WORKSPACE}
-                                agenda={GYREHUB_AGENDA}
-                            />
-                        </div>
-
-                        <a
-                            href={whatsappUrlWithSummary(WA_PHONE, lead, answers)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group w-full inline-flex items-center justify-center gap-2.5 rounded-full border border-white/25 hover:bg-white/10 text-white font-semibold text-sm px-6 py-4 transition-colors"
-                        >
-                            Prefiro falar no WhatsApp
-                            <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                        </a>
-                    </div>
-                )}
 
                 {/* ─── Área de resposta ─── */}
                 <div className={`${done ? "" : "sticky bottom-0"} pt-5 pb-2 bg-gradient-to-t from-[#14261A] via-[#14261A] to-transparent`}>
