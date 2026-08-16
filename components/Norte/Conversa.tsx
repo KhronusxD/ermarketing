@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Arrow, NorteNav, WHATSAPP, TAG } from './shared';
 import { QUESTION_BY_STEP, nicheSpecificQuestion } from '../Quiz/constants';
 import { whatsappUrlWithSummary } from '../Quiz/summary';
+import GyreHubAgenda from './GyreHubAgenda';
 import { financialInsight, nextStep, qualify } from '../Quiz/branching';
 import { submitLead, submitWaitlist } from '../Quiz/services';
 import {
@@ -58,6 +59,10 @@ const CASE_MESSAGE =
 // Mesmo número do WHATSAPP compartilhado; aqui só o dígito, porque a
 // mensagem é montada com o resumo em vez do texto padrão.
 const WA_PHONE = '5592985146299';
+
+// Agenda da Norte no GyreHub.
+const GYREHUB_WORKSPACE = '298c4d68-d1f9-46ab-ae76-3e6e2f69671a';
+const GYREHUB_AGENDA = 'norte-call';
 
 let seq = 0;
 const uid = () => `m${(seq += 1)}`;
@@ -211,7 +216,7 @@ const Conversa: React.FC = () => {
                     ? ['Obrigado! Te aviso assim que abrir.']
                     : [
                           `Perfeito, ${full.name.split(' ')[0]}. Já tenho o que precisava.`,
-                          'Vou te levar pro WhatsApp com tudo o que você respondeu já escrito — assim ninguém te pergunta a mesma coisa de novo.',
+                          'Escolhe aí embaixo o melhor horário. Se preferir resolver por mensagem, o botão do WhatsApp já vai com tudo o que você respondeu escrito.',
                       ],
             );
         },
@@ -434,15 +439,26 @@ const Conversa: React.FC = () => {
                     )}
 
                     {done && done !== 'nurture' && (
-                        <a
-                            href={whatsappUrlWithSummary(WA_PHONE, lead, answers)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm px-6 py-4 transition-colors"
-                        >
-                            Abrir o WhatsApp com o resumo
-                            <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                        </a>
+                        <div className="space-y-3">
+                            {/* A agenda é o caminho principal; o WhatsApp fica
+                                como saída pra quem prefere resolver falando. */}
+                            <div className="rounded-2xl bg-white overflow-hidden">
+                                <GyreHubAgenda
+                                    workspace={GYREHUB_WORKSPACE}
+                                    agenda={GYREHUB_AGENDA}
+                                />
+                            </div>
+
+                            <a
+                                href={whatsappUrlWithSummary(WA_PHONE, lead, answers)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group w-full inline-flex items-center justify-center gap-2.5 rounded-full border border-white/25 hover:bg-white/10 text-white font-semibold text-sm px-6 py-4 transition-colors"
+                            >
+                                Prefiro falar no WhatsApp
+                                <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                            </a>
+                        </div>
                     )}
 
                     {sending && (
