@@ -245,6 +245,8 @@ interface RouteMeta {
     description: string;
     canonical: string;
     ogType?: 'website' | 'article' | 'profile';
+    /** Etapa de funil: entra no build mas fica fora do índice. */
+    noindex?: boolean;
     publishedAt?: string;
     /** One or many JSON-LD blocks — each stringified separately. */
     jsonLd?: Array<Record<string, unknown>>;
@@ -436,6 +438,23 @@ const ROUTES: RouteSpec[] = [
                 'Lista de espera pra aprender tráfego pago combinado com IA. O método que a ER Marketing usa pra gerenciar +R$ 5M em mídia, em formato de turma. Entre antes da abertura.',
             canonical: `${SITE_ORIGIN}/lab-de-performance`,
             ogType: 'website',
+        },
+    },
+
+    // /conversa — captação de lead em formato de bate-papo. Mesmo
+    // baralho de perguntas e mesmo webhook do diagnóstico; muda a
+    // superfície. noindex: é etapa de funil, não página de conteúdo, e
+    // indexá-la só canibalizaria a home.
+    {
+        path: '/conversa',
+        out: 'conversa/index.html',
+        meta: {
+            title: 'Conversar com a Norte · Diagnóstico em 2 minutos',
+            description:
+                'Responda algumas perguntas rápidas sobre o seu negócio e a Norte entra na conversa já sabendo do que se trata.',
+            canonical: `${SITE_ORIGIN}/conversa`,
+            ogType: 'website',
+            noindex: true,
         },
     },
 
@@ -632,6 +651,9 @@ const injectHead = (html: string, meta: RouteMeta): string => {
         `<meta name="twitter:description" content="${escapeAttr(meta.description)}">`,
         `<meta name="twitter:image" content="${og}">`,
     ];
+    if (meta.noindex) {
+        tags.push(`<meta name="robots" content="noindex, follow">`);
+    }
     if (meta.publishedAt) {
         tags.push(
             `<meta property="article:published_time" content="${meta.publishedAt}">`,

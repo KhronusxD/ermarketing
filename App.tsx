@@ -24,6 +24,7 @@ import LabPerformance from './components/LabPerformance';
 import EdRodriguesCapture from './components/EdRodriguesCapture';
 import NorteLanding from './components/NorteLanding';
 import NorteServicePage from './components/Norte/ServicePage';
+import Conversa from './components/Norte/Conversa';
 import NotFound from './components/NotFound';
 
 // Lazy routes — code-split so a first-time visitor only downloads what
@@ -98,6 +99,7 @@ const App: React.FC = () => {
                 <Route path="/edrodrigues" element={<EdRodriguesCapture />} />
                 <Route path="/norte" element={<NorteLanding />} />
                 <Route path="/norte/:slug" element={<NorteServicePage />} />
+                <Route path="/conversa" element={<Conversa />} />
 
                 {/* Lazy */}
                 <Route path="/restaurante" element={<RestaurantLanding />} />
