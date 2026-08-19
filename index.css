@@ -407,3 +407,23 @@ body {
 @media (prefers-reduced-motion: reduce) {
     .rr-track { animation: none; }
 }
+
+/* ── Kit Assistência Técnica Plus ──────────────────────────────────── */
+
+/* Reaproveita o anel 3D da home (.fan-group/.fan-item) só trocando os
+   números. Precisa vir depois das regras da Norte no arquivo: as duas
+   têm a mesma especificidade, então quem ganha é a última. */
+.kit-ring {
+    --r: 268px;
+    --cw: 146px;
+    --rx: 7deg;
+    height: 190px;
+}
+
+@media (min-width: 768px) {
+    .kit-ring {
+        --r: 392px;
+        --cw: 208px;
+        height: 244px;
+    }
+}

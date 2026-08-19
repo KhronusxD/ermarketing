@@ -1,4 +1,5 @@
 import React from 'react';
+import { CountUp, stagger, useRevealOnView, useScrollReveal } from '../motion';
 
 // /kit-assistencia-tecnica-plus — LP da oferta do Kit.
 //
@@ -34,6 +35,28 @@ const WHATSAPP =
 const DISPLAY = 'font-kit font-bold uppercase leading-[0.92] tracking-[-0.01em]';
 const LABEL = 'font-mono text-[10px] tracking-[0.18em] uppercase';
 
+// Anel da hero: as cinco peças mais cinco fatos da oferta, dez cartas a
+// 36° de passo. Mesma mecânica da home, só com outra pele.
+const RING = [
+    { tag: 'Módulo 01', valor: 'LP', nota: 'página de orçamento' },
+    { tag: 'Entrega', valor: '5', nota: 'dias úteis', solid: true },
+    { tag: 'Módulo 02', valor: 'Google', nota: 'campanha na sua conta' },
+    { tag: 'No Pix', valor: 'R$ 997', nota: 'à vista', solid: true },
+    { tag: 'Módulo 03', valor: 'Script', nota: 'roteiros de WhatsApp' },
+    { tag: 'Garantia', valor: '100%', nota: 'de volta se atrasar', solid: true },
+    { tag: 'Módulo 04', valor: 'Maps', nota: 'Google Meu Negócio' },
+    { tag: 'No cartão', valor: '12x', nota: 'de R$ 125', solid: true },
+    { tag: 'Módulo 05', valor: 'IA 24h', nota: 'atendente no WhatsApp' },
+    { tag: 'Verba', valor: 'Sua', nota: 'fica na sua conta', solid: true },
+];
+
+const RING_STEP = 360 / RING.length;
+const RING_DUR = 72;
+const RING_LIFT = [0, 11, -7, 5, -12, 4, 13, -5, 8, -9];
+const ringDelay = (i: number) => -(RING_DUR * (1 - i / RING.length));
+
+const HERO_WORDS = ['A', 'máquina', 'de', 'cliente', 'novo', 'da', 'sua', 'assistência'];
+
 const MODULOS = [
     {
         n: '01',
@@ -68,6 +91,106 @@ const MODULOS = [
     },
 ];
 
+// Maquete de cada peça. Tudo HTML e CSS: nenhuma imagem entra no bundle
+// e nada serrilha em tela densa.
+const Mock: React.FC<{ n: string }> = ({ n }) => {
+    const bar = 'rounded-full';
+    const cinza = { backgroundColor: '#3A3B43' };
+
+    if (n === '01')
+        return (
+            <div className="rounded-md overflow-hidden border" style={{ borderColor: LINE, backgroundColor: '#0D0E11' }}>
+                <div className="flex items-center gap-1 px-2.5 py-2 border-b" style={{ borderColor: LINE }}>
+                    {[0, 1, 2].map((i) => (
+                        <span key={i} className="w-1.5 h-1.5 rounded-full" style={cinza} />
+                    ))}
+                    <span className={`ml-2 h-1.5 flex-1 ${bar}`} style={cinza} />
+                </div>
+                <div className="p-3">
+                    <div className="h-8 rounded mb-2" style={{ background: `linear-gradient(90deg, ${RED}40, transparent)` }} />
+                    <div className={`h-1.5 w-3/4 ${bar} mb-1.5`} style={cinza} />
+                    <div className={`h-1.5 w-1/2 ${bar} mb-3`} style={cinza} />
+                    <span className="block h-5 w-24 rounded" style={{ backgroundColor: RED }} />
+                </div>
+            </div>
+        );
+
+    if (n === '02')
+        return (
+            <div className="rounded-md border p-3 space-y-2.5" style={{ borderColor: LINE, backgroundColor: '#0D0E11' }}>
+                {[0, 1, 2].map((i) => (
+                    <div key={i} className="flex items-start gap-2">
+                        <span
+                            className="font-mono text-[7px] px-1 py-0.5 rounded flex-shrink-0"
+                            style={{ backgroundColor: i === 0 ? RED : '#2A2B32', color: INK }}
+                        >
+                            {i === 0 ? 'AD' : '—'}
+                        </span>
+                        <span className="flex-1">
+                            <span className={`block h-1.5 ${bar} mb-1`} style={{ ...cinza, width: `${88 - i * 16}%` }} />
+                            <span className={`block h-1.5 w-2/5 ${bar}`} style={{ backgroundColor: '#2A2B32' }} />
+                        </span>
+                    </div>
+                ))}
+            </div>
+        );
+
+    if (n === '03')
+        return (
+            <div className="rounded-md border p-3 space-y-2" style={{ borderColor: LINE, backgroundColor: '#0D0E11' }}>
+                <span className="block w-[70%] rounded-lg rounded-tl-sm px-2.5 py-2" style={{ backgroundColor: '#22232A' }}>
+                    <span className={`block h-1.5 w-full ${bar} mb-1`} style={cinza} />
+                    <span className={`block h-1.5 w-2/3 ${bar}`} style={cinza} />
+                </span>
+                <span className="block w-[78%] ml-auto rounded-lg rounded-br-sm px-2.5 py-2" style={{ backgroundColor: RED }}>
+                    <span className={`block h-1.5 w-full ${bar} mb-1`} style={{ backgroundColor: '#ffffff70' }} />
+                    <span className={`block h-1.5 w-3/5 ${bar}`} style={{ backgroundColor: '#ffffff70' }} />
+                </span>
+            </div>
+        );
+
+    if (n === '04')
+        return (
+            <div className="rounded-md border p-3" style={{ borderColor: LINE, backgroundColor: '#0D0E11' }}>
+                <div className="flex items-center gap-2.5 mb-3">
+                    <span className="w-8 h-8 rounded flex-shrink-0" style={{ backgroundColor: '#22232A' }} />
+                    <span className="flex-1">
+                        <span className={`block h-1.5 w-2/3 ${bar} mb-1.5`} style={cinza} />
+                        <span className="flex gap-0.5" aria-hidden="true">
+                            {[0, 1, 2, 3, 4].map((i) => (
+                                <span key={i} className="text-[8px]" style={{ color: RED }}>★</span>
+                            ))}
+                        </span>
+                    </span>
+                </div>
+                <div className="h-10 rounded relative overflow-hidden" style={{ backgroundColor: '#191A20' }}>
+                    <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: RED }} />
+                </div>
+            </div>
+        );
+
+    return (
+        <div className="rounded-md border p-3" style={{ borderColor: LINE, backgroundColor: '#0D0E11' }}>
+            <div className="flex items-center gap-2 mb-3">
+                <span className="w-6 h-6 rounded-full flex items-center justify-center font-mono text-[8px] flex-shrink-0" style={{ backgroundColor: RED, color: INK }}>
+                    IA
+                </span>
+                <span className={`h-1.5 w-1/3 ${bar}`} style={cinza} />
+                <span className="ml-auto font-mono text-[7px]" style={{ color: MUTED }}>24h</span>
+            </div>
+            <span className="block w-[72%] rounded-lg rounded-tl-sm px-2.5 py-2 mb-2" style={{ backgroundColor: '#22232A' }}>
+                <span className={`block h-1.5 w-full ${bar} mb-1`} style={cinza} />
+                <span className={`block h-1.5 w-1/2 ${bar}`} style={cinza} />
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-lg px-2.5 py-2" style={{ backgroundColor: '#22232A' }}>
+                {[0, 1, 2].map((i) => (
+                    <span key={i} className="w-1 h-1 rounded-full animate-bounce" style={{ backgroundColor: MUTED, animationDelay: `${i * 0.15}s` }} />
+                ))}
+            </span>
+        </div>
+    );
+};
+
 const FAQ = [
     {
         q: 'Isso não é caro?',
@@ -95,7 +218,72 @@ const FAQ = [
     },
 ];
 
-const KitLanding: React.FC = () => (
+// Card do anel — pele do Kit sobre a mecânica da home.
+const RingCard: React.FC<{ c: (typeof RING)[number]; i: number }> = ({ c, i }) => (
+    <div
+        className="fan-item flex flex-col justify-between rounded-lg border p-4 md:p-5 w-[146px] h-[184px] md:w-[208px] md:h-[236px]"
+        style={{
+            borderColor: c.solid ? RED : LINE,
+            backgroundColor: c.solid ? RED : PANEL,
+            ['--ry' as string]: `${i * RING_STEP}deg`,
+            ['--ty' as string]: `${RING_LIFT[i]}px`,
+            animationDelay: `${ringDelay(i)}s`,
+        }}
+    >
+        <span className={LABEL} style={{ color: c.solid ? '#FFFFFFB3' : RED }}>
+            {c.tag}
+        </span>
+        <span>
+            <span className={`${DISPLAY} block text-[30px] md:text-[38px] mb-1`}>{c.valor}</span>
+            <span className="block text-[11px] md:text-[12px]" style={{ color: c.solid ? '#FFFFFFCC' : MUTED }}>
+                {c.nota}
+            </span>
+        </span>
+    </div>
+);
+
+// Célula de módulo: sobe de baixo quando entra na tela, com a maquete em cima.
+const ModuloCard: React.FC<{ m: (typeof MODULOS)[number]; col: number }> = ({ m, col }) => {
+    const [ref, state] = useRevealOnView<HTMLDivElement>();
+    return (
+        <div
+            ref={ref}
+            className={`svc ${state === 'off' ? 'svc-off' : ''} rounded-lg border p-6 md:p-7 flex flex-col`}
+            style={{
+                borderColor: m.plus ? RED_DARK : LINE,
+                backgroundColor: m.plus ? PANEL_HI : PANEL,
+                transitionDelay: `${col * 90}ms`,
+            }}
+        >
+            <div className="flex items-center justify-between gap-3 mb-5">
+                <span className={LABEL} style={{ color: RED }}>
+                    Módulo {m.n}
+                </span>
+                {m.plus && (
+                    <span className={`${LABEL} px-2 py-1 rounded`} style={{ backgroundColor: RED, color: INK }}>
+                        Plus
+                    </span>
+                )}
+            </div>
+
+            <div className="mb-5">
+                <Mock n={m.n} />
+            </div>
+
+            <h3 className={`${DISPLAY} text-[26px] mb-3`}>{m.nome}</h3>
+            <p className="text-[15px] leading-relaxed" style={{ color: MUTED }}>
+                {m.texto}
+            </p>
+        </div>
+    );
+};
+
+const KitLanding: React.FC = () => {
+    // Mesma cascata do título da home: piso alto porque o H1 é o elemento
+    // de LCP e o que o robô de busca lê — suaviza sem esconder.
+    const heroProgress = useScrollReveal(420);
+
+    return (
     <div
         className="min-h-screen font-kitBody antialiased"
         style={{ backgroundColor: BG, color: INK }}
@@ -129,13 +317,39 @@ const KitLanding: React.FC = () => (
 
         <main>
             {/* ─── Hero ─── */}
-            <section className="max-w-[1120px] mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-12 md:pb-16">
+            <section className="max-w-[1120px] mx-auto px-5 md:px-8 pt-12 md:pt-16 pb-10 md:pb-14">
+                <img
+                    src="/kit/logo-kit.png"
+                    alt="Kit Assistência Técnica Plus"
+                    width={900}
+                    height={777}
+                    fetchPriority="high"
+                    className="w-[220px] md:w-[290px] h-auto mb-8"
+                />
+
                 <span className={`${LABEL} inline-block mb-6`} style={{ color: RED }}>
                     Para donos de assistência técnica
                 </span>
 
+                {/* Cascata palavra a palavra, igual à home */}
                 <h1 className={`${DISPLAY} text-[clamp(42px,8.5vw,86px)] max-w-[16ch] mb-6`}>
-                    A máquina de cliente novo da sua assistência
+                    {HERO_WORDS.map((w, i) => {
+                        const t = stagger(i, HERO_WORDS.length, heroProgress, 0.45);
+                        return (
+                            <React.Fragment key={`${w}-${i}`}>
+                                <span
+                                    className="inline-block"
+                                    style={{
+                                        opacity: 0.38 + t * 0.62,
+                                        filter: `blur(${(1 - t) * 4.5}px)`,
+                                        willChange: 'filter, opacity',
+                                    }}
+                                >
+                                    {w}
+                                </span>{' '}
+                            </React.Fragment>
+                        );
+                    })}
                 </h1>
 
                 <p
@@ -147,7 +361,7 @@ const KitLanding: React.FC = () => (
                     ligada em <strong style={{ color: INK }}>5 dias úteis</strong>.
                 </p>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
                     <a
                         href={WHATSAPP}
                         target="_blank"
@@ -164,9 +378,53 @@ const KitLanding: React.FC = () => (
                     </span>
                 </div>
 
-                <p className={`${LABEL}`} style={{ color: MUTED }}>
-                    Mais leads · Mais clientes · Mais resultados
-                </p>
+                {/* Anel 3D — mesma mecânica da home, outra pele */}
+                <div
+                    className="fan-mask -mx-5 md:mx-0 mt-12 md:mt-14 overflow-hidden md:overflow-visible"
+                >
+                    <div
+                        className="fan-stage"
+                        style={{ perspective: 'clamp(760px, 140vw, 1900px)', perspectiveOrigin: '50% 45%' }}
+                    >
+                        <div
+                            className="fan-group kit-ring"
+                            style={{ ['--dur' as string]: `${RING_DUR}s` }}
+                        >
+                            {RING.map((c, i) => (
+                                <RingCard key={c.tag + c.valor} c={c} i={i} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ─── Números ─── */}
+            <section className="border-y" style={{ borderColor: LINE }}>
+                <div className="max-w-[1120px] mx-auto px-5 md:px-8">
+                    <div className="grid grid-cols-2 md:grid-cols-4 md:divide-x" style={{ borderColor: LINE }}>
+                        {[
+                            { v: 5, suf: '', label: 'dias úteis de entrega' },
+                            { v: 5, suf: '', label: 'peças na estrutura' },
+                            { v: 100, suf: '%', label: 'de volta se atrasar' },
+                            { v: 24, suf: 'h', label: 'de atendente com IA' },
+                        ].map((n, i) => (
+                            <div
+                                key={n.label}
+                                className={`py-6 ${i > 0 ? 'md:pl-6' : ''} ${i > 1 ? 'border-t md:border-t-0' : ''}`}
+                                style={{ borderColor: LINE }}
+                            >
+                                <CountUp
+                                    value={n.v}
+                                    suffix={n.suf}
+                                    className={`${DISPLAY} text-[34px] md:text-[42px] block`}
+                                />
+                                <p className="text-[12px] md:text-[13px] mt-1" style={{ color: MUTED }}>
+                                    {n.label}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </section>
 
             {/* ─── O problema ─── */}
@@ -205,33 +463,8 @@ const KitLanding: React.FC = () => (
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {MODULOS.map((m) => (
-                        <div
-                            key={m.n}
-                            className="rounded-lg border p-6 md:p-7 flex flex-col"
-                            style={{
-                                borderColor: m.plus ? RED_DARK : LINE,
-                                backgroundColor: m.plus ? PANEL_HI : PANEL,
-                            }}
-                        >
-                            <div className="flex items-center justify-between gap-3 mb-4">
-                                <span className={LABEL} style={{ color: RED }}>
-                                    Módulo {m.n}
-                                </span>
-                                {m.plus && (
-                                    <span
-                                        className={`${LABEL} px-2 py-1 rounded`}
-                                        style={{ backgroundColor: RED, color: INK }}
-                                    >
-                                        Plus
-                                    </span>
-                                )}
-                            </div>
-                            <h3 className={`${DISPLAY} text-[26px] mb-3`}>{m.nome}</h3>
-                            <p className="text-[15px] leading-relaxed" style={{ color: MUTED }}>
-                                {m.texto}
-                            </p>
-                        </div>
+                    {MODULOS.map((m, i) => (
+                        <ModuloCard key={m.n} m={m} col={i % 2} />
                     ))}
                 </div>
             </section>
@@ -392,6 +625,7 @@ const KitLanding: React.FC = () => (
             </div>
         </footer>
     </div>
-);
+    );
+};
 
 export default KitLanding;
