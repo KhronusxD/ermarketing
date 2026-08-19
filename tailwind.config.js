@@ -15,6 +15,8 @@ export default {
                 serif: ['"Playfair Display"', 'serif'],
                 display: ['Anton', 'Inter', 'sans-serif'],
                 norte: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+                kit: ['"Big Shoulders Display"', 'Anton', 'sans-serif'],
+                kitBody: ['Outfit', 'Inter', 'sans-serif'],
                 mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
             },
             colors: {

@@ -25,6 +25,23 @@
 @import '@fontsource/plus-jakarta-sans/latin-500.css';
 @import '@fontsource/plus-jakarta-sans/latin-600.css';
 
+/* Kit Assistência Técnica Plus — identidade própria, separada da Norte.
+   Big Shoulders nos títulos display, Outfit no texto. Os rótulos em caixa
+   alta usam a mono do sistema em vez da Geist Mono do manual: a diferença
+   entre as duas some num label de 10px com letter-spacing, e evita puxar
+   uma família inteira só pra isso.
+
+   Import sem a extensão .css de propósito: estes dois pacotes (fontsource
+   5.3) expõem só `./*` -> `./*.css` no mapa de exports, então pedir
+   "latin-700.css" resolve pra "latin-700.css.css" e o build quebra. O
+   @fontsource/inter é 5.2 e ainda expõe `./*.css`, por isso os imports
+   antigos deste arquivo levam a extensão. */
+@import '@fontsource/big-shoulders-display/latin-700';
+@import '@fontsource/outfit/latin-400';
+@import '@fontsource/outfit/latin-500';
+@import '@fontsource/outfit/latin-600';
+@import '@fontsource/outfit/latin-700';
+
 /* Playfair Display (serif) — weights actually used across the LPs */
 @import '@fontsource/playfair-display/latin-400.css';
 @import '@fontsource/playfair-display/latin-500.css';

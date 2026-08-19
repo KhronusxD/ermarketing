@@ -451,6 +451,43 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // /kit-assistencia-tecnica-plus — LP da oferta do Kit. Serviço com
+    // preço fechado, então entra Offer no schema: é o que faz o preço
+    // aparecer no resultado de busca em vez de só o título.
+    {
+        path: '/kit-assistencia-tecnica-plus',
+        out: 'kit-assistencia-tecnica-plus/index.html',
+        meta: {
+            title:
+                'Kit Assistência Técnica Plus · Estrutura de captação pronta em 5 dias',
+            description:
+                'Landing page, campanha no Google, script de vendas, Google Meu Negócio e atendente de IA no WhatsApp. A estrutura que traz cliente novo pra sua assistência técnica, montada em 5 dias úteis. R$ 997 no Pix ou 12x de R$ 125.',
+            canonical: `${SITE_ORIGIN}/kit-assistencia-tecnica-plus`,
+            ogType: 'website',
+            jsonLd: [
+                {
+                    '@context': 'https://schema.org',
+                    '@type': 'Service',
+                    name: 'Kit Assistência Técnica Plus',
+                    serviceType: 'Estruturação de captação de clientes para assistência técnica',
+                    provider: { '@id': `${SITE_ORIGIN}/#organization` },
+                    areaServed: { '@type': 'Country', name: 'Brasil' },
+                    audience: {
+                        '@type': 'BusinessAudience',
+                        name: 'Donos de assistência técnica',
+                    },
+                    offers: {
+                        '@type': 'Offer',
+                        price: '997.00',
+                        priceCurrency: 'BRL',
+                        url: `${SITE_ORIGIN}/kit-assistencia-tecnica-plus`,
+                        availability: 'https://schema.org/LimitedAvailability',
+                    },
+                },
+            ],
+        },
+    },
+
     // /lab-de-performance — waitlist LP for the upcoming course/community
     // (tráfego pago + IA). Submits to the same Make.com webhook with a
     // dedicated type discriminator (`waitlist_lab_performance`).
@@ -783,6 +820,12 @@ const sitemapEntries: Array<{
         changefreq: 'monthly',
     },
     { loc: `${SITE_ORIGIN}/links`, lastmod: today, priority: 0.5, changefreq: 'monthly' },
+    {
+        loc: `${SITE_ORIGIN}/kit-assistencia-tecnica-plus`,
+        lastmod: today,
+        priority: 0.8,
+        changefreq: 'weekly',
+    },
     {
         loc: `${SITE_ORIGIN}/ed-rodrigues`,
         lastmod: today,
