@@ -318,64 +318,76 @@ const KitLanding: React.FC = () => {
         <main>
             {/* ─── Hero ─── */}
             <section className="max-w-[1120px] mx-auto px-5 md:px-8 pt-12 md:pt-16 pb-10 md:pb-14">
-                <img
-                    src="/kit/logo-kit.png"
-                    alt="Kit Assistência Técnica Plus"
-                    width={900}
-                    height={777}
-                    fetchPriority="high"
-                    className="w-[220px] md:w-[290px] h-auto mb-8"
-                />
+                {/* Texto à esquerda, selo à direita. No celular não existe
+                    coluna lateral, então ele volta pra cima do título. */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+                    <div className="lg:col-span-7">
+                        <span className={`${LABEL} inline-block mb-6`} style={{ color: RED }}>
+                            Para donos de assistência técnica
+                        </span>
 
-                <span className={`${LABEL} inline-block mb-6`} style={{ color: RED }}>
-                    Para donos de assistência técnica
-                </span>
+                        {/* Cascata palavra a palavra, igual à home */}
+                        <h1 className={`${DISPLAY} text-[clamp(40px,6.6vw,74px)] mb-6`}>
+                            {HERO_WORDS.map((w, i) => {
+                                const t = stagger(i, HERO_WORDS.length, heroProgress, 0.45);
+                                return (
+                                    <React.Fragment key={`${w}-${i}`}>
+                                        <span
+                                            className="inline-block"
+                                            style={{
+                                                opacity: 0.38 + t * 0.62,
+                                                filter: `blur(${(1 - t) * 4.5}px)`,
+                                                willChange: 'filter, opacity',
+                                            }}
+                                        >
+                                            {w}
+                                        </span>{' '}
+                                    </React.Fragment>
+                                );
+                            })}
+                        </h1>
 
-                {/* Cascata palavra a palavra, igual à home */}
-                <h1 className={`${DISPLAY} text-[clamp(42px,8.5vw,86px)] max-w-[16ch] mb-6`}>
-                    {HERO_WORDS.map((w, i) => {
-                        const t = stagger(i, HERO_WORDS.length, heroProgress, 0.45);
-                        return (
-                            <React.Fragment key={`${w}-${i}`}>
-                                <span
-                                    className="inline-block"
-                                    style={{
-                                        opacity: 0.38 + t * 0.62,
-                                        filter: `blur(${(1 - t) * 4.5}px)`,
-                                        willChange: 'filter, opacity',
-                                    }}
-                                >
-                                    {w}
-                                </span>{' '}
-                            </React.Fragment>
-                        );
-                    })}
-                </h1>
+                        <p
+                            className="text-[17px] md:text-[19px] leading-relaxed max-w-xl mb-8"
+                            style={{ color: MUTED }}
+                        >
+                            Não é pacote de arte nem site bonito. É a estrutura que faz
+                            gente que nunca ouviu falar de você pedir orçamento no seu
+                            WhatsApp — montada e ligada em{' '}
+                            <strong style={{ color: INK }}>5 dias úteis</strong>.
+                        </p>
 
-                <p
-                    className="text-[17px] md:text-[20px] leading-relaxed max-w-2xl mb-8"
-                    style={{ color: MUTED }}
-                >
-                    Não é pacote de arte nem site bonito. É a estrutura que faz gente que
-                    nunca ouviu falar de você pedir orçamento no seu WhatsApp — montada e
-                    ligada em <strong style={{ color: INK }}>5 dias úteis</strong>.
-                </p>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                            <a
+                                href={WHATSAPP}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[15px] font-bold transition-colors"
+                                style={{ backgroundColor: RED, color: INK }}
+                            >
+                                Quero montar a minha
+                                <span aria-hidden="true">→</span>
+                            </a>
+                            <span className="text-[14px]" style={{ color: MUTED }}>
+                                Pronto em 5 dias úteis ou{' '}
+                                <strong style={{ color: INK }}>
+                                    100% do dinheiro de volta
+                                </strong>
+                                .
+                            </span>
+                        </div>
+                    </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
-                    <a
-                        href={WHATSAPP}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[15px] font-bold transition-colors"
-                        style={{ backgroundColor: RED, color: INK }}
-                    >
-                        Quero montar a minha
-                        <span aria-hidden="true">→</span>
-                    </a>
-                    <span className="text-[14px]" style={{ color: MUTED }}>
-                        Pronto em 5 dias úteis ou{' '}
-                        <strong style={{ color: INK }}>100% do dinheiro de volta</strong>.
-                    </span>
+                    <div className="lg:col-span-5 order-first lg:order-last flex justify-center lg:justify-end">
+                        <img
+                            src="/kit/logo-kit.png"
+                            alt="Kit Assistência Técnica Plus"
+                            width={900}
+                            height={777}
+                            fetchPriority="high"
+                            className="w-[230px] sm:w-[280px] lg:w-full lg:max-w-[400px] h-auto"
+                        />
+                    </div>
                 </div>
 
                 {/* Anel 3D — mesma mecânica da home, outra pele */}
