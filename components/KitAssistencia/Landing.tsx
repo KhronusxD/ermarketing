@@ -317,7 +317,54 @@ const KitLanding: React.FC = () => {
 
         <main>
             {/* ─── Hero ─── */}
-            <section className="max-w-[1120px] mx-auto px-5 md:px-8 pt-12 md:pt-16 pb-10 md:pb-14">
+            <section className="relative overflow-hidden pt-12 md:pt-16 pb-10 md:pb-14">
+                {/* Foto da loja cheia. Entra como <picture> e não como
+                    background-image de propósito: assim o navegador acha a
+                    imagem já no HTML pré-renderizado, escolhe a largura pelo
+                    srcset e trata como LCP. */}
+                <picture aria-hidden="true">
+                    <source
+                        type="image/webp"
+                        sizes="100vw"
+                        srcSet={
+                            '/kit/bg/hero-kit-640.webp 640w, ' +
+                            '/kit/bg/hero-kit-1024.webp 1024w, ' +
+                            '/kit/bg/hero-kit-1440.webp 1440w, ' +
+                            '/kit/bg/hero-kit-1920.webp 1920w, ' +
+                            '/kit/bg/hero-kit-2400.webp 2400w'
+                        }
+                    />
+                    <img
+                        src="/kit/bg/hero-kit-1440.jpg"
+                        alt=""
+                        fetchPriority="high"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
+                </picture>
+
+                {/* Véu pesado. A foto é vermelha e cheia de texto de placa —
+                    sem fechar bastante, ela briga com o título e as placas
+                    da loja fictícia da imagem ganham leitura que não devem
+                    ter. Fecha de vez no rodapé pra emendar na faixa seguinte. */}
+                <div
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    style={{
+                        background:
+                            'linear-gradient(to bottom, rgba(19,19,22,0.90) 0%, rgba(19,19,22,0.86) 40%, rgba(19,19,22,0.94) 78%, #131316 100%)',
+                    }}
+                />
+                <div
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    style={{
+                        background:
+                            'linear-gradient(100deg, rgba(19,19,22,0.82) 0%, rgba(19,19,22,0.35) 55%, rgba(19,19,22,0.55) 100%)',
+                    }}
+                />
+
+                <div className="relative max-w-[1120px] mx-auto px-5 md:px-8">
                 {/* Texto à esquerda, selo à direita. No celular não existe
                     coluna lateral, então ele volta pra cima do título. */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
@@ -407,6 +454,7 @@ const KitLanding: React.FC = () => {
                             ))}
                         </div>
                     </div>
+                </div>
                 </div>
             </section>
 
