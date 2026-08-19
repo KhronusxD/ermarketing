@@ -428,6 +428,29 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // /ed-rodrigues — árvore de links da marca pessoal do Ed, na
+    // linguagem visual dos conteúdos dele. Indexável: é uma página de
+    // marca, não etapa de funil.
+    {
+        path: '/ed-rodrigues',
+        out: 'ed-rodrigues/index.html',
+        meta: {
+            title: 'Ed Rodrigues · @edrodrigues.mkt · Todos os links',
+            description:
+                'Gestor de tráfego pago desde 2020, +R$ 5 milhões em Meta Ads e Google Ads. WhatsApp, agenda, YouTube, blog e a agência — todos os links num lugar só.',
+            canonical: `${SITE_ORIGIN}/ed-rodrigues`,
+            ogType: 'profile',
+            jsonLd: [
+                {
+                    '@context': 'https://schema.org',
+                    '@type': 'ProfilePage',
+                    url: `${SITE_ORIGIN}/ed-rodrigues`,
+                    mainEntity: { '@id': `${SITE_ORIGIN}/sobre/ed-rodrigues#person` },
+                },
+            ],
+        },
+    },
+
     // /lab-de-performance — waitlist LP for the upcoming course/community
     // (tráfego pago + IA). Submits to the same Make.com webhook with a
     // dedicated type discriminator (`waitlist_lab_performance`).
@@ -760,6 +783,12 @@ const sitemapEntries: Array<{
         changefreq: 'monthly',
     },
     { loc: `${SITE_ORIGIN}/links`, lastmod: today, priority: 0.5, changefreq: 'monthly' },
+    {
+        loc: `${SITE_ORIGIN}/ed-rodrigues`,
+        lastmod: today,
+        priority: 0.5,
+        changefreq: 'monthly',
+    },
     {
         loc: `${SITE_ORIGIN}/lab-de-performance`,
         lastmod: today,

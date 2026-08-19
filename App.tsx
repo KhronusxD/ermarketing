@@ -20,6 +20,7 @@ import MetaAppIndex from './components/MetaApp/Index';
 import MetaAppPrivacy from './components/MetaApp/Privacy';
 import MetaAppTerms from './components/MetaApp/Terms';
 import LinksPage from './components/Links';
+import EdRodriguesLinks from './components/EdRodriguesLinks';
 import LabPerformance from './components/LabPerformance';
 import EdRodriguesCapture from './components/EdRodriguesCapture';
 import NorteLanding from './components/NorteLanding';
@@ -96,6 +97,7 @@ const App: React.FC = () => {
                 <Route path="/meta-app/privacidade" element={<MetaAppPrivacy />} />
                 <Route path="/meta-app/termos" element={<MetaAppTerms />} />
                 <Route path="/links" element={<LinksPage />} />
+                <Route path="/ed-rodrigues" element={<EdRodriguesLinks />} />
                 <Route path="/lab-de-performance" element={<LabPerformance />} />
                 <Route path="/edrodrigues" element={<EdRodriguesCapture />} />
                 <Route path="/norte" element={<NorteLanding />} />
