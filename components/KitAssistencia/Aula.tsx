@@ -20,7 +20,10 @@ const LINE = '#33343B';
 const DISPLAY = 'font-kit font-bold uppercase leading-[0.92] tracking-[-0.01em]';
 const LABEL = 'font-mono text-[10px] tracking-[0.18em] uppercase';
 
-// ⚠️ TROCAR pelas URLs do R2 depois do upload. Só estas três linhas.
+// Bucket ermarketing-assets no R2. As duas versões são o mesmo corte:
+// o navegador escolhe a de 720p no celular e a de 1080p no desktop,
+// pela media query do <source>. Cache de um ano com immutable — se o
+// vídeo mudar, o nome do arquivo muda junto.
 const VIDEO = {
     mp4_1080: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/mini-vsl-1080.mp4',
     mp4_720: 'https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/mini-vsl-720.mp4',
