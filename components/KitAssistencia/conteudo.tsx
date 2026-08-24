@@ -222,3 +222,194 @@ export const ModuloCard: React.FC<{ m: (typeof MODULOS)[number]; col: number }> 
         </div>
     );
 };
+
+// ─── Prova social ──────────────────────────────────────────────────────
+//
+// COMPLIANCE (playbook, Seção 8, regra 1): a autorização por escrito da
+// iTV Manaus e da SOS TV ainda não chegou. Enquanto não chegar, nada aqui
+// nomeia cliente — os painéis de campanha e as avaliações não mostram o
+// nome do negócio, então podem entrar; o perfil do Google Meu Negócio e
+// os sites mostram, e ficam de fora.
+//
+// Quando a autorização sair, é virar esta constante pra true: os dois
+// perfis entram e as legendas passam a poder dizer de quem são.
+export const AUTORIZADO_CITAR_CLIENTE = false;
+
+// Painéis das contas que o Ed gere. Os números são das campanhas, não
+// promessa de repetição — o aviso ao pé da seção não é opcional.
+export const PAINEIS = [
+    {
+        src: '/kit/prova/painel-google-1.webp',
+        w: 1400,
+        h: 495,
+        alt: 'Painel do Google Ads mostrando 79,1 mil cliques e 15 mil conversões a R$ 4,42 cada',
+        titulo: 'Google Ads · assistência A',
+        nota: '79,1 mil cliques e 15 mil conversões, a R$ 4,42 por conversão.',
+    },
+    {
+        src: '/kit/prova/painel-google-2.webp',
+        w: 1400,
+        h: 346,
+        alt: 'Painel do Google Ads mostrando 96,3 mil cliques e 11,4 mil conversões',
+        titulo: 'Google Ads · assistência B',
+        nota: '96,3 mil cliques e 11,4 mil conversões em 4,93 milhões de exibições.',
+    },
+    {
+        src: '/kit/prova/painel-meta-1.webp',
+        w: 1400,
+        h: 210,
+        alt: 'Painel do Meta Ads com três campanhas de captação por WhatsApp',
+        titulo: 'Meta Ads · captação no WhatsApp',
+        nota: 'Conversa iniciada saindo entre R$ 0,76 e R$ 1,14.',
+    },
+];
+
+// Seis avaliações — o mesmo número que a vitrine em pulso espera por
+// volta (a faixa duplica o conteúdo e anda de um sexto por passo).
+export const AVALIACOES = [
+    { src: '/kit/prova/aval-1.webp', w: 760, h: 368 },
+    { src: '/kit/prova/aval-2.webp', w: 760, h: 457 },
+    { src: '/kit/prova/aval-3.webp', w: 760, h: 375 },
+    { src: '/kit/prova/aval-4.webp', w: 760, h: 372 },
+    { src: '/kit/prova/aval-5.webp', w: 760, h: 452 },
+    { src: '/kit/prova/aval-6.webp', w: 760, h: 490 },
+];
+
+export const PERFIS = [
+    { src: '/kit/prova/perfil-maps-1.webp', w: 820, h: 1077, alt: 'Perfil no Google Meu Negócio com nota 4,9' },
+    { src: '/kit/prova/perfil-maps-2.webp', w: 820, h: 987, alt: 'Perfil no Google Meu Negócio otimizado' },
+];
+
+export const Provas: React.FC<{ compacto?: boolean }> = ({ compacto }) => (
+    <section className="border-y" style={{ borderColor: LINE, backgroundColor: PANEL }}>
+        <div className={`${compacto ? 'max-w-[1000px]' : 'max-w-[1120px]'} mx-auto px-5 md:px-8 py-14 md:py-20`}>
+            <span className={`${LABEL} inline-block mb-5`} style={{ color: RED }}>
+                Print das contas
+            </span>
+            <h2 className={`${DISPLAY} text-[clamp(30px,5vw,50px)] max-w-[20ch] mb-5`}>
+                Não é slide bonito. É o painel aberto.
+            </h2>
+            <p className="text-[16px] md:text-[17px] leading-relaxed max-w-2xl mb-10" style={{ color: MUTED }}>
+                São contas de assistência técnica que eu gerencio hoje. Os nomes ficam
+                de fora porque a autorização pra citá-los ainda não saiu — os números
+                estão do jeito que o painel mostra.
+            </p>
+
+            <div className="grid grid-cols-1 gap-3 mb-3">
+                {PAINEIS.map((p) => (
+                    <figure
+                        key={p.src}
+                        className="rounded-lg border overflow-hidden"
+                        style={{ borderColor: LINE, backgroundColor: BG }}
+                    >
+                        <img
+                            src={p.src}
+                            width={p.w}
+                            height={p.h}
+                            alt={p.alt}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-auto block"
+                        />
+                        <figcaption className="px-5 py-4 border-t" style={{ borderColor: LINE }}>
+                            <span className={`${LABEL} block mb-1.5`} style={{ color: RED }}>
+                                {p.titulo}
+                            </span>
+                            <span className="text-[14px]" style={{ color: MUTED }}>
+                                {p.nota}
+                            </span>
+                        </figcaption>
+                    </figure>
+                ))}
+            </div>
+
+            {/* Nota do perfil + avaliações. O módulo 04 é justamente cuidar
+                do perfil no mapa; é ali que essa prova encosta. */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                <figure
+                    className="rounded-lg border overflow-hidden lg:col-span-1"
+                    style={{ borderColor: LINE, backgroundColor: BG }}
+                >
+                    <img
+                        src="/kit/prova/nota-maps.webp"
+                        width={780}
+                        height={447}
+                        alt="Distribuição de notas do perfil: 4,9 de média em 1.337 avaliações"
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-auto block"
+                    />
+                    <figcaption className="px-5 py-4 border-t" style={{ borderColor: LINE }}>
+                        <span className={`${LABEL} block mb-1.5`} style={{ color: RED }}>
+                            O perfil no mapa
+                        </span>
+                        <span className="text-[14px]" style={{ color: MUTED }}>
+                            4,9 de média em 1.337 avaliações. Quem cuida do perfil e
+                            responde as avaliações é o módulo 04.
+                        </span>
+                    </figcaption>
+                </figure>
+
+                <div
+                    className="rounded-lg border overflow-hidden lg:col-span-2 rr"
+                    style={{ borderColor: LINE, backgroundColor: BG }}
+                >
+                    <div className="aval-rail no-scrollbar py-5">
+                        <div className="rr-track gap-3 px-3">
+                            {[...AVALIACOES, ...AVALIACOES].map((a, i) => (
+                                <img
+                                    key={i}
+                                    src={a.src}
+                                    width={a.w}
+                                    height={a.h}
+                                    alt={i < AVALIACOES.length ? 'Avaliação de 5 estrelas no Google' : ''}
+                                    aria-hidden={i >= AVALIACOES.length}
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="w-[236px] md:w-[300px] h-auto flex-shrink-0 rounded-md bg-white"
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div className="px-5 py-4 border-t" style={{ borderColor: LINE }}>
+                        <span className={`${LABEL} block mb-1.5`} style={{ color: RED }}>
+                            As avaliações
+                        </span>
+                        <span className="text-[14px]" style={{ color: MUTED }}>
+                            Avaliações públicas no Google, do jeito que estão lá.
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            {AUTORIZADO_CITAR_CLIENTE && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                    {PERFIS.map((p) => (
+                        <img
+                            key={p.src}
+                            src={p.src}
+                            width={p.w}
+                            height={p.h}
+                            alt={p.alt}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-auto block rounded-lg border"
+                            style={{ borderColor: LINE }}
+                        />
+                    ))}
+                </div>
+            )}
+
+            {/* Regra 2 do playbook. Meta e Google derrubam anúncio por
+                promessa de ganho, e o CDC trata como propaganda enganosa. */}
+            <p
+                className="text-[13px] leading-relaxed max-w-2xl border-l-2 pl-4 mt-8"
+                style={{ color: MUTED, borderColor: LINE }}
+            >
+                Resultado deles, com a operação deles. O que você contrata é a montagem
+                da estrutura, não um número garantido — quem entrega resultado é o
+                conjunto: estrutura, verba e o seu atendimento.
+            </p>
+        </div>
+    </section>
+);

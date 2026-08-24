@@ -11,6 +11,7 @@ import {
     MODULOS,
     FAQ,
     ModuloCard,
+    Provas,
 } from './conteudo';
 
 // /kit-aula — VSL do Kit com player próprio e trava de conteúdo.
@@ -35,14 +36,13 @@ const VIDEO = {
 
 const DURACAO = 247; // 4:07
 
-// Momento em que a página abre.
+// Momento em que a página abre: 4 minutos, como o Ed definiu.
 //
-// Li as legendas queimadas do vídeo pra escolher: aos 3:10 ele fecha a
-// oferta ("uma vez, sem mensalidade, a estrutura fica com você"), aos 3:25
-// entra o bônus e aos 3:55 a vaga da semana. Aos 3:15 a pessoa já sabe o
-// que está comprando e por quanto — segurar além disso só atrasa quem já
-// decidiu. Pra liberar só no fim, trocar por 240.
-const LIBERA_EM = 195;
+// Num vídeo de 4:07 isso é praticamente o fim — a oferta aparece com sete
+// segundos de sobra. É a decisão dele, tomada sabendo disso: a premissa da
+// página é que só a hero existe até a pessoa assistir os 4 minutos.
+// Pra soltar logo depois do fechamento da oferta (3:10), trocar por 195.
+const LIBERA_EM = 240;
 
 const CHAVE = 'kit:vsl:assistido';
 
@@ -141,7 +141,16 @@ const Aula: React.FC = () => {
         if (v.paused) void v.play();
     };
 
-    const pct = Math.min(100, (tempo / DURACAO) * 100);
+    // Barra com aceleração: corre no começo e arrasta no fim, pra
+    // parecer que o vídeo está quase acabando. Expoente menor que 1 deixa
+    // a curva côncava — a 1/4 do vídeo ela já marca metade.
+    //
+    // A barra passa a não dizer a verdade sobre o quanto falta. Isso é
+    // escolha do Ed e está anotado aqui de propósito: o único número que
+    // a página afirma continua sendo o da trava ("falta X de vídeo"), que
+    // é medido no relógio real e não foi tocado.
+    const CURVA = 0.5;
+    const pct = Math.min(100, Math.pow(Math.min(1, tempo / DURACAO), CURVA) * 100);
     const falta = Math.max(0, LIBERA_EM - maior);
 
     return (
@@ -161,6 +170,19 @@ const Aula: React.FC = () => {
                     player no meio. Texto alinhado à esquerda criava uma
                     borda que nada embaixo acompanhava. */}
                 <div className="text-center">
+                    {/* Logo acima do título: a hero é a única coisa que
+                        existe até a trava abrir, então ela é a página
+                        inteira — precisa dizer de que produto se trata
+                        antes do vídeo começar a falar. */}
+                    <img
+                        src="/kit/logo-kit.png"
+                        alt="Kit Assistência Técnica Plus"
+                        width={900}
+                        height={777}
+                        fetchPriority="high"
+                        className="w-[132px] md:w-[168px] h-auto mx-auto mb-5"
+                    />
+
                     <span className={`${LABEL} block mb-4`} style={{ color: RED }}>
                         Para donos de assistência técnica
                     </span>
@@ -379,14 +401,10 @@ const Aula: React.FC = () => {
                                 assistência técnica. O kit é a mesma estrutura que eu montei
                                 pra elas, empacotada — sem a mensalidade de agência no meio.
                             </p>
-                            <p className="text-[13px] leading-relaxed max-w-2xl border-l-2 pl-4" style={{ color: MUTED, borderColor: LINE }}>
-                                Resultado delas, com a operação delas. O que você contrata
-                                aqui é a montagem da estrutura, não um número garantido —
-                                quem entrega resultado é o conjunto: estrutura, verba e o
-                                seu atendimento.
-                            </p>
                         </div>
                     </section>
+
+                    <Provas compacto />
 
                     <section className="max-w-[1000px] mx-auto px-5 md:px-8 py-14 md:py-20">
                         <span className={`${LABEL} inline-block mb-5`} style={{ color: RED }}>

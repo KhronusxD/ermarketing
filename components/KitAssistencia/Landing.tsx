@@ -14,6 +14,7 @@ import {
     MODULOS,
     FAQ,
     ModuloCard,
+    Provas,
 } from './conteudo';
 
 // /kit-assistencia-tecnica-plus — LP da oferta do Kit.
@@ -366,6 +367,8 @@ const KitLanding: React.FC = () => {
                     </p>
                 </div>
             </section>
+
+            <Provas />
 
             {/* ─── Preço ─── */}
             <section id="preco" className="max-w-[1120px] mx-auto px-5 md:px-8 py-14 md:py-20">

@@ -427,3 +427,22 @@ body {
         height: 244px;
     }
 }
+
+/* Vitrine de avaliações do Kit.
+   No desktop ela anda sozinha em pulso (.rr-track, definido acima). No
+   celular a animação não roda — e sem poder arrastar, quem está no
+   telefone via uma avaliação e meia e não alcançava o resto. Aqui o
+   trilho vira rolagem por toque, com o mesmo esmaecido nas bordas. */
+.aval-rail {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
+}
+
+@media (min-width: 768px) {
+    .aval-rail {
+        overflow: hidden;
+    }
+}
