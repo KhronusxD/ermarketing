@@ -76,10 +76,20 @@ export const Mock: React.FC<{ n: string }> = ({ n }) => {
                     <span className={`ml-2 h-1.5 flex-1 ${bar}`} style={cinza} />
                 </div>
                 <div className="p-3">
-                    <div className="h-8 rounded mb-2" style={{ background: `linear-gradient(90deg, ${RED}40, transparent)` }} />
-                    <div className={`h-1.5 w-3/4 ${bar} mb-1.5`} style={cinza} />
-                    <div className={`h-1.5 w-1/2 ${bar} mb-3`} style={cinza} />
-                    <span className="block h-5 w-24 rounded" style={{ backgroundColor: RED }} />
+                    <div className="mk mk-lp-1 h-8 rounded mb-2" style={{ background: `linear-gradient(90deg, ${RED}40, transparent)` }} />
+                    <div className={`mk mk-lp-2 h-1.5 w-3/4 ${bar} mb-1.5`} style={cinza} />
+                    <div className={`mk mk-lp-3 h-1.5 w-1/2 ${bar} mb-3`} style={cinza} />
+                    <span className="relative inline-block">
+                        <span className="mk mk-lp-cta block h-5 w-24 rounded" style={{ backgroundColor: RED }} />
+                        {/* Setinha do mouse descendo até o botão e clicando. */}
+                        <svg
+                            className="mk mk-cursor absolute -right-1 -bottom-1 w-3 h-3"
+                            viewBox="0 0 12 12"
+                            aria-hidden="true"
+                        >
+                            <path d="M1 1 L1 9.5 L3.4 7.2 L5 11 L6.8 10.2 L5.2 6.6 L8.6 6.4 Z" fill={INK} stroke={BG} strokeWidth="0.7" />
+                        </svg>
+                    </span>
                 </div>
             </div>
         );
@@ -88,9 +98,9 @@ export const Mock: React.FC<{ n: string }> = ({ n }) => {
         return (
             <div className="rounded-md border p-3 space-y-2.5" style={{ borderColor: LINE, backgroundColor: '#0D0E11' }}>
                 {[0, 1, 2].map((i) => (
-                    <div key={i} className="flex items-start gap-2">
+                    <div key={i} className={`mk mk-res-${i + 1} flex items-start gap-2`}>
                         <span
-                            className="font-mono text-[7px] px-1 py-0.5 rounded flex-shrink-0"
+                            className={`font-mono text-[7px] px-1 py-0.5 rounded flex-shrink-0 ${i === 0 ? 'mk mk-selo' : ''}`}
                             style={{ backgroundColor: i === 0 ? RED : '#2A2B32', color: INK }}
                         >
                             {i === 0 ? 'AD' : '—'}
@@ -107,11 +117,11 @@ export const Mock: React.FC<{ n: string }> = ({ n }) => {
     if (n === '03')
         return (
             <div className="rounded-md border p-3 space-y-2" style={{ borderColor: LINE, backgroundColor: '#0D0E11' }}>
-                <span className="block w-[70%] rounded-lg rounded-tl-sm px-2.5 py-2" style={{ backgroundColor: '#22232A' }}>
+                <span className="mk mk-msg-1 block w-[70%] rounded-lg rounded-tl-sm px-2.5 py-2" style={{ backgroundColor: '#22232A' }}>
                     <span className={`block h-1.5 w-full ${bar} mb-1`} style={cinza} />
                     <span className={`block h-1.5 w-2/3 ${bar}`} style={cinza} />
                 </span>
-                <span className="block w-[78%] ml-auto rounded-lg rounded-br-sm px-2.5 py-2" style={{ backgroundColor: RED }}>
+                <span className="mk mk-msg-2 block w-[78%] ml-auto rounded-lg rounded-br-sm px-2.5 py-2" style={{ backgroundColor: RED }}>
                     <span className={`block h-1.5 w-full ${bar} mb-1`} style={{ backgroundColor: '#ffffff70' }} />
                     <span className={`block h-1.5 w-3/5 ${bar}`} style={{ backgroundColor: '#ffffff70' }} />
                 </span>
@@ -127,13 +137,22 @@ export const Mock: React.FC<{ n: string }> = ({ n }) => {
                         <span className={`block h-1.5 w-2/3 ${bar} mb-1.5`} style={cinza} />
                         <span className="flex gap-0.5" aria-hidden="true">
                             {[0, 1, 2, 3, 4].map((i) => (
-                                <span key={i} className="text-[8px]" style={{ color: RED }}>★</span>
+                                <span
+                                    key={i}
+                                    className="mk mk-estrela text-[8px]"
+                                    style={{ color: RED, animationDelay: `${i * 0.13}s` }}
+                                >
+                                    ★
+                                </span>
                             ))}
                         </span>
                     </span>
                 </div>
                 <div className="h-10 rounded relative overflow-hidden" style={{ backgroundColor: '#191A20' }}>
-                    <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: RED }} />
+                    {/* Onda saindo do pino: é o negócio aparecendo pra quem
+                        busca conserto por perto. */}
+                    <span className="mk mk-onda absolute left-1/2 top-1/2 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: RED }} />
+                    <span className="mk mk-pino absolute left-1/2 top-1/2 w-2.5 h-2.5 rounded-full" style={{ backgroundColor: RED }} />
                 </div>
             </div>
         );
@@ -145,16 +164,29 @@ export const Mock: React.FC<{ n: string }> = ({ n }) => {
                     IA
                 </span>
                 <span className={`h-1.5 w-1/3 ${bar}`} style={cinza} />
-                <span className="ml-auto font-mono text-[7px]" style={{ color: MUTED }}>24h</span>
+                <span className="ml-auto flex items-center gap-1">
+                    <span className="mk mk-online w-1 h-1 rounded-full" style={{ backgroundColor: '#4ADE80' }} />
+                    <span className="font-mono text-[7px]" style={{ color: MUTED }}>24h</span>
+                </span>
             </div>
-            <span className="block w-[72%] rounded-lg rounded-tl-sm px-2.5 py-2 mb-2" style={{ backgroundColor: '#22232A' }}>
+
+            {/* Cliente pergunta, reticências correm, resposta entra. É o
+                módulo 05 acontecendo: ninguém fica esperando de madrugada. */}
+            <span className="mk mk-ia-pergunta block w-[72%] rounded-lg rounded-tl-sm px-2.5 py-2 mb-2" style={{ backgroundColor: '#22232A' }}>
                 <span className={`block h-1.5 w-full ${bar} mb-1`} style={cinza} />
                 <span className={`block h-1.5 w-1/2 ${bar}`} style={cinza} />
             </span>
-            <span className="inline-flex items-center gap-1 rounded-lg px-2.5 py-2" style={{ backgroundColor: '#22232A' }}>
-                {[0, 1, 2].map((i) => (
-                    <span key={i} className="w-1 h-1 rounded-full animate-bounce" style={{ backgroundColor: MUTED, animationDelay: `${i * 0.15}s` }} />
-                ))}
+
+            <span className="relative block h-[30px]">
+                <span className="mk mk-ia-digitando absolute left-0 top-0 inline-flex items-center gap-1 rounded-lg px-2.5 py-2" style={{ backgroundColor: '#22232A' }}>
+                    {[0, 1, 2].map((i) => (
+                        <span key={i} className="w-1 h-1 rounded-full animate-bounce" style={{ backgroundColor: MUTED, animationDelay: `${i * 0.15}s` }} />
+                    ))}
+                </span>
+                <span className="mk mk-ia-resposta absolute right-0 top-0 block w-[76%] rounded-lg rounded-br-sm px-2.5 py-2" style={{ backgroundColor: RED }}>
+                    <span className={`block h-1.5 w-full ${bar} mb-1`} style={{ backgroundColor: '#ffffff70' }} />
+                    <span className={`block h-1.5 w-2/3 ${bar}`} style={{ backgroundColor: '#ffffff70' }} />
+                </span>
             </span>
         </div>
     );
