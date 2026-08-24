@@ -44,7 +44,28 @@ const DURACAO = 247; // 4:07
 // Pra soltar logo depois do fechamento da oferta (3:10), trocar por 195.
 const LIBERA_EM = 240;
 
-const CHAVE = 'kit:vsl:assistido';
+// Agora guarda o token assinado, não o tempo. sessionStorage e não
+// localStorage: o crédito vale pela visita, e o token tem validade
+// própria no servidor de qualquer jeito.
+const CHAVE = 'kit:vsl:token';
+
+type Oferta = {
+    selo: string;
+    de: string;
+    por: string;
+    termos: string;
+    cta: string;
+    whatsapp: string;
+};
+
+type Resposta = {
+    token?: string;
+    creditado?: number;
+    liberado?: boolean;
+    liberaEm?: number;
+    oferta?: Oferta;
+    erro?: string;
+};
 
 const fmt = (s: number) => {
     const m = Math.floor(Math.max(0, s) / 60);
@@ -58,6 +79,19 @@ const WHATSAPP =
         'Oi Ed! Assisti o vídeo do Kit Assistência Técnica Plus e quero montar a minha.',
     );
 
+// Fala com /api/aula. O token guarda o estado assinado pelo servidor; o
+// navegador só o transporta.
+const chamar = async (corpo: Record<string, unknown>): Promise<Resposta> => {
+    const r = await fetch('/api/aula', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(corpo),
+    });
+    const dados = (await r.json()) as Resposta;
+    if (!r.ok) throw new Error(dados.erro || String(r.status));
+    return dados;
+};
+
 const Aula: React.FC = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [pronto, setPronto] = useState(false);
@@ -65,26 +99,92 @@ const Aula: React.FC = () => {
     const [mudo, setMudo] = useState(true);
     const [tempo, setTempo] = useState(0);
 
-    // Guarda o ponto mais longe já assistido, não o currentTime: é isso que
-    // impede destravar a página voltando e avançando o vídeo.
+    // Ponto mais longe alcançado. Continua servindo pra impedir o pulo no
+    // player, mas não decide mais nada: quem libera é o servidor.
     const maiorRef = useRef(0);
-    const [maior, setMaior] = useState(0);
 
-    const liberado = maior >= LIBERA_EM;
+    // Estado da trava, vindo de /api/aula. `creditado` é quanto tempo real
+    // o servidor reconheceu; `oferta` só chega quando ele reconhece tudo.
+    const [creditado, setCreditado] = useState(0);
+    const [oferta, setOferta] = useState<Oferta | null>(null);
+    const [semServidor, setSemServidor] = useState(false);
+    const tokenRef = useRef<string | null>(null);
 
-    // Quem já assistiu numa visita anterior não é obrigado a assistir de
-    // novo — recarregar a página não pode custar o acesso à oferta.
+    const liberado = oferta !== null;
+    const maior = creditado;
+
+    // Abre a sessão. O token vai pro sessionStorage pra que recarregar a
+    // página não jogue fora o tempo já reconhecido — e ele é assinado, então
+    // guardar no navegador não abre brecha: mexer nele invalida a assinatura.
     useEffect(() => {
-        try {
-            const salvo = Number(localStorage.getItem(CHAVE) || 0);
-            if (salvo > 0) {
-                maiorRef.current = salvo;
-                setMaior(salvo);
+        let vivo = true;
+
+        (async () => {
+            const guardado = (() => {
+                try {
+                    return sessionStorage.getItem(CHAVE);
+                } catch {
+                    return null;
+                }
+            })();
+
+            if (guardado) {
+                try {
+                    const r = await chamar({ acao: 'pulso', token: guardado, posicao: 0 });
+                    if (!vivo) return;
+                    tokenRef.current = r.token ?? null;
+                    setCreditado(r.creditado ?? 0);
+                    if (r.oferta) setOferta(r.oferta);
+                    return;
+                } catch {
+                    // token vencido ou inválido: começa uma sessão nova
+                }
             }
-        } catch {
-            // storage bloqueado: a trava simplesmente recomeça do zero
-        }
+
+            try {
+                const r = await chamar({ acao: 'inicio' });
+                if (!vivo) return;
+                tokenRef.current = r.token ?? null;
+                setCreditado(0);
+            } catch {
+                if (vivo) setSemServidor(true);
+            }
+        })();
+
+        return () => {
+            vivo = false;
+        };
     }, []);
+
+    // Pulso a cada 5s enquanto o vídeo corre. Parado, nada é enviado — e o
+    // servidor não credita tempo que ninguém reivindicou.
+    useEffect(() => {
+        if (!tocando || liberado || semServidor) return;
+
+        const id = window.setInterval(async () => {
+            const v = videoRef.current;
+            if (!v || !tokenRef.current) return;
+            try {
+                const r = await chamar({
+                    acao: 'pulso',
+                    token: tokenRef.current,
+                    posicao: v.currentTime,
+                });
+                tokenRef.current = r.token ?? tokenRef.current;
+                setCreditado(r.creditado ?? 0);
+                if (r.oferta) setOferta(r.oferta);
+                try {
+                    if (r.token) sessionStorage.setItem(CHAVE, r.token);
+                } catch {
+                    /* sem storage: recarregar recomeça a contagem */
+                }
+            } catch {
+                setSemServidor(true);
+            }
+        }, 5000);
+
+        return () => window.clearInterval(id);
+    }, [tocando, liberado, semServidor]);
 
     // Carregamento "rápido": o esqueleto tem piso de tempo pra não piscar
     // quando o vídeo já está em cache, e teto pra não travar a página se a
@@ -102,18 +202,7 @@ const Aula: React.FC = () => {
         const v = videoRef.current;
         if (!v) return;
         setTempo(v.currentTime);
-        if (v.currentTime > maiorRef.current) {
-            maiorRef.current = v.currentTime;
-            setMaior(v.currentTime);
-            // grava de 5 em 5s pra não bater no storage 4x por segundo
-            if (Math.floor(v.currentTime) % 5 === 0) {
-                try {
-                    localStorage.setItem(CHAVE, String(Math.floor(v.currentTime)));
-                } catch {
-                    /* sem storage, sem persistência */
-                }
-            }
-        }
+        if (v.currentTime > maiorRef.current) maiorRef.current = v.currentTime;
     }, []);
 
     // Sem barra pra arrastar, mas teclado e gesto de mídia do sistema ainda
@@ -282,7 +371,35 @@ const Aula: React.FC = () => {
                 </div>
 
                 {/* ─── Trava ─── */}
-                {!liberado ? (
+                {semServidor ? (
+                    /* Se a trava não responde, a saída não pode ser liberar
+                       por engano nem prender a pessoa numa página morta. O
+                       WhatsApp resolve os dois: ela fala com o Ed e ele sabe
+                       de onde ela veio. */
+                    <div
+                        className="mt-6 rounded-lg border p-6 md:p-8 text-center"
+                        style={{ borderColor: LINE, backgroundColor: PANEL }}
+                    >
+                        <span className={`${LABEL} block mb-3`} style={{ color: RED }}>
+                            Não consegui liberar por aqui
+                        </span>
+                        <p className="text-[14px] max-w-md mx-auto mb-6" style={{ color: MUTED }}>
+                            Deu problema na conexão com o servidor. Continua assistindo —
+                            e pra pegar a condição, é só me chamar no WhatsApp.
+                        </p>
+                        <a
+                            href={WHATSAPP}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[15px] font-bold"
+                            style={{ backgroundColor: RED, color: INK }}
+                        >
+                            <span>
+                                Falar no WhatsApp <span aria-hidden="true">→</span>
+                            </span>
+                        </a>
+                    </div>
+                ) : !liberado ? (
                     <div
                         className="mt-6 rounded-lg border p-6 md:p-8 text-center"
                         style={{ borderColor: LINE, backgroundColor: PANEL }}
@@ -306,41 +423,39 @@ const Aula: React.FC = () => {
                     </div>
                 ) : (
                     <div className="mt-6 rounded-lg p-7 md:p-9 text-center" style={{ backgroundColor: RED }}>
+                        {/* Nada aqui é escrito no código: o texto, o preço
+                            e o link chegam de /api/aula quando o servidor
+                            reconhece os 4 minutos. Antes disso a oferta não
+                            existe no navegador — nem no HTML, nem no JS. */}
                         <span className={`${LABEL} block mb-5`} style={{ color: '#FFFFFFB3' }}>
-                            Liberado · condição desta semana
+                            {oferta!.selo}
                         </span>
 
-                        {/* Âncora de preço. R$ 2.000 não é número inventado
-                            pra fazer volume: é o mesmo valor cheio que está
-                            na LP e no contrato — o 997 é o desconto do Pix.
-                            Preço riscado só se sustenta se for praticado. */}
                         <p className="flex items-baseline justify-center flex-wrap gap-x-3 mb-1">
                             <span className={LABEL} style={{ color: '#FFFFFFB3' }}>De</span>
                             <s className={`${DISPLAY} text-[26px] md:text-[30px]`} style={{ color: '#FFFFFF8C' }}>
-                                R$ 2.000
+                                {oferta!.de}
                             </s>
                             <span className={LABEL} style={{ color: '#FFFFFFB3' }}>por</span>
                         </p>
 
                         <p className="flex items-start justify-center gap-1 mb-3">
                             <span className={`${DISPLAY} text-[24px] mt-2`}>R$</span>
-                            <span className={`${DISPLAY} text-[clamp(58px,11vw,96px)]`}>997</span>
+                            <span className={`${DISPLAY} text-[clamp(58px,11vw,96px)]`}>{oferta!.por}</span>
                         </p>
 
                         <p className="text-[15px] max-w-md mx-auto mb-6" style={{ color: '#FFFFFFD9' }}>
-                            No Pix, à vista. No cartão, 12x de R$ 125. Entrega em 5 dias
-                            úteis ou 100% do dinheiro de volta.
+                            {oferta!.termos}
                         </p>
                         <a
-                            href={WHATSAPP}
+                            href={oferta!.whatsapp}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[15px] font-bold"
                             style={{ backgroundColor: BG, color: INK }}
                         >
                             <span>
-                                Quero garantir a minha vaga{' '}
-                                <span aria-hidden="true">→</span>
+                                {oferta!.cta} <span aria-hidden="true">→</span>
                             </span>
                         </a>
                     </div>
