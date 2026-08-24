@@ -1,4 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+    BG,
+    PANEL,
+    RED,
+    INK,
+    MUTED,
+    LINE,
+    DISPLAY,
+    LABEL,
+    MODULOS,
+    FAQ,
+    ModuloCard,
+} from './conteudo';
 
 // /kit-aula — VSL do Kit com player próprio e trava de conteúdo.
 //
@@ -9,16 +22,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 // Player próprio e não YouTube por três motivos: dá pra ler o currentTime
 // exato, não entra JS de terceiro no caminho do primeiro quadro, e o R2
 // não cobra egresso — que é o custo que escala junto com o tráfego pago.
-
-const BG = '#131316';
-const PANEL = '#1C1D22';
-const RED = '#E3242B';
-const INK = '#F5F5F7';
-const MUTED = '#A6A9B0';
-const LINE = '#33343B';
-
-const DISPLAY = 'font-kit font-bold uppercase leading-[0.92] tracking-[-0.01em]';
-const LABEL = 'font-mono text-[10px] tracking-[0.18em] uppercase';
 
 // Bucket ermarketing-assets no R2. As duas versões são o mesmo corte:
 // o navegador escolhe a de 720p no celular e a de 1080p no desktop,
@@ -280,41 +283,214 @@ const Aula: React.FC = () => {
                         </div>
                     </div>
                 ) : (
-                    <div className="mt-6 space-y-3">
-                        <div className="rounded-lg p-7 md:p-9" style={{ backgroundColor: RED }}>
-                            <span className={`${LABEL} block mb-4`} style={{ color: '#FFFFFFB3' }}>
-                                Liberado · condição desta semana
-                            </span>
-                            <p className="flex items-start gap-1 mb-2">
-                                <span className={`${DISPLAY} text-[24px] mt-2`}>R$</span>
-                                <span className={`${DISPLAY} text-[clamp(58px,11vw,96px)]`}>997</span>
-                            </p>
-                            <p className="text-[15px] mb-6" style={{ color: '#FFFFFFD9' }}>
-                                No Pix, à vista. No cartão, 12x de R$ 125. Entrega em 5 dias
-                                úteis ou 100% do dinheiro de volta.
-                            </p>
-                            <a
-                                href={WHATSAPP}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[15px] font-bold"
-                                style={{ backgroundColor: BG, color: INK }}
-                            >
-                                Quero garantir a minha vaga
-                                <span aria-hidden="true">→</span>
-                            </a>
-                        </div>
+                    <div className="mt-6 rounded-lg p-7 md:p-9 text-center" style={{ backgroundColor: RED }}>
+                        <span className={`${LABEL} block mb-5`} style={{ color: '#FFFFFFB3' }}>
+                            Liberado · condição desta semana
+                        </span>
 
+                        {/* Âncora de preço. R$ 2.000 não é número inventado
+                            pra fazer volume: é o mesmo valor cheio que está
+                            na LP e no contrato — o 997 é o desconto do Pix.
+                            Preço riscado só se sustenta se for praticado. */}
+                        <p className="flex items-baseline justify-center flex-wrap gap-x-3 mb-1">
+                            <span className={LABEL} style={{ color: '#FFFFFFB3' }}>De</span>
+                            <s className={`${DISPLAY} text-[26px] md:text-[30px]`} style={{ color: '#FFFFFF8C' }}>
+                                R$ 2.000
+                            </s>
+                            <span className={LABEL} style={{ color: '#FFFFFFB3' }}>por</span>
+                        </p>
+
+                        <p className="flex items-start justify-center gap-1 mb-3">
+                            <span className={`${DISPLAY} text-[24px] mt-2`}>R$</span>
+                            <span className={`${DISPLAY} text-[clamp(58px,11vw,96px)]`}>997</span>
+                        </p>
+
+                        <p className="text-[15px] max-w-md mx-auto mb-6" style={{ color: '#FFFFFFD9' }}>
+                            No Pix, à vista. No cartão, 12x de R$ 125. Entrega em 5 dias
+                            úteis ou 100% do dinheiro de volta.
+                        </p>
                         <a
-                            href="/kit-assistencia-tecnica-plus"
-                            className="block rounded-lg border p-5 text-center text-[14px] transition-colors"
-                            style={{ borderColor: LINE, backgroundColor: PANEL, color: MUTED }}
+                            href={WHATSAPP}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[15px] font-bold"
+                            style={{ backgroundColor: BG, color: INK }}
                         >
-                            Ver os cinco módulos em detalhe →
+                            <span>
+                                Quero garantir a minha vaga{' '}
+                                <span aria-hidden="true">→</span>
+                            </span>
                         </a>
                     </div>
                 )}
             </main>
+
+            {/* ─── A LP inteira, embaixo do vídeo ───
+                Antes era um link pra outra página, e mandar embora quem
+                acabou de assistir 3 minutos é perder a pessoa no momento
+                em que ela está mais perto de decidir.
+                Só entra depois de liberado: enquanto a trava vale, isso
+                não existe nem no HTML — conteúdo escondido com CSS
+                aparece em "ver código-fonte" e a trava vira encenação.
+                Adaptado ao vídeo: sem hero, sem anel girando e sem repetir
+                o preço em destaque, que já está logo acima. O que sobra é
+                o que a pessoa quer conferir depois de ouvir: as peças, quem
+                está falando, como paga e as dúvidas. */}
+            {liberado && (
+                <>
+                    <section className="border-t" style={{ borderColor: LINE }}>
+                        <div className="max-w-[1000px] mx-auto px-5 md:px-8 py-14 md:py-20">
+                            <span className={`${LABEL} inline-block mb-5`} style={{ color: RED }}>
+                                O que você recebe
+                            </span>
+                            <h2 className={`${DISPLAY} text-[clamp(30px,5vw,50px)] max-w-[18ch] mb-5`}>
+                                Cinco peças. Uma estrutura só.
+                            </h2>
+                            <p className="text-[16px] md:text-[17px] leading-relaxed max-w-2xl mb-10" style={{ color: MUTED }}>
+                                São as mesmas peças que eu abri na tela no meio do vídeo,
+                                agora escritas pra você conferir com calma.
+                            </p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {MODULOS.map((m, i) => (
+                                    <ModuloCard key={m.n} m={m} col={i % 2} />
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* COMPLIANCE (playbook, regra 1): sem a autorização por
+                        escrito da iTV Manaus e da SOS TV, nome de cliente e
+                        número de cliente não entram — só "duas assistências
+                        que eu atendo" e "seis dígitos".
+                        Regra 2: o aviso ao pé não é enfeite. Resultado de
+                        cliente não é promessa, e Meta, Google e CDC tratam
+                        promessa de ganho como publicidade enganosa. */}
+                    <section className="border-y" style={{ borderColor: LINE, backgroundColor: PANEL }}>
+                        <div className="max-w-[1000px] mx-auto px-5 md:px-8 py-14 md:py-20">
+                            <span className={`${LABEL} inline-block mb-5`} style={{ color: RED }}>
+                                Por que eu
+                            </span>
+                            <h2 className={`${DISPLAY} text-[clamp(30px,5vw,50px)] max-w-[22ch] mb-6`}>
+                                Duas assistências que eu atendo passaram dos seis dígitos por mês
+                            </h2>
+                            <p className="text-[16px] md:text-[18px] leading-relaxed max-w-2xl mb-6" style={{ color: MUTED }}>
+                                Sou gestor de tráfego desde 2020 e escolhi um nicho só:
+                                assistência técnica. O kit é a mesma estrutura que eu montei
+                                pra elas, empacotada — sem a mensalidade de agência no meio.
+                            </p>
+                            <p className="text-[13px] leading-relaxed max-w-2xl border-l-2 pl-4" style={{ color: MUTED, borderColor: LINE }}>
+                                Resultado delas, com a operação delas. O que você contrata
+                                aqui é a montagem da estrutura, não um número garantido —
+                                quem entrega resultado é o conjunto: estrutura, verba e o
+                                seu atendimento.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section className="max-w-[1000px] mx-auto px-5 md:px-8 py-14 md:py-20">
+                        <span className={`${LABEL} inline-block mb-5`} style={{ color: RED }}>
+                            Como você paga
+                        </span>
+                        <h2 className={`${DISPLAY} text-[clamp(30px,5vw,50px)] mb-10`}>
+                            Duas formas, mesma entrega
+                        </h2>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                            <div className="rounded-lg border p-8" style={{ borderColor: LINE, backgroundColor: PANEL }}>
+                                <span className={`${LABEL} block mb-4`} style={{ color: RED }}>
+                                    No Pix, à vista
+                                </span>
+                                <p className={`${DISPLAY} text-[clamp(40px,7vw,62px)] mb-3`}>
+                                    R$ 997
+                                </p>
+                                <p className="text-[15px] leading-relaxed" style={{ color: MUTED }}>
+                                    De <s>R$ 2.000</s> — o desconto é pra quem fecha no Pix.
+                                </p>
+                            </div>
+
+                            <div className="rounded-lg border p-8" style={{ borderColor: LINE, backgroundColor: PANEL }}>
+                                <span className={`${LABEL} block mb-4`} style={{ color: MUTED }}>
+                                    Ou no cartão
+                                </span>
+                                <p className={`${DISPLAY} text-[clamp(40px,7vw,62px)] mb-3`}>
+                                    12x de R$ 125
+                                </p>
+                                <p className="text-[15px] leading-relaxed" style={{ color: MUTED }}>
+                                    Total de R$ 1.500, parcelado em até 12 vezes. Sem repasse
+                                    de juros pra você — a taxa fica comigo.
+                                </p>
+                            </div>
+                        </div>
+
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3 rounded-lg border p-6 text-[14px]" style={{ borderColor: LINE, color: MUTED }}>
+                            {[
+                                'Pagamento pela InfinitePay',
+                                'Entrega em 5 dias úteis ou 100% de volta',
+                                '1 rodada de ajustes em até 7 dias',
+                                'Suporte a dúvidas por 15 dias',
+                                'A verba de anúncio é sua e fica na sua conta do Google',
+                                'Primeiro mês da IA incluso, sem renovação automática',
+                            ].map((l) => (
+                                <li key={l} className="flex items-start gap-2.5">
+                                    <span style={{ color: RED }} aria-hidden="true">
+                                        ✓
+                                    </span>
+                                    {l}
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+
+                    <section className="border-y" style={{ borderColor: LINE, backgroundColor: PANEL }}>
+                        <div className="max-w-[900px] mx-auto px-5 md:px-8 py-14 md:py-20">
+                            <span className={`${LABEL} inline-block mb-5`} style={{ color: RED }}>
+                                O que sempre perguntam
+                            </span>
+                            <h2 className={`${DISPLAY} text-[clamp(30px,5vw,50px)] mb-10`}>
+                                Perguntas honestas
+                            </h2>
+
+                            <div className="divide-y" style={{ borderColor: LINE }}>
+                                {FAQ.map((f) => (
+                                    <div key={f.q} className="py-6 first:pt-0" style={{ borderColor: LINE }}>
+                                        <h3 className={`${DISPLAY} text-[22px] mb-3`}>{f.q}</h3>
+                                        <p className="text-[15px] leading-relaxed" style={{ color: MUTED }}>
+                                            {f.a}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="max-w-[1000px] mx-auto px-5 md:px-8 py-16 md:py-24 text-center">
+                        <h2 className={`${DISPLAY} text-[clamp(34px,6.5vw,68px)] max-w-[16ch] mx-auto mb-6`}>
+                            Me conta de qual assistência você fala
+                        </h2>
+                        <p className="text-[16px] md:text-[18px] leading-relaxed max-w-xl mx-auto mb-8" style={{ color: MUTED }}>
+                            Olho o seu perfil, seu Google e sua concorrência na sua região,
+                            e te respondo em áudio dizendo o que eu montaria primeiro. Sem
+                            custo e sem compromisso.
+                        </p>
+                        <a
+                            href={WHATSAPP}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-2 rounded-md px-9 py-4 text-[16px] font-bold"
+                            style={{ backgroundColor: RED, color: INK }}
+                        >
+                            <span>
+                                Quero garantir a minha vaga{' '}
+                                <span aria-hidden="true">→</span>
+                            </span>
+                        </a>
+                        <p className="text-[13px] mt-5" style={{ color: MUTED }}>
+                            Monto os kits pessoalmente, então abro poucas vagas por semana.
+                        </p>
+                    </section>
+                </>
+            )}
 
             <footer className="border-t" style={{ borderColor: LINE }}>
                 <div className="max-w-[1000px] mx-auto px-5 md:px-8 py-7 text-center text-[12px]" style={{ color: MUTED }}>
