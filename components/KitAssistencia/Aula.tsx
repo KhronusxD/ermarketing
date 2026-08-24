@@ -154,18 +154,23 @@ const Aula: React.FC = () => {
             </div>
 
             <main className="max-w-[1000px] mx-auto px-5 md:px-8 py-8 md:py-12">
-                <span className={`${LABEL} block mb-4`} style={{ color: RED }}>
-                    Para donos de assistência técnica
-                </span>
+                {/* Centralizado: a página inteira é uma coluna só, com o
+                    player no meio. Texto alinhado à esquerda criava uma
+                    borda que nada embaixo acompanhava. */}
+                <div className="text-center">
+                    <span className={`${LABEL} block mb-4`} style={{ color: RED }}>
+                        Para donos de assistência técnica
+                    </span>
 
-                <h1 className={`${DISPLAY} text-[clamp(30px,5.6vw,54px)] max-w-[20ch] mb-4`}>
-                    Como encher a fila da sua assistência em 5 dias
-                </h1>
+                    <h1 className={`${DISPLAY} text-[clamp(30px,5.6vw,54px)] max-w-[20ch] mx-auto mb-4`}>
+                        Como encher a fila da sua assistência em 5 dias
+                    </h1>
 
-                <p className="text-[15px] md:text-[17px] leading-relaxed max-w-2xl mb-7" style={{ color: MUTED }}>
-                    Assista até o fim: no meio do vídeo eu mostro a estrutura funcionando
-                    na tela, e no final libero a condição desta semana.
-                </p>
+                    <p className="text-[15px] md:text-[17px] leading-relaxed max-w-2xl mx-auto mb-7" style={{ color: MUTED }}>
+                        Assista até o fim: no meio do vídeo eu mostro a estrutura funcionando
+                        na tela, e no final libero a condição desta semana.
+                    </p>
+                </div>
 
                 {/* ─── Player ─── */}
                 <div
