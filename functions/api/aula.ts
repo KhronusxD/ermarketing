@@ -20,7 +20,12 @@
 
 interface Env {
     AULA_SEGREDO?: string;
+    // Opcional. Sem ele o evento sai só pelo navegador; com ele sai
+    // pelos dois caminhos, casados pelo mesmo event_id.
+    META_CAPI_TOKEN?: string;
 }
+
+const PIXEL = '339396175425796';
 
 const DURACAO = 247;          // 4:07 de vídeo
 const LIBERA_EM = 240;        // 4 minutos assistidos
@@ -48,7 +53,49 @@ type Estado = {
     u: number;  // instante do último pulso
     c: number;  // segundos creditados
     p: number;  // última posição informada
+    e?: string; // id do evento de destrave, criado uma vez só
 };
+
+// Evento "assistiu os 4 minutos" pela API de Conversões.
+//
+// O navegador também dispara esse evento. Os dois carregam o mesmo
+// event_id, então a Meta guarda um só — e se um bloqueador de anúncio
+// derrubar o pixel, este aqui continua chegando. É o caminho mais
+// confiável que existe pra esse sinal, porque quem conta o tempo é este
+// servidor, não a página.
+async function mandarParaMeta(
+    token: string,
+    eventId: string,
+    request: Request,
+): Promise<void> {
+    const corpo = {
+        data: [
+            {
+                event_name: 'AulaAssistida',
+                event_time: Math.floor(Date.now() / 1000),
+                event_id: eventId,
+                action_source: 'website',
+                event_source_url: request.headers.get('referer') || undefined,
+                user_data: {
+                    // Sem e-mail nem telefone nesta altura do funil: IP e
+                    // agente são o que a Meta aceita pra casar a pessoa.
+                    client_ip_address: request.headers.get('cf-connecting-ip') || undefined,
+                    client_user_agent: request.headers.get('user-agent') || undefined,
+                },
+                custom_data: {
+                    content_name: 'Kit Assistência Técnica Plus',
+                    content_category: 'aula-vsl',
+                },
+            },
+        ],
+    };
+
+    await fetch(`https://graph.facebook.com/v21.0/${PIXEL}/events?access_token=${encodeURIComponent(token)}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(corpo),
+    });
+}
 
 const enc = new TextEncoder();
 
@@ -107,7 +154,7 @@ const responder = (dados: unknown, status = 200) =>
         },
     });
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+export const onRequestPost: PagesFunction<Env> = async ({ request, env, waitUntil }) => {
     const segredo = env.AULA_SEGREDO;
     if (!segredo) {
         // Sem a chave não dá pra assinar nada. Melhor dizer isso na cara
@@ -162,9 +209,28 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
             // Guarda o ponto mais longe: voltar o vídeo não devolve
             // crédito, e avançar de novo não credita duas vezes.
             p: Math.max(estado.p, posicao),
+            e: estado.e,
         };
 
         const liberado = novo.c >= LIBERA_EM;
+        const acabouDeLiberar = liberado && !estado.e;
+
+        if (acabouDeLiberar) {
+            // O id nasce aqui e passa a viver no token. Recarregar a
+            // página devolve o mesmo id, então o navegador não conta o
+            // destrave de novo a cada visita.
+            novo.e = crypto.randomUUID();
+
+            if (env.META_CAPI_TOKEN) {
+                // Fora do caminho da resposta: a pessoa não espera a Meta.
+                waitUntil(
+                    mandarParaMeta(env.META_CAPI_TOKEN, novo.e, request).catch(() => {
+                        // Falha aqui não pode travar o destrave. O evento
+                        // do navegador ainda vai.
+                    }),
+                );
+            }
+        }
 
         return responder({
             token: await selar(novo, chave),
@@ -172,6 +238,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
             liberado,
             liberaEm: LIBERA_EM,
             ...(liberado ? { oferta: OFERTA } : {}),
+            // Só na virada: é o disparo, não o estado.
+            ...(acabouDeLiberar ? { eventoId: novo.e } : {}),
         });
     }
 

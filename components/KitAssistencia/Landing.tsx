@@ -1,5 +1,6 @@
 import React from 'react';
 import { CountUp, stagger, useScrollReveal } from '../motion';
+import { rastrear } from '../tracking';
 import {
     BG,
     PANEL,
@@ -116,6 +117,7 @@ const KitLanding: React.FC = () => {
                 </span>
                 <a
                     href={WHATSAPP}
+                    onClick={() => rastrear('Lead', { content_name: 'Kit Assistência Técnica Plus', content_category: 'barra-topo' })}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-shrink-0 rounded-md px-4 py-2.5 text-[13px] font-semibold transition-colors"
@@ -218,6 +220,7 @@ const KitLanding: React.FC = () => {
                         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                             <a
                                 href={WHATSAPP}
+                                onClick={() => rastrear('Lead', { content_name: 'Kit Assistência Técnica Plus', content_category: 'hero' })}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[15px] font-bold transition-colors"
@@ -424,6 +427,7 @@ const KitLanding: React.FC = () => {
                 <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4">
                     <a
                         href={WHATSAPP}
+                        onClick={() => rastrear('Lead', { content_name: 'Kit Assistência Técnica Plus', content_category: 'preco' })}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[15px] font-bold transition-colors"
@@ -477,6 +481,7 @@ const KitLanding: React.FC = () => {
                 </p>
                 <a
                     href={WHATSAPP}
+                    onClick={() => rastrear('Lead', { content_name: 'Kit Assistência Técnica Plus', content_category: 'fechamento' })}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 rounded-md px-9 py-4 text-[16px] font-bold transition-colors"

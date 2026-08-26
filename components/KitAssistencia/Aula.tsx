@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { rastrear } from '../tracking';
 import {
     BG,
     PANEL,
@@ -64,8 +65,18 @@ type Resposta = {
     liberado?: boolean;
     liberaEm?: number;
     oferta?: Oferta;
+    eventoId?: string;
     erro?: string;
 };
+
+// Marcos de audiência. O de 4 minutos é o que interessa pra otimizar,
+// mas ele vai ser raro — os intermediários dão volume pra Meta ter o que
+// aprender enquanto os destraves não acumulam.
+const MARCOS: { em: number; nome: string }[] = [
+    { em: 0.25, nome: 'AulaQuarto' },
+    { em: 0.5, nome: 'AulaMetade' },
+    { em: 0.75, nome: 'AulaTresQuartos' },
+];
 
 const fmt = (s: number) => {
     const m = Math.floor(Math.max(0, s) / 60);
@@ -173,6 +184,17 @@ const Aula: React.FC = () => {
                 tokenRef.current = r.token ?? tokenRef.current;
                 setCreditado(r.creditado ?? 0);
                 if (r.oferta) setOferta(r.oferta);
+
+                // eventoId só vem na virada. Usar o id do servidor é o que
+                // casa este disparo com o da CAPI — os dois viram um só.
+                if (r.eventoId) {
+                    rastrear(
+                        'AulaAssistida',
+                        { content_name: 'Kit Assistência Técnica Plus', segundos: LIBERA_EM },
+                        { id: r.eventoId },
+                    );
+                }
+
                 try {
                     if (r.token) sessionStorage.setItem(CHAVE, r.token);
                 } catch {
@@ -203,6 +225,14 @@ const Aula: React.FC = () => {
         if (!v) return;
         setTempo(v.currentTime);
         if (v.currentTime > maiorRef.current) maiorRef.current = v.currentTime;
+
+        // umaVezSo: onTimeUpdate roda ~4x por segundo, e sem trava cada
+        // marco viraria centenas de eventos.
+        for (const m of MARCOS) {
+            if (maiorRef.current >= DURACAO * m.em) {
+                rastrear(m.nome, { content_name: 'Kit Assistência Técnica Plus' }, { umaVezSo: true });
+            }
+        }
     }, []);
 
     // Sem barra pra arrastar, mas teclado e gesto de mídia do sistema ainda
@@ -391,6 +421,7 @@ const Aula: React.FC = () => {
                             href={WHATSAPP}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => rastrear('Lead', { content_name: 'Kit Assistência Técnica Plus', content_category: 'modo-falha' })}
                             className="inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[15px] font-bold"
                             style={{ backgroundColor: RED, color: INK }}
                         >
@@ -451,6 +482,7 @@ const Aula: React.FC = () => {
                             href={oferta!.whatsapp}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => rastrear('Lead', { content_name: 'Kit Assistência Técnica Plus', content_category: 'oferta-liberada' })}
                             className="inline-flex items-center justify-center gap-2 rounded-md px-8 py-4 text-[15px] font-bold"
                             style={{ backgroundColor: BG, color: INK }}
                         >
@@ -610,6 +642,7 @@ const Aula: React.FC = () => {
                             href={WHATSAPP}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => rastrear('Lead', { content_name: 'Kit Assistência Técnica Plus', content_category: 'fechamento' })}
                             className="inline-flex items-center justify-center gap-2 rounded-md px-9 py-4 text-[16px] font-bold"
                             style={{ backgroundColor: RED, color: INK }}
                         >
