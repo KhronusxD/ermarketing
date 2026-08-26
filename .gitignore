@@ -33,3 +33,6 @@ public/sócios/
 public/Logos Clientes/
 public/informações-resultados-clientes/
 public/referencias/
+
+# Estado local do wrangler (pages dev) — não versionar
+.wrangler/
