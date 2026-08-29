@@ -580,6 +580,34 @@ p b,strong{color:var(--tx);font-weight:700}
   function waLink(msg){ return 'https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(msg); }
   var DEBUG = /[?&]debug=1/.test(location.search);
 
+  /* ═══ TRACKING — espelha components/tracking.ts do site ═══
+     A Meta só reconhece os nomes da lista padrão via 'track'; nome próprio
+     mandado por 'track' é descartado em silêncio, por isso a separação.
+     O eventID existe pra casar este disparo com o da CAPI, se ela entrar
+     depois — sem ele, o mesmo evento contaria duas vezes. */
+  var PADRAO = {Lead:1,Contact:1,ViewContent:1,CompleteRegistration:1,
+                InitiateCheckout:1,Purchase:1,Schedule:1,SubmitApplication:1,StartTrial:1};
+  var jaFoi = {};
+  function novoId(){
+    try{ if(window.crypto && crypto.randomUUID) return crypto.randomUUID(); }catch(e){}
+    return 'e'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);
+  }
+  function rastrear(ev, params, opts){
+    params=params||{}; opts=opts||{};
+    // marco só vale uma vez por visita: o timeupdate dispara 4x por segundo
+    if(opts.umaVezSo){ if(jaFoi[ev]) return; jaFoi[ev]=1; }
+    var id = opts.id || novoId();
+    try{ if(window.fbq) fbq(PADRAO[ev]?'track':'trackCustom', ev, params, {eventID:id}); }catch(e){}
+    try{
+      if(window.dataLayer){
+        var o={event:'er_'+ev, event_id:id};
+        for(var k in params) o[k]=params[k];
+        window.dataLayer.push(o);
+      }
+    }catch(e){}
+  }
+  var KIT = 'Kit Assistência Técnica Plus';
+
   var $ = function(id){ return document.getElementById(id); };
   var vid=$('vid'), ov=$('ov'), ovTx=$('ovTx'), ovSub=$('ovSub'), sh=$('sh'),
       ln=$('ln'), pb=$('pb'), lt=$('lt'), locked=$('locked');
@@ -613,7 +641,18 @@ p b,strong{color:var(--tx);font-weight:700}
 
   /* ═══ TRAVA ═══ */
   var unlocked=false;
+  /* marcos de audiência: dão volume pro Meta aprender enquanto os
+     destraves de 4 min, que são raros, não acumulam */
+  var MARCOS=[{em:.25,nome:'AulaQuarto'},{em:.5,nome:'AulaMetade'},{em:.75,nome:'AulaTresQuartos'}];
   vid.addEventListener('timeupdate', function(){
+    var dur=vid.duration;
+    if(dur){
+      var pct=vid.currentTime/dur;
+      for(var i=0;i<MARCOS.length;i++){
+        if(pct>=MARCOS[i].em)
+          rastrear(MARCOS[i].nome,{content_name:KIT,percentual:MARCOS[i].em*100},{umaVezSo:true});
+      }
+    }
     if(unlocked) return;
     var p=Math.min(vid.currentTime/UNLOCK_AT,1);
     pb.style.width=(p*100)+'%';
@@ -667,6 +706,7 @@ p b,strong{color:var(--tx);font-weight:700}
     if(unlocked) return; unlocked=true;
     ln.classList.add('hide');
     locked.classList.add('open');
+    rastrear('AulaAssistida',{content_name:KIT,segundos:UNLOCK_AT},{umaVezSo:true});
     paintVagas(); startClock();
     setTimeout(function(){ $('sticky').classList.add('on'); }, 1200);
     TOAST_AT.forEach(function(ms,i){ setTimeout(function(){ toast(i); }, ms); });
@@ -783,7 +823,9 @@ p b,strong{color:var(--tx);font-weight:700}
     }).catch(function(err){ console.warn('gyrehub:', err); });
 
     try{ localStorage.setItem(KEY, JSON.stringify({nome:vNome, whatsapp:vZap, em:new Date().toISOString()})); }catch(e){}
-    if(window.fbq) fbq('track','Lead');
+    // Lead uma vez por visita: a pessoa passa pelo formulário E pelo botão
+    // do WhatsApp, e isso é uma conversão só.
+    rastrear('Lead',{content_name:KIT,content_category:'popup-formulario'},{umaVezSo:true});
 
     var c = COPY[variant];
     $('oiNome').textContent  = vNome.split(' ')[0];
@@ -792,6 +834,9 @@ p b,strong{color:var(--tx);font-weight:700}
     var rw = $('ctaReward');
     rw.textContent = c.revBtn;
     rw.href = waLink(c.wa + ' Meu nome é ' + vNome + '.');
+    rw.onclick = function(){
+      rastrear('Contact',{content_name:KIT,content_category:'whatsapp-popup'},{umaVezSo:true});
+    };
     $('capture').style.display='none';
     $('reveal').classList.add('on');
   });
@@ -800,6 +845,8 @@ p b,strong{color:var(--tx);font-weight:700}
   function goCheckout(e){
     if(e) e.preventDefault();
     if(alreadyLead()){                       // já deixou contato: vai direto
+      rastrear('Lead',{content_name:KIT,content_category:'whatsapp-direto'},{umaVezSo:true});
+      rastrear('Contact',{content_name:KIT,content_category:'whatsapp-direto'},{umaVezSo:true});
       window.open(waLink(COPY.cta.wa), '_blank');
       return;
     }
