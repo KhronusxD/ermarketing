@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit Assistência Técnica Plus — A aula</title>
+<meta name="description" content="A estrutura que coloca cliente novo na sua assistência técnica todo dia, sem depender de indicação.">
+<link rel="canonical" href="https://trafegomanaus.com.br/aula/">
+<meta property="og:title" content="A estrutura que coloca cliente novo na sua assistência técnica todo dia">
+<meta property="og:description" content="Sem depender de indicação e sem mensalidade de agência.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://trafegomanaus.com.br/aula/">
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','339396175425796');
+fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+ src="https://www.facebook.com/tr?id=339396175425796&ev=PageView&noscript=1"></noscript>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Outfit:wght@400;500;600;700&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#131316; --panel:#1C1D22; --panel2:#222329;
+  --red:#E3242B; --red-d:#B0141B;
+  --tx:#F5F5F7; --mut:#A6A9B0; --line:#33343B;
+  --ok:#3FBF6A; --amber:#FFB020;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'Outfit',system-ui,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.noscroll{overflow:hidden}
+
+.bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(680px 420px at 12% -4%, rgba(227,36,43,.16), transparent 60%),
+    radial-gradient(620px 400px at 92% 8%, rgba(227,36,43,.10), transparent 60%),
+    radial-gradient(700px 500px at 50% 100%, rgba(227,36,43,.07), transparent 65%);}
+.bgfx::after{content:"";position:absolute;inset:0;opacity:.16;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='56' height='96' viewBox='0 0 56 96'><path d='M28 0l24 14v28L28 56 4 42V14z' fill='none' stroke='%2333343B' stroke-width='1'/><path d='M28 56l24 14v28L28 112 4 98V70z' fill='none' stroke='%2333343B' stroke-width='1'/></svg>");}
+
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 22px}
+section{padding:74px 0}
+
+h1,h2,h3{font-family:'Big Shoulders Display','Arial Black',sans-serif;font-weight:900;
+  line-height:1.02;text-transform:uppercase;letter-spacing:-.004em}
+h1{font-size:clamp(34px,5.1vw,62px)}
+h2{font-size:clamp(28px,4.1vw,48px)}
+h3{font-size:clamp(20px,2.4vw,27px)}
+.red{color:var(--red)}
+.eyebrow{font-family:'Roboto Mono',monospace;font-weight:700;font-size:13px;letter-spacing:.19em;
+  color:var(--red);text-transform:uppercase;margin-bottom:14px}
+p{font-size:clamp(15px,1.7vw,18px);line-height:1.62;color:var(--mut)}
+p b,strong{color:var(--tx);font-weight:700}
+.center{text-align:center}
+.lead{font-size:clamp(16px,1.9vw,20px)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--red);color:#fff;border:0;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-weight:700;font-size:clamp(15px,1.8vw,19px);
+  letter-spacing:.02em;text-transform:uppercase;text-decoration:none;
+  padding:20px 34px;border-radius:12px;transition:.18s;
+  box-shadow:0 10px 30px rgba(227,36,43,.28)}
+.btn:hover{background:var(--red-d);transform:translateY(-2px)}
+.btn.block{display:flex;width:100%}
+.btnNote{margin-top:11px;font-family:'Roboto Mono',monospace;font-size:11.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--amber);text-align:center;line-height:1.7}
+
+/* ── hero ── */
+.hero{padding-top:38px;text-align:center}
+.logo{width:132px;height:auto;margin:0 auto 30px;display:block}
+.badge{display:inline-flex;align-items:center;gap:9px;margin:22px 0 26px;
+  background:rgba(227,36,43,.12);border:1px solid rgba(227,36,43,.42);color:#FFD9DA;
+  font-family:'Roboto Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;padding:10px 18px;border-radius:999px}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+.player{position:relative;max-width:800px;margin:0 auto;border-radius:16px;overflow:hidden;
+  border:1px solid var(--line);background:#000;box-shadow:0 26px 70px rgba(0,0,0,.6)}
+.player video{display:block;width:100%;height:auto;cursor:pointer}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;gap:18px;
+  align-items:center;justify-content:center;background:rgba(10,10,12,.55);
+  cursor:pointer;transition:.22s;text-align:center;padding:20px}
+.ov:hover{background:rgba(10,10,12,.42)}
+.ov.hide{opacity:0;pointer-events:none}
+.playBtn{width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.95);
+  display:grid;place-items:center;box-shadow:0 8px 34px rgba(0,0,0,.5);transition:.2s}
+.ov:hover .playBtn{transform:scale(1.07)}
+.playBtn svg{margin-left:5px}
+.ovTx{font-family:'Big Shoulders Display',sans-serif;font-weight:900;text-transform:uppercase;
+  font-size:clamp(20px,2.9vw,30px);color:#fff;line-height:1.06;text-shadow:0 2px 18px rgba(0,0,0,.7)}
+.ovSub{font-size:14.5px;color:#D8D9DD;max-width:380px}
+.soundHint{position:absolute;left:50%;transform:translateX(-50%);bottom:16px;
+  background:rgba(19,19,22,.88);border:1px solid var(--line);color:var(--tx);
+  font-size:13px;padding:8px 14px;border-radius:999px;cursor:pointer;transition:.2s}
+.soundHint.hide{opacity:0;pointer-events:none}
+
+/* ── trava ── */
+#locked{display:none}
+#locked.open{display:block;animation:reveal .55s ease both}
+@keyframes reveal{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.lockNote{max-width:660px;margin:26px auto 0;display:flex;align-items:center;gap:14px;
+  justify-content:center;color:var(--mut);font-size:14px;flex-wrap:wrap}
+.lockNote.hide{display:none}
+.bar{flex:1;min-width:180px;max-width:280px;height:5px;border-radius:99px;background:var(--panel2);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--red);transition:width .4s linear}
+.lockTime{font-family:'Roboto Mono',monospace;font-size:13px;color:#7C7F87}
+
+.chev{display:grid;place-items:center;margin:44px auto 0;width:46px;height:46px;
+  border:1px solid var(--line);border-radius:12px;color:var(--mut);animation:bob 2s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ── urgência ── */
+.urg{max-width:780px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.urgBox{background:rgba(227,36,43,.09);border:1.5px solid var(--red);border-radius:16px;
+  padding:22px 20px;text-align:center;animation:glow 1.9s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 rgba(227,36,43,0),0 0 22px rgba(227,36,43,.18)}
+  50%{box-shadow:0 0 0 rgba(227,36,43,0),0 0 46px rgba(227,36,43,.5)}}
+.urgBox .k{font-family:'Roboto Mono',monospace;font-size:11.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:#FFB6B9;margin-bottom:8px}
+.urgBox .v{font-family:'Big Shoulders Display',sans-serif;font-weight:900;
+  font-size:clamp(38px,6vw,56px);line-height:1;color:#fff}
+.urgBox .v small{font-size:.42em;color:var(--mut);display:block;margin-top:6px;
+  font-family:'Outfit',sans-serif;font-weight:400;text-transform:none;letter-spacing:0}
+.urgBox.vg .v{color:var(--red)}
+
+/* barra fixa */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:40;transform:translateY(105%);
+  transition:transform .4s cubic-bezier(.2,.9,.3,1);
+  background:rgba(19,19,22,.94);backdrop-filter:blur(9px);border-top:1.5px solid var(--red)}
+.sticky.on{transform:none}
+.stickyIn{max-width:1080px;margin:0 auto;padding:13px 22px;display:flex;align-items:center;
+  gap:18px;justify-content:space-between;flex-wrap:wrap}
+.stickyL{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.sItem{font-family:'Roboto Mono',monospace;font-size:11.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--mut);line-height:1.5}
+.sItem b{display:block;font-family:'Big Shoulders Display',sans-serif;font-weight:900;
+  font-size:26px;letter-spacing:0;color:#fff;margin-top:2px}
+.sItem.hot b{color:var(--red)}
+.sticky .btn{padding:15px 28px;font-size:15px}
+
+/* toasts */
+.toasts{position:fixed;right:18px;bottom:96px;z-index:45;display:flex;flex-direction:column;
+  gap:10px;align-items:flex-end;pointer-events:none}
+.toast{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--ok);
+  border-radius:13px;padding:14px 18px;max-width:330px;box-shadow:0 16px 44px rgba(0,0,0,.6);
+  transform:translateX(120%);opacity:0;transition:.45s cubic-bezier(.2,.9,.3,1)}
+.toast.on{transform:none;opacity:1}
+.toast .t{font-size:14.5px;color:var(--tx);font-weight:600;line-height:1.35}
+.toast .s{font-family:'Roboto Mono',monospace;font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:#7C7F87;margin-top:6px}
+.toast .s em{color:var(--red);font-style:normal;font-weight:700}
+
+/* ── carrossel ── */
+.carou{position:relative;margin-top:30px}
+.track{display:flex;align-items:flex-start;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;padding-bottom:8px;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 min(430px,84%);scroll-snap-align:center;background:var(--panel);
+  border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.slide img{display:block;width:100%;height:auto;background:#fff}
+.arr{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;
+  border-radius:50%;background:rgba(19,19,22,.9);border:1px solid var(--line);color:var(--tx);
+  display:grid;place-items:center;cursor:pointer;z-index:3;transition:.18s}
+.arr:hover{background:var(--red);border-color:var(--red)}
+.arr.l{left:-6px}.arr.r{right:-6px}
+.dots{display:flex;gap:7px;justify-content:center;margin-top:18px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--line);cursor:pointer;transition:.2s}
+.dot.on{background:var(--red);width:22px;border-radius:99px}
+
+/* ── provas / listas ── */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.card .shot{background:#fff;display:block;width:100%;height:auto}
+.card .cap{padding:15px 18px;font-family:'Roboto Mono',monospace;font-size:11.5px;
+  letter-spacing:.07em;text-transform:uppercase;color:#7C7F87;line-height:1.5}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+.checks{list-style:none;display:grid;gap:15px;margin-top:22px}
+.checks li{display:flex;gap:13px;align-items:flex-start;font-size:clamp(15px,1.7vw,17.5px);
+  line-height:1.5;color:var(--tx)}
+.checks .ic{flex:0 0 23px;height:23px;border-radius:50%;background:rgba(63,191,106,.14);
+  border:1px solid rgba(63,191,106,.5);color:var(--ok);display:grid;place-items:center;
+  font-size:12px;font-weight:700;margin-top:2px}
+.mod{display:flex;gap:20px;align-items:center;background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;padding:19px 22px}
+.mod + .mod{margin-top:12px}
+.mod .n{font-family:'Big Shoulders Display',sans-serif;font-weight:900;font-size:38px;
+  color:var(--red);line-height:1;min-width:50px}
+.mod .t{font-size:19px;font-weight:700;line-height:1.25}
+.mod .t small{display:block;font-size:15px;font-weight:400;color:var(--mut);margin-top:3px}
+.mod.hi{border-color:var(--red)}
+
+/* ── oferta ── */
+.offer{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:44px 38px;
+  text-align:center;max-width:760px;margin:0 auto}
+.price{margin:26px 0 8px}
+.was{font-size:19px;color:var(--mut);text-decoration:line-through}
+.now{font-family:'Big Shoulders Display',sans-serif;font-weight:900;
+  font-size:clamp(62px,10vw,104px);line-height:.94;color:var(--tx)}
+.now span{color:var(--red)}
+.terms{font-size:16px;color:var(--mut);margin-top:8px}
+.terms b{color:var(--tx)}
+.guar{display:inline-flex;align-items:center;gap:11px;margin:24px 0 30px;
+  background:rgba(63,191,106,.09);border:1px solid rgba(63,191,106,.36);border-radius:12px;
+  padding:13px 20px;font-size:15px;color:#CBEBD6}
+.fine{font-size:12.5px;color:#7C7F87;margin-top:14px;line-height:1.5}
+
+/* ── popup ── */
+.mask{position:fixed;inset:0;z-index:60;background:rgba(6,6,8,.82);backdrop-filter:blur(5px);
+  display:none;align-items:center;justify-content:center;padding:20px}
+.mask.on{display:flex;animation:fade .25s ease both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal{position:relative;width:100%;max-width:520px;background:var(--panel);
+  border:1px solid var(--line);border-radius:20px;padding:40px 34px;text-align:center;
+  box-shadow:0 30px 90px rgba(0,0,0,.7);animation:pop .3s cubic-bezier(.2,.9,.3,1.2) both;
+  max-height:92vh;overflow-y:auto}
+@keyframes pop{from{opacity:0;transform:scale(.94) translateY(14px)}to{opacity:1;transform:none}}
+.close{position:absolute;top:14px;right:16px;background:none;border:0;color:var(--mut);
+  font-size:26px;cursor:pointer;line-height:1;padding:6px}
+.close:hover{color:var(--tx)}
+.gift{font-size:44px;margin-bottom:12px}
+.field{text-align:left;margin-top:16px}
+.field label{display:block;font-family:'Roboto Mono',monospace;font-size:11.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:7px}
+.field input{width:100%;background:#15161A;border:1px solid var(--line);border-radius:11px;
+  padding:15px 16px;color:var(--tx);font-family:'Outfit',sans-serif;font-size:16.5px;outline:none}
+.field input:focus{border-color:var(--red)}
+.field .err{color:#FF8A8F;font-size:13px;margin-top:6px;display:none}
+.field.bad input{border-color:#FF8A8F}
+.field.bad .err{display:block}
+#reveal{display:none}
+#reveal.on{display:block;animation:reveal .4s ease both}
+.rewardbox{background:#15161A;border:1px dashed var(--red);border-radius:14px;padding:22px;margin:20px 0}
+.rewardbox .big{font-family:'Big Shoulders Display',sans-serif;font-weight:900;
+  font-size:clamp(46px,9vw,72px);line-height:.95;color:var(--red)}
+
+@media(max-width:820px){
+  section{padding:56px 0}
+  /* hero ocupa a tela e fica centralizado */
+  .hero{padding-top:20px;padding-bottom:20px;min-height:100vh;min-height:100svh;
+        display:flex;flex-direction:column;justify-content:center}
+  .hero .wrap{width:100%}
+  .logo{width:84px;margin-bottom:12px}
+  .hero h1{font-size:clamp(23px,6.4vw,29px);line-height:1.05}
+  .hero .lead{font-size:14.5px;margin-top:10px;margin-bottom:20px}
+  /* o overlay do vídeo já diz "assista este vídeo" — o selo vira redundante aqui */
+  .hero .badge{display:none}
+  /* vídeo de ponta a ponta */
+  .player{margin-left:-22px;margin-right:-22px;border-radius:0;border-left:0;border-right:0;
+          box-shadow:0 14px 40px rgba(0,0,0,.55)}
+  .ovTx{font-size:22px}
+  .ovSub{font-size:13.5px;max-width:300px}
+  .lockNote{margin-top:18px;font-size:13px;gap:10px}
+  .split{grid-template-columns:1fr;gap:34px}
+  .g2{grid-template-columns:1fr}
+  .urg{grid-template-columns:1fr}
+  .offer{padding:34px 22px}
+  .mod .n{font-size:32px;min-width:42px}
+  .arr{display:none}
+  .toasts{right:10px;left:10px;bottom:104px;align-items:stretch}
+  .toast{max-width:none}
+  .stickyIn{gap:10px;padding:11px 16px}
+  .sItem b{font-size:21px}
+  .sticky .btn{padding:13px 18px;font-size:13px;flex:1}
+}
+</style>
+</head>
+<body>
+<div class="bgfx"></div>
+
+<!-- ═════ HERO ═════ -->
+<header class="hero">
+  <div class="wrap">
+    <img class="logo" src="assets/logo.png" alt="Kit Assistência Técnica Plus">
+    <h1>Descubra a estrutura que coloca<br><span class="red">cliente novo</span> na sua assistência<br>técnica todo dia</h1>
+    <p class="lead" style="max-width:640px;margin:18px auto 0">
+      Sem depender de indicação e sem mensalidade de agência.
+    </p>
+
+    <div class="badge"><span class="dot"></span> Assista à aula abaixo para entender</div>
+
+    <div class="player">
+      <video id="vid" poster="assets/poster.jpg" playsinline preload="metadata">
+        <source src="https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev/mini-vsl-720.mp4" type="video/mp4">
+      </video>
+      <div class="ov" id="ov">
+        <div class="playBtn">
+          <svg width="30" height="34" viewBox="0 0 30 34" fill="#131316"><path d="M30 17 0 34V0z"/></svg>
+        </div>
+        <div class="ovTx" id="ovTx">Assista este vídeo até o fim</div>
+        <div class="ovSub" id="ovSub">São poucos minutos — é neles que eu abro a estrutura inteira.</div>
+      </div>
+      <div class="soundHint hide" id="sh">🔊 Toque para ativar o som</div>
+    </div>
+
+    <div class="lockNote" id="ln">
+      <span>Continue assistindo para liberar o restante</span>
+      <span class="bar"><i id="pb"></i></span>
+      <span class="lockTime" id="lt">04:00</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═════ CONTEÚDO LIBERADO ═════ -->
+<div id="locked">
+
+  <section style="padding-top:40px">
+    <div class="wrap">
+      <div class="urg">
+        <div class="urgBox vg">
+          <div class="k">Vagas para esta semana</div>
+          <div class="v" id="vagas">03<small>montagem feita pessoalmente pelo Ed</small></div>
+        </div>
+        <div class="urgBox">
+          <div class="k">Esta condição encerra em</div>
+          <div class="v" id="clock">15:00<small>depois disso, volta ao valor de tabela</small></div>
+        </div>
+      </div>
+
+      <div class="center" style="margin-top:44px">
+        <p class="lead" style="max-width:660px;margin:0 auto 26px">
+          Essa é a mesma estrutura que eu montei nas assistências que atendo — e que hoje
+          passam de <b>seis dígitos por mês</b> sem depender de indicação.
+        </p>
+        <a href="#oferta" class="btn">Quero montar essa estrutura</a>
+        <div class="btnNote">⚠ Vagas limitadas · preço promocional por tempo limitado</div>
+        <div class="chev">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section>
+    <div class="wrap">
+      <div class="center">
+        <div class="eyebrow">Clientes das assistências que eu estruturei</div>
+        <h2>É <span class="red">isso</span> que a gente<br>vai construir pra você</h2>
+        <p style="max-width:640px;margin:16px auto 0">
+          Cliente satisfeito, avaliação cinco estrelas e movimento entrando todo dia.
+          Não é sorte — é a estrutura fazendo o trabalho.
+        </p>
+      </div>
+
+      <div class="carou">
+        <div class="arr l" id="arrL"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M15 18l-6-6 6-6"/></svg></div>
+        <div class="track" id="track">
+          <div class="slide"><img src="assets/depo-1.png" alt="Avaliação de cliente"></div>
+          <div class="slide"><img src="assets/depo-2.png" alt="Avaliação de cliente"></div>
+          <div class="slide"><img src="assets/depo-3.png" alt="Avaliação de cliente"></div>
+          <div class="slide"><img src="assets/depo-4.png" alt="Avaliação de cliente"></div>
+          <div class="slide"><img src="assets/depo-5.png" alt="Avaliação de cliente"></div>
+          <div class="slide"><img src="assets/depo-6.png" alt="Avaliação de cliente"></div>
+          <div class="slide"><img src="assets/depo-7.png" alt="Avaliação de cliente"></div>
+          <div class="slide"><img src="assets/depo-8.png" alt="Avaliação de cliente"></div>
+        </div>
+        <div class="arr r" id="arrR"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="dots" id="dots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVAS -->
+  <section>
+    <div class="wrap">
+      <div class="center" style="margin-bottom:36px">
+        <div class="eyebrow">Contas reais · nome dos clientes preservado</div>
+        <h2>Não é teoria.<br>É <span class="red">conta rodando</span>.</h2>
+      </div>
+      <div class="grid g2">
+        <div class="card">
+          <img class="shot" src="assets/prova-meta.png" alt="Custo por conversa no WhatsApp">
+          <div class="cap">Conversa no WhatsApp a partir de R$ 0,73 · gerenciador real</div>
+        </div>
+        <div class="card">
+          <img class="shot" src="assets/prova-google.png" alt="Crescimento no Google Ads">
+          <div class="cap">O que acontece quando a estrutura entra no ar · 2 anos de campanha</div>
+        </div>
+        <div class="card">
+          <img class="shot" src="assets/prova-lp.png" alt="Página de orçamento">
+          <div class="cap">Peça 1: a página que transforma clique em orçamento</div>
+        </div>
+        <div class="card">
+          <img class="shot" src="assets/prova-review.png" alt="Avaliação real no Google">
+          <div class="cap">Cliente que achou a loja pesquisando no Google — não foi indicação</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRA QUEM É -->
+  <section>
+    <div class="wrap split">
+      <div class="card" style="padding:0">
+        <img class="shot" src="assets/prova-gmn.png" style="background:var(--panel)" alt="Perfil no Google">
+        <div class="cap">Nota 4,9 com 1.356 avaliações — e mesmo assim precisou de estrutura para crescer</div>
+      </div>
+      <div>
+        <div class="eyebrow">Pra quem é</div>
+        <h3>O Kit Assistência Técnica Plus é pra você que…</h3>
+        <ul class="checks">
+          <li><span class="ic">✓</span> Tem assistência técnica e hoje depende de indicação e boca a boca</li>
+          <li><span class="ic">✓</span> Quer cliente novo entrando todo dia, não só no mês bom</li>
+          <li><span class="ic">✓</span> Cansou de pagar mensalidade de agência e não ficar com nada</li>
+          <li><span class="ic">✓</span> Quer aparecer pra quem está com o aparelho quebrado agora</li>
+          <li><span class="ic">✓</span> Quer uma estrutura no seu nome, na sua conta, que fique sendo sua</li>
+          <li><span class="ic">✓</span> Quer parar de depender de você mesmo estar na bancada pra vender</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESTRUTURA -->
+  <section>
+    <div class="wrap">
+      <div class="center" style="margin-bottom:34px">
+        <div class="eyebrow">O que é montado na sua loja</div>
+        <h2>Cliente novo não é sorte.<br>É <span class="red">estrutura</span>.</h2>
+      </div>
+      <div class="mod"><div class="n">01</div><div class="t">LP Profissional<small>página que transforma clique em orçamento no WhatsApp</small></div></div>
+      <div class="mod"><div class="n">02</div><div class="t">Campanha no Google<small>aparecendo pra quem pesquisa conserto na sua região</small></div></div>
+      <div class="mod"><div class="n">03</div><div class="t">Script de Vendas<small>orçamento virando ordem de serviço no WhatsApp</small></div></div>
+      <div class="mod"><div class="n">04</div><div class="t">Google Meu Negócio<small>otimizado pra sua loja aparecer primeiro</small></div></div>
+      <div class="mod hi"><div class="n">05</div><div class="t">Atendente de WhatsApp com IA<small>respondendo 24h · 1º mês incluso, sem renovação automática</small></div></div>
+    </div>
+  </section>
+
+  <!-- OFERTA -->
+  <section id="oferta">
+    <div class="wrap">
+      <div class="offer">
+        <div class="eyebrow">Montagem completa em 5 dias úteis</div>
+        <h2>Leve a estrutura<br>pra sua assistência</h2>
+
+        <div class="price">
+          <div class="was">de R$ 2.000</div>
+          <div class="now">R$ <span>997</span></div>
+          <div class="terms">à vista no Pix &nbsp;·&nbsp; ou <b>12x de R$ 125</b> no cartão</div>
+        </div>
+
+        <div class="guar">
+          🛡️ Estrutura completa em 5 dias úteis ou <b>100% do seu dinheiro de volta</b>
+        </div>
+
+        <a href="#" class="btn block" id="ctaFinal">Quero o Kit Assistência Técnica Plus</a>
+        <div class="btnNote">
+          ⚠ Restam <b id="vagas2">03</b> vagas para esta semana<br>
+          Preço promocional encerra em <b id="clock2">15:00</b>
+        </div>
+        <p class="fine">
+          Pagamento único, sem mensalidade de agência. A verba de mídia no Google
+          fica por sua conta (a partir de R$ 30/dia) e vai direto pro Google.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding:34px 0 120px;text-align:center">
+    <div class="wrap">
+      <p style="font-size:13px;color:#7C7F87">
+        Kit Assistência Técnica Plus · E.R Marketing<br>
+        Resultados citados são de clientes atendidos, obtidos com os serviços deles. Não constituem promessa de resultado.
+      </p>
+    </div>
+  </footer>
+</div>
+
+<!-- barra fixa -->
+<div class="sticky" id="sticky">
+  <div class="stickyIn">
+    <div class="stickyL">
+      <div class="sItem hot">Vagas restantes<b id="vagas3">03</b></div>
+      <div class="sItem">Oferta encerra em<b id="clock3">15:00</b></div>
+    </div>
+    <a href="#oferta" class="btn">Garantir minha vaga</a>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<!-- ═════ POPUP ═════ -->
+<div class="mask" id="mask">
+  <div class="modal">
+    <button class="close" id="x" aria-label="Fechar">×</button>
+
+    <div id="capture">
+      <div class="gift" id="popIcon">🎁</div>
+      <h3 id="popTitle">Espera! Tem uma recompensa<br>reservada pra você</h3>
+      <p style="margin-top:10px" id="popText">
+        Antes de sair, deixa seu nome e WhatsApp. Vou te liberar
+        <b>um benefício exclusivo</b> que não está na página.
+      </p>
+
+      <form id="form" novalidate>
+        <div class="field" id="fNome">
+          <label for="nome">Seu nome</label>
+          <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Como você se chama?">
+          <div class="err">Me diz seu nome 🙂</div>
+        </div>
+        <div class="field" id="fZap">
+          <label for="zap">Seu WhatsApp</label>
+          <input id="zap" name="zap" type="tel" inputmode="numeric" autocomplete="tel" placeholder="(00) 00000-0000">
+          <div class="err">Coloca o WhatsApp com DDD</div>
+        </div>
+        <button type="submit" class="btn block" id="sendBtn" style="margin-top:20px">Liberar minha recompensa</button>
+      </form>
+      <p class="fine" id="popFine">Sem spam. É só pra te enviar o benefício e tirar suas dúvidas.</p>
+    </div>
+
+    <div id="reveal">
+      <div class="gift">✅</div>
+      <h3>Prontinho, <span id="oiNome" class="red">tudo certo</span>!</h3>
+      <p style="margin-top:10px" id="revText">Seu benefício exclusivo está liberado:</p>
+
+      <div class="rewardbox">
+        <div class="eyebrow" style="margin-bottom:6px">Desconto exclusivo</div>
+        <div class="big">R$ 500 OFF</div>
+        <p style="margin-top:12px;color:var(--tx)">
+          <b>no cartão</b> — você parcela pagando o preço do Pix
+        </p>
+        <p style="margin-top:6px;font-size:15px">
+          De <span style="text-decoration:line-through">R$ 1.500</span> por
+          <b style="color:var(--red)">R$ 997 parcelado</b><br>
+          <span style="font-size:13.5px">(acrescido apenas dos juros das parcelas do cartão)</span>
+        </p>
+      </div>
+
+      <a href="#" class="btn block" id="ctaReward" target="_blank" rel="noopener">Falar com o Ed no WhatsApp</a>
+      <p class="fine" id="revFine">Te chamo por lá pra tirar qualquer dúvida. Válido por 72h.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  /* ═══ AJUSTES ═══ */
+  var UNLOCK_AT   = 240;    // segundos de vídeo assistidos para liberar a página
+  var OFFER_MIN   = 15;     // minutos de contagem da oferta
+  var PAUSE_GRACE = 6000;   // ms pausado antes de oferecer a recompensa
+  var TOAST_AT    = [22000, 78000];  // quando cada aviso lateral aparece (após liberar)
+  var GYREHUB     = 'https://gyrehub.com.br/api/f/bonus500/ingest';
+  var WHATSAPP    = '5592985146299';
+
+  /* duas versões do popup: quem está saindo x quem clicou pra comprar */
+  var COPY = {
+    exit:{
+      icon:'🎁',
+      title:'Espera! Tem uma recompensa<br>reservada pra você',
+      text:'Antes de sair, deixa seu nome e WhatsApp. Vou te liberar <b>um benefício exclusivo</b> que não está na página.',
+      btn:'Liberar minha recompensa',
+      fine:'Sem spam. É só pra te enviar o benefício e tirar suas dúvidas.',
+      revText:'Seu benefício exclusivo está liberado:',
+      revBtn:'Falar com o Ed no WhatsApp',
+      revFine:'Te chamo por lá pra tirar qualquer dúvida. Válido por 72h.',
+      wa:'Vim da aula do Kit Assistência Técnica Plus e quero saber mais sobre o bônus de R$ 500.'
+    },
+    cta:{
+      icon:'🔒',
+      title:'Falta um passo pra<br>separar a sua vaga',
+      text:'Me diz seu nome e WhatsApp que eu <b>separo sua vaga agora</b> — e ainda libero um bônus que não está na página.',
+      btn:'Separar minha vaga',
+      fine:'Sua vaga fica reservada enquanto a gente conversa.',
+      revText:'Vaga separada. E ainda tem isto aqui:',
+      revBtn:'Garantir agora no WhatsApp',
+      revFine:'Me chama que eu já te explico como começamos hoje.',
+      wa:'Vim da aula do Kit Assistência Técnica Plus e quero garantir minha vaga com o bônus de R$ 500.'
+    }
+  };
+  function waLink(msg){ return 'https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(msg); }
+  var DEBUG = /[?&]debug=1/.test(location.search);
+
+  var $ = function(id){ return document.getElementById(id); };
+  var vid=$('vid'), ov=$('ov'), ovTx=$('ovTx'), ovSub=$('ovSub'), sh=$('sh'),
+      ln=$('ln'), pb=$('pb'), lt=$('lt'), locked=$('locked');
+
+  function mmss(s){
+    s=Math.max(0,Math.round(s));
+    return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  }
+
+  /* ═══ PLAYER ═══ */
+  var started=false;
+  function showOv(txt,sub){
+    ovTx.textContent=txt; ovSub.textContent=sub; ov.classList.remove('hide');
+  }
+  function play(){
+    started=true; ov.classList.add('hide');
+    vid.play().catch(function(){ vid.muted=true; vid.play(); sh.classList.remove('hide'); });
+  }
+  function toggle(){ vid.paused ? play() : vid.pause(); }
+  ov.addEventListener('click', toggle);
+  vid.addEventListener('click', toggle);
+  sh.addEventListener('click', function(e){ e.stopPropagation(); vid.muted=false; sh.classList.add('hide'); });
+
+  vid.addEventListener('play',  function(){ ov.classList.add('hide'); });
+  vid.addEventListener('pause', function(){
+    if(vid.ended) return;
+    showOv('Continuar de onde parou',
+           'Faltam ' + mmss(Math.max(0,UNLOCK_AT-vid.currentTime)) + ' para liberar o restante da página.');
+  });
+  vid.addEventListener('ended', function(){ ov.classList.add('hide'); });
+
+  /* ═══ TRAVA ═══ */
+  var unlocked=false;
+  vid.addEventListener('timeupdate', function(){
+    if(unlocked) return;
+    var p=Math.min(vid.currentTime/UNLOCK_AT,1);
+    pb.style.width=(p*100)+'%';
+    lt.textContent=mmss(UNLOCK_AT-vid.currentTime);
+    if(p>=1) unlock();
+  });
+  vid.addEventListener('ended', unlock);
+  if(DEBUG) setTimeout(unlock, 300);
+
+  /* ═══ URGÊNCIA ═══ */
+  var vagas=3, DEADLINE_KEY='kit_offer_deadline';
+  function paintVagas(){
+    var t=String(vagas).padStart(2,'0');
+    ['vagas','vagas2','vagas3'].forEach(function(id){ if($(id)) $(id).childNodes[0].nodeValue=t; });
+  }
+  function startClock(){
+    var end;
+    try{ end=parseInt(localStorage.getItem(DEADLINE_KEY),10); }catch(e){}
+    if(!end || isNaN(end) || end<Date.now()){
+      end=Date.now()+OFFER_MIN*60000;
+      try{ localStorage.setItem(DEADLINE_KEY,String(end)); }catch(e){}
+    }
+    (function tick(){
+      var left=(end-Date.now())/1000, t=mmss(left);
+      ['clock','clock2','clock3'].forEach(function(id){
+        if(!$(id)) return;
+        if(id==='clock') $(id).childNodes[0].nodeValue=t; else $(id).textContent=t;
+      });
+      if(left>0) setTimeout(tick,1000);
+    })();
+  }
+
+  var CIDADES=['Goiânia (GO)','Campinas (SP)','Fortaleza (CE)','Belo Horizonte (MG)','Curitiba (PR)'];
+  function toast(i){
+    if(vagas<=1) return;
+    vagas--; paintVagas();
+    var el=document.createElement('div');
+    el.className='toast';
+    el.innerHTML='<div class="t">Uma assistência de '+CIDADES[i % CIDADES.length]+
+                 ' acabou de fechar o Kit</div>'+
+                 '<div class="s">agora restam <em>0'+vagas+'</em> vaga'+(vagas>1?'s':'')+' esta semana</div>';
+    $('toasts').appendChild(el);
+    requestAnimationFrame(function(){ el.classList.add('on'); });
+    setTimeout(function(){
+      el.classList.remove('on');
+      setTimeout(function(){ el.remove(); }, 500);
+    }, 7000);
+  }
+
+  function unlock(){
+    if(unlocked) return; unlocked=true;
+    ln.classList.add('hide');
+    locked.classList.add('open');
+    paintVagas(); startClock();
+    setTimeout(function(){ $('sticky').classList.add('on'); }, 1200);
+    TOAST_AT.forEach(function(ms,i){ setTimeout(function(){ toast(i); }, ms); });
+    buildDots();
+  }
+
+  /* ═══ CARROSSEL ═══ */
+  var track=$('track'), dots=$('dots');
+  function slideW(){
+    var s=track.querySelector('.slide');
+    return s ? s.getBoundingClientRect().width+16 : 0;
+  }
+  function buildDots(){
+    if(dots.children.length) return;
+    var n=track.querySelectorAll('.slide').length;
+    for(var i=0;i<n;i++){
+      var d=document.createElement('div');
+      d.className='dot'+(i===0?' on':'');
+      (function(idx){ d.addEventListener('click',function(){ track.scrollTo({left:idx*slideW(),behavior:'smooth'}); }); })(i);
+      dots.appendChild(d);
+    }
+  }
+  track.addEventListener('scroll', function(){
+    var i=Math.round(track.scrollLeft/(slideW()||1));
+    [].forEach.call(dots.children,function(d,k){ d.classList.toggle('on',k===i); });
+  });
+  $('arrL').addEventListener('click',function(){ track.scrollBy({left:-slideW(),behavior:'smooth'}); });
+  $('arrR').addEventListener('click',function(){ track.scrollBy({left: slideW(),behavior:'smooth'}); });
+
+  /* ═══ POPUP DE SAÍDA ═══ */
+  var mask=$('mask'), shown=false, KEY='kit_lead_v1', variant='exit';
+  function alreadyLead(){ try{ return !!localStorage.getItem(KEY); }catch(e){ return false; } }
+
+  function openPop(kind, force){
+    // gatilhos automáticos só disparam uma vez e só pra quem ainda não deixou contato
+    if(!force && (shown || alreadyLead())) return;
+    variant = kind || 'exit';
+    var c = COPY[variant];
+    $('popIcon').textContent = c.icon;
+    $('popTitle').innerHTML  = c.title;
+    $('popText').innerHTML   = c.text;
+    $('sendBtn').textContent = c.btn;
+    $('popFine').textContent = c.fine;
+    // volta o formulário ao estado inicial
+    $('capture').style.display='';
+    $('reveal').classList.remove('on');
+    $('sendBtn').disabled=false;
+    if(!force) shown=true;
+    mask.classList.add('on'); document.body.classList.add('noscroll');
+    if(!vid.paused) vid.pause();
+  }
+  function closePop(){ mask.classList.remove('on'); document.body.classList.remove('noscroll'); }
+  $('x').addEventListener('click', closePop);
+  mask.addEventListener('click', function(e){ if(e.target===mask) closePop(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closePop(); });
+
+  document.addEventListener('mouseout', function(e){
+    if(!e.relatedTarget && e.clientY<=0) openPop('exit');
+  });
+  var pauseTimer=null;
+  vid.addEventListener('pause', function(){
+    if(unlocked || !started || vid.ended) return;
+    pauseTimer=setTimeout(function(){ openPop('exit'); }, PAUSE_GRACE);
+  });
+  vid.addEventListener('play', function(){ clearTimeout(pauseTimer); });
+  try{
+    history.pushState({p:1},'');
+    window.addEventListener('popstate', function(){
+      if(!shown && !alreadyLead()){ history.pushState({p:1},''); openPop('exit'); }
+    });
+  }catch(e){}
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState==='hidden' && started && !unlocked) openPop('exit');
+  });
+
+  /* ═══ FORMULÁRIO ═══ */
+  var form=$('form'), nome=$('nome'), zap=$('zap'), fNome=$('fNome'), fZap=$('fZap'), sendBtn=$('sendBtn');
+
+  zap.addEventListener('input', function(){
+    var v=zap.value.replace(/\D/g,'').slice(0,11), o=v;
+    if(v.length>=1) o='('+v.slice(0,2);
+    if(v.length>=3) o+=') '+v.slice(2, v.length>10?7:6);
+    if(v.length>=7) o+='-'+(v.length>10?v.slice(7):v.slice(6));
+    zap.value=o;
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var okN=nome.value.trim().length>=2,
+        okZ=zap.value.replace(/\D/g,'').length>=10;
+    fNome.classList.toggle('bad', !okN);
+    fZap.classList.toggle('bad', !okZ);
+    if(!okN || !okZ) return;
+
+    var vNome=nome.value.trim(), vZap=zap.value;
+    sendBtn.disabled=true; sendBtn.textContent='Liberando…';
+
+    var params=new URLSearchParams(location.search);
+    fetch(GYREHUB, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        evento:'completo',
+        respostas:[
+          {pergunta:'Qual seu nome?',     valor:vNome},
+          {pergunta:'Qual seu WhatsApp?', valor:vZap}
+        ],
+        tracking:{
+          utm_source:params.get('utm_source'),
+          fbclid:    params.get('fbclid'),
+          referrer:  document.referrer
+        }
+      })
+    }).catch(function(err){ console.warn('gyrehub:', err); });
+
+    try{ localStorage.setItem(KEY, JSON.stringify({nome:vNome, whatsapp:vZap, em:new Date().toISOString()})); }catch(e){}
+    if(window.fbq) fbq('track','Lead');
+
+    var c = COPY[variant];
+    $('oiNome').textContent  = vNome.split(' ')[0];
+    $('revText').textContent = c.revText;
+    $('revFine').textContent = c.revFine;
+    var rw = $('ctaReward');
+    rw.textContent = c.revBtn;
+    rw.href = waLink(c.wa + ' Meu nome é ' + vNome + '.');
+    $('capture').style.display='none';
+    $('reveal').classList.add('on');
+  });
+
+  /* botão de compra → popup como etapa intermediária → WhatsApp */
+  function goCheckout(e){
+    if(e) e.preventDefault();
+    if(alreadyLead()){                       // já deixou contato: vai direto
+      window.open(waLink(COPY.cta.wa), '_blank');
+      return;
+    }
+    openPop('cta', true);
+  }
+  $('ctaFinal').addEventListener('click', goCheckout);
+})();
+</script>
+</body>
+</html>
