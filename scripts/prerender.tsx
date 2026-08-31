@@ -504,6 +504,22 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // /kit-aula-2 — mesma aula sem a trava de 4 min: a oferta aparece de
+    // cara e o vídeo começa depois da vinheta. noindex pelo mesmo motivo
+    // da /kit-aula, e porque as duas dividiriam a mesma intenção de busca.
+    {
+        path: '/kit-aula-2',
+        out: 'kit-aula-2/index.html',
+        meta: {
+            title: 'Como encher a fila da sua assistência em 5 dias · Kit Assistência Técnica Plus',
+            description:
+                'Aula gratuita: a estrutura de captação que faz cliente novo pedir orçamento no WhatsApp da sua assistência técnica.',
+            canonical: `${SITE_ORIGIN}/kit-aula-2`,
+            ogType: 'website',
+            noindex: true,
+        },
+    },
+
     // /lab-de-performance — waitlist LP for the upcoming course/community
     // (tráfego pago + IA). Submits to the same Make.com webhook with a
     // dedicated type discriminator (`waitlist_lab_performance`).

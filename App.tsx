@@ -23,6 +23,7 @@ import LinksPage from './components/Links';
 import EdRodriguesLinks from './components/EdRodriguesLinks';
 import KitLanding from './components/KitAssistencia/Landing';
 import KitAula from './components/KitAssistencia/Aula';
+import KitAula2 from './components/KitAssistencia/Aula2';
 import LabPerformance from './components/LabPerformance';
 import EdRodriguesCapture from './components/EdRodriguesCapture';
 import NorteLanding from './components/NorteLanding';
@@ -102,6 +103,7 @@ const App: React.FC = () => {
                 <Route path="/ed-rodrigues" element={<EdRodriguesLinks />} />
                 <Route path="/kit-assistencia-tecnica-plus" element={<KitLanding />} />
                 <Route path="/kit-aula" element={<KitAula />} />
+                <Route path="/kit-aula-2" element={<KitAula2 />} />
                 <Route path="/lab-de-performance" element={<LabPerformance />} />
                 <Route path="/edrodrigues" element={<EdRodriguesCapture />} />
                 <Route path="/norte" element={<NorteLanding />} />
