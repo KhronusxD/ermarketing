@@ -213,10 +213,12 @@ p b{color:var(--tx);font-weight:700}
 (function(){
   "use strict";
 
-  /* ════════ TROCAR AQUI ════════
-     Link de convite do grupo. Enquanto estiver vazio, os botões levam pra
-     conversa direta com o Ed — assim a página nunca fica com botão morto. */
-  var GRUPO = '';
+  /* ════════ CONFIGURAÇÃO ════════ */
+  var GRUPO = 'https://chat.whatsapp.com/CSFDrt1kuGq6l0XHHzr0HC?mode=gi_t';
+
+  // Primeira aula: 10/09. A contagem nunca aponta pra uma quinta anterior
+  // a esta, mesmo que a semana atual já tenha uma.
+  var ESTREIA_UTC = Date.UTC(2026, 8, 10, 17, 0, 0);
   var FALLBACK = 'https://wa.me/5592985146299?text=' +
     encodeURIComponent('Oi Ed! Quero entrar no grupo da aula ao vivo de quinta.');
 
@@ -266,7 +268,8 @@ p b{color:var(--tx);font-weight:700}
     var agora=new Date();
     var d=new Date(Date.UTC(agora.getUTCFullYear(),agora.getUTCMonth(),agora.getUTCDate(),HORA_UTC,0,0));
     while(d.getUTCDay()!==QUINTA || d<=agora) d.setUTCDate(d.getUTCDate()+1);
-    return d;
+    // antes da estreia, a contagem aponta pra ela e não pra quinta desta semana
+    return d.getTime() < ESTREIA_UTC ? new Date(ESTREIA_UTC) : d;
   }
   var alvo=proxima();
   var el={d:document.getElementById('d'),h:document.getElementById('h'),
