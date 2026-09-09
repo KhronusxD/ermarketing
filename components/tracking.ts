@@ -122,7 +122,9 @@ export function ouvirCliquesDeWhatsApp(): void {
         'click',
         (e) => {
             const alvo = e.target as HTMLElement | null;
-            const link = alvo?.closest?.('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
+            const link = alvo?.closest?.(
+                'a[href*="wa.me"], a[href*="api.whatsapp.com"], a[href*="gyrehub.com.br/r/"]',
+            );
             if (!link) return;
 
             // De onde saiu o clique, pra saber qual seção converte.

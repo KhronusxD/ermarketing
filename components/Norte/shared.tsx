@@ -4,9 +4,12 @@ import React from 'react';
 // LPs de serviço (/norte/<slug>): constantes de marca, ícones SVG
 // inline e componentes de chrome (nav e footer).
 
-export const WHATSAPP =
-    'https://wa.me/5592985146299?text=' +
-    encodeURIComponent('Olá! Vim pelo site da Norte e quero conversar sobre marketing.');
+// Link de atribuição do GyreHub, não o wa.me direto. Ele redireciona pro
+// mesmo WhatsApp, mas carimba a mensagem com [REF:3knb27] — é assim que o
+// CRM sabe que o lead veio do site, e não de indicação ou do Instagram.
+// A mensagem de abertura fica configurada lá, não aqui: por isso o link
+// não leva ?text=.
+export const WHATSAPP = 'https://gyrehub.com.br/r/3knb27';
 
 export const LIME = '#8DC63F';
 export const FOREST = '#14261A';
