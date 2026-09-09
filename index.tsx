@@ -3,6 +3,10 @@ import { hydrateRoot, createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
+import { ouvirCliquesDeWhatsApp } from './components/tracking';
+
+// Um ouvinte só, para clique de WhatsApp em qualquer página.
+ouvirCliquesDeWhatsApp();
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

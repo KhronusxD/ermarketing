@@ -4,6 +4,7 @@ import { Arrow, NorteNav, TAG } from './shared';
 import { HANDOFF_KEY } from './Agendar';
 import { QUESTION_BY_STEP, nicheSpecificQuestion } from '../Quiz/constants';
 import { whatsappUrlWithSummary } from '../Quiz/summary';
+import { converter, rastrear } from '../tracking';
 import { financialInsight, nextStep, qualify } from '../Quiz/branching';
 import { submitLead, submitWaitlist } from '../Quiz/services';
 import {
@@ -223,6 +224,12 @@ const Conversa: React.FC = () => {
             );
             setSending(false);
             setDone(level);
+
+            // Conversão primária: a pessoa respondeu tudo e foi qualificada.
+            // Dispara aqui, antes do encaminhamento, porque a partir daqui
+            // o agendamento acontece dentro de um iframe de outro domínio.
+            converter('conversa', { qualificacao: level });
+            rastrear('CompleteRegistration', { content_name: 'Conversa Norte', qualificacao: level });
 
             // A agenda vive em página própria. Embutida aqui, o iframe
             // ficava num ambiente que muda a cada mensagem e a cada

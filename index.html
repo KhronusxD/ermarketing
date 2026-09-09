@@ -52,6 +52,13 @@
     fbq('init', '339396175425796');
     fbq('track', 'PageView');
 
+    // Fila do gtag, pelo mesmo motivo do fbq: conversão disparada antes
+    // do script chegar não pode se perder.
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', 'AW-18054403022');
+
     // Defer real loaders to first idle slot after `load`, so they never compete
     // with the LCP image / hero JS. ~1.5s extra delay vs synchronous fire.
     function __loadThirdPartyTags() {
@@ -70,6 +77,11 @@
       m.async = true;
       m.src = 'https://connect.facebook.net/en_US/fbevents.js';
       document.head.appendChild(m);
+      // Google Ads — conversões da conta Norte Marketing
+      var g = document.createElement('script');
+      g.async = true;
+      g.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18054403022';
+      document.head.appendChild(g);
     }
     function __schedulePixels() {
       if ('requestIdleCallback' in window) {

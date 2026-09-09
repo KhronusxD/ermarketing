@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { converter, rastrear } from '../tracking';
 
 // Agenda do GyreHub embutida.
 //
@@ -42,11 +43,30 @@ const GyreHubAgenda: React.FC<Props> = ({ workspace, agenda, className }) => {
 
     // Se um dia o embed passar a reportar a própria altura, o iframe
     // acompanha e o scroll interno deixa de ser necessário.
+    // O agendamento em si acontece DENTRO do iframe, em outro domínio.
+    // Não dá pra observar de fora: nem clique, nem navegação, nem DOM.
+    // Se o GyreHub um dia avisar por postMessage, a conversão dispara.
+    // Enquanto isso, a medição confiável do funil para na conversa
+    // concluída, que acontece um passo antes.
+    const jaContou = useRef(false);
+
     useEffect(() => {
         const onMessage = (e: MessageEvent) => {
             if (e.origin !== GYREHUB_ORIGIN) return;
             const data = e.data as { tipo?: string; altura?: number } | null;
-            if (!data || data.tipo !== 'gyrehub:altura') return;
+            if (!data) return;
+
+            if (
+                !jaContou.current &&
+                typeof data.tipo === 'string' &&
+                /agendad|confirmad|booked|scheduled/i.test(data.tipo)
+            ) {
+                jaContou.current = true;
+                converter('agendamento');
+                rastrear('Schedule', { content_name: 'Agenda Norte' });
+            }
+
+            if (data.tipo !== 'gyrehub:altura') return;
             const h = Number(data.altura);
             if (h > 0 && h < 5000) setHeight(h);
         };

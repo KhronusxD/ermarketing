@@ -71,3 +71,73 @@ export function rastrear(
         /* dataLayer indisponível: seguir sem quebrar a página */
     }
 }
+
+// ── Conversões do Google Ads ────────────────────────────────────────
+//
+// Os rótulos vêm da conta Norte Marketing (2046445358). Cada ação de
+// conversão tem o seu; o número antes da barra é o mesmo para a conta.
+//
+// Dispara direto pelo gtag em vez de depender de gatilho configurado no
+// GTM: o que está aqui no código é o que roda, e não fica um pedaço da
+// medição vivendo num painel que ninguém lembra de conferir.
+
+const ADS = 'AW-18054403022';
+
+export const CONVERSOES = {
+    agendamento: `${ADS}/tnvGCMf2wfIcEM6ngaFD`,
+    conversa: `${ADS}/2Zi1CMr2wfIcEM6ngaFD`,
+    whatsapp: `${ADS}/Vb1CCM32wfIcEM6ngaFD`,
+    formulario: `${ADS}/Rqa0CJW4w_IcEM6ngaFD`,
+} as const;
+
+declare global {
+    interface Window {
+        gtag?: (...args: unknown[]) => void;
+    }
+}
+
+export function converter(qual: keyof typeof CONVERSOES, extras: Params = {}): void {
+    if (typeof window === 'undefined') return;
+    try {
+        window.gtag?.('event', 'conversion', { send_to: CONVERSOES[qual], ...extras });
+    } catch {
+        // Bloqueador derrubou o gtag. Segue sem quebrar a página.
+    }
+}
+
+// ── Clique para o WhatsApp, em qualquer lugar do site ───────────────
+//
+// Um ouvinte só, na raiz, em vez de onClick em cada botão. Os links de
+// WhatsApp estão espalhados por cinco arquivos e nascem novos a cada
+// página que a gente cria; assim nenhum fica de fora por esquecimento.
+//
+// Na fase de captura, porque o React para a propagação em alguns casos.
+let instalado = false;
+
+export function ouvirCliquesDeWhatsApp(): void {
+    if (instalado || typeof document === 'undefined') return;
+    instalado = true;
+
+    document.addEventListener(
+        'click',
+        (e) => {
+            const alvo = e.target as HTMLElement | null;
+            const link = alvo?.closest?.('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
+            if (!link) return;
+
+            // De onde saiu o clique, pra saber qual seção converte.
+            const secao =
+                link.closest('[data-secao]')?.getAttribute('data-secao') ||
+                link.closest('section')?.querySelector('h2')?.textContent?.trim().slice(0, 40) ||
+                document.title.slice(0, 40);
+
+            converter('whatsapp');
+            rastrear('Lead', {
+                content_name: 'Norte Marketing',
+                content_category: secao || 'sem seção',
+                pagina: window.location.pathname,
+            });
+        },
+        true,
+    );
+}
