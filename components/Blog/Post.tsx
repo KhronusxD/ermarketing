@@ -46,7 +46,7 @@ const BlogPost: React.FC = () => {
                         <div className="flex items-center gap-4 border-t border-black/[0.08] pt-6">
                             <Link to="/sobre/ed-rodrigues" className="flex-shrink-0">
                                 <img
-                                    src="/socios/ed-avatar.png"
+                                    src="/socios/ed-avatar.jpg"
                                     alt={AUTHOR.name}
                                     className="w-12 h-12 rounded-full object-cover bg-[#14261A]"
                                     width={48}
@@ -88,7 +88,7 @@ const BlogPost: React.FC = () => {
                         <div className="mt-5 flex flex-col sm:flex-row gap-5">
                             <Link to="/sobre/ed-rodrigues" className="flex-shrink-0">
                                 <img
-                                    src="/socios/ed-avatar.png"
+                                    src="/socios/ed-avatar.jpg"
                                     alt={AUTHOR.name}
                                     className="w-20 h-20 rounded-full object-cover bg-[#14261A]"
                                     width={80}

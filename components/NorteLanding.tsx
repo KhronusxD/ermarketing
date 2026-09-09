@@ -669,10 +669,13 @@ const REELS = [
 // `photo` é o recorte de corpo inteiro usado na seção de sócios;
 // `avatar` é o mesmo recorte já cortado na cabeça e sobre um disco
 // verde, pro empilhamento de bolinhas do bento.
+// Fotos de set/2026: os três no mesmo estúdio, mesma luz, camisa da
+// marca. Como o fundo é bom e igual nas três, a foto preenche o cartão
+// em vez de virar recorte flutuando sobre cor.
 const PARTNERS = [
-    { name: 'Ed Rodrigues', role: 'Gestor estratégico', photo: '/socios/ed-cut.png', avatar: '/socios/ed-avatar.png' },
-    { name: 'Brenno Soares', role: 'Administrador', photo: '/socios/brenno-cut.png', avatar: '/socios/brenno-avatar.png' },
-    { name: 'Francyelle Barbosa', role: 'Diretora de conteúdo', photo: '/socios/francyelle-cut.png', avatar: '/socios/francyelle-avatar.png' },
+    { name: 'Ed Rodrigues', role: 'Gestor estratégico', photo: '/socios/ed-4x5.jpg', avatar: '/socios/ed-avatar.jpg' },
+    { name: 'Brenno Soares', role: 'Administrador', photo: '/socios/brenno-4x5.jpg', avatar: '/socios/brenno-avatar.jpg' },
+    { name: 'Francyelle Barbosa', role: 'Diretora de conteúdo', photo: '/socios/francyelle-4x5.jpg', avatar: '/socios/francyelle-avatar.jpg' },
 ];
 
 // Três posts em destaque na home. A capa vem de foto nossa de cliente —
@@ -1705,19 +1708,12 @@ const NorteLanding: React.FC = () => {
                                             'linear-gradient(165deg, #1d3423 0%, #14261A 55%, #0B0E0C 100%)',
                                     }}
                                 >
-                                    <div
-                                        aria-hidden="true"
-                                        className="absolute inset-0"
-                                        style={{
-                                            background:
-                                                'radial-gradient(circle at 72% 26%, rgba(141,198,63,0.28) 0%, transparent 58%)',
-                                        }}
-                                    />
+
                                     <img
                                         src={p.photo}
                                         alt={p.name}
                                         loading="lazy"
-                                        className="absolute inset-0 w-full h-full object-contain object-bottom"
+                                        className="absolute inset-0 w-full h-full object-cover"
                                     />
                                 </div>
                                 <p className={`${H3} text-[17px] leading-tight`}>{p.name}</p>
