@@ -6,7 +6,6 @@ import {
     NorteFooter,
     H2,
     CONTAINER,
-    PAPER,
 } from './shared';
 import GyreHubAgenda from './GyreHubAgenda';
 import { whatsappUrlWithSummary } from '../Quiz/summary';
@@ -63,42 +62,77 @@ const Agendar: React.FC = () => {
 
             <main className="pt-28 md:pt-36 pb-16 md:pb-24">
                 <div className={CONTAINER}>
-                    <div className="max-w-2xl mb-9 md:mb-12">
-                        <Eyebrow>Último passo</Eyebrow>
-                        <h1 className={`mt-4 ${H2} text-[clamp(30px,4.4vw,52px)]`}>
-                            Escolhe o melhor horário.
-                        </h1>
-                        <p className="mt-5 text-[15px] md:text-[17px] tracking-[-0.01em] text-black/45 leading-relaxed">
-                            {handoff
-                                ? 'Já temos suas respostas em mãos — a conversa começa do ponto onde você parou, não do zero.'
-                                : 'São 30 minutos, no horário de Manaus, direto com um estrategista.'}
-                        </p>
-                    </div>
+                    {/* Duas colunas no desktop. Antes a agenda ocupava os
+                        1174px inteiros do container, e ela não é feita pra
+                        isso: a régua de dias virava uma fita com barra de
+                        rolagem e os horários deixavam meia tela vazia à
+                        direita. Num embed de terceiro, largura demais é tão
+                        ruim quanto largura de menos. */}
+                    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:grid-rows-[auto_1fr] lg:gap-x-16 xl:gap-x-24 lg:gap-y-0 lg:items-start">
+                        <div className="max-w-xl lg:col-start-1 lg:row-start-1">
+                            <Eyebrow>Último passo</Eyebrow>
+                            <h1 className={`mt-4 ${H2} text-[clamp(30px,4.4vw,52px)]`}>
+                                Escolha o melhor horário.
+                            </h1>
+                            <p className="mt-5 text-[15px] md:text-[17px] tracking-[-0.01em] text-black/45 leading-relaxed">
+                                {handoff
+                                    ? 'Já temos suas respostas em mãos — a conversa começa do ponto onde você parou, não do zero.'
+                                    : 'Meia hora com um estrategista, no horário de Manaus.'}
+                            </p>
 
-                    <div
-                        className="rounded-[24px] border border-black/[0.07] overflow-hidden"
-                        style={{ backgroundColor: PAPER }}
-                    >
-                        <GyreHubAgenda
-                            workspace={GYREHUB_WORKSPACE}
-                            agenda={GYREHUB_AGENDA}
-                        />
-                    </div>
+                        </div>
 
-                    <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4">
-                        <p className="text-[14px] text-black/45 flex-1">
-                            Prefere resolver por mensagem? O botão abre o WhatsApp
-                            {handoff ? ' já com tudo o que você respondeu escrito' : ''}.
-                        </p>
-                        <a
-                            href={waHref}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group inline-flex flex-shrink-0 items-center justify-center gap-2.5 rounded-full border border-black/15 hover:border-[#8DC63F] hover:bg-[#8DC63F] text-[#131313] hover:text-[#0B0E0C] font-semibold text-sm px-6 py-3.5 transition-colors"
-                        >
-                            Falar no WhatsApp
-                            <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                        </a>
+                        {/* No celular a agenda vem logo depois do título:
+                            quem chega aqui já sabe o que quer, e enterrar o
+                            calendário embaixo de três parágrafos é obrigar a
+                            pessoa a rolar pra fazer a única coisa que veio
+                            fazer. No desktop ela volta pra coluna da direita
+                            e o contexto ocupa a esquerda. */}
+                        <div className="mt-10 lg:mt-0 lg:col-start-2 lg:row-start-1 lg:row-span-2 rounded-[24px] border border-black/[0.09] bg-white overflow-hidden shadow-[0_1px_2px_rgba(0,0,0,0.04),0_12px_34px_-18px_rgba(0,0,0,0.22)]">
+                            <GyreHubAgenda
+                                workspace={GYREHUB_WORKSPACE}
+                                agenda={GYREHUB_AGENDA}
+                            />
+                        </div>
+
+                        <div className="max-w-xl lg:col-start-1 lg:row-start-2">
+                            <ul className="mt-12 lg:mt-9 space-y-5 border-t border-black/[0.08] pt-8">
+                                {[
+                                    ['Onde está vazando', 'A gente olha conta, criativo, oferta e funil pra achar por onde o dinheiro está escapando.'],
+                                    ['O que faria diferença primeiro', 'Você sai da conversa com uma direção, não com um orçamento na mão.'],
+                                    ['Quem atende', 'Um estrategista da casa. Não é ligação de vendedor com roteiro.'],
+                                ].map(([titulo, texto]) => (
+                                    <li key={titulo} className="flex gap-4">
+                                        <span
+                                            aria-hidden="true"
+                                            className="mt-[7px] w-1.5 h-1.5 rounded-full flex-shrink-0"
+                                            style={{ backgroundColor: '#8DC63F' }}
+                                        />
+                                        <div>
+                                            <p className="text-[15px] font-semibold tracking-[-0.01em]">{titulo}</p>
+                                            <p className="mt-1 text-[14px] text-black/45 leading-relaxed">{texto}</p>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <div className="mt-9 border-t border-black/[0.08] pt-7">
+                                <p className="text-[14px] text-black/45 leading-relaxed">
+                                    Prefere resolver por mensagem? O botão abre o WhatsApp
+                                    {handoff ? ' já com tudo o que você respondeu escrito' : ''}.
+                                </p>
+                                <a
+                                    href={waHref}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group mt-4 inline-flex items-center justify-center gap-2.5 rounded-full border border-black/15 hover:border-[#8DC63F] hover:bg-[#8DC63F] text-[#131313] hover:text-[#0B0E0C] font-semibold text-sm px-6 py-3.5 transition-colors"
+                                >
+                                    Falar no WhatsApp
+                                    <Arrow className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </main>

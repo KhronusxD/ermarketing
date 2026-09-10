@@ -14,13 +14,23 @@ import { converter, rastrear } from '../tracking';
 // rota, mesmo parâmetro `origem` e mesmo sandbox. Quando o agenda.js for
 // corrigido, trocar este componente pela tag oficial é remover código.
 //
-// A altura é fixa e o iframe rola por dentro. O script oficial espera uma
-// mensagem `gyrehub:altura` pra ajustar sozinho, mas testei escutando as
-// mensagens do embed por 20 segundos e ela nunca chega — a página é um app
-// de altura cheia (html/body em h-full), que preenche o que recebe em vez
-// de reportar o que precisa. Com `scrolling="no"` e 420px, como faz o
-// script, os horários ficavam cortados sem jeito de alcançar.
-// O ouvinte continua aqui: se a mensagem passar a existir, ele assume.
+// A altura é fixa e o iframe rola por dentro, porque hoje não dá pra
+// confiar na altura que o embed reporta. Medido em 09/09/2026, escutando
+// as mensagens do embed em produção: ele manda `gyrehub:altura` **uma
+// única vez, com altura 0**, cerca de 1,3s depois de carregar, e nunca
+// mais. (Correção de um comentário anterior, que dizia que a mensagem
+// nunca chegava — ela chega, só chega zerada.)
+//
+// A causa está no lado do GyreHub, em `components/agendamento/
+// agenda-embed.tsx`: `avisar()` roda com o ref ainda vazio, cai no
+// fallback `document.body.scrollHeight` (0 àquela altura), e o
+// `ResizeObserver` fica dentro de um `if (ref.current && ...)` que não
+// chega a ser satisfeito — por isso a única mensagem. Enquanto isso não
+// for corrigido lá, altura automática aqui só encolheria o iframe a zero.
+//
+// O guard `h > 0` abaixo é o que impede isso de acontecer. Quando o
+// embed passar a reportar direito, ele assume sozinho e a altura fixa
+// deixa de importar.
 //
 // A agenda também confere o parâmetro `origem` contra uma lista do
 // workspace: trafegomanaus.com.br (com e sem www) está liberado, localhost

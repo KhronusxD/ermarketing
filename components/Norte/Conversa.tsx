@@ -5,7 +5,14 @@ import { HANDOFF_KEY } from './Agendar';
 import { QUESTION_BY_STEP, nicheSpecificQuestion } from '../Quiz/constants';
 import { whatsappUrlWithSummary } from '../Quiz/summary';
 import { converter, rastrear } from '../tracking';
-import { financialInsight, nextStep, qualify } from '../Quiz/branching';
+import {
+    financialInsight,
+    isProgressStep,
+    nextStep,
+    progressIndex,
+    qualify,
+    totalProgressSteps,
+} from '../Quiz/branching';
 import { submitLead, submitWaitlist } from '../Quiz/services';
 import {
     LeadData,
@@ -309,6 +316,15 @@ const Conversa: React.FC = () => {
         }
     };
 
+    // Só conta pergunta de verdade: a trava de preço, o formulário de
+    // contato e as telas finais ficam de fora da contagem.
+    const progresso = (() => {
+        if (done || !isProgressStep(step)) return null;
+        const total = totalProgressSteps(answers);
+        const atual = progressIndex(step, answers);
+        return atual > 0 && total > 0 ? { atual, total } : null;
+    })();
+
     const question = currentQuestion();
     const showOptions = !typing && !done && question && step !== 'lead_form';
     const showPrice = !typing && !done && step === 'price_gate';
@@ -350,8 +366,15 @@ const Conversa: React.FC = () => {
             />
 
             <main className="relative flex-1 flex flex-col w-full max-w-[720px] mx-auto px-5 pt-28 pb-6">
+                {/* mt-auto, não flex-1: com flex-1 a lista esticava até o
+                    rodapé e a conversa nascia colada no topo, com um vazio
+                    de quase 300px no meio da tela. Empurrada pra baixo, ela
+                    cresce pra cima a partir da área de resposta, que é como
+                    toda conversa se comporta. mt-auto e não justify-end
+                    porque justify-end corta o começo quando o conteúdo
+                    passa da altura do container. */}
                 <div
-                    className="flex-1 space-y-3"
+                    className="mt-auto space-y-3"
                     role="log"
                     aria-live="polite"
                     aria-label="Conversa com o assistente da Norte"
@@ -400,6 +423,24 @@ const Conversa: React.FC = () => {
 
                 {/* ─── Área de resposta ─── */}
                 <div className={`${done ? "" : "sticky bottom-0"} pt-5 pb-2 bg-gradient-to-t from-[#14261A] via-[#14261A] to-transparent`}>
+                    {/* "Leva uns 2 minutos" é promessa; a barra é prova.
+                        Sem ela a pessoa responde no escuro, sem saber se
+                        faltam duas perguntas ou doze — e é aí que desiste.
+                        A régua é a mesma do /auditoria: mesmo baralho,
+                        mesma contagem. */}
+                    {progresso && (
+                        <div className="mb-4 flex items-center gap-3">
+                            <div className="h-[3px] flex-1 rounded-full bg-white/15 overflow-hidden">
+                                <div
+                                    className="h-full rounded-full bg-[#8DC63F] transition-[width] duration-500 ease-out"
+                                    style={{ width: `${(progresso.atual / progresso.total) * 100}%` }}
+                                />
+                            </div>
+                            <span className={`${TAG} text-white/40 flex-shrink-0`}>
+                                {progresso.atual}/{progresso.total}
+                            </span>
+                        </div>
+                    )}
                     {showOptions && question && (
                         <div className="flex flex-wrap gap-2">
                             {question.options.map((o) => (
