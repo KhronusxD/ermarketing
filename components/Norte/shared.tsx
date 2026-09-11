@@ -11,6 +11,12 @@ import React from 'react';
 // não leva ?text=.
 export const WHATSAPP = 'https://gyrehub.com.br/r/3knb27';
 
+// Formulário de qualificação da Norte, no GyreHub: 11 perguntas, cai
+// direto no CRM. Substituiu o /conversa, que era o mesmo quiz rodando
+// dentro do site. A página /conversa continua de pé e acessível por URL,
+// só não é mais linkada de lugar nenhum.
+export const FORMULARIO = 'https://gyrehub.com.br/f/1l03bm';
+
 export const LIME = '#8DC63F';
 export const FOREST = '#14261A';
 export const INK = '#0B0E0C';

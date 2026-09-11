@@ -105,16 +105,28 @@ export function converter(qual: keyof typeof CONVERSOES, extras: Params = {}): v
     }
 }
 
-// ── Clique para o WhatsApp, em qualquer lugar do site ───────────────
+// ── Cliques de contato, em qualquer lugar do site ──────────────────
 //
 // Um ouvinte só, na raiz, em vez de onClick em cada botão. Os links de
-// WhatsApp estão espalhados por cinco arquivos e nascem novos a cada
+// contato estão espalhados por cinco arquivos e nascem novos a cada
 // página que a gente cria; assim nenhum fica de fora por esquecimento.
+//
+// São dois caminhos, e eles não valem a mesma coisa:
+//
+//   WhatsApp (wa.me, api.whatsapp.com, gyrehub.com.br/r/) → conversa
+//   começa na hora, com uma pessoa.
+//
+//   Formulário (gyrehub.com.br/f/) → a pessoa vai responder 11 perguntas
+//   em outro domínio. O clique diz que ela COMEÇOU, não que terminou.
+//   Por isso dispara a ação "formulário", que é secundária, e não a de
+//   conversa qualificada. Contar início como conclusão inflaria a régua
+//   e estragaria o lance no dia em que a conta migrar pra estratégia por
+//   conversão.
 //
 // Na fase de captura, porque o React para a propagação em alguns casos.
 let instalado = false;
 
-export function ouvirCliquesDeWhatsApp(): void {
+export function ouvirCliquesDeContato(): void {
     if (instalado || typeof document === 'undefined') return;
     instalado = true;
 
@@ -123,8 +135,9 @@ export function ouvirCliquesDeWhatsApp(): void {
         (e) => {
             const alvo = e.target as HTMLElement | null;
             const link = alvo?.closest?.(
-                'a[href*="wa.me"], a[href*="api.whatsapp.com"], a[href*="gyrehub.com.br/r/"]',
-            );
+                'a[href*="wa.me"], a[href*="api.whatsapp.com"],' +
+                    ' a[href*="gyrehub.com.br/r/"], a[href*="gyrehub.com.br/f/"]',
+            ) as HTMLAnchorElement | null;
             if (!link) return;
 
             // De onde saiu o clique, pra saber qual seção converte.
@@ -133,8 +146,10 @@ export function ouvirCliquesDeWhatsApp(): void {
                 link.closest('section')?.querySelector('h2')?.textContent?.trim().slice(0, 40) ||
                 document.title.slice(0, 40);
 
-            converter('whatsapp');
-            rastrear('Lead', {
+            const ehFormulario = (link.getAttribute('href') || '').includes('gyrehub.com.br/f/');
+
+            converter(ehFormulario ? 'formulario' : 'whatsapp');
+            rastrear(ehFormulario ? 'InitiateCheckout' : 'Lead', {
                 content_name: 'Norte Marketing',
                 content_category: secao || 'sem seção',
                 pagina: window.location.pathname,

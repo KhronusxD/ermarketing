@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
     WHATSAPP,
+    FORMULARIO,
     Arrow,
     Check,
     Eyebrow,
@@ -1283,7 +1284,7 @@ const NorteLanding: React.FC = () => {
 
                         <div className="flex flex-col sm:flex-row gap-2.5 justify-center">
                             <a
-                                href="/conversa"
+                                href={FORMULARIO}
                                 className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm pl-6 pr-2 py-2 transition-colors"
                             >
                                 Conversar com um estrategista
@@ -1889,7 +1890,7 @@ const NorteLanding: React.FC = () => {
                                 estamos prontos pra conversar sobre o seu negócio.
                             </p>
                             <a
-                                href="/conversa"
+                                href={FORMULARIO}
                                 className="group inline-flex items-center gap-3 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm md:text-base pl-7 pr-2.5 py-2.5 transition-colors"
                             >
                                 Começar a conversa
