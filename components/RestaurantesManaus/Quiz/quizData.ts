@@ -63,4 +63,4 @@ export const QUIZ_STEPS: QuizStepData[] = [
     },
 ];
 
-export const WHATSAPP_REDIRECT = 'https://flowdesk-flowdesk-app.rikvu5.easypanel.host/r/sknyr4';
+export const WHATSAPP_REDIRECT = 'https://gyrehub.com.br/r/sknyr4';

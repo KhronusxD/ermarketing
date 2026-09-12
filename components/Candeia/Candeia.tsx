@@ -1208,7 +1208,7 @@ export const Candeia: React.FC = () => {
             const script = document.createElement('script');
             script.id = scriptId;
             script.async = true;
-            script.src = `https://flowdesk-flowdesk-app.rikvu5.easypanel.host/pixel.js?id=${FLOWDESK_PIXEL_ID}&link=${FLOWDESK_LINK}`;
+            script.src = `https://gyrehub.com.br/pixel.js?id=${FLOWDESK_PIXEL_ID}&link=${FLOWDESK_LINK}`;
             document.head.appendChild(script);
         }
     }, []);

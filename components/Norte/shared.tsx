@@ -228,6 +228,7 @@ export const NorteNav: React.FC<{ scrolled: boolean }> = ({ scrolled }) => (
 
             <a
                 href={WHATSAPP}
+                data-whatsapp
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-shrink-0 inline-flex items-center gap-2 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-[13px] px-4 md:px-5 py-2.5 transition-colors"
@@ -278,7 +279,13 @@ export const NorteFooter: React.FC = () => (
                         </p>
                         <ul className="space-y-2.5 text-[13px]">
                             <li>
-                                <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                                <a
+                                    href={WHATSAPP}
+                                    data-whatsapp
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-white transition-colors"
+                                >
                                     (92) 98514-6299
                                 </a>
                             </li>

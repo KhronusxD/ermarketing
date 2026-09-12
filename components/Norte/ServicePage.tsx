@@ -78,6 +78,7 @@ const ServicePage: React.FC = () => {
 
                         <a
                             href={WHATSAPP}
+                            data-whatsapp
                             target="_blank"
                             rel="noopener noreferrer"
                             className="group inline-flex items-center gap-2 rounded-full bg-[#8DC63F] hover:bg-[#7db32f] text-[#0B0E0C] font-semibold text-sm px-6 py-3.5 transition-colors"
@@ -215,6 +216,7 @@ const ServicePage: React.FC = () => {
                         <div className="lg:col-span-4 lg:justify-self-end">
                             <a
                                 href={WHATSAPP}
+                            data-whatsapp
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="group inline-flex items-center gap-3 rounded-full bg-[#0B0E0C] hover:bg-[#14261A] text-white font-semibold text-sm md:text-base px-8 py-4 transition-colors"

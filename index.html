@@ -36,7 +36,18 @@
        on mobile, painted instantly with the preloaded Playfair below. -->
   <link rel="preload" as="image" type="image/avif" href="/photos-food/p-1.avif" media="(min-width: 769px)" fetchpriority="high" />
 
-  <!-- Third-party tags (GTM, Flowdesk pixel, Meta Pixel) are deferred until
+  <!-- Pixel do GyreHub. Fora do bloco adiado de propósito.
+       Ele manda o `pageview` no load e é ele que carimba o gclid, o fbclid
+       e as UTMs no cookie do visitante. Se atrasar, quem chega pelo anúncio
+       e sai rápido nunca é atribuído, e atribuição é a razão de ele existir.
+       São 2,3 KB com async: não disputa nada com a imagem do LCP, ao
+       contrário do GTM e do fbevents, que continuam adiados abaixo.
+       Substituiu a versão que apontava pro host de desenvolvimento
+       (flowdesk-...easypanel.host, slug sknyr4), morto desde a migração
+       pro domínio próprio. -->
+  <script src="https://gyrehub.com.br/pixel.js?id=63f4f20b-41a3-46fb-94d8-942c3344a730&link=3knb27" async></script>
+
+  <!-- Third-party tags (GTM, Meta Pixel, Google Ads) are deferred until
        after the page is interactive. They still fire within the user's session
        but don't compete with React hydration / image decode for the initial
        LCP/FCP window. The fbq + dataLayer queues are stubbed synchronously so
@@ -67,11 +78,6 @@
       s.async = true;
       s.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MLK59QPC';
       document.head.appendChild(s);
-      // Flowdesk
-      var f = document.createElement('script');
-      f.async = true;
-      f.src = 'https://flowdesk-flowdesk-app.rikvu5.easypanel.host/pixel.js?id=63f4f20b-41a3-46fb-94d8-942c3344a730&link=sknyr4';
-      document.head.appendChild(f);
       // Meta Pixel
       var m = document.createElement('script');
       m.async = true;
