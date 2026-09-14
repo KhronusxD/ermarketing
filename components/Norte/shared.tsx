@@ -193,7 +193,15 @@ export const NAV_LINKS = [
 
 // A nav nasce sobre a faixa verde-escura da hero, então antes do scroll
 // ela é transparente com a logo branca; depois vira a pílula branca.
-export const NorteNav: React.FC<{ scrolled: boolean }> = ({ scrolled }) => (
+//
+// `enxuta` tira os cinco links e o link da logo. Serve pra LP de nicho, que
+// recebe clique pago: os links apontam pra /norte, então numa LP eles são
+// cinco portas de saída de um clique que custou de R$ 5 a R$ 8. Sobra a
+// logo e o botão de contato.
+export const NorteNav: React.FC<{ scrolled: boolean; enxuta?: boolean }> = ({
+    scrolled,
+    enxuta = false,
+}) => (
     <header className="fixed top-3 left-0 right-0 z-50 px-3 md:px-5">
         <div
             className={`max-w-[1240px] mx-auto flex items-center justify-between gap-4 rounded-full px-4 md:px-5 py-2.5 transition-all duration-300 ${
@@ -202,16 +210,26 @@ export const NorteNav: React.FC<{ scrolled: boolean }> = ({ scrolled }) => (
                     : 'bg-transparent'
             }`}
         >
-            <a href="/norte" className="flex items-center flex-shrink-0">
-                <img
-                    src={scrolled ? '/norte/logo-preta.png' : '/norte/logo-branca.png'}
-                    alt="Norte · Agência de Marketing"
-                    className="h-12 w-auto -my-2 object-contain"
-                />
-            </a>
+            {enxuta ? (
+                <span className="flex items-center flex-shrink-0">
+                    <img
+                        src={scrolled ? '/norte/logo-preta.png' : '/norte/logo-branca.png'}
+                        alt="Norte · Agência de Marketing"
+                        className="h-12 w-auto -my-2 object-contain"
+                    />
+                </span>
+            ) : (
+                <a href="/norte" className="flex items-center flex-shrink-0">
+                    <img
+                        src={scrolled ? '/norte/logo-preta.png' : '/norte/logo-branca.png'}
+                        alt="Norte · Agência de Marketing"
+                        className="h-12 w-auto -my-2 object-contain"
+                    />
+                </a>
+            )}
 
             <nav className="hidden md:flex items-center gap-0.5">
-                {NAV_LINKS.map((l) => (
+                {(enxuta ? [] : NAV_LINKS).map((l) => (
                     <a
                         key={l.href}
                         href={l.href}

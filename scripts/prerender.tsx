@@ -228,6 +228,40 @@ const NORTE_FAQ_SCHEMA = {
     })),
 };
 
+// FAQ da LP de dentistas. Mesmas cinco perguntas que estão visíveis em
+// components/Norte/Dentistas.tsx — schema que não reflete texto visível é
+// o jeito certo de perder o rich result.
+const DENTISTAS_FAQ_SCHEMA = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+        [
+            'Posso anunciar antes e depois?',
+            'Antes e depois, anúncio de preço e promessa de resultado são os pontos mais sensíveis da publicidade odontológica. A Norte monta a campanha dentro dessa régua e valida cada peça com o responsável técnico da clínica.',
+        ],
+        [
+            'Em quanto tempo aparece paciente?',
+            'Os primeiros 30 dias são de calibração e servem pra aprender, não pra julgar. Dos 60 aos 90 dias a curva acelera. Quem promete agenda cheia no primeiro mês está chutando.',
+        ],
+        [
+            'Vocês atendem clínica fora de Manaus?',
+            'Sim. A Norte é de Manaus e atende o Brasil inteiro. Tráfego pago não depende de estarmos na mesma cidade, e a reunião semanal é por chamada.',
+        ],
+        [
+            'Preciso ter um Instagram bonito antes de anunciar?',
+            'Não precisa estar bonito, precisa não estar abandonado. Quem clica no anúncio quase sempre passa no perfil antes de mandar mensagem.',
+        ],
+        [
+            'Quanto preciso investir de verba?',
+            'A recomendação pra começar é R$ 1.000 por mês de verba de mídia, além do honorário de R$ 1.800. A verba é paga direto na plataforma, no cartão e na conta da clínica.',
+        ],
+    ].map(([q, a]) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+};
+
 const breadcrumb = (items: Array<{ name: string; href: string }>) => ({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -295,6 +329,28 @@ const ROUTES: RouteSpec[] = [
                 breadcrumb([
                     { name: 'Início', href: '/' },
                     { name: 'ER Marketing', href: '/er-marketing' },
+                ]),
+            ],
+        },
+    },
+
+    // LP de nicho — odontologia. A rota tem o nome do termo porque a
+    // pesquisa de 14/09/2026 mostrou que "tráfego pago para dentista" subiu
+    // 60% no ano enquanto "marketing para dentista" caiu 24%.
+    {
+        path: '/trafego-pago-para-dentistas',
+        out: 'trafego-pago-para-dentistas/index.html',
+        meta: {
+            title: 'Tráfego pago para dentistas · Norte Marketing',
+            description:
+                'Campanhas no Google e no Meta para clínicas odontológicas, com custo por paciente medido toda semana. A Odonto Solutions captou 5.193 leads a R$ 1,57. Agência em Manaus, atende o Brasil.',
+            canonical: `${SITE_ORIGIN}/trafego-pago-para-dentistas`,
+            ogType: 'website',
+            jsonLd: [
+                DENTISTAS_FAQ_SCHEMA,
+                breadcrumb([
+                    { name: 'Início', href: '/' },
+                    { name: 'Tráfego pago para dentistas', href: '/trafego-pago-para-dentistas' },
                 ]),
             ],
         },

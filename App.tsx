@@ -30,6 +30,7 @@ import NorteLanding from './components/NorteLanding';
 import NorteServicePage from './components/Norte/ServicePage';
 import Conversa from './components/Norte/Conversa';
 import Agendar from './components/Norte/Agendar';
+import Dentistas from './components/Norte/Dentistas';
 import NotFound from './components/NotFound';
 
 // Lazy routes — code-split so a first-time visitor only downloads what
@@ -108,6 +109,10 @@ const App: React.FC = () => {
                 <Route path="/edrodrigues" element={<EdRodriguesCapture />} />
                 <Route path="/norte" element={<NorteLanding />} />
                 <Route path="/norte/:slug" element={<NorteServicePage />} />
+                {/* LP de nicho. A rota tem o nome do termo de busca de
+                    propósito: "tráfego pago para dentista" subiu 60% no ano,
+                    enquanto "marketing para dentista" caiu 24%. */}
+                <Route path="/trafego-pago-para-dentistas" element={<Dentistas />} />
                 <Route path="/conversa" element={<Conversa />} />
                 <Route path="/agendar" element={<Agendar />} />
 
