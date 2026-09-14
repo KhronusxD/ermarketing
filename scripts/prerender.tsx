@@ -894,6 +894,12 @@ const sitemapEntries: Array<{
         priority: 0.9,
         changefreq: 'monthly',
     },
+    {
+        loc: `${SITE_ORIGIN}/trafego-pago-para-dentistas`,
+        lastmod: today,
+        priority: 0.9,
+        changefreq: 'monthly',
+    },
     { loc: `${SITE_ORIGIN}/sobre`, lastmod: today, priority: 0.8, changefreq: 'monthly' },
     {
         loc: `${SITE_ORIGIN}/sobre/ed-rodrigues`,
