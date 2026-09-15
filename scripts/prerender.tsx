@@ -356,6 +356,27 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // Mesma LP de odontologia, com o maquinário visual da institucional.
+    // As duas ficam no ar pra serem comparadas com verba real.
+    {
+        path: '/dentistas',
+        out: 'dentistas/index.html',
+        meta: {
+            title: 'Tráfego pago para dentistas · Norte Marketing',
+            description:
+                'Campanhas no Google e no Meta para clínicas odontológicas, com custo por paciente medido toda semana. A Odonto Solutions captou 5.193 leads a R$ 1,57. Agência em Manaus, atende o Brasil.',
+            canonical: `${SITE_ORIGIN}/dentistas`,
+            ogType: 'website',
+            jsonLd: [
+                DENTISTAS_FAQ_SCHEMA,
+                breadcrumb([
+                    { name: 'Início', href: '/' },
+                    { name: 'Tráfego pago para dentistas', href: '/dentistas' },
+                ]),
+            ],
+        },
+    },
+
     // Quiz / diagnostic landing
     {
         path: '/auditoria-de-lucro-invisivel',
@@ -890,6 +911,12 @@ const sitemapEntries: Array<{
     { loc: `${SITE_ORIGIN}/`, lastmod: today, priority: 1.0, changefreq: 'weekly' },
     {
         loc: `${SITE_ORIGIN}/auditoria-de-lucro-invisivel`,
+        lastmod: today,
+        priority: 0.9,
+        changefreq: 'monthly',
+    },
+    {
+        loc: `${SITE_ORIGIN}/dentistas`,
         lastmod: today,
         priority: 0.9,
         changefreq: 'monthly',

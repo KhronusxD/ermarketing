@@ -31,6 +31,7 @@ import NorteServicePage from './components/Norte/ServicePage';
 import Conversa from './components/Norte/Conversa';
 import Agendar from './components/Norte/Agendar';
 import Dentistas from './components/Norte/Dentistas';
+import DentistasCompleta from './components/Norte/DentistasCompleta';
 import NotFound from './components/NotFound';
 
 // Lazy routes — code-split so a first-time visitor only downloads what
@@ -113,6 +114,9 @@ const App: React.FC = () => {
                     propósito: "tráfego pago para dentista" subiu 60% no ano,
                     enquanto "marketing para dentista" caiu 24%. */}
                 <Route path="/trafego-pago-para-dentistas" element={<Dentistas />} />
+                {/* Mesma copy, maquinário visual da institucional. As duas
+                    existem pra serem comparadas com verba real. */}
+                <Route path="/dentistas" element={<DentistasCompleta />} />
                 <Route path="/conversa" element={<Conversa />} />
                 <Route path="/agendar" element={<Agendar />} />
 
