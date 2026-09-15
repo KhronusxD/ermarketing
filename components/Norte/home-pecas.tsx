@@ -5,6 +5,7 @@ import {
     CountUp,
     useElementReveal,
     useRevealOnView,
+    EDGE_FADE,
     stagger,
     IconRocket,
     H2,
@@ -988,3 +989,65 @@ export const AnelDeCards: React.FC<{ cards: FanCard[] }> = ({ cards }) => {
         </div>
     );
 };
+
+
+// ─── Trilho de logos ────────────────────────────────────────────────
+//
+// A lista de clientes não é conteúdo de uma página, é patrimônio da marca:
+// vale igual na institucional e em qualquer LP de nicho. Por isso o dado
+// mora aqui junto com o componente, ao contrário do resto do arquivo.
+//
+// A lista entra duplicada na pista porque a marquise precisa emendar em si
+// mesma: chegar a -50% cai exatamente onde começou e o laço não tem costura.
+export const LOGOS_CLIENTES =  [
+    { src: '/clientes/logos/itv-manaus.png', alt: 'iTV Manaus' },
+    { src: '/clientes/logos/taychi.png', alt: 'Taychi Sushi' },
+    { src: '/clientes/logos/abacazo.png', alt: 'Abacazo' },
+    { src: '/clientes/logos/amazon-one.png', alt: 'Amazon One' },
+    { src: '/clientes/logos/a-escola-de-sites.png', alt: 'A Escola de Sites' },
+    { src: '/clientes/logos/tecno-obras.png', alt: 'Tecno Obras' },
+    { src: '/clientes/logos/odonto-solutions.png', alt: 'Odonto Solutions' },
+    { src: '/clientes/logos/pandora-eletronicos.png', alt: 'Pandora Eletrônicos' },
+    { src: '/clientes/logos/dermo-evas.png', alt: 'Dermo Ervas' },
+    { src: '/clientes/logos/conceito-obras.png', alt: 'Conceito Obras' },
+    { src: '/clientes/logos/bem-fisio.png', alt: 'Bem Fisio' },
+    { src: '/clientes/logos/bembe-atelier.png', alt: 'Bembê Atelier' },
+    { src: '/clientes/logos/propriedades-compartilhadas.png', alt: 'Propriedades Compartilhadas' },
+    { src: '/clientes/logos/full-sales-system.png', alt: 'Full Sales System' },
+    { src: '/clientes/logos/oli-sofi.png', alt: 'Oli e Sofi' },
+    { src: '/clientes/logos/omnifit.png', alt: 'Omnifit' },
+    { src: '/clientes/logos/english-vip.png', alt: 'English Vip' },
+    { src: '/clientes/logos/reifel.png', alt: 'Reifel Confecções' },
+    { src: '/clientes/logos/formulle-age.png', alt: 'Formulle Age' },
+    { src: '/clientes/logos/studio-5.png', alt: 'Studio 5' },
+    { src: '/clientes/logos/livre-leve.png', alt: 'Livre & Leve' },
+    { src: '/clientes/logos/bye-singles.png', alt: 'Bye Singles' },
+    { src: '/clientes/logos/infinity-cobrancas.png', alt: 'Infinity Cobranças' },
+];
+
+export const TrilhoDeLogos: React.FC<{ titulo?: string }> = ({
+    titulo = 'Marcas que seguiram o Norte',
+}) => (
+    <section className="bg-white py-10 md:py-14 overflow-hidden">
+        <p className="text-center font-mono text-[11px] tracking-[0.16em] uppercase text-black/35 mb-8">
+            {titulo}
+        </p>
+        <div style={EDGE_FADE}>
+            <div className="flex gap-12 md:gap-16 animate-marquee motion-reduce:animate-none w-max">
+                {[...LOGOS_CLIENTES, ...LOGOS_CLIENTES].map((logo, i) => (
+                    <div
+                        key={`${logo.src}-${i}`}
+                        className="flex-shrink-0 w-16 h-16 md:w-[70px] md:h-[70px] flex items-center justify-center"
+                    >
+                        <img
+                            src={logo.src}
+                            alt={logo.alt}
+                            loading="lazy"
+                            className="max-h-full max-w-full object-contain rounded-full grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+);

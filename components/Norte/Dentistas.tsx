@@ -116,6 +116,34 @@ const Dentistas: React.FC = () => {
 
             {/* ═══ Hero ═══ */}
             <section className="relative bg-[#14261A] text-white overflow-hidden pt-28 md:pt-36 pb-16 md:pb-24">
+                <picture aria-hidden="true">
+                    <source
+                        type="image/webp"
+                        sizes="100vw"
+                        srcSet={
+                            '/norte/hero/fundo-hero-640.webp 640w, ' +
+                            '/norte/hero/fundo-hero-1024.webp 1024w, ' +
+                            '/norte/hero/fundo-hero-1440.webp 1440w, ' +
+                            '/norte/hero/fundo-hero-1920.webp 1920w, ' +
+                            '/norte/hero/fundo-hero-2400.webp 2400w'
+                        }
+                    />
+                    <img
+                        src="/norte/hero/fundo-hero-1440.jpg"
+                        alt=""
+                        fetchPriority="high"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
+                </picture>
+                <div
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    style={{
+                        background:
+                            'linear-gradient(to bottom, rgba(11,18,13,0.88) 0%, rgba(15,29,20,0.60) 30%, rgba(14,28,19,0.88) 62%, rgba(18,35,24,0.96) 84%, #14261A 100%)',
+                    }}
+                />
                 <div
                     aria-hidden="true"
                     className="pointer-events-none absolute -top-32 right-[-10%] w-[620px] h-[620px] rounded-full"

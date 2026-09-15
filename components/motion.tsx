@@ -224,7 +224,10 @@ export const CountUp: React.FC<{
     prefix?: string;
     suffix?: string;
     className?: string;
-}> = ({ value, decimals = 0, prefix = '', suffix = '', className }) => {
+    /** Aceita style porque sem ele um `style` passado de fora era descartado
+        em silêncio e o número caía pros 16px padrão do navegador. */
+    style?: React.CSSProperties;
+}> = ({ value, decimals = 0, prefix = '', suffix = '', className, style }) => {
     const ref = React.useRef<HTMLSpanElement>(null);
     const [shown, setShown] = React.useState(value);
 
@@ -254,7 +257,7 @@ export const CountUp: React.FC<{
     }, [value]);
 
     return (
-        <span ref={ref} className={className}>
+        <span ref={ref} className={className} style={style}>
             {prefix}
             {shown.toLocaleString('pt-BR', {
                 minimumFractionDigits: decimals,

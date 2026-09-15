@@ -28,6 +28,7 @@ import {
     ResultViz,
     RESULT_SKINS,
     RES_SKIN,
+    TrilhoDeLogos,
     type FanCard,
     type Token,
     type Passo,
@@ -124,6 +125,12 @@ const RESULTADOS = [
     { client: 'iTV Manaus', category: 'Serviços', headline: 'R$ 15 mil', body: 'de faturamento com leads a R$ 0,50/dia.' },
 ];
 
+const TIME = [
+    ['Ed Rodrigues', 'Gestor estratégico', 'ed', 'Desenha o funil e responde pelo número.'],
+    ['Brenno Soares', 'Administrador', 'brenno', 'Cuida do contrato, do prazo e do que foi combinado.'],
+    ['Francyelle Barbosa', 'Diretora de conteúdo', 'francyelle', 'Responde pelo que a sua clínica fala e mostra.'],
+];
+
 const FAQ: [string, string][] = [
     ['Posso anunciar antes e depois?', 'É a pergunta que mais aparece, e a resposta honesta é: antes e depois, anúncio de preço e promessa de resultado são os pontos mais sensíveis da publicidade odontológica. A Norte monta a campanha dentro dessa régua e valida as peças com você e com o responsável técnico da clínica. Se uma ideia boa não passar na regra, ela não vai ao ar.'],
     ['Em quanto tempo aparece paciente?', 'Os primeiros 30 dias são de calibração, e nesse período o número serve pra aprender, não pra julgar. Dos 60 aos 90 dias a curva acelera. Quem promete agenda cheia no primeiro mês está chutando.'],
@@ -148,6 +155,40 @@ const DentistasCompleta: React.FC = () => {
 
             {/* ═══ Hero com o anel ═══ */}
             <section className="relative bg-[#14261A] text-white overflow-hidden pt-28 md:pt-36 pb-16 md:pb-20">
+                {/* A mesma foto de trilha na mata da institucional. Entra como
+                    <img> e não como background-image: assim o navegador acha a
+                    imagem já no HTML pré-renderizado e trata como LCP. Sem ela
+                    a hero era um retângulo verde chapado, e era a maior razão
+                    de a página parecer genérica. */}
+                <picture aria-hidden="true">
+                    <source
+                        type="image/webp"
+                        sizes="100vw"
+                        srcSet={
+                            '/norte/hero/fundo-hero-640.webp 640w, ' +
+                            '/norte/hero/fundo-hero-1024.webp 1024w, ' +
+                            '/norte/hero/fundo-hero-1440.webp 1440w, ' +
+                            '/norte/hero/fundo-hero-1920.webp 1920w, ' +
+                            '/norte/hero/fundo-hero-2400.webp 2400w'
+                        }
+                    />
+                    <img
+                        src="/norte/hero/fundo-hero-1440.jpg"
+                        alt=""
+                        fetchPriority="high"
+                        decoding="async"
+                        className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
+                </picture>
+                {/* Véu por cima: a foto sozinha come o contraste do texto. */}
+                <div
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    style={{
+                        background:
+                            'linear-gradient(to bottom, rgba(11,18,13,0.88) 0%, rgba(15,29,20,0.60) 30%, rgba(14,28,19,0.88) 62%, rgba(18,35,24,0.96) 84%, #14261A 100%)',
+                    }}
+                />
                 <div
                     aria-hidden="true"
                     className="pointer-events-none absolute -top-32 right-[-10%] w-[620px] h-[620px] rounded-full"
@@ -192,6 +233,11 @@ const DentistasCompleta: React.FC = () => {
                 </div>
             </section>
 
+            {/* Logos antes de qualquer argumento. Quem chega de anúncio
+                decide em segundos se a agência é grande o bastante, e 24
+                logos respondem isso sem uma linha de texto. */}
+            <TrilhoDeLogos titulo="Marcas que seguiram o Norte" />
+
             {/* ═══ Manifesto ═══ */}
             <section className={`bg-white ${SECTION} text-center`}>
                 <div className={CONTAINER}>
@@ -209,8 +255,7 @@ const DentistasCompleta: React.FC = () => {
                                 <div>
                                     <CountUp
                                         value={5193}
-                                        className={`${H2} text-[#14261A] block`}
-                                        style={{ fontSize: 'clamp(44px, 7vw, 86px)', lineHeight: 1 }}
+                                        className={`${H2} text-[#14261A] text-[clamp(44px,7vw,86px)] leading-none block`}
                                     />
                                     <div className={`${LABEL} text-black/45 mt-3`}>leads captados</div>
                                 </div>
@@ -219,8 +264,7 @@ const DentistasCompleta: React.FC = () => {
                                         prefix="R$ "
                                         value={1.57}
                                         decimals={2}
-                                        className={`${H2} text-[#14261A] block`}
-                                        style={{ fontSize: 'clamp(44px, 7vw, 86px)', lineHeight: 1 }}
+                                        className={`${H2} text-[#14261A] text-[clamp(44px,7vw,86px)] leading-none block`}
                                     />
                                     <div className={`${LABEL} text-black/45 mt-3`}>por lead</div>
                                 </div>
@@ -234,12 +278,17 @@ const DentistasCompleta: React.FC = () => {
                                 Resultado deles, com a operação deles.
                             </p>
                         </div>
-                        <img
-                            src="/clientes/logos/odonto-solutions.png"
-                            alt="Odonto Solutions"
-                            loading="lazy"
-                            className="h-14 md:h-20 w-auto opacity-60 self-start md:self-end"
-                        />
+                        {/* O PNG é opaco, sem canal alfa. Solto ele vira um
+                            quadrado bege no meio do creme. Redondo, como no
+                            trilho, ele lê como marca. */}
+                        <div className="self-start md:self-end w-20 h-20 md:w-[104px] md:h-[104px] rounded-full overflow-hidden ring-1 ring-black/[0.06] flex-shrink-0">
+                            <img
+                                src="/clientes/logos/odonto-solutions.png"
+                                alt="Odonto Solutions"
+                                loading="lazy"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
                     </div>
                 </div>
             </section>
@@ -251,7 +300,6 @@ const DentistasCompleta: React.FC = () => {
                         <div>
                             <h2 className={H2} style={{ fontSize: 'clamp(28px, 4.2vw, 50px)' }}>
                                 Três coisas que a gente ouve
-                                <br />
                                 de quase toda clínica.
                             </h2>
                             <div className="mt-10">
@@ -353,6 +401,49 @@ const DentistasCompleta: React.FC = () => {
                 </div>
             </section>
 
+            {/* ═══ Quem cuida ═══ */}
+            {/* Campo preto: é a única cor que não aparece em nenhum outro
+                lugar da página. E é a primeira vez que aparece um rosto —
+                dono de clínica escolhendo fornecedor quer saber com quem vai
+                falar toda semana. */}
+            <section className="bg-[#131313] text-white py-16 md:py-24">
+                <div className={CONTAINER}>
+                    <div className="max-w-2xl">
+                        <Eyebrow light>Time fixo e nominal</Eyebrow>
+                        <h2 className={`mt-4 ${H2}`} style={{ fontSize: 'clamp(28px, 4vw, 50px)' }}>
+                            Quem vai cuidar
+                            <br />
+                            <span className="text-white/45">da sua conta.</span>
+                        </h2>
+                        <p className="mt-6 text-[15px] md:text-[17px] text-white/55 leading-relaxed">
+                            As mesmas três pessoas do primeiro diagnóstico até o relatório da
+                            última semana. Não é rodízio de estagiário, e você não vai
+                            descobrir num e-mail que trocaram de responsável.
+                        </p>
+                    </div>
+
+                    <div className="mt-14 grid sm:grid-cols-3 gap-5 md:gap-8">
+                        {TIME.map(([nome, papel, arquivo, linha]) => (
+                            <div key={nome}>
+                                <div className="relative aspect-[4/5] rounded-[20px] overflow-hidden bg-[#1c1c1c]">
+                                    <img
+                                        src={`/socios/${arquivo}-4x5.jpg`}
+                                        alt={nome}
+                                        loading="lazy"
+                                        className="absolute inset-0 w-full h-full object-cover"
+                                    />
+                                </div>
+                                <h3 className="mt-5 text-[18px] md:text-[20px] font-semibold tracking-[-0.02em]">
+                                    {nome}
+                                </h3>
+                                <p className={`${LABEL} text-[#8DC63F] mt-1.5`}>{papel}</p>
+                                <p className="mt-3 text-[14px] text-white/50 leading-relaxed">{linha}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* ═══ Bônus ═══ */}
             <section className={SECTION} style={{ backgroundColor: CREAM }}>
                 <div className={CONTAINER}>
@@ -394,8 +485,7 @@ const DentistasCompleta: React.FC = () => {
                                 <CountUp
                                     prefix="R$ "
                                     value={1800}
-                                    className={`${H2} text-[#14261A] block`}
-                                    style={{ fontSize: 'clamp(34px, 5vw, 58px)', lineHeight: 1 }}
+                                    className={`${H2} text-[#14261A] text-[clamp(34px,5vw,58px)] leading-none block`}
                                 />
                                 <div className={`${LABEL} text-black/45 mt-3`}>por mês de honorário</div>
                             </div>
@@ -403,8 +493,7 @@ const DentistasCompleta: React.FC = () => {
                                 <CountUp
                                     prefix="R$ "
                                     value={1000}
-                                    className={`${H2} text-black/35 block`}
-                                    style={{ fontSize: 'clamp(34px, 5vw, 58px)', lineHeight: 1 }}
+                                    className={`${H2} text-black/35 text-[clamp(34px,5vw,58px)] leading-none block`}
                                 />
                                 <div className={`${LABEL} text-black/45 mt-3`}>de verba, no seu cartão</div>
                             </div>
