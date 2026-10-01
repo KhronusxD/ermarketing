@@ -39,6 +39,17 @@ const SITE_ORIGIN = 'https://trafegomanaus.com.br';
 const DEFAULT_OG = `${SITE_ORIGIN}/og-norte.jpg`;
 const PHONE_E164 = '+55-92-98514-6299';
 
+// O Cloudflare Pages serve cada rota como diretório: /sobre/index.html responde
+// em /sobre/ e devolve 308 de /sobre pra /sobre/. Os canonicals e o sitemap
+// eram escritos sem a barra — então o canonical declarava como versão oficial
+// uma URL que redireciona, e o sitemap submetia 30 URLs que todas redirecionam.
+// O Google resolve seguindo o 308, mas é sinal fraco sem ganho nenhum, e toda
+// ferramenta de auditoria aponta isso. Normalizando aqui, no único ponto de
+// saída de cada um, as 30 definições de rota ficam intactas e a URL declarada
+// passa a ser exatamente a que responde 200. A home já termina em barra.
+const withTrailingSlash = (url: string): string =>
+    url.endsWith('/') ? url : `${url}/`;
+
 // ──────────────────────────────────────────────────────────────────────
 // Reusable schema fragments. Embedded directly in the per-route JSON-LD.
 // ──────────────────────────────────────────────────────────────────────
@@ -269,7 +280,7 @@ const breadcrumb = (items: Array<{ name: string; href: string }>) => ({
         '@type': 'ListItem',
         position: i + 1,
         name: it.name,
-        item: `${SITE_ORIGIN}${it.href}`,
+        item: withTrailingSlash(`${SITE_ORIGIN}${it.href}`),
     })),
 });
 
@@ -836,10 +847,10 @@ const injectHead = (html: string, meta: RouteMeta): string => {
     const tags = [
         `<title>${escapeHtml(meta.title)}</title>`,
         `<meta name="description" content="${escapeAttr(meta.description)}">`,
-        `<link rel="canonical" href="${meta.canonical}">`,
+        `<link rel="canonical" href="${withTrailingSlash(meta.canonical)}">`,
         `<meta property="og:title" content="${escapeAttr(meta.title)}">`,
         `<meta property="og:description" content="${escapeAttr(meta.description)}">`,
-        `<meta property="og:url" content="${meta.canonical}">`,
+        `<meta property="og:url" content="${withTrailingSlash(meta.canonical)}">`,
         `<meta property="og:type" content="${meta.ogType ?? 'website'}">`,
         `<meta property="og:image" content="${og}">`,
         `<meta property="og:site_name" content="Norte">`,
@@ -1017,7 +1028,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 ${sitemapEntries
     .map(
         (e) => `  <url>
-    <loc>${e.loc}</loc>
+    <loc>${withTrailingSlash(e.loc)}</loc>
     <lastmod>${e.lastmod}</lastmod>
     <changefreq>${e.changefreq}</changefreq>
     <priority>${e.priority.toFixed(1)}</priority>
