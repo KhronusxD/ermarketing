@@ -300,6 +300,9 @@ interface RouteMeta {
     ogType?: 'website' | 'article' | 'profile';
     /** Etapa de funil: entra no build mas fica fora do índice. */
     noindex?: boolean;
+    /** Imagem a pré-carregar com prioridade. Só para rota cuja imagem está
+     *  acima da dobra — preload de imagem fora de tela atrasa o LCP real. */
+    preloadImage?: string;
     publishedAt?: string;
     /** One or many JSON-LD blocks — each stringified separately. */
     jsonLd?: Array<Record<string, unknown>>;
@@ -335,6 +338,8 @@ const ROUTES: RouteSpec[] = [
         path: '/er-marketing',
         out: 'er-marketing/index.html',
         meta: {
+            // A foto do colagem do herói é candidata a LCP no desktop aqui.
+            preloadImage: '/photos-food/p-1.avif',
             title: 'ER Marketing · Agência de marketing de performance em Manaus',
             description:
                 'Tráfego pago, copy, captação audiovisual e BI ponta a ponta — agência baseada em Manaus, 7 anos de operação, mais de R$ 5 milhões em mídia gerida.',
@@ -500,6 +505,8 @@ const ROUTES: RouteSpec[] = [
         path: '/restaurantes-manaus',
         out: 'restaurantes-manaus/index.html',
         meta: {
+            // Mesma foto, também acima da dobra nesta LP.
+            preloadImage: '/photos-food/p-1.avif',
             title:
                 'Marketing para Restaurantes em Manaus · ER Marketing',
             description:
@@ -760,9 +767,9 @@ const ROUTES: RouteSpec[] = [
         path: '/cases',
         out: 'cases/index.html',
         meta: {
-            title: 'Cases da Norte · 20 operações com resultado medido',
+            title: `Cases da Norte · ${CASES.length} operações com resultado medido`,
             description:
-                'Os resultados que a Norte entregou, marca por marca e com a métrica exata: Taychi de R$ 70 mil a R$ 200 mil/mês, La Pizza Rio com ROAS 4,1x, Odonto Solutions com 5.193 leads a R$ 1,57. Restaurante, e-commerce, clínica, varejo e construção.',
+                'Os resultados que a Norte entregou, marca por marca e com a métrica exata: Taychi de R$ 70 mil a R$ 200 mil/mês, La Pizza Rio com ROAS 4,1x, Odonto Solutions com 5.193 leads a R$ 1,57. Restaurante, e-commerce, clínica veterinária, varejo e construção.',
             canonical: `${SITE_ORIGIN}/cases`,
             jsonLd: [
                 {
@@ -955,6 +962,12 @@ const injectHead = (html: string, meta: RouteMeta): string => {
         `<meta name="twitter:description" content="${escapeAttr(meta.description)}">`,
         `<meta name="twitter:image" content="${og}">`,
     ];
+    if (meta.preloadImage) {
+        tags.push(
+            `<link rel="preload" as="image" type="image/avif" href="${meta.preloadImage}" media="(min-width: 769px)" fetchpriority="high">`,
+        );
+    }
+
     if (meta.noindex) {
         tags.push(`<meta name="robots" content="noindex, follow">`);
     }

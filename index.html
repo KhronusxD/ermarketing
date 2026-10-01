@@ -30,11 +30,13 @@
        and the main LP hero. Saves TLS/DNS on the first byte of video metadata. -->
   <link rel="preconnect" href="https://pub-a56d220bf5884e95b4762d77d7556734.r2.dev" />
 
-  <!-- Desktop-only preload of the pizza photo. On >=lg the hero collage is
-       in viewport on first paint and the photo is the LCP candidate there.
-       Mobile hero is copy-only (no static <img>): the H1 is the LCP element
-       on mobile, painted instantly with the preloaded Playfair below. -->
-  <link rel="preload" as="image" type="image/avif" href="/photos-food/p-1.avif" media="(min-width: 769px)" fetchpriority="high" />
+  <!-- O preload da foto do herói saiu daqui. Este index.html é o molde de
+       TODAS as rotas pré-renderizadas, então o preload valia em 42 das 44
+       páginas — com fetchpriority="high" — enquanto a imagem só está acima
+       da dobra em /er-marketing e /restaurantes-manaus. Nas outras ~38 o
+       navegador baixava com prioridade máxima uma foto que nunca aparece,
+       disputando banda com o LCP de verdade daquela página. Agora o preload
+       é injetado por rota, via `preloadImage` no prerender. -->
 
   <!-- Pixel do GyreHub. Fora do bloco adiado de propósito.
        Ele manda o `pageview` no load e é ele que carimba o gclid, o fbclid

@@ -24,10 +24,12 @@ export interface CaseDetail {
     /** O cenário de quando o cliente chegou. */
     challenge: string;
     stats: CaseStat[];
-    quote: string;
-    author: string;
+    /** Opcionais: só entram quando existem de verdade. Case sem depoimento
+     *  do cliente não ganha depoimento inventado — a seção some. */
+    quote?: string;
+    author?: string;
     hero: string;
-    gallery: string[];
+    gallery?: string[];
     /** O que a Norte executou. Cada item sai da operação registrada do case. */
     approach: { title: string; body: string }[];
     seoTitle: string;
@@ -130,6 +132,45 @@ export const CASES: ReadonlyArray<CaseEntry> = [
             seoTitle: 'Case La Pizza Rio: +190% em pedidos diretos e ROAS de 4,1x',
             seoDescription:
                 'Como a La Pizza Rio cresceu 190% em pedidos diretos no WhatsApp, com ROAS de 4,1x e CPL de R$ 9,40, saindo da dependência de marketplace. Case da Norte Marketing.',
+        },
+    },
+
+    {
+        client: 'Clinvet',
+        handle: '@clinvetbsb',
+        headline: 'R$ 88/mês de desperdício',
+        body: 'é tudo que sobrou de verba mal gasta na conta inteira, depois da revisão de termos de pesquisa.',
+        category: 'Saúde',
+        premium: true,
+        slug: 'clinvet',
+        detail: {
+            location: 'Sobradinho · DF',
+            nicheTag: 'Clínica veterinária',
+            challenge:
+                'Clínica com três décadas de praça e demanda chegando todo dia pelo WhatsApp — mas sem régua. Não havia definição do que contava como cliente em potencial: currículo, fornecedor e engano entravam no funil junto com quem queria marcar consulta. Sem essa linha, qualquer número de "leads" é um número que não dá pra usar.',
+            stats: [
+                { value: 'R$ 88', label: 'de desperdício por mês na conta inteira' },
+                { value: '590', label: 'conversas auditadas uma a uma' },
+                { value: '8', label: 'janelas de remarketing, de 7 a 540 dias' },
+            ],
+            hero: '/cases/clinvet-fachada.webp',
+            approach: [
+                {
+                    title: 'A conta montada pra medir, não pra parecer grande',
+                    body: 'Search de clínica veterinária como carro-chefe, remarketing de display leve e uma PMax deliberadamente restrita — com exclusões de conteúdo e Display minimizado, porque PMax solta come verba em inventário que não converte. Mais oito públicos de visitante, de 7 a 540 dias, pra que quem já passou pelo site não seja tratado como desconhecido.',
+                },
+                {
+                    title: 'A verba apontada pra conversa, não pra clique barato',
+                    body: 'As campanhas passaram a otimizar apenas para contato no WhatsApp. As outras conversões continuam sendo contadas, mas pararam de guiar o lance — porque otimizar pra tudo é otimizar pra nada. Em paralelo, a revisão de termos de pesquisa derrubou o desperdício da conta a R$ 88 por mês, com 162 negativos ativos segurando concorrente, pet shop e busca de fora da praça.',
+                },
+                {
+                    title: 'O funil definido conversa por conversa',
+                    body: 'Lemos 590 conversas de 30 dias e escrevemos a régua a partir delas, não de teoria: convite pra agendar não é agendamento; ganho é pagamento, não alta de internação; quem procura serviço que a casa não vende não é lead perdido por desinteresse, é outra coisa. Regras assim não se deduzem de dashboard — saem de ler o que o cliente de verdade escreveu.',
+                },
+            ],
+            seoTitle: 'Case Clinvet: como a gente auditou 590 conversas de uma clínica veterinária',
+            seoDescription:
+                'Conta de Google e Meta reconstruída para uma clínica veterinária em Sobradinho/DF: desperdício derrubado a R$ 88/mês, otimização apontada pro WhatsApp e 590 conversas auditadas para definir o que é lead. Case da Norte Marketing.',
         },
     },
 

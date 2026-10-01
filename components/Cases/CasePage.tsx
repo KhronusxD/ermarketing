@@ -21,6 +21,12 @@ import { findCase, CASES_WITH_PAGE } from './cases';
 const SECTION = 'py-16 md:py-24';
 const CONTAINER = 'max-w-[1240px] mx-auto px-5 md:px-8';
 
+// Só existe par AVIF para as fotos .jpg de /photos-food. Para qualquer outro
+// formato (a fachada do Clinvet é .webp) devolve null e o <picture> cai
+// direto no <img> — sem isso o <source> apontaria pra um arquivo inexistente.
+const avifDe = (src: string): string | null =>
+    src.endsWith('.jpg') ? src.replace(/\.jpg$/, '.avif') : null;
+
 const CasePage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const caso = slug ? findCase(slug) : undefined;
@@ -114,10 +120,9 @@ const CasePage: React.FC = () => {
 
                     <div className="mt-12 overflow-hidden rounded-3xl">
                         <picture>
-                            <source
-                                type="image/avif"
-                                srcSet={detail.hero.replace(/\.jpg$/, '.avif')}
-                            />
+                            {avifDe(detail.hero) && (
+                                <source type="image/avif" srcSet={avifDe(detail.hero)!} />
+                            )}
                             <img
                                 src={detail.hero}
                                 alt={`${caso.client} — ${detail.nicheTag} em ${detail.location}`}
@@ -159,15 +164,14 @@ const CasePage: React.FC = () => {
                         ))}
                     </div>
 
-                    {detail.gallery.length > 0 && (
+                    {detail.gallery && detail.gallery.length > 0 && (
                         <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
                             {detail.gallery.map((src, i) => (
                                 <div key={src} className="overflow-hidden rounded-2xl">
                                     <picture>
-                                        <source
-                                            type="image/avif"
-                                            srcSet={src.replace(/\.jpg$/, '.avif')}
-                                        />
+                                        {avifDe(src) && (
+                                            <source type="image/avif" srcSet={avifDe(src)!} />
+                                        )}
                                         <img
                                             src={src}
                                             alt={`${caso.client} — imagem ${i + 2} da operação`}
@@ -186,17 +190,30 @@ const CasePage: React.FC = () => {
             {/* ═══ A fala do cliente ═══ */}
             <section className={`${SECTION} bg-[#14261A] text-white`}>
                 <div className={CONTAINER}>
-                    <Eyebrow light>Na voz de quem contratou</Eyebrow>
-                    <blockquote className="mt-6 max-w-[34ch]">
-                        <p
-                            className={`${H2} text-[clamp(24px,3.2vw,40px)] text-white`}
-                        >
-                            “{detail.quote}”
-                        </p>
-                        <footer className={`${TAG} mt-6 text-[#8DC63F]`}>
-                            {detail.author}
-                        </footer>
-                    </blockquote>
+                    {detail.quote ? (
+                        <>
+                            <Eyebrow light>Na voz de quem contratou</Eyebrow>
+                            <blockquote className="mt-6 max-w-[34ch]">
+                                <p
+                                    className={`${H2} text-[clamp(24px,3.2vw,40px)] text-white`}
+                                >
+                                    “{detail.quote}”
+                                </p>
+                                {detail.author && (
+                                    <footer className={`${TAG} mt-6 text-[#8DC63F]`}>
+                                        {detail.author}
+                                    </footer>
+                                )}
+                            </blockquote>
+                        </>
+                    ) : (
+                        <>
+                            <Eyebrow light>O próximo passo</Eyebrow>
+                            <h2 className={`${H2} mt-4 text-[clamp(24px,3.2vw,40px)] max-w-[26ch]`}>
+                                A sua conta também tem um número que ninguém olhou.
+                            </h2>
+                        </>
+                    )}
 
                     <div className="mt-12 flex flex-wrap gap-3">
                         <a

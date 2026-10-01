@@ -175,7 +175,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'Na [Norte](/) a gente conta os cases por nicho de forma transparente: [Taychi Sushi Bar](/cases/taychi-sushi-bar), [La Pizza Rio](/cases/la-pizza-rio), iTV Manaus e [mais 17 operações documentadas](/cases). Você vê o número antes de assinar.',
+                text: 'Na [Norte](/) a gente conta os cases por nicho de forma transparente: [Taychi Sushi Bar](/cases/taychi-sushi-bar), [La Pizza Rio](/cases/la-pizza-rio), iTV Manaus e [mais 18 operações documentadas](/cases). Você vê o número antes de assinar.',
             },
             {
                 type: 'h2',

@@ -90,7 +90,7 @@ const CasesIndex: React.FC = () => {
                 <div className={CONTAINER}>
                     <Eyebrow>Por dentro da operação</Eyebrow>
                     <h2 className={`${H2} mt-4 text-[clamp(28px,3.6vw,46px)] max-w-[26ch]`}>
-                        Dois cases com a conta aberta.
+                        {destaques.length === 2 ? 'Dois' : 'Três'} cases com a conta aberta.
                     </h2>
                     <p className="mt-4 max-w-[60ch] text-[15px] md:text-[17px] leading-relaxed text-black/70">
                         O cenário de quando o cliente chegou, o que foi executado e
@@ -111,10 +111,15 @@ const CasesIndex: React.FC = () => {
                                             cerca de um terço (22 KB contra 60 KB
                                             na t-1). */}
                                         <picture>
-                                            <source
-                                                type="image/avif"
-                                                srcSet={c.detail.hero.replace(/\.jpg$/, '.avif')}
-                                            />
+                                            {c.detail.hero.endsWith('.jpg') && (
+                                                <source
+                                                    type="image/avif"
+                                                    srcSet={c.detail.hero.replace(
+                                                        /\.jpg$/,
+                                                        '.avif',
+                                                    )}
+                                                />
+                                            )}
                                             <img
                                                 src={c.detail.hero}
                                                 alt={`${c.client} — ${c.detail.nicheTag}`}
