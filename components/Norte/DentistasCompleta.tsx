@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
     WHATSAPP,
-    FORMULARIO,
+    whatsappCom,
     Arrow,
     Check,
     Eyebrow,
@@ -46,6 +46,12 @@ import {
 //
 // Nenhuma peça foi duplicada: tudo vem de Norte/home-pecas.tsx, que saiu
 // de dentro da NorteLanding justamente pra isso.
+
+// Mensagem própria da LP: saber que o lead veio da página de dentistas
+// vale mais que uma mensagem genérica. O carimbo de origem vai junto.
+const WA_DENTISTA = whatsappCom(
+    'Olá! Sou de uma clínica odontológica e vim pela página de tráfego pago para dentistas.',
+);
 
 const SECTION = 'py-16 md:py-24';
 const CONTAINER = 'max-w-[1240px] mx-auto px-5 md:px-8';
@@ -209,7 +215,10 @@ const DentistasCompleta: React.FC = () => {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-2.5">
                             <a
-                                href={FORMULARIO}
+                                href={WA_DENTISTA}
+                                data-whatsapp
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm pl-6 pr-2 py-2 transition-colors"
                             >
                                 Quero um diagnóstico da minha clínica
@@ -546,7 +555,10 @@ const DentistasCompleta: React.FC = () => {
                         </p>
                         <div className="mt-10 flex flex-col sm:flex-row gap-2.5">
                             <a
-                                href={FORMULARIO}
+                                href={WA_DENTISTA}
+                                data-whatsapp
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#8DC63F] hover:bg-[#9ed650] text-[#0B0E0C] font-semibold text-sm md:text-base pl-7 pr-2.5 py-2.5 transition-colors"
                             >
                                 Quero um diagnóstico da minha clínica

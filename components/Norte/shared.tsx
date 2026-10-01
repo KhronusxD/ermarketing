@@ -4,18 +4,31 @@ import React from 'react';
 // LPs de serviço (/norte/<slug>): constantes de marca, ícones SVG
 // inline e componentes de chrome (nav e footer).
 
-// Link de atribuição do GyreHub, não o wa.me direto. Ele redireciona pro
-// mesmo WhatsApp, mas carimba a mensagem com [REF:3knb27] — é assim que o
-// CRM sabe que o lead veio do site, e não de indicação ou do Instagram.
-// A mensagem de abertura fica configurada lá, não aqui: por isso o link
-// não leva ?text=.
-export const WHATSAPP = 'https://gyrehub.com.br/r/3knb27';
+// WhatsApp direto, com o carimbo de origem embutido na própria mensagem.
+//
+// Antes isto apontava pro redirecionador do GyreHub (gyrehub.com.br/r/...).
+// Medido em 01/10/2026: aquele link NÃO é um redirect HTTP, é uma página
+// que carrega inteira (1,2 a 1,9s) e só então o JavaScript manda pro
+// WhatsApp. No celular, em conexão ruim, é um tempo em que a pessoa olha
+// pra uma tela em branco — e se o JS falhar, ela não chega.
+//
+// O wa.me abre o aplicativo na hora. E a atribuição não se perde, porque o
+// [REF] que o redirecionador carimbava é texto fixo: dá pra escrever aqui.
+// O pixel do GyreHub, que já roda no site, continua registrando o clique
+// com gclid e UTM.
+const WA_NUMERO = '5592985146299';
+const REF = '[REF:3knb27]';
 
-// Formulário de qualificação da Norte, no GyreHub: 11 perguntas, cai
-// direto no CRM. Substituiu o /conversa, que era o mesmo quiz rodando
-// dentro do site. A página /conversa continua de pé e acessível por URL,
-// só não é mais linkada de lugar nenhum.
-export const FORMULARIO = 'https://gyrehub.com.br/f/1l03bm';
+/** Monta o link do WhatsApp com a mensagem de abertura e o carimbo de
+ *  origem. Cada página pode mandar a sua: saber que o lead veio da LP de
+ *  dentistas vale mais que uma mensagem genérica pra todo mundo. */
+export const whatsappCom = (mensagem: string) =>
+    `https://wa.me/${WA_NUMERO}?text=${encodeURIComponent(`${mensagem} ${REF}`)}`;
+
+export const WHATSAPP = whatsappCom(
+    'Olá! Vim pelo site da Norte e quero conversar sobre marketing.',
+);
+
 
 export const LIME = '#8DC63F';
 export const FOREST = '#14261A';

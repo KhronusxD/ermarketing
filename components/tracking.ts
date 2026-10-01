@@ -116,12 +116,11 @@ export function converter(qual: keyof typeof CONVERSOES, extras: Params = {}): v
 //   WhatsApp (wa.me, api.whatsapp.com, gyrehub.com.br/r/) → conversa
 //   começa na hora, com uma pessoa.
 //
-//   Formulário (gyrehub.com.br/f/) → a pessoa vai responder 11 perguntas
-//   em outro domínio. O clique diz que ela COMEÇOU, não que terminou.
-//   Por isso dispara a ação "formulário", que é secundária, e não a de
-//   conversa qualificada. Contar início como conclusão inflaria a régua
-//   e estragaria o lance no dia em que a conta migrar pra estratégia por
-//   conversão.
+//   Formulário (gyrehub.com.br/f/) → desde 01/10/2026 nenhum botão do site
+//   aponta pra lá: todos vão direto pro WhatsApp. O seletor continua
+//   cobrindo o caso porque custa nada e volta a funcionar sozinho se o
+//   formulário voltar. A ação "Formulário iniciado (GyreHub)" no Google
+//   Ads está sem gatilho de novo.
 //
 // Na fase de captura, porque o React para a propagação em alguns casos.
 let instalado = false;
