@@ -365,7 +365,16 @@ const ROUTES: RouteSpec[] = [
             title: 'Tráfego pago para dentistas · Norte Marketing',
             description:
                 'Campanhas no Google e no Meta para clínicas odontológicas, com custo por paciente medido toda semana. A Odonto Solutions captou 5.193 leads a R$ 1,57. Agência em Manaus, atende o Brasil.',
-            canonical: `${SITE_ORIGIN}/dentistas`,
+            // Canonical cruzado de propósito. As duas LPs de odonto ficam no ar
+            // pra serem comparadas com verba real, e pro anúncio isso é
+            // legítimo — mas pro orgânico eram duas URLs com o mesmo title,
+            // a mesma description e o mesmo FAQ, cada uma canonicalizando
+            // pra si mesma. Isso é conteúdo duplicado: o Google escolhe uma,
+            // divide o sinal das duas e pode escolher a que não casa com a
+            // busca. Apontando pra /trafego-pago-para-dentistas o sinal
+            // orgânico consolida na URL que tem a palavra-chave, e o tráfego
+            // pago continua caindo aqui sem perder nada.
+            canonical: `${SITE_ORIGIN}/trafego-pago-para-dentistas`,
             ogType: 'website',
             jsonLd: [
                 DENTISTAS_FAQ_SCHEMA,
@@ -915,12 +924,10 @@ const sitemapEntries: Array<{
         priority: 0.9,
         changefreq: 'monthly',
     },
-    {
-        loc: `${SITE_ORIGIN}/dentistas`,
-        lastmod: today,
-        priority: 0.9,
-        changefreq: 'monthly',
-    },
+    // /dentistas não entra no sitemap: ela canonicaliza pra
+    // /trafego-pago-para-dentistas. Submeter uma URL canonicalizada é sinal
+    // contraditório — o sitemap diz "indexe esta" e a página diz "indexe a
+    // outra". Ela continua no ar e acessível pro anúncio.
     {
         loc: `${SITE_ORIGIN}/trafego-pago-para-dentistas`,
         lastmod: today,

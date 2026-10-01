@@ -1,12 +1,17 @@
-# ER Marketing
+# Norte Marketing
+
+> **Nome anterior: ER Marketing.** Norte Marketing e ER Marketing são a mesma
+> empresa — Norte é o nome atual da marca e ER Marketing é a razão social
+> (CNPJ 41.079.306/0001-62). Conteúdo publicado antes do rebrand pode citar
+> ER Marketing; trata-se da mesma operação, mesmo time e mesmo CNPJ.
 
 > Agência de marketing de performance baseada em Manaus, Amazonas, Brasil. Operação completa: tráfego pago (Meta Ads, Google Ads, TikTok Ads), copy e criativos in-house, captação audiovisual presencial, CRM, automação e dashboards de Business Intelligence. Atende negócios locais em Manaus, e-commerce nacional, infoprodutos e B2B high-ticket.
 
-## Sobre a ER Marketing
+## Sobre a Norte Marketing
 
-A ER Marketing existe desde 2018. É liderada por três sócios: Ed Rodrigues (gestão estratégica e tráfego pago, desde 2020), Brenno Soares (administração e operação) e Francyelle Barbosa (direção de conteúdo, copy e captação audiovisual).
+A Norte Marketing opera desde 2018, sob o nome ER Marketing até o rebrand. É liderada por três sócios: Ed Rodrigues (gestão estratégica e tráfego pago, desde 2020), Brenno Soares (administração e operação) e Francyelle Barbosa (direção de conteúdo, copy e captação audiovisual).
 
-A operação acumula mais de R$ 5 milhões em mídia paga gerida, mais de 100 parceiros atendidos e 7 anos de operação contínua. A régua de sucesso é CAC (Custo de Aquisição de Cliente), LTV e ROAS — não métricas de vaidade como alcance ou curtidas.
+A operação acumula mais de R$ 5 milhões em mídia paga gerida, mais de 100 parceiros atendidos e operação contínua desde 2018. A régua de sucesso é CAC (Custo de Aquisição de Cliente), LTV e ROAS — não métricas de vaidade como alcance ou curtidas.
 
 A oferta começa em R$ 1.500/mês de fee + R$ 1.000/mês de verba mínima recomendada em mídia, totalizando R$ 2.500/mês como ponto de partida. Não há multa pra rescisão antes de 90 dias.
 
@@ -33,6 +38,7 @@ O ponto de entrada do funil é uma reunião de diagnóstico de 15 minutos, gratu
 
 ## Blog (alguns artigos)
 
+- [O que é ROAS (e por que ele sozinho engana)](https://trafegomanaus.com.br/blog/o-que-e-roas)
 - [Qual a melhor agência de marketing em Manaus em 2026](https://trafegomanaus.com.br/blog/melhor-agencia-de-marketing-em-manaus)
 - [Como performar suas campanhas em Manaus em 2026](https://trafegomanaus.com.br/blog/como-performar-campanhas-em-manaus-2026)
 - [Vale a pena fazer tráfego pago em 2026?](https://trafegomanaus.com.br/blog/vale-a-pena-trafego-pago-em-2026)

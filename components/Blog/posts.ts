@@ -6,6 +6,140 @@ import { Post } from './types';
 
 export const POSTS: ReadonlyArray<Post> = [
     {
+        slug: 'o-que-e-roas',
+        title: 'O que é ROAS (e por que ele sozinho engana)',
+        description:
+            'ROAS é a receita que cada real de anúncio devolve. A conta é simples — e é justamente por isso que ela engana: ROAS não sabe qual é a sua margem. Com a conta aberta e o ROAS de equilíbrio explicado.',
+        publishedAt: '2026-10-01',
+        readTime: 7,
+        category: 'Métricas',
+        tags: ['roas', 'metricas', 'trafego-pago'],
+        body: [
+            {
+                type: 'p',
+                text: 'ROAS é a sigla de Return On Ad Spend — retorno sobre o investimento em anúncio. Ele responde uma pergunta só: cada real que você colocou em mídia voltou em quanta receita? Se você investiu R$ 10.000 e as campanhas geraram R$ 40.000 em vendas, o ROAS foi 4 — ou 4x, ou 400%, que é a mesma coisa escrita de três jeitos.',
+            },
+            {
+                type: 'callout',
+                text: 'ROAS = receita gerada pelos anúncios ÷ valor investido em anúncios.',
+            },
+            {
+                type: 'p',
+                text: 'Essa é a parte que a internet inteira já explicou. O que quase ninguém escreve é a parte que custa dinheiro: ROAS é uma métrica de receita, não de lucro. Ele não sabe quanto custa o seu produto, não sabe seu aluguel e não sabe sua margem. Dá pra ter ROAS alto e fechar o mês no vermelho — e eu vou te mostrar a conta.',
+            },
+            {
+                type: 'h2',
+                text: 'Por que ROAS alto pode ser prejuízo',
+            },
+            {
+                type: 'p',
+                text: 'Duas lojas, mesma verba de R$ 10.000 em mídia no mês. A primeira vende eletrônico, com margem de contribuição de 15%. A segunda vende serviço, com margem de 60%.',
+            },
+            {
+                type: 'p',
+                text: 'A loja de eletrônico faz ROAS 6x. Parece excelente: R$ 60.000 de receita. Mas a margem de 15% sobre R$ 60.000 são R$ 9.000 — e ela gastou R$ 10.000 pra conseguir isso. O mês fechou com R$ 1.000 de prejuízo, com um ROAS que qualquer painel mostraria em verde.',
+            },
+            {
+                type: 'p',
+                text: 'A loja de serviço faz ROAS 2,5x. Parece fraco: R$ 25.000 de receita. Mas a margem de 60% sobre R$ 25.000 são R$ 15.000, contra R$ 10.000 de mídia. O mês fechou com R$ 5.000 de lucro — com um ROAS que metade do mercado chamaria de ruim.',
+            },
+            {
+                type: 'callout',
+                text: 'ROAS 6x deu prejuízo. ROAS 2,5x deu lucro. A diferença não estava na mídia, estava na margem — e o ROAS não enxerga margem.',
+            },
+            {
+                type: 'h2',
+                text: 'O número que resolve isso: o ROAS de equilíbrio',
+            },
+            {
+                type: 'p',
+                text: 'Se ROAS sozinho não diz se você lucra, existe um jeito de fazer ele dizer. Você calcula o seu ROAS de equilíbrio — o ponto em que a receita de anúncio paga exatamente o custo do anúncio e nada mais. Abaixo dele você perde dinheiro; acima dele você lucra. E a conta é de uma linha:',
+            },
+            {
+                type: 'callout',
+                text: 'ROAS de equilíbrio = 1 ÷ margem de contribuição.',
+            },
+            {
+                type: 'ol',
+                items: [
+                    'Pegue o preço médio do que você vende e tire dele tudo que varia por venda: custo do produto ou da hora, comissão, taxa de cartão, frete, imposto sobre a venda.',
+                    'O que sobrou, dividido pelo preço, é a sua margem de contribuição. Se de R$ 100 sobram R$ 30, sua margem é 30% — ou 0,30.',
+                    'Divida 1 por esse número. Com margem de 30%, 1 ÷ 0,30 = 3,33. Esse é o seu ROAS de equilíbrio.',
+                    'Compare com o ROAS real das campanhas. Acima de 3,33 você lucra. Abaixo, você está comprando receita com o próprio bolso.',
+                ],
+            },
+            {
+                type: 'p',
+                text: 'Voltando às duas lojas: a de margem 15% tinha ROAS de equilíbrio de 6,67x (1 ÷ 0,15) e fez 6x — por isso o prejuízo. A de margem 60% tinha equilíbrio em 1,67x (1 ÷ 0,60) e fez 2,5x — por isso o lucro. O mesmo número que parecia contraditório fica óbvio quando você tem a referência certa.',
+            },
+            {
+                type: 'p',
+                text: 'É por isso que não existe "ROAS bom" universal. Quando alguém te diz que o mínimo aceitável é 3x, essa pessoa está chutando a sua margem sem saber qual é. ROAS bom é o que fica acima do seu equilíbrio, com folga suficiente pra pagar o que não varia por venda — aluguel, folha, estrutura.',
+            },
+            {
+                type: 'h2',
+                text: 'ROAS e ROI não são a mesma coisa',
+            },
+            {
+                type: 'p',
+                text: 'Essa confusão é diária. ROAS olha receita contra gasto de mídia, e só. ROI olha lucro contra o investimento todo — mídia, fee de agência, ferramenta, hora da sua equipe. Dá pra ter ROAS alto e ROI negativo, principalmente em operação com muita gente envolvida pra fechar uma venda.',
+            },
+            {
+                type: 'p',
+                text: 'Na prática: ROAS serve pra decidir dentro da campanha, no dia a dia — qual criativo escalar, qual público cortar, onde o dinheiro está rendendo mais. ROI serve pra decidir se o canal inteiro vale a pena continuar existindo. São réguas diferentes, em prazos diferentes, e usar uma no lugar da outra é como medir temperatura com trena.',
+            },
+            {
+                type: 'h2',
+                text: 'O que olhar junto com o ROAS',
+            },
+            {
+                type: 'ul',
+                items: [
+                    'Margem de contribuição — sem ela o ROAS é um número solto. É o primeiro dado que a gente pede numa conta nova.',
+                    'CAC, o custo de adquirir um cliente. ROAS fala de receita; CAC fala de quanto custou trazer a pessoa.',
+                    'LTV, o quanto o cliente deixa ao longo do tempo. Em negócio de recorrência ou recompra, ROAS de primeira venda subestima muito o resultado real — e aí cortar campanha por ROAS baixo é cortar o que mais dá dinheiro.',
+                    'Prazo de retorno. ROAS 2x que volta em sete dias e ROAS 2x que volta em noventa não são o mesmo negócio, porque um deles exige caixa pra aguentar a espera.',
+                    'Para onde o lead vai depois do clique. Campanha com ROAS caindo costuma ser atendimento travado, não mídia ruim.',
+                ],
+            },
+            {
+                type: 'h2',
+                text: 'Como a gente mede isso na prática',
+            },
+            {
+                type: 'p',
+                text: 'Na [Norte](/sobre) a régua de contrato é CAC, LTV e ROAS — e a primeira reunião de qualquer conta nova é sobre margem, não sobre criativo. Sem margem na mesa, qualquer meta de ROAS que a gente combinasse seria chute. O [La Pizza Rio](/restaurantes-manaus) roda com ROAS de 4,1x e CPL de R$ 9,40, e esses números só significam algo porque a gente sabe qual é a margem do pedido dele.',
+            },
+            {
+                type: 'p',
+                text: 'Vale um aviso sobre o número que o painel te mostra: o ROAS do Meta e o do Google são atribuídos por plataforma, e as duas tendem a reivindicar a mesma venda. Se você somar os dois painéis, vai encontrar mais receita do que entrou na conta bancária. Para decisão de dinheiro, a referência é o seu faturamento real no período, com o painel servindo de bússola de direção — não de extrato.',
+            },
+            {
+                type: 'h2',
+                text: 'Resumo em quatro linhas',
+            },
+            {
+                type: 'ul',
+                items: [
+                    'ROAS = receita de anúncio ÷ gasto de anúncio. É métrica de receita, não de lucro.',
+                    'Calcule seu ROAS de equilíbrio: 1 ÷ margem de contribuição. É ele que diz se o seu ROAS é bom.',
+                    'ROAS decide dentro da campanha. ROI decide se o canal continua.',
+                    'ROAS sem margem, CAC e LTV do lado é número bonito sem decisão possível.',
+                ],
+            },
+            {
+                type: 'p',
+                text: 'Se você quer a sua conta feita com os seus números em vez do exemplo deste post, é isso que a gente faz na primeira conversa: você sai com margem, ROAS de equilíbrio e plano dos próximos 90 dias.',
+            },
+            {
+                type: 'cta',
+                label: 'Agendar diagnóstico de 15 min',
+                href: '/auditoria-de-lucro-invisivel',
+            },
+        ],
+    },
+
+    {
         slug: 'melhor-agencia-de-marketing-em-manaus',
         title: 'Qual a melhor agência de marketing em Manaus em 2026?',
         description:
