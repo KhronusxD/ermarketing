@@ -106,13 +106,23 @@ const CasesIndex: React.FC = () => {
                             >
                                 {c.detail && (
                                     <div className="relative aspect-[16/10] overflow-hidden bg-[#14261A]">
-                                        <img
-                                            src={c.detail.hero}
-                                            alt={`${c.client} — ${c.detail.nicheTag}`}
-                                            loading="lazy"
-                                            decoding="async"
-                                            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
-                                        />
+                                        {/* AVIF com fallback JPG: as mesmas fotos
+                                            existem nos dois formatos e o AVIF pesa
+                                            cerca de um terço (22 KB contra 60 KB
+                                            na t-1). */}
+                                        <picture>
+                                            <source
+                                                type="image/avif"
+                                                srcSet={c.detail.hero.replace(/\.jpg$/, '.avif')}
+                                            />
+                                            <img
+                                                src={c.detail.hero}
+                                                alt={`${c.client} — ${c.detail.nicheTag}`}
+                                                loading="lazy"
+                                                decoding="async"
+                                                className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                                            />
+                                        </picture>
                                     </div>
                                 )}
                                 <div className="p-6 md:p-8">

@@ -113,13 +113,19 @@ const CasePage: React.FC = () => {
                     </div>
 
                     <div className="mt-12 overflow-hidden rounded-3xl">
-                        <img
-                            src={detail.hero}
-                            alt={`${caso.client} — ${detail.nicheTag} em ${detail.location}`}
-                            loading="lazy"
-                            decoding="async"
-                            className="w-full aspect-[16/9] object-cover"
-                        />
+                        <picture>
+                            <source
+                                type="image/avif"
+                                srcSet={detail.hero.replace(/\.jpg$/, '.avif')}
+                            />
+                            <img
+                                src={detail.hero}
+                                alt={`${caso.client} — ${detail.nicheTag} em ${detail.location}`}
+                                loading="lazy"
+                                decoding="async"
+                                className="w-full aspect-[16/9] object-cover"
+                            />
+                        </picture>
                     </div>
                 </div>
             </section>
@@ -157,13 +163,19 @@ const CasePage: React.FC = () => {
                         <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
                             {detail.gallery.map((src, i) => (
                                 <div key={src} className="overflow-hidden rounded-2xl">
-                                    <img
-                                        src={src}
-                                        alt={`${caso.client} — imagem ${i + 2} da operação`}
-                                        loading="lazy"
-                                        decoding="async"
-                                        className="w-full aspect-[4/3] object-cover"
-                                    />
+                                    <picture>
+                                        <source
+                                            type="image/avif"
+                                            srcSet={src.replace(/\.jpg$/, '.avif')}
+                                        />
+                                        <img
+                                            src={src}
+                                            alt={`${caso.client} — imagem ${i + 2} da operação`}
+                                            loading="lazy"
+                                            decoding="async"
+                                            className="w-full aspect-[4/3] object-cover"
+                                        />
+                                    </picture>
                                 </div>
                             ))}
                         </div>
