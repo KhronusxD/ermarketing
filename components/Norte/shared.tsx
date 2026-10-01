@@ -199,7 +199,11 @@ export {
 export const NAV_LINKS = [
     { label: 'Início', href: '/norte#inicio' },
     { label: 'Serviços', href: '/norte#servicos' },
-    { label: 'Cases', href: '/norte#cases' },
+    // Aponta pra página real em vez da âncora da seção: /cases tem as 20
+    // operações, e um link de nav pra página própria é o que dá descoberta
+    // e autoridade interna pra ela. Os outros itens seguem âncora porque a
+    // institucional é página única.
+    { label: 'Cases', href: '/cases' },
     { label: 'Sobre', href: '/norte#sobre' },
     { label: 'Contato', href: '/norte#contato' },
 ];

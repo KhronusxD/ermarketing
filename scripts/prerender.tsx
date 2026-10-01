@@ -24,6 +24,7 @@ import { StaticRouter } from 'react-router-dom';
 import Beasties from 'beasties';
 import App from '../App';
 import { POSTS } from '../components/Blog/posts';
+import { CASES, CASES_WITH_PAGE } from '../components/Cases/cases';
 import { AUTHOR } from '../components/Blog/types';
 import { SERVICES as NORTE_SERVICES } from '../components/Norte/services';
 
@@ -68,7 +69,11 @@ const ORG_SCHEMA = {
     },
     description:
         'Agência de marketing de performance baseada em Manaus. Tráfego pago, copy, criativos, CRM e BI ponta a ponta.',
-    foundingDate: '2018',
+    // 2020 confirmado pelo Ed: é desde quando a Norte conta como agência.
+    // O texto visível de /sobre conta que a ER nasceu em 2018 como operação
+    // solo de tráfego do Ed — as duas coisas convivem, e o llms.txt diz as
+    // duas na ordem certa. Não trocar por 2018 sem trocar /sobre também.
+    foundingDate: '2020',
     sameAs: [
         'https://instagram.com/edrodrigues.mkt',
         'https://www.linkedin.com/in/edrodriguesmkt/',
@@ -748,6 +753,96 @@ const ROUTES: RouteSpec[] = [
         },
     },
 
+    // /cases — índice. CollectionPage + ItemList: o ItemList é o que permite
+    // ao Google entender a página como uma lista de casos e não como texto
+    // corrido, e os 20 itens vêm da mesma fonte que a página renderiza.
+    {
+        path: '/cases',
+        out: 'cases/index.html',
+        meta: {
+            title: 'Cases da Norte · 20 operações com resultado medido',
+            description:
+                'Os resultados que a Norte entregou, marca por marca e com a métrica exata: Taychi de R$ 70 mil a R$ 200 mil/mês, La Pizza Rio com ROAS 4,1x, Odonto Solutions com 5.193 leads a R$ 1,57. Restaurante, e-commerce, clínica, varejo e construção.',
+            canonical: `${SITE_ORIGIN}/cases`,
+            jsonLd: [
+                {
+                    '@context': 'https://schema.org',
+                    '@type': 'CollectionPage',
+                    name: 'Cases da Norte Marketing',
+                    description:
+                        'Operações com resultado medido, por segmento, com a métrica exata de cada marca.',
+                    url: `${SITE_ORIGIN}/cases`,
+                    isPartOf: { '@id': `${SITE_ORIGIN}/#website` },
+                    publisher: { '@id': `${SITE_ORIGIN}/#organization` },
+                    inLanguage: 'pt-BR',
+                    mainEntity: {
+                        '@type': 'ItemList',
+                        numberOfItems: CASES.length,
+                        itemListElement: CASES.map((c, i) => ({
+                            '@type': 'ListItem',
+                            position: i + 1,
+                            name: `${c.client} — ${c.headline}`,
+                            ...(c.slug
+                                ? { url: `${SITE_ORIGIN}/cases/${c.slug}` }
+                                : {}),
+                        })),
+                    },
+                },
+                breadcrumb([
+                    { name: 'Início', href: '/' },
+                    { name: 'Cases', href: '/cases' },
+                ]),
+            ],
+        },
+    },
+
+    // /cases/<slug> — só os cases com desafio, operação e resultado
+    // registrados. Article em vez de Review de propósito: depoimento de
+    // cliente sem nota não é review, e carimbar Review sem rating é pedir
+    // penalidade de dado estruturado.
+    ...CASES_WITH_PAGE.map<RouteSpec>((c) => ({
+        path: `/cases/${c.slug}`,
+        out: `cases/${c.slug}/index.html`,
+        meta: {
+            title: c.detail.seoTitle,
+            description: c.detail.seoDescription,
+            canonical: `${SITE_ORIGIN}/cases/${c.slug}`,
+            ogType: 'article',
+            jsonLd: [
+                {
+                    '@context': 'https://schema.org',
+                    '@type': 'Article',
+                    headline: c.detail.seoTitle,
+                    description: c.detail.seoDescription,
+                    image: `${SITE_ORIGIN}${c.detail.hero}`,
+                    author: {
+                        '@type': 'Person',
+                        name: AUTHOR.name,
+                        url: `${SITE_ORIGIN}/sobre/ed-rodrigues`,
+                        description: `${AUTHOR.role}. ${AUTHOR.bio}`,
+                    },
+                    publisher: { '@id': `${SITE_ORIGIN}/#organization` },
+                    mainEntityOfPage: {
+                        '@type': 'WebPage',
+                        '@id': `${SITE_ORIGIN}/cases/${c.slug}`,
+                    },
+                    about: {
+                        '@type': 'Organization',
+                        name: c.client,
+                        location: c.detail.location,
+                    },
+                    articleSection: c.category,
+                    inLanguage: 'pt-BR',
+                },
+                breadcrumb([
+                    { name: 'Início', href: '/' },
+                    { name: 'Cases', href: '/cases' },
+                    { name: c.client, href: `/cases/${c.slug}` },
+                ]),
+            ],
+        },
+    })),
+
     // Blog index
     {
         path: '/blog',
@@ -958,6 +1053,13 @@ const sitemapEntries: Array<{
         priority: 0.8,
         changefreq: 'monthly',
     },
+    { loc: `${SITE_ORIGIN}/cases`, lastmod: today, priority: 0.9, changefreq: 'monthly' },
+    ...CASES_WITH_PAGE.map((c) => ({
+        loc: `${SITE_ORIGIN}/cases/${c.slug}`,
+        lastmod: today,
+        priority: 0.8,
+        changefreq: 'monthly' as const,
+    })),
     { loc: `${SITE_ORIGIN}/links`, lastmod: today, priority: 0.5, changefreq: 'monthly' },
     {
         loc: `${SITE_ORIGIN}/kit-assistencia-tecnica-plus`,

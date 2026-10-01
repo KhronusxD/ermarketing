@@ -175,7 +175,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'Na [Norte](/) a gente conta os cases por nicho de forma transparente: [Taychi Sushi Bar](/), La Pizza Rio, ITV Manaus e mais 16 operações documentadas. Você vê o número antes de assinar.',
+                text: 'Na [Norte](/) a gente conta os cases por nicho de forma transparente: [Taychi Sushi Bar](/cases/taychi-sushi-bar), [La Pizza Rio](/cases/la-pizza-rio), iTV Manaus e [mais 17 operações documentadas](/cases). Você vê o número antes de assinar.',
             },
             {
                 type: 'h2',
@@ -247,7 +247,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'Em Manaus tem outro detalhe: criativo com produção local performa 30-40% melhor que criativo "genérico Brasil". O público reconhece. Vale captar dentro do negócio do cliente — comida, atendimento, fachada, time. É exatamente o que a [equipe da Norte produz in loco](/) pros parceiros.',
+                text: 'Em Manaus tem outro detalhe: criativo com produção local performa 30-40% melhor que criativo "genérico Brasil". O público reconhece. Vale captar dentro do negócio do cliente — comida, atendimento, fachada, time. É exatamente o que a [equipe da Norte produz in loco](/norte/captacao-de-conteudo) pros parceiros.',
             },
             {
                 type: 'h2',
@@ -493,7 +493,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'A [nossa metodologia](/) é simples: antes de qualquer contrato, fazemos uma reunião de diagnóstico de 15 minutos. Olhamos seu funil, seu CAC atual, sua capacidade comercial, e devolvemos um plano dos próximos 90 dias. Sem assinatura, sem compromisso. Se a gente fechar, ótimo. Se você ver que faz mais sentido em outro lugar, melhor ainda — pelo menos saiu com clareza.',
+                text: 'A [nossa metodologia](/sobre) é simples: antes de qualquer contrato, fazemos uma reunião de diagnóstico de 15 minutos. Olhamos seu funil, seu CAC atual, sua capacidade comercial, e devolvemos um plano dos próximos 90 dias. Sem assinatura, sem compromisso. Se a gente fechar, ótimo. Se você ver que faz mais sentido em outro lugar, melhor ainda — pelo menos saiu com clareza.',
             },
             {
                 type: 'p',
@@ -662,7 +662,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'O [Taychi Sushi Bar](/) saiu de R$ 70k/mês pra R$ 200k/mês em 7 meses com esse desenho. Não foi mágica — foi processo.',
+                text: 'O [Taychi Sushi Bar](/cases/taychi-sushi-bar) saiu de R$ 70k/mês pra R$ 200k/mês em 7 meses com esse desenho. Não foi mágica — foi processo.',
             },
             {
                 type: 'h2',
@@ -725,7 +725,7 @@ export const POSTS: ReadonlyArray<Post> = [
             },
             {
                 type: 'p',
-                text: 'Cliente em Manaus reconhece quem é manauara de verdade. Loja de bairro com vídeo do próprio dono atendendo vende mais que rede nacional com criativo "Brasil genérico". É comportamento comprovado em [campanhas que a gente roda](/) há anos.',
+                text: 'Cliente em Manaus reconhece quem é manauara de verdade. Loja de bairro com vídeo do próprio dono atendendo vende mais que rede nacional com criativo "Brasil genérico". É comportamento comprovado em [campanhas que a gente roda](/norte/trafego-pago) há anos.',
             },
             {
                 type: 'h2',

@@ -28,6 +28,8 @@ import LabPerformance from './components/LabPerformance';
 import EdRodriguesCapture from './components/EdRodriguesCapture';
 import NorteLanding from './components/NorteLanding';
 import NorteServicePage from './components/Norte/ServicePage';
+import CasesIndex from './components/Cases/CasesIndex';
+import CasePage from './components/Cases/CasePage';
 import Conversa from './components/Norte/Conversa';
 import Agendar from './components/Norte/Agendar';
 import Dentistas from './components/Norte/Dentistas';
@@ -98,6 +100,8 @@ const App: React.FC = () => {
                 <Route path="/sobre/ed-rodrigues" element={<AuthorPage />} />
                 <Route path="/blog" element={<BlogIndex />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/cases" element={<CasesIndex />} />
+                <Route path="/cases/:slug" element={<CasePage />} />
                 <Route path="/meta-app" element={<MetaAppIndex />} />
                 <Route path="/meta-app/privacidade" element={<MetaAppPrivacy />} />
                 <Route path="/meta-app/termos" element={<MetaAppTerms />} />
